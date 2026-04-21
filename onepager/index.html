@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>An executive assistant that actually knows you — Sam Davis</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&display=swap');
+
+  :root {
+    --bg: #FAF7EE;
+    --bg-soft: #F2EEDD;
+    --bg-card: #DCE0B6;
+    --bg-card-hi: #C8CEA0;
+    --ink: #3E3418;
+    --ink-soft: #6B5F3A;
+    --ink-faint: #998D6B;
+    --accent: #8F7530;
+    --accent-bright: #B89B4A;
+    --accent-deep: #6B5624;
+    --accent-glow: rgba(184, 155, 74, 0.22);
+    --rule: #B0B490;
+    --good: #7A8B3F;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  @page { size: A4 portrait; margin: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 14mm 14mm 12mm;
+    display: flex;
+    flex-direction: column;
+    gap: 7mm;
+  }
+
+  header.top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 4mm;
+    border-bottom: 1px solid var(--rule);
+  }
+  header.top .ident {
+    display: flex; align-items: center; gap: 10px;
+  }
+  header.top .who {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    line-height: 1.3;
+  }
+  header.top .who b { color: var(--ink); font-weight: 600; }
+  header.top .meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-align: right;
+    letter-spacing: 0.05em;
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: 36px;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  h1 .accent { color: var(--accent); font-style: italic; font-weight: 700; }
+  .lede {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    max-width: 175mm;
+  }
+
+  h2.sec {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--rule);
+    font-weight: 600;
+  }
+
+  .what-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .tier-box {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 8px 10px;
+  }
+  .tier-box .lbl {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .tier-box .body {
+    font-size: 10.5px;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .tier-box .body strong { font-weight: 600; color: var(--ink); }
+  .tier-box .body .mono {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--ink-soft);
+    display: block;
+    margin-top: 2px;
+  }
+
+  .layer-strip {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+  }
+  .layer-chip {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    border-radius: 3px;
+    padding: 6px 6px;
+    text-align: center;
+  }
+  .layer-chip .n {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .layer-chip .nm {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 3px;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  .ladder {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.3fr 1fr;
+    gap: 6px;
+  }
+  .rung {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 9px 11px;
+  }
+  .rung .nm {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .rung .ttl {
+    font-family: var(--serif);
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin-bottom: 2px;
+  }
+  .rung .pr {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .rung .body {
+    font-size: 10px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+  .rung-hero {
+    background: var(--accent-bright);
+    border-color: var(--accent-deep);
+  }
+  .rung-hero .nm { color: var(--accent-deep); }
+  .rung-hero .ttl, .rung-hero .pr { color: var(--ink); }
+  .rung-hero .body { color: var(--ink); opacity: 0.85; }
+
+  .ladder-note {
+    font-style: italic;
+    font-size: 10px;
+    color: var(--ink-soft);
+    margin-top: 5px;
+  }
+
+  .demos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .demo-link {
+    background: var(--bg-soft);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 10px 12px;
+    text-decoration: none;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .demo-link .arrow {
+    font-family: var(--mono);
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .demo-link .text { flex: 1; }
+  .demo-link .text .ttl {
+    font-family: var(--serif);
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .demo-link .text .url {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--accent);
+    margin-top: 2px;
+    word-break: break-all;
+  }
+  .demo-link .text .sub {
+    font-size: 10px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+
+  .cta {
+    background: var(--accent-bright);
+    border: 1px solid var(--accent-deep);
+    border-radius: 6px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: auto;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .cta .left .ttl {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .cta .left .sub {
+    font-size: 10.5px;
+    color: var(--ink);
+    opacity: 0.8;
+    margin-top: 3px;
+  }
+  .cta .url {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: none;
+    background: var(--bg);
+    padding: 8px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--accent-deep);
+    white-space: nowrap;
+  }
+
+  footer.bot {
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--ink-soft);
+  }
+  footer.bot .left span { color: var(--ink); }
+  footer.bot .right { color: var(--ink-faint); font-style: italic; font-family: var(--sans); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="top">
+    <div class="ident">
+      <div class="who"><b>Sam Davis</b><br>AI coach &amp; systems builder</div>
+    </div>
+    <div class="meta">One-pager · 2026<br>Coogee, Sydney</div>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">What I build for clients</div>
+    <h1>An executive assistant that <span class="accent">actually knows you.</span></h1>
+    <p class="lede">Not a chatbot. Not another productivity app. A real brain — aware of who you are, what you care about, who's in your life, what you've decided, what you're doing, and how you write. Across every part of your work and your life.</p>
+  </section>
+
+  <section>
+    <h2 class="sec">Under the hood</h2>
+    <div class="what-grid">
+      <div class="tier-box">
+        <div class="lbl">The engine</div>
+        <div class="body"><strong>Claude</strong> — Anthropic's frontier model, running through the Claude Code harness.</div>
+      </div>
+      <div class="tier-box">
+        <div class="lbl">The connectors</div>
+        <div class="body">Seven live integrations via the open <strong>Model Context Protocol</strong>.<span class="mono">Gmail · Calendar · Sheets · Todoist · WhatsApp · Perplexity · Browser</span></div>
+      </div>
+      <div class="tier-box">
+        <div class="lbl">The memory</div>
+        <div class="body">A <strong>plain-text wiki</strong> on your own machine. No proprietary format. No vendor lock-in.</div>
+      </div>
+      <div class="tier-box">
+        <div class="lbl">The automation</div>
+        <div class="body"><strong>Scheduled watchers</strong> running quietly. Inbox every 15 min. Calendar on the hour. Tasks every 30 min.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">The brain — eight layers of structured self-knowledge</h2>
+    <div class="layer-strip">
+      <div class="layer-chip"><div class="n">1</div><div class="nm">North&nbsp;Star</div></div>
+      <div class="layer-chip"><div class="n">2</div><div class="nm">Philosophy</div></div>
+      <div class="layer-chip"><div class="n">3</div><div class="nm">Self</div></div>
+      <div class="layer-chip"><div class="n">4</div><div class="nm">Network</div></div>
+      <div class="layer-chip"><div class="n">5</div><div class="nm">Past</div></div>
+      <div class="layer-chip"><div class="n">6</div><div class="nm">Goals</div></div>
+      <div class="layer-chip"><div class="n">7</div><div class="nm">Tasks</div></div>
+      <div class="layer-chip"><div class="n">8</div><div class="nm">Workflow</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">How we work together — pick where you start</h2>
+    <div class="ladder">
+      <div class="rung">
+        <div class="nm">Single session</div>
+        <div class="ttl">60 min, one thing</div>
+        <div class="pr">$150</div>
+        <div class="body">Bring one pain. Leave with one working piece.</div>
+      </div>
+      <div class="rung">
+        <div class="nm">Coaching block</div>
+        <div class="ttl">4 × 60 min</div>
+        <div class="pr">$500</div>
+        <div class="body">Build your EA one capability at a time. You drive, I guide.</div>
+      </div>
+      <div class="rung rung-hero">
+        <div class="nm">★ The EA Setup</div>
+        <div class="ttl">One-week sprint</div>
+        <div class="pr">$2,000</div>
+        <div class="body">I build your whole EA and hand it over running. Built for anybody.</div>
+      </div>
+      <div class="rung">
+        <div class="nm">Layers</div>
+        <div class="ttl">Per-capability add-ons</div>
+        <div class="pr">$500 – $800</div>
+        <div class="body">CRM sync, outreach, reviews — added as you need them.</div>
+      </div>
+    </div>
+    <p class="ladder-note">Coaching credits apply to Setup within 90 days. No subscription. No lock-in.</p>
+  </section>
+
+  <section>
+    <h2 class="sec">See it in detail</h2>
+    <div class="demos">
+      <a class="demo-link" href="https://cradsdavis-cell.github.io/samdavis-site/overview/">
+        <div class="arrow">→</div>
+        <div class="text">
+          <div class="ttl">The full overview</div>
+          <div class="url">cradsdavis-cell.github.io/samdavis-site/overview</div>
+          <div class="sub">What it is, how it learns, what lives inside the brain.</div>
+        </div>
+      </a>
+      <a class="demo-link" href="https://cradsdavis-cell.github.io/samdavis-site/offer/">
+        <div class="arrow">→</div>
+        <div class="text">
+          <div class="ttl">How we work together</div>
+          <div class="url">cradsdavis-cell.github.io/samdavis-site/offer</div>
+          <div class="sub">The full ladder — pricing, week shape, what you own.</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <a class="cta" href="https://calendly.com/cradsdavis/30min">
+    <div class="left">
+      <div class="ttl">Book a free 30-min intro. No pitch.</div>
+      <div class="sub">Whether the shape of your business actually suits a system like this — and whether I'm the right person to help you build it.</div>
+    </div>
+    <div class="url">calendly.com/cradsdavis/30min</div>
+  </a>
+
+  <footer class="bot">
+    <div class="left"><span>cradsdavis@gmail.com</span> · linkedin.com/in/samuel-davis4 · +61 0493 302 154</div>
+    <div class="right">AEST until September 2026, UK after.</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
