@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>An executive assistant that actually knows me — Sam Davis</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&display=swap');
+
+  :root {
+    --bg: #FAF7EE;
+    --bg-soft: #F2EEDD;
+    --bg-card: #DCE0B6;
+    --bg-card-hi: #C8CEA0;
+    --ink: #3E3418;
+    --ink-soft: #6B5F3A;
+    --ink-faint: #998D6B;
+    --accent: #8F7530;
+    --accent-bright: #B89B4A;
+    --accent-deep: #6B5624;
+    --accent-glow: rgba(184, 155, 74, 0.22);
+    --rule: #B0B490;
+    --good: #7A8B3F;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --serif: "Playfair Display", "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 18px;
+    line-height: 1.55;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body { display: flex; flex-direction: column; }
+
+  header.chrome {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 44px;
+    padding: 0 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; color: var(--ink-faint);
+    z-index: 100; pointer-events: none;
+  }
+  header.chrome .brand b { color: var(--ink-soft); font-weight: 600; }
+
+  footer.chrome {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 44px;
+    padding: 0 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px; color: var(--ink-faint);
+    z-index: 100;
+  }
+  footer.chrome .counter { font-family: var(--mono); }
+  footer.chrome .hint { opacity: 0.7; }
+
+  main.stage {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    padding: 88px 64px;
+    min-height: 100vh;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1180px;
+    animation: fade 0.4s ease;
+    transform: scale(var(--fit, 1));
+    transform-origin: center center;
+  }
+  .slide.active { display: block; }
+
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(38px, 5.2vw, 66px);
+    line-height: 1.05; letter-spacing: -0.01em;
+    font-weight: 800; margin-bottom: 22px;
+  }
+  h1 .accent, h2 .accent { color: var(--accent); font-style: italic; font-weight: 700; }
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(30px, 3.5vw, 46px);
+    line-height: 1.14; letter-spacing: -0.005em;
+    font-weight: 800; margin-bottom: 20px;
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 14px;
+  }
+  .lede {
+    font-size: clamp(18px, 1.55vw, 23px);
+    color: var(--ink-soft); line-height: 1.5;
+    max-width: 900px; font-weight: 400;
+  }
+  .caption {
+    margin-top: 28px; color: var(--ink-soft);
+    font-style: italic; font-size: 16px; max-width: 920px;
+  }
+  .kicker { margin-top: 40px; color: var(--ink-faint); font-size: 14px; font-style: italic; }
+
+  ul.hits { list-style: none; margin-top: 20px; }
+  ul.hits li {
+    padding: 12px 0; border-bottom: 1px solid var(--rule);
+    font-size: 19px; color: var(--ink);
+    display: flex; gap: 16px; align-items: baseline;
+  }
+  ul.hits li:last-child { border-bottom: 0; }
+  ul.hits li::before { content: "—"; color: var(--accent); font-family: var(--mono); flex-shrink: 0; }
+
+  .mock {
+    background: var(--bg-card); border: 1px solid var(--rule);
+    border-radius: 6px; padding: 18px 22px;
+    font-family: var(--mono); font-size: 13.5px;
+    line-height: 1.7; color: var(--ink); margin-top: 14px;
+  }
+  .mock .k { color: var(--accent); font-weight: 600; }
+  .mock .c { color: var(--ink-soft); font-style: italic; }
+  .mock .g { color: var(--good); font-weight: 600; }
+  .mock .h { color: var(--ink-soft); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; display: block; font-weight: 600; }
+  .mock hr { border: 0; border-top: 1px solid var(--rule); margin: 10px 0; }
+
+  .layers { margin-top: 14px; display: grid; gap: 5px; }
+  .layer {
+    display: grid; grid-template-columns: 46px 140px 1fr;
+    gap: 18px; align-items: center;
+    background: var(--bg-card); border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent); border-radius: 5px;
+    padding: 8px 18px; transition: transform 0.2s;
+  }
+  .layer:hover { transform: translateX(4px); }
+  .layer .n { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--accent); letter-spacing: -0.02em; }
+  .layer .nm { font-weight: 700; font-size: 15.5px; color: var(--ink); letter-spacing: -0.01em; }
+  .layer .dc { font-size: 13.5px; color: var(--ink-soft); line-height: 1.45; }
+
+  .stack { margin-top: 16px; display: grid; gap: 10px; }
+  .tier {
+    display: grid; grid-template-columns: 160px 1fr; gap: 22px;
+    align-items: start; background: var(--bg-card);
+    border: 1px solid var(--rule); border-radius: 6px; padding: 16px 20px;
+  }
+  .tier .tl { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.13em; color: var(--accent); font-weight: 600; padding-top: 2px; }
+  .tier .tb { font-size: 14.5px; color: var(--ink); line-height: 1.55; }
+  .tier .tb strong { color: var(--ink); font-weight: 600; }
+  .tier .tb .mono { font-family: var(--mono); font-size: 13px; color: var(--ink-soft); }
+
+  .portrait { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+  .pcol { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 6px; padding: 18px 22px; }
+  .pcol h4 { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 10px; font-weight: 600; }
+  .pcol .row { padding: 6px 0; border-bottom: 1px dashed var(--rule); font-size: 14px; line-height: 1.45; color: var(--ink); display: flex; gap: 12px; }
+  .pcol .row:last-child { border-bottom: 0; }
+  .pcol .row .lab { color: var(--ink-soft); font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; flex-shrink: 0; width: 76px; padding-top: 3px; font-weight: 600; }
+  .pcol .row .val em { color: var(--ink-soft); font-style: normal; }
+
+  .reflexes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 18px; }
+  .reflex { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 7px; padding: 20px 20px; }
+  .reflex .trig { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 8px; }
+  .reflex h5 { font-size: 16.5px; line-height: 1.25; font-weight: 700; margin-bottom: 10px; color: var(--ink); letter-spacing: -0.01em; }
+  .reflex p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; }
+  .reflex p .quote { color: var(--ink); font-style: italic; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; margin-top: 8px; }
+
+  .wf-band { margin-top: 16px; border-top: 1px solid var(--rule); padding-top: 14px; }
+  .wf-band .lbl { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.13em; color: var(--ink-faint); margin-bottom: 10px; }
+  .wf-band ul { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 28px; }
+  .wf-band li { font-size: 14px; color: var(--ink); padding: 3px 0; display: flex; gap: 10px; align-items: baseline; }
+  .wf-band li::before { content: "·"; color: var(--accent); font-weight: 700; }
+
+  .scenes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+  .scene-card { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 7px; padding: 20px 20px; }
+  .scene-card .tag { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 10px; }
+  .scene-card .trig { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 10px; letter-spacing: -0.01em; line-height: 1.3; }
+  .scene-card p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; }
+
+  .hub { margin-top: 24px; display: grid; grid-template-columns: 1fr auto 1fr; gap: 72px; align-items: center; }
+  .hub-side { display: flex; flex-direction: column; gap: 10px; }
+  .hub-side.right { align-items: flex-start; }
+  .hub-side.left { align-items: flex-end; }
+  .spoke { font-family: var(--mono); font-size: 13.5px; color: var(--ink); background: var(--bg-card); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 14px; display: inline-block; }
+  .spoke .sub { color: var(--ink-soft); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.1em; margin-left: 8px; font-weight: 500; }
+  .hub-core { width: 210px; height: 210px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, var(--accent-bright) 0%, var(--accent) 75%); color: #2A2410; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-weight: 700; letter-spacing: -0.01em; box-shadow: 0 0 24px var(--accent-glow); padding: 20px; }
+  .hub-core .bigword { font-size: 22px; line-height: 1.1; margin-bottom: 4px; }
+  .hub-core .subword { font-size: 11.5px; font-weight: 500; opacity: 0.75; }
+
+  .toolgrid { margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .toolcell { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 7px; padding: 18px 20px; }
+  .toolcell h5 { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.13em; color: var(--accent); margin-bottom: 8px; font-weight: 600; }
+  .toolcell .tag-line { font-size: 14.5px; color: var(--ink); line-height: 1.4; margin-bottom: 8px; font-weight: 600; letter-spacing: -0.005em; }
+  .toolcell .eg { font-size: 12.5px; color: var(--ink-soft); font-family: var(--mono); line-height: 1.55; }
+
+  .callouts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 28px; }
+  .callout { border-left: 2px solid var(--accent); padding: 8px 20px; }
+  .callout .big { font-size: 21px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 10px; }
+  .callout .small { color: var(--ink-soft); font-size: 14.5px; line-height: 1.5; }
+
+  .ladder-mini { display: grid; grid-template-columns: 1fr 1fr 1.35fr 1fr; gap: 10px; margin-top: 28px; }
+  .rung { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+  .rung .r-name { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 600; }
+  .rung .r-title { font-weight: 700; font-size: 15px; color: var(--ink); letter-spacing: -0.01em; line-height: 1.25; }
+  .rung .r-price { font-family: var(--mono); font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+  .rung-hero { background: var(--accent-bright); border-color: var(--accent-deep); box-shadow: 0 0 8px var(--accent-glow); }
+  .rung-hero .r-name { color: var(--accent-deep); }
+  .rung-hero .r-title { color: var(--ink); }
+  .rung-hero .r-price { color: var(--ink); opacity: 0.8; }
+
+  .contact-slide .lines { font-family: var(--mono); font-size: 17px; color: var(--ink-soft); margin-top: 30px; line-height: 2; }
+  .contact-slide .lines span { color: var(--ink); }
+
+  @media print {
+    @page { size: landscape; margin: 0; }
+    html, body { overflow: visible; height: auto; }
+    header.chrome, footer.chrome { display: none; }
+    main.stage { padding: 40px; min-height: auto; }
+    .slide { display: block !important; page-break-after: always; max-width: 100%; padding: 20px; }
+    .slide:last-child { page-break-after: auto; }
+  }
+
+  @media (max-width: 960px) {
+    main.stage { padding: 56px 24px; }
+    .two-col, .portrait { grid-template-columns: 1fr; gap: 20px; }
+    .reflexes, .callouts, .scenes, .toolgrid, .ladder-mini { grid-template-columns: 1fr; }
+    .hub { grid-template-columns: 1fr; gap: 20px; }
+    .hub-side { align-items: flex-start !important; flex-direction: row; flex-wrap: wrap; }
+    .layer, .tier { grid-template-columns: 40px 120px 1fr; gap: 10px; padding: 10px 14px; }
+    .wf-band ul { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <div class="brand"><b>Sam Davis</b> · AI coach &amp; systems builder</div>
+  <div class="brand">cradsdavis@gmail.com</div>
+</header>
+
+<main class="stage">
+
+  <section class="slide active" data-slide="1">
+    <div class="eyebrow">What I built for myself</div>
+    <h1>An executive assistant that <span class="accent">actually knows me.</span></h1>
+    <p class="lede">Not a chatbot. Not another productivity app. A real brain — aware of who I am, what I care about, who's in my life, what I've decided, what I'm doing, and how I write. Across every part of my work and my life.</p>
+    <p class="kicker">Sam Davis · Coogee, Sydney · 2026</p>
+  </section>
+
+  <section class="slide" data-slide="2">
+    <div class="eyebrow">The missing layer</div>
+    <h2>Every AI forgets you<br>the moment you close the tab.</h2>
+    <ul class="hits">
+      <li>ChatGPT doesn't know your people, your deals, or your decisions.</li>
+      <li>Your calendar doesn't know what was said in the meeting.</li>
+      <li>Your notes don't know your voice.</li>
+      <li>Your inbox doesn't know what matters this week.</li>
+      <li>Seven tools open. Nothing shared between them.</li>
+    </ul>
+    <p class="caption">The missing layer isn't intelligence. It's context — yours, held somewhere the AI can read.</p>
+  </section>
+
+  <section class="slide" data-slide="3">
+    <div class="eyebrow">What changes</div>
+    <h2>One brain. <span class="accent">Continuously aware</span><br>of who you are and what you're doing.</h2>
+    <p class="lede" style="margin-top: 30px;">An assistant that has read every decision you've made, met every person in your life, learned your voice, holds your priorities in view, and uses all of it — every time you ask, every time it acts.</p>
+    <p class="caption">Work life. Home life. Everything in between. One memory underneath.</p>
+  </section>
+
+  <section class="slide" data-slide="4">
+    <div class="eyebrow">The brain</div>
+    <h2>Eight layers of <span class="accent">structured self-knowledge.</span></h2>
+    <p class="lede" style="font-size: 16px; max-width: 780px;">Not a notes app. A real model of you — read, written, and reasoned over by the AI, in your voice, with your priorities in mind.</p>
+    <div class="layers">
+      <div class="layer"><div class="n">1</div><div class="nm">North Star</div><div class="dc">What you're building a life toward. The frame above the frame.</div></div>
+      <div class="layer"><div class="n">2</div><div class="nm">Philosophy</div><div class="dc">How you operate when no one's watching. Your values, as filters.</div></div>
+      <div class="layer"><div class="n">3</div><div class="nm">Self</div><div class="dc">Who you are when you show up. Identity, strengths, voice, patterns.</div></div>
+      <div class="layer"><div class="n">4</div><div class="nm">Network</div><div class="dc">Every person in your life — tiered, recalled, and linked to the work you share.</div></div>
+      <div class="layer"><div class="n">5</div><div class="nm">Past</div><div class="dc">What's happened that still shapes today. Decisions, pivots, lessons, wins.</div></div>
+      <div class="layer"><div class="n">6</div><div class="nm">Goals</div><div class="dc">What you're trying to do, now and next. Reviewed weekly.</div></div>
+      <div class="layer"><div class="n">7</div><div class="nm">Tasks</div><div class="dc">What's on your plate today — synced with calendar and inbox.</div></div>
+      <div class="layer"><div class="n">8</div><div class="nm">Workflow</div><div class="dc">How your days actually run. The routines that hold the rest together.</div></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="5">
+    <div class="eyebrow">Under the hood</div>
+    <h2>Real tools. Open protocols. <span class="accent">Your data, your system.</span></h2>
+    <p class="lede" style="font-size: 16px; max-width: 800px;">Not magic. Not a black box. A specific stack — built on open standards so you're never locked in.</p>
+    <div class="stack">
+      <div class="tier"><div class="tl">The engine</div><div class="tb"><strong>Claude</strong> — Anthropic's frontier AI model, running through the Claude Code harness. Handles reasoning, drafting, decision-making, conversation.</div></div>
+      <div class="tier"><div class="tl">The connectors</div><div class="tb">Seven live integrations today, via the open <strong>Model Context Protocol</strong>.<br><span class="mono">Gmail · Calendar · Google Sheets · Todoist · WhatsApp · Perplexity · Browser (Playwright)</span></div></div>
+      <div class="tier"><div class="tl">The memory</div><div class="tb">A <strong>plain-text wiki</strong> on your own machine. Every person, decision, project, and routine — stored as markdown files you can read, edit, export, and walk away with.</div></div>
+      <div class="tier"><div class="tl">The automation</div><div class="tb"><strong>Scheduled watchers</strong> running in the background. Inbox scanned every 15 minutes. Calendar on the hour. Tasks every 30 minutes. Nothing you have to remember to run.</div></div>
+    </div>
+    <p class="caption">No proprietary format. No vendor lock-in. If the system ever stops serving you, you walk away with everything — in plain text.</p>
+  </section>
+
+  <section class="slide" data-slide="6">
+    <div class="eyebrow">What it knows about me</div>
+    <h2>To a T. <span class="accent">To the sentence.</span></h2>
+    <p class="lede" style="font-size: 16px;">The kind of context a great human assistant builds over ten years — in a system that can be queried in a second.</p>
+    <div class="portrait">
+      <div class="pcol">
+        <h4>The person</h4>
+        <div class="row"><span class="lab">Values</span><span class="val">Freedom · impact · connection · adventure · nature</span></div>
+        <div class="row"><span class="lab">Voice</span><span class="val">Direct, concrete, contrast-framed. <em>No LinkedIn register.</em></span></div>
+        <div class="row"><span class="lab">Patterns</span><span class="val">Pivots are deepening, not quitting. Wild and calm, always both.</span></div>
+        <div class="row"><span class="lab">Filters</span><span class="val">Any decision runs through five North-Star checks before it's made.</span></div>
+        <div class="row"><span class="lab">Red lines</span><span class="val">No performative masculinity. No inflated positioning. No flattery.</span></div>
+      </div>
+      <div class="pcol">
+        <h4>The life, right now</h4>
+        <div class="row"><span class="lab">Network</span><span class="val">127 people tiered by closeness; 8 core, 14 live.</span></div>
+        <div class="row"><span class="lab">Priorities</span><span class="val">Earn this month · land a UK placement · ship PhD</span></div>
+        <div class="row"><span class="lab">Live threads</span><span class="val">Abbey (coaching) · Eleni (meeting today) · 3 TES apps</span></div>
+        <div class="row"><span class="lab">Open loops</span><span class="val">Mum's birthday in 9 days · climbing off 6 weeks</span></div>
+        <div class="row"><span class="lab">On the horizon</span><span class="val">UK move late Aug · farewell tour · overland dream after</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="7">
+    <div class="eyebrow">How it gets sharper</div>
+    <h2>It updates itself <span class="accent">while you work.</span></h2>
+    <p class="lede" style="font-size: 16px;">You don't maintain the brain. You use it, and it keeps itself current — quietly, in the background. Real things that happened in mine last month:</p>
+    <div class="reflexes">
+      <div class="reflex"><div class="trig">When I decided</div><h5>It captured the decision and the reasoning.</h5><p>I decided to raise my coaching rate. The brain logged <span class="quote">"market puts sole-operator AI coaching at $180–300/hr mid-band"</span>, backlinked to my pricing page, and flagged the three prospects still attached to the old rate.</p></div>
+      <div class="reflex"><div class="trig">When someone new entered</div><h5>It built them a page.</h5><p>A mentor mentioned a school head I should know. The brain created her entity page, inferred the two-way relationship to the mentor, and had her context ready the next time I drafted outreach.</p></div>
+      <div class="reflex"><div class="trig">When facts contradicted</div><h5>It flagged the conflict.</h5><p>My draft bio said <span class="quote">"coaching since 2024"</span>. The wiki said 2025. The brain paused, asked which was right, and updated the single source of truth once I confirmed.</p></div>
+    </div>
+    <p class="caption">The longer you run it, the more it becomes an extension of your own thinking.</p>
+  </section>
+
+  <section class="slide" data-slide="8">
+    <div class="eyebrow">In your work</div>
+    <h2>It holds <span class="accent">every thread</span> across every channel.</h2>
+    <div class="two-col">
+      <div>
+        <p class="lede">A prospect replies. Before you answer, the brain pulls their full history — every email, every meeting, every message, what you charged, what you promised, what you decided last time.</p>
+        <p class="caption" style="margin-top: 18px;">Ten seconds. One view. Then it drafts the reply in your voice.</p>
+      </div>
+      <div>
+        <div class="mock">
+          <span class="h">&gt; jane replied · pull context?</span>
+          <hr>
+          <span class="k">Wiki</span>   · tier: live · last update: 19 Apr<br>
+          <span class="k">Gmail</span>  · 14 msgs · last: today 9:04am<br>
+          <span class="k">WhatsApp</span> · 6 msgs · last: today 8:47am<br>
+          <span class="k">Calendar</span> · 2 past · 1 upcoming<br>
+          <span class="k">Todoist</span> · 3 open tasks<br>
+          <span class="k">Decisions</span> · 2 (proposal $4k · CFO gate)<br>
+          <hr>
+          <span class="c">Pattern: when you're blocked on a CFO gate,</span><br>
+          <span class="c">offering to meet direct has unblocked it before.</span><br>
+          <span class="c">Want to try that line?</span><br>
+          <br>
+          Draft reply? <span class="g">y / edit / no</span>
+        </div>
+      </div>
+    </div>
+    <div class="wf-band">
+      <div class="lbl">Other work I've put through the brain this quarter</div>
+      <ul>
+        <li>Personalised outreach drafts, per contact, in my voice</li>
+        <li>CVs + cover letters tailored per role in under 10 minutes</li>
+        <li>Research consolidated into wiki pages with citations</li>
+        <li>One-pager prep briefs before every discovery call</li>
+        <li>Cross-tool thread view of any person, in 30 seconds</li>
+        <li>Job applications tracked across Sheets, pages, and Todoist</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="9">
+    <div class="eyebrow">In your life</div>
+    <h2>It remembers <span class="accent">the things that matter</span> outside of work.</h2>
+    <p class="lede" style="font-size: 16px;">Your family. Your health. Your relationships. The retreat you're planning with your brother. The promise you made three weeks ago. The thing you said you'd never forget — and did.</p>
+    <div class="scenes">
+      <div class="scene-card"><div class="tag">Relationships</div><div class="trig">Your mum's birthday is nine days out.</div><p>Brain surfaces her last message — she mentioned her shoulder physio and a new neighbour called Gwen. Worth asking about. Draft a note?</p></div>
+      <div class="scene-card"><div class="tag">Plans</div><div class="trig">The August retreat with your brother.</div><p>Every note, every vendor contact, every lesson from the past three you've run — one view. The Airbnb you shortlisted closes next Friday.</p></div>
+      <div class="scene-card"><div class="tag">Patterns</div><div class="trig">You haven't climbed in six weeks.</div><p>You've flagged this before as an identity canary — when climbing drops, so does everything else. Want me to find a weekend slot?</p></div>
+    </div>
+    <p class="caption">The same brain whether you're pitching a client or planning a weekend with your brother. Nothing falls through.</p>
+  </section>
+
+  <section class="slide" data-slide="10">
+    <div class="eyebrow">The integration</div>
+    <h2>One brain. <span class="accent">Every part of your life.</span></h2>
+    <div class="hub">
+      <div class="hub-side left">
+        <div class="spoke">Work <span class="sub">pipeline · clients · decisions</span></div>
+        <div class="spoke">Family <span class="sub">parents · siblings · plans</span></div>
+        <div class="spoke">Health <span class="sub">movement · sleep · patterns</span></div>
+        <div class="spoke">Money <span class="sub">income · runway · goals</span></div>
+      </div>
+      <div class="hub-core">
+        <div class="bigword">Your brain</div>
+        <div class="subword">One memory · one voice · one view</div>
+      </div>
+      <div class="hub-side right">
+        <div class="spoke">Relationships <span class="sub">live · warm · dormant</span></div>
+        <div class="spoke">Creative <span class="sub">writing · projects · ideas</span></div>
+        <div class="spoke">Travel <span class="sub">trips · logistics · dreams</span></div>
+        <div class="spoke">Growth <span class="sub">goals · practices · pivots</span></div>
+      </div>
+    </div>
+    <p class="caption">No context switch. No re-explaining yourself across tools. The same brain, everywhere you go.</p>
+  </section>
+
+  <section class="slide" data-slide="11">
+    <div class="eyebrow">The outcome</div>
+    <h2>The assistant you've <span class="accent">wished you had.</span></h2>
+    <div class="callouts">
+      <div class="callout"><div class="big">Nothing falls through.</div><div class="small">Every promise, every decision, every person — held. Your mind stops doing the job of a filing cabinet.</div></div>
+      <div class="callout"><div class="big">You sound like yourself.</div><div class="small">Every reply, every message, every draft — in your voice, from your actual memory. Not generic AI output.</div></div>
+      <div class="callout"><div class="big">You think more clearly.</div><div class="small">Because the system holds the context, you don't have to. Your best hours go to the work, not to remembering.</div></div>
+    </div>
+  </section>
+
+  <section class="slide" data-slide="12">
+    <div class="eyebrow">For your business</div>
+    <h2>Any tool you use already. <span class="accent">Wired into one brain.</span></h2>
+    <p class="lede" style="font-size: 16px; max-width: 900px;">Seven integrations live in my own system. Hundreds more exist — and if your tool has an API, it can wire into yours. Built around your stack, not mine.</p>
+    <div class="toolgrid">
+      <div class="toolcell"><h5>Customer systems</h5><div class="tag-line">Your CRM, your deals, your pipeline.</div><div class="eg">HubSpot · Salesforce · Pipedrive · Airtable · Attio</div></div>
+      <div class="toolcell"><h5>Communications</h5><div class="tag-line">Every channel your clients and team use.</div><div class="eg">Slack · Teams · Email · WhatsApp · SMS</div></div>
+      <div class="toolcell"><h5>Operations</h5><div class="tag-line">Your workspace — read and written to.</div><div class="eg">Notion · Asana · Linear · Trello · Google Workspace</div></div>
+      <div class="toolcell"><h5>Money</h5><div class="tag-line">Invoicing, payments, book-keeping.</div><div class="eg">Stripe · Xero · QuickBooks · bank feeds</div></div>
+      <div class="toolcell"><h5>Client-facing</h5><div class="tag-line">Scheduling, proposals, follow-through.</div><div class="eg">Calendly · Cal.com · DocuSign · Mailchimp · Beehiiv</div></div>
+      <div class="toolcell"><h5>Anything bespoke</h5><div class="tag-line">Your internal tools, your own database.</div><div class="eg">REST APIs · webhooks · custom MCP servers</div></div>
+    </div>
+    <p class="caption">Built once, with you, in your stack, tuned to your work. No off-the-shelf product. No lock-in.</p>
+  </section>
+
+  <section class="slide" data-slide="13">
+    <div class="eyebrow">What's possible for you</div>
+    <h2>Imagine an AI that <span class="accent">actually knows you.</span></h2>
+    <p class="lede" style="margin-top: 24px;">Not another subscription. Not another app to check. An executive assistant with a real brain — built around who you are, what you care about, and how you work.</p>
+    <div class="ladder-mini">
+      <div class="rung"><div class="r-name">Single session</div><div class="r-title">60 min, one thing</div><div class="r-price">$150 · technical</div></div>
+      <div class="rung"><div class="r-name">Coaching block</div><div class="r-title">4 × 60 min sessions</div><div class="r-price">$500 · technical</div></div>
+      <div class="rung rung-hero"><div class="r-name">The EA Setup</div><div class="r-title">One-week sprint · built for you</div><div class="r-price">$2,000 · anybody</div></div>
+      <div class="rung"><div class="r-name">Layers</div><div class="r-title">Per-capability add-ons</div><div class="r-price">$500–800 each</div></div>
+    </div>
+    <p class="lede" style="margin-top: 22px; font-size: 19px; color: var(--ink);">Let's spend 30 minutes figuring out what yours could look like.</p>
+    <p class="caption" style="margin-top: 18px;">Free intro call. You learn how it works as we build it. You're never dependent on me.</p>
+  </section>
+
+  <section class="slide contact-slide" data-slide="14">
+    <div class="eyebrow">Get in touch</div>
+    <h1>Sam Davis</h1>
+    <div class="lines">
+      <div><span>cradsdavis@gmail.com</span></div>
+      <div><span>linkedin.com/in/samuel-davis4</span></div>
+      <div><span>+61 0493 302 154</span></div>
+    </div>
+    <p class="kicker">Coogee, Sydney. Moving to the UK late 2026.</p>
+  </section>
+
+</main>
+
+<footer class="chrome">
+  <div class="hint">← → navigate · 1–9 jump · P print</div>
+  <div class="counter"><span id="curr">1</span> / <span id="total">14</span></div>
+</footer>
+
+<script>
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const counter = document.getElementById('curr');
+  document.getElementById('total').textContent = slides.length;
+  let idx = 0;
+  function show(n) {
+    idx = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    counter.textContent = idx + 1;
+    if (location.hash !== '#' + (idx + 1)) history.replaceState(null, '', '#' + (idx + 1));
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(idx + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(idx - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(slides.length - 1); }
+    else if (e.key === 'p' || e.key === 'P') { window.print(); }
+    else if (e.key >= '1' && e.key <= '9') { const n = parseInt(e.key, 10) - 1; if (n < slides.length) show(n); }
+  });
+  const initial = parseInt((location.hash || '#1').slice(1), 10);
+  show(isFinite(initial) && initial > 0 ? initial - 1 : 0);
+  function fit() {
+    const designH = 640, designW = 1180;
+    const reserveH = 120, reserveW = 128;
+    const availH = window.innerHeight - reserveH;
+    const availW = window.innerWidth - reserveW;
+    const sH = availH < designH ? availH / designH : 1;
+    const sW = availW < designW ? availW / designW : 1;
+    document.documentElement.style.setProperty('--fit', Math.min(sH, sW, 1));
+  }
+  window.addEventListener('resize', fit);
+  fit();
+})();
+</script>
+
+</body>
+</html>
