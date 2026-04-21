@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sam Davis — AI coach &amp; systems builder</title>
+<meta name="description" content="I build AI executive assistants with real brains — for founders who want their AI to actually know them.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&display=swap');
+
+  :root {
+    --bg: #FAF7EE;
+    --bg-soft: #F2EEDD;
+    --bg-card: #DCE0B6;
+    --bg-card-hi: #C8CEA0;
+    --ink: #3E3418;
+    --ink-soft: #6B5F3A;
+    --ink-faint: #998D6B;
+    --accent: #8F7530;
+    --accent-bright: #B89B4A;
+    --accent-deep: #6B5624;
+    --accent-glow: rgba(184, 155, 74, 0.22);
+    --rule: #B0B490;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --serif: "Playfair Display", Georgia, serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 18px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 32px 60px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    font-weight: 800;
+    margin-bottom: 20px;
+    max-width: 900px;
+  }
+  h1 em {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  .lede {
+    font-size: clamp(18px, 1.6vw, 23px);
+    color: var(--ink-soft);
+    line-height: 1.5;
+    max-width: 720px;
+    margin-bottom: 64px;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 72px;
+  }
+
+  a.card {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 32px 34px 28px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+  }
+  a.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 32px rgba(62, 52, 24, 0.1);
+  }
+  a.card .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  a.card h2 {
+    font-family: var(--serif);
+    font-size: clamp(24px, 2.4vw, 32px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  a.card h2 em {
+    color: var(--accent);
+    font-style: italic;
+  }
+  a.card p {
+    font-size: 15.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+  a.card .go {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .contact {
+    padding-top: 36px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 2;
+  }
+  .contact a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--ink-faint);
+  }
+  .contact a:hover { border-bottom-color: var(--accent); }
+  .contact .kicker {
+    margin-top: 20px;
+    color: var(--ink-faint);
+    font-style: italic;
+    font-size: 13.5px;
+    font-family: var(--sans);
+  }
+
+  @media (max-width: 760px) {
+    main { padding: 48px 24px 48px; }
+    .cards { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">Sam Davis · AI coach &amp; systems builder</div>
+    <h1>An AI executive assistant <em>with a real brain.</em></h1>
+    <p class="lede">I build executive assistants that actually know you — your voice, your people, your priorities, your life. Not another chatbot. Not another app. A real memory underneath everything you do.</p>
+
+    <div class="cards">
+      <a class="card" href="overview/">
+        <div class="tag">What this is</div>
+        <h2>An executive assistant<br>that <em>actually knows me.</em></h2>
+        <p>A working demo of what's possible when AI has real context — aware of who you are, what you care about, who's in your life, and how you write.</p>
+        <div class="go">See the demo →</div>
+      </a>
+      <a class="card" href="offer/">
+        <div class="tag">How we work together</div>
+        <h2>Four ways in,<br><em>one ladder.</em></h2>
+        <p>From a single session to a one-week EA Setup to per-capability layers — pick where you start and climb as you want. Credits carry forward.</p>
+        <div class="go">See the offer →</div>
+      </a>
+    </div>
+
+    <div class="contact">
+      <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+      <div><a href="https://linkedin.com/in/samuel-davis4">linkedin.com/in/samuel-davis4</a></div>
+      <div>+61 0493 302 154</div>
+      <p class="kicker">Coogee, Sydney. Moving to the UK late 2026.</p>
+    </div>
+  </main>
+</body>
+</html>
