@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Help your team adopt AI without breaking your product — Sam Davis</title>
-<meta name="description" content="Sam Davis — fractional AI lead for climate / ESG companies and the consultancies that serve them. Two rungs: AI Leverage Read ($2,500) and Fractional AI Lead (from $4,000/mo).">
+<meta name="description" content="Sam Davis — AI builds for climate & ESG businesses. Embedded part-time alongside your team. AI Leverage Read ($2,500) and Fractional AI Lead (from $4,000/mo).">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&display=swap');
 
@@ -23,441 +24,674 @@
     --good: #7A8B3F;
     --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-    --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+    --serif: "Playfair Display", "Cormorant Garamond", Georgia, "Times New Roman", serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  @page { size: A4 portrait; margin: 0; }
-
   html, body {
+    height: 100%;
     background: var(--bg);
     color: var(--ink);
     font-family: var(--sans);
+    font-size: 18px;
+    line-height: 1.55;
+    overflow: hidden;
     -webkit-font-smoothing: antialiased;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+  }
+  body { display: flex; flex-direction: column; }
+
+  header.chrome {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 44px;
+    padding: 0 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; color: var(--ink-faint);
+    z-index: 100; pointer-events: none;
+  }
+  header.chrome .brand b { color: var(--ink-soft); font-weight: 600; }
+
+  footer.chrome {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 44px;
+    padding: 0 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12px; color: var(--ink-faint);
+    z-index: 100;
+  }
+  footer.chrome .counter { font-family: var(--mono); }
+  footer.chrome .hint { opacity: 0.7; }
+  footer.chrome a { color: var(--ink-faint); text-decoration: none; border-bottom: 1px dashed var(--ink-faint); pointer-events: auto; }
+  footer.chrome a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  main.stage {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    padding: 88px 64px;
+    min-height: 100vh;
   }
 
-  .page {
-    width: 210mm;
-    min-height: 297mm;
-    margin: 0 auto;
-    padding: 13mm 13mm 11mm;
-    display: flex;
-    flex-direction: column;
-    gap: 6mm;
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1180px;
+    animation: fade 0.4s ease;
+    transform: scale(var(--fit, 1));
+    transform-origin: center center;
   }
+  .slide.active { display: block; }
 
-  header.top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 3.5mm;
-    border-bottom: 1px solid var(--rule);
-  }
-  header.top .ident { display: flex; align-items: center; gap: 10px; }
-  header.top .who {
-    font-size: 11.5px;
-    color: var(--ink-soft);
-    line-height: 1.3;
-  }
-  header.top .who b { color: var(--ink); font-weight: 600; }
-  header.top .meta {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--ink-faint);
-    text-align: right;
-    letter-spacing: 0.05em;
-  }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 
-  .hero {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(38px, 5.2vw, 66px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-weight: 800;
+    margin-bottom: 22px;
+  }
+  h1 .accent, h2 .accent { color: var(--accent); font-style: italic; font-weight: 700; }
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(30px, 3.5vw, 46px);
+    line-height: 1.14;
+    letter-spacing: -0.005em;
+    font-weight: 800;
+    margin-bottom: 20px;
   }
   .eyebrow {
     font-family: var(--mono);
-    font-size: 9.5px;
+    font-size: 12px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--accent);
+    margin-bottom: 14px;
   }
-  h1 {
-    font-family: var(--serif);
-    font-size: 32px;
-    line-height: 1.06;
-    letter-spacing: -0.01em;
-    font-weight: 800;
-    color: var(--ink);
-  }
-  h1 .accent { color: var(--accent); font-style: italic; font-weight: 700; }
   .lede {
-    font-size: 12px;
+    font-size: clamp(18px, 1.55vw, 23px);
     color: var(--ink-soft);
-    line-height: 1.55;
-    max-width: 175mm;
+    line-height: 1.5;
+    max-width: 900px;
+    font-weight: 400;
   }
   .lede strong { color: var(--ink); font-weight: 600; }
+  .caption {
+    margin-top: 28px;
+    color: var(--ink-soft);
+    font-style: italic;
+    font-size: 16px;
+    max-width: 920px;
+  }
+  .kicker {
+    margin-top: 40px;
+    color: var(--ink-faint);
+    font-size: 14px;
+    font-style: italic;
+  }
 
-  h2.sec {
-    font-family: var(--mono);
-    font-size: 9.5px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 6px;
-    padding-bottom: 4px;
+  ul.hits { list-style: none; margin-top: 20px; }
+  ul.hits li {
+    padding: 12px 0;
     border-bottom: 1px solid var(--rule);
-    font-weight: 600;
+    font-size: 19px;
+    color: var(--ink);
+    display: flex; gap: 16px; align-items: baseline;
   }
+  ul.hits li:last-child { border-bottom: 0; }
+  ul.hits li::before { content: "—"; color: var(--accent); font-family: var(--mono); flex-shrink: 0; }
 
-  .audience {
+  .patterns-list { margin-top: 14px; display: grid; gap: 6px; }
+  .pat {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 6px;
-  }
-  .aud-box {
+    grid-template-columns: 46px 1fr;
+    gap: 18px;
+    align-items: start;
     background: var(--bg-card);
     border: 1px solid var(--rule);
     border-left: 3px solid var(--accent);
-    border-radius: 4px;
-    padding: 8px 10px;
+    border-radius: 5px;
+    padding: 12px 20px;
+    transition: transform 0.2s;
   }
-  .aud-box .lbl {
+  .pat:hover { transform: translateX(4px); }
+  .pat .n {
     font-family: var(--mono);
-    font-size: 8.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
+    font-size: 20px;
+    font-weight: 700;
     color: var(--accent);
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-  .aud-box .body {
-    font-size: 10.5px;
-    color: var(--ink);
+    letter-spacing: -0.02em;
     line-height: 1.4;
   }
-  .aud-box .body strong { font-weight: 600; }
+  .pat .body { line-height: 1.45; }
+  .pat .body .ttl { font-weight: 700; font-size: 16px; color: var(--ink); letter-spacing: -0.01em; margin-bottom: 4px; }
+  .pat .body .txt { font-size: 14.5px; color: var(--ink-soft); line-height: 1.5; }
 
-  .patterns { display: flex; flex-direction: column; gap: 4px; }
-  .pattern {
+  .three-col {
     display: grid;
-    grid-template-columns: 22px 1fr;
-    gap: 10px;
-    padding: 7px 11px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 24px;
+  }
+  .pillar {
     background: var(--bg-card);
     border: 1px solid var(--rule);
-    border-left: 3px solid var(--accent);
-    border-radius: 4px;
-    align-items: start;
+    border-radius: 7px;
+    padding: 22px 24px;
   }
-  .pattern .num {
+  .pillar .tag {
     font-family: var(--mono);
     font-size: 11px;
-    color: var(--accent);
-    font-weight: 700;
-    line-height: 1.4;
-  }
-  .pattern .text { font-size: 10.5px; line-height: 1.45; color: var(--ink-soft); }
-  .pattern .text strong { color: var(--ink); font-weight: 700; }
-
-  .ladder { display: grid; grid-template-columns: 1fr 1.3fr; gap: 6px; }
-  .rung {
-    background: var(--bg-card);
-    border: 1px solid var(--rule);
-    border-radius: 4px;
-    padding: 10px 12px;
-  }
-  .rung .nm {
-    font-family: var(--mono);
-    font-size: 8.5px;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.13em;
     color: var(--accent);
+    margin-bottom: 10px;
     font-weight: 600;
-    margin-bottom: 3px;
   }
-  .rung .ttl {
-    font-family: var(--serif);
-    font-size: 14px;
-    font-weight: 800;
+  .pillar h5 {
+    font-size: 18px;
+    line-height: 1.25;
+    font-weight: 700;
+    margin-bottom: 10px;
     color: var(--ink);
     letter-spacing: -0.01em;
-    line-height: 1.15;
-    margin-bottom: 2px;
   }
-  .rung .pr {
-    font-family: var(--mono);
-    font-size: 11.5px;
-    color: var(--ink);
-    font-weight: 600;
-    margin-bottom: 5px;
-  }
-  .rung .body { font-size: 10.5px; color: var(--ink-soft); line-height: 1.45; }
-  .rung-hero { background: var(--accent-bright); border-color: var(--accent-deep); }
-  .rung-hero .nm { color: var(--accent-deep); }
-  .rung-hero .ttl, .rung-hero .pr { color: var(--ink); }
-  .rung-hero .body { color: var(--ink); opacity: 0.85; }
-  .ladder-note { font-style: italic; font-size: 10px; color: var(--ink-soft); margin-top: 5px; }
+  .pillar p { font-size: 14px; color: var(--ink-soft); line-height: 1.55; }
 
-  .antis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
-  .anti {
-    background: var(--bg-soft);
-    border: 1px dashed var(--rule);
-    border-radius: 3px;
-    padding: 7px 9px;
+  .four-col {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 22px;
   }
-  .anti .x {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--ink-faint);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 3px;
-  }
-  .anti .text { font-size: 10px; color: var(--ink); line-height: 1.35; font-weight: 500; }
-
-  .proof { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
-  .build {
+  .example {
     background: var(--bg-card);
     border: 1px solid var(--rule);
     border-top: 2px solid var(--accent);
-    border-radius: 3px;
-    padding: 8px 10px;
+    border-radius: 6px;
+    padding: 18px 18px;
   }
-  .build .nm {
-    font-family: var(--serif);
-    font-size: 12.5px;
+  .example .tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .example h6 {
+    font-size: 14.5px;
+    font-weight: 700;
     color: var(--ink);
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    margin-bottom: 8px;
+  }
+  .example p { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+
+  .ladder {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .rung {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    padding: 22px 26px;
+  }
+  .rung .nm {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .rung .ttl {
+    font-family: var(--serif);
+    font-size: 28px;
     font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .rung .pr {
+    font-family: var(--mono);
+    font-size: 15.5px;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .rung .body {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .rung-hero {
+    background: var(--accent-bright);
+    border-color: var(--accent-deep);
+    box-shadow: 0 0 14px var(--accent-glow);
+  }
+  .rung-hero .nm { color: var(--accent-deep); }
+  .rung-hero .ttl, .rung-hero .pr { color: var(--ink); }
+  .rung-hero .body { color: var(--ink); opacity: 0.85; }
+  .credits-note {
+    margin-top: 18px;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+
+  .antis {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 24px;
+  }
+  .anti {
+    background: var(--bg-soft);
+    border: 1px dashed var(--rule);
+    border-radius: 6px;
+    padding: 18px 22px;
+  }
+  .anti .x {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .anti .text { font-size: 16.5px; color: var(--ink); line-height: 1.45; font-weight: 500; }
+
+  .builds {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 22px;
+  }
+  .build-card {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    border-radius: 6px;
+    padding: 18px 22px;
+  }
+  .build-card .nm {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--ink);
     letter-spacing: -0.01em;
     line-height: 1.15;
-    margin-bottom: 3px;
+    margin-bottom: 6px;
   }
-  .build .body { font-size: 9.5px; color: var(--ink-soft); line-height: 1.4; }
-  .build .body strong { color: var(--ink); font-weight: 600; }
+  .build-card .lab {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .build-card .body {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .build-card .body strong { color: var(--ink); font-weight: 600; }
 
-  .bg-line { margin-top: 6px; font-size: 10.5px; color: var(--ink-soft); line-height: 1.5; }
+  .bg-line {
+    margin-top: 18px;
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    max-width: 1000px;
+  }
   .bg-line strong { color: var(--ink); font-weight: 600; }
 
-  .demos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .demo-link {
-    background: var(--bg-soft);
-    border: 1px solid var(--rule);
-    border-radius: 5px;
-    padding: 9px 12px;
-    text-decoration: none;
-    color: var(--ink);
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  .callouts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 32px;
   }
-  .demo-link .arrow { font-family: var(--mono); color: var(--accent); font-size: 18px; font-weight: 700; }
-  .demo-link .text { flex: 1; }
-  .demo-link .text .ttl {
-    font-family: var(--serif);
-    font-weight: 800;
-    font-size: 12.5px;
+  .callout {
+    border-left: 2px solid var(--accent);
+    padding: 8px 22px;
+  }
+  .callout .big {
+    font-size: 22px;
+    font-weight: 700;
     color: var(--ink);
     letter-spacing: -0.01em;
     line-height: 1.2;
+    margin-bottom: 10px;
   }
-  .demo-link .text .url {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--accent);
-    margin-top: 2px;
-    word-break: break-all;
-  }
-  .demo-link .text .sub { font-size: 9.5px; color: var(--ink-soft); margin-top: 3px; line-height: 1.4; }
+  .callout .small { color: var(--ink-soft); font-size: 14.5px; line-height: 1.5; }
 
-  .cta {
-    background: var(--accent-bright);
-    border: 1px solid var(--accent-deep);
-    border-radius: 6px;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: auto;
-    text-decoration: none;
-    color: var(--ink);
-  }
-  .cta .left .ttl {
-    font-family: var(--serif);
+  .contact-slide .lines {
+    font-family: var(--mono);
     font-size: 17px;
-    font-weight: 800;
-    color: var(--ink);
-    letter-spacing: -0.01em;
-    line-height: 1.15;
+    color: var(--ink-soft);
+    margin-top: 30px;
+    line-height: 2;
   }
-  .cta .left .sub { font-size: 10.5px; color: var(--ink); opacity: 0.8; margin-top: 3px; }
-  .cta .url {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--ink);
-    font-weight: 700;
-    text-decoration: none;
-    background: var(--bg);
-    padding: 7px 13px;
-    border-radius: 4px;
-    border: 1px solid var(--accent-deep);
-    white-space: nowrap;
+  .contact-slide .lines span { color: var(--ink); }
+  .contact-slide a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
+
+  @media print {
+    @page { size: landscape; margin: 0; }
+    html, body { overflow: visible; height: auto; }
+    header.chrome, footer.chrome { display: none; }
+    main.stage { padding: 40px; min-height: auto; }
+    .slide { display: block !important; page-break-after: always; max-width: 100%; padding: 20px; }
+    .slide:last-child { page-break-after: auto; }
   }
 
-  footer.bot {
-    border-top: 1px solid var(--rule);
-    padding-top: 6px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: var(--mono);
-    font-size: 9.5px;
-    color: var(--ink-soft);
+  @media (max-width: 960px) {
+    main.stage { padding: 56px 24px; }
+    .three-col, .four-col, .callouts, .builds, .antis, .ladder { grid-template-columns: 1fr; }
+    .pat { grid-template-columns: 36px 1fr; gap: 12px; padding: 10px 14px; }
   }
-  footer.bot .left span { color: var(--ink); }
-  footer.bot .right { color: var(--ink-faint); font-style: italic; font-family: var(--sans); }
 </style>
 </head>
 <body>
 
-<div class="page">
+<header class="chrome">
+  <div class="brand"><b>Sam Davis</b> · AI builder &amp; translator</div>
+  <div class="brand">cradsdavis@gmail.com</div>
+</header>
 
-  <header class="top">
-    <div class="ident">
-      <div class="who"><b>Sam Davis</b><br>AI builder &amp; translator · fractional AI lead</div>
-    </div>
-    <div class="meta">B2B Build · 2026<br>Coogee, Sydney</div>
-  </header>
+<main class="stage">
 
-  <section class="hero">
-    <div class="eyebrow">Fractional AI engagements for climate &amp; ESG companies</div>
+  <!-- SLIDE 1 — Title -->
+  <section class="slide active" data-slide="1">
+    <div class="eyebrow">AI for climate &amp; ESG businesses</div>
     <h1>Help your team adopt AI <span class="accent">without breaking your product.</span></h1>
-    <p class="lede">If you're running a climate or sustainability business with a product or service line, you've already started doing AI — and the honest answer is, it's not landing the way it should. <strong>I work as a fractional AI lead</strong> — embedded part-time, alongside your team, picking up the AI problems that are stuck and shipping them. I'm not selling software. I'm not delivering a strategy deck. I write code, I sit with your engineers, and I leave them faster than I found them.</p>
+    <p class="lede">You already have AI ambitions. Your team is stretched. The integrations don't stick. <strong>I work alongside your engineers, part-time, on the AI problems that are stuck</strong> — and ship them.</p>
+    <p class="kicker">Sam Davis · Coogee, Sydney · 2026</p>
   </section>
 
-  <section>
-    <h2 class="sec">Who this is for</h2>
-    <div class="audience">
-      <div class="aud-box">
-        <div class="lbl">Climate &amp; ESG</div>
-        <div class="body">Scaleups, consultancies, advisory firms with a product or delivery process where AI <strong>should compound but currently doesn't.</strong></div>
+  <!-- SLIDE 2 — Problem -->
+  <section class="slide" data-slide="2">
+    <div class="eyebrow">The honest answer</div>
+    <h2>Most AI initiatives stall <span class="accent">in the same five places.</span></h2>
+    <ul class="hits">
+      <li>The reporting feature your accountants wanted is half-deployed.</li>
+      <li>Each new client still needs a week of taxonomy mapping.</li>
+      <li>The chat assistant your sales team built doesn't sound like you.</li>
+      <li>Your engineers are split across three roadmaps.</li>
+      <li>You hired an agency once. Six figures, three months, nothing shipped.</li>
+    </ul>
+    <p class="caption">The bottleneck isn't the model. It's everything around it.</p>
+  </section>
+
+  <!-- SLIDE 3 — The five patterns -->
+  <section class="slide" data-slide="3">
+    <div class="eyebrow">What I keep seeing</div>
+    <h2>Five patterns that <span class="accent">repeat across every climate-tech</span> I work with.</h2>
+    <div class="patterns-list">
+      <div class="pat">
+        <div class="n">1</div>
+        <div class="body">
+          <div class="ttl">The integration trap.</div>
+          <div class="txt">The model works in a notebook. Then it has to read your customer's data format, write to your audit-trail, route to your CRM, and explain itself when it's wrong. That's where projects stall.</div>
+        </div>
       </div>
-      <div class="aud-box">
-        <div class="lbl">Service businesses</div>
-        <div class="body">Coaches, professional services, community-builders where AI inside the operations would <strong>change the unit economics.</strong></div>
+      <div class="pat">
+        <div class="n">2</div>
+        <div class="body">
+          <div class="ttl">The adoption gap.</div>
+          <div class="txt">Features ship into a vacuum because the team that has to <em>use</em> them — sales, customer success, the channel partner — wasn't in the room when they were being built.</div>
+        </div>
       </div>
-      <div class="aud-box">
-        <div class="lbl">Need a champion</div>
-        <div class="body">A founder, head of product or eng, ops lead — someone who can carry the work after I'm out. <strong>I work alongside, not instead of.</strong></div>
+      <div class="pat">
+        <div class="n">3</div>
+        <div class="body">
+          <div class="ttl">The hand-tuning death spiral.</div>
+          <div class="txt">Every new client takes a week of taxonomy work, supplier categorisation, or chart-of-accounts wrangling. Growth caps at the rate you can hire analysts. AI applied right turns this into a one-hour configuration.</div>
+        </div>
+      </div>
+      <div class="pat">
+        <div class="n">4</div>
+        <div class="body">
+          <div class="ttl">The architecture trap.</div>
+          <div class="txt">AI buried inside a process tends to fail silently and break the audit trail. AI sitting <em>above</em> the process — designing and adapting it — keeps the audit trail clean and the failure modes legible.</div>
+        </div>
+      </div>
+      <div class="pat">
+        <div class="n">5</div>
+        <div class="body">
+          <div class="ttl">The translation gap.</div>
+          <div class="txt">Between technical and non-technical, between platform team and customer team, between what the LLM can do and what your product needs it to do. That's the actual job.</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section>
-    <h2 class="sec">What I keep seeing</h2>
-    <div class="patterns">
-      <div class="pattern">
-        <div class="num">01</div>
-        <div class="text"><strong>The AI isn't the bottleneck — the fifteen integration points around it are.</strong> The model works in a notebook. Then it needs to read your customer's data format, write to your audit-trail schema, route to your CRM, and explain itself when it's wrong. That's the actual project, and it's where most AI initiatives stall.</div>
+  <!-- SLIDE 4 — How I work -->
+  <section class="slide" data-slide="4">
+    <div class="eyebrow">How I work</div>
+    <h2>Alongside your team. <span class="accent">Not instead of them.</span></h2>
+    <p class="lede">Not a vendor pitch. Not a strategy deck. I write code, I sit with your engineers, and I leave them faster than I found them.</p>
+    <div class="three-col">
+      <div class="pillar">
+        <div class="tag">I write code</div>
+        <h5>The build is the work.</h5>
+        <p>I open PRs in your repo. I deploy. I test. I review. I'm not a slide-deck consultant — I'm in the codebase with your team.</p>
       </div>
-      <div class="pattern">
-        <div class="num">02</div>
-        <div class="text"><strong>Adoption is built before the feature ships, not after.</strong> The team that has to <em>use</em> the AI — sales, customer success, the channel partner — needs to be in the room while it's being built, not in the demo afterward.</div>
+      <div class="pillar">
+        <div class="tag">I work with your team</div>
+        <h5>Capability stays with you.</h5>
+        <p>Your engineers learn the patterns by working through them with me. When I leave, the people who use the system every day know how it works.</p>
       </div>
-      <div class="pattern">
-        <div class="num">03</div>
-        <div class="text"><strong>Hand-tuning is where margin goes to die.</strong> If every new client requires a week of taxonomy mapping, supplier categorisation, or chart-of-accounts wrangling, growth caps at the rate you can hire analysts. AI applied right makes that a one-hour configuration. AI applied wrong adds a chatbot nobody uses.</div>
-      </div>
-      <div class="pattern">
-        <div class="num">04</div>
-        <div class="text"><strong>Where you put the AI matters more than which model you pick.</strong> AI sitting <em>inside</em> a deterministic pipeline tends to fail silently and break the audit trail. AI sitting <em>above</em> the pipeline — designing and adapting the deterministic steps the engine then runs — keeps the audit trail clean and the failure modes legible.</div>
-      </div>
-      <div class="pattern">
-        <div class="num">05</div>
-        <div class="text"><strong>Translation between layers is the real job.</strong> Between technical and non-technical, between platform team and customer team, between what the LLM can do and what your product needs it to do. That's where I sit.</div>
+      <div class="pillar">
+        <div class="tag">I make adoption stick</div>
+        <h5>Built with the people who'll use it.</h5>
+        <p>Sales, customer success, the channel partner — in the room while the feature is being built. By the time it ships, they already know how to use it.</p>
       </div>
     </div>
   </section>
 
-  <section>
-    <h2 class="sec">How we can work together — two rungs</h2>
+  <!-- SLIDE 5 — Where AI compounds -->
+  <section class="slide" data-slide="5">
+    <div class="eyebrow">Where AI compounds in a climate / ESG business</div>
+    <h2>Real shapes I've seen <span class="accent">work — and stick.</span></h2>
+    <div class="four-col">
+      <div class="example">
+        <div class="tag">Onboarding</div>
+        <h6>From a week per client to an hour.</h6>
+        <p>Taxonomy mapping, supplier matching, chart-of-accounts alignment — automated where it can be, AI-assisted where it can't.</p>
+      </div>
+      <div class="example">
+        <div class="tag">Reporting</div>
+        <h6>Audit-trail-clean across frameworks.</h6>
+        <p>One source of truth, multi-framework output (CSRD, TCFD, AASB S2, SEC). The AI designs the path, the deterministic engine runs it.</p>
+      </div>
+      <div class="example">
+        <div class="tag">Channel</div>
+        <h6>Customer success that scales with partners.</h6>
+        <p>Tools that let advisor / channel partners onboard, configure, and support their own clients without your team in every loop.</p>
+      </div>
+      <div class="example">
+        <div class="tag">Customer-facing</div>
+        <h6>AI features that actually compound.</h6>
+        <p>Built around adoption, not the demo. The team that uses them every day was in the room when the feature was being designed.</p>
+      </div>
+    </div>
+    <p class="caption">Same shape, different industry. Whatever your stack already is, I work in it.</p>
+  </section>
+
+  <!-- SLIDE 6 — Two rungs -->
+  <section class="slide" data-slide="6">
+    <div class="eyebrow">How we work together</div>
+    <h2>Two rungs. <span class="accent">Pay for clarity. Then build.</span></h2>
     <div class="ladder">
       <div class="rung">
         <div class="nm">Entry · pay-for-clarity</div>
         <div class="ttl">AI Leverage Read</div>
         <div class="pr">$2,500 fixed · 1 week</div>
-        <div class="body">I sit with your operations, product, and customer flow. I name the three places AI compounds in your business, and the three where it would add noise. You get a written read (4–6 pages), a recommended 90-day move, and a pricing-anchored plan if you want to continue. Three structured calls; I do the rest async.</div>
+        <div class="body">I sit with your operations, product, and customer flow. I name the three places AI compounds in your business — and the three where it would add noise. You get a written read (4–6 pages), a recommended 90-day move, and a pricing-anchored plan if you want to continue. Three structured calls; I do the rest async.</div>
       </div>
       <div class="rung rung-hero">
         <div class="nm">★ Embedded · ongoing</div>
         <div class="ttl">Fractional AI Lead</div>
         <div class="pr">From $4,000 / month · 3-month minimum</div>
-        <div class="body">1 day/week embedded + async between days. I work alongside your team — picking up AI problems as they surface, building or coaching your engineers to, translating between technical and non-technical, and making sure what ships actually lands with the customer. Quarterly review of what compounded vs what didn't.</div>
+        <div class="body">1 day/week embedded with your team + async between days. I pick up AI problems as they surface, build alongside your engineers (or coach them to build), translate between technical and non-technical, and make sure what ships actually lands with the customer. Quarterly review of what compounded vs what didn't.</div>
       </div>
     </div>
-    <p class="ladder-note">Read credits: every dollar you spend on the AI Leverage Read counts toward your first month of Fractional AI Lead if you start within 90 days.</p>
+    <p class="credits-note">Read credits: every dollar you spend on the AI Leverage Read counts toward your first month of Fractional AI Lead if you start within 90 days.</p>
   </section>
 
-  <section>
-    <h2 class="sec">What this isn't</h2>
+  <!-- SLIDE 7 — What this isn't -->
+  <section class="slide" data-slide="7">
+    <div class="eyebrow">The boundaries</div>
+    <h2>What this isn't.</h2>
+    <p class="lede">Naming what I won't do is as load-bearing as naming what I will.</p>
     <div class="antis">
-      <div class="anti"><div class="x">Not</div><div class="text">a vendor pitch. I'm not selling carbon software or a wrapper around Claude.</div></div>
-      <div class="anti"><div class="x">Not</div><div class="text">a Sam-solo sprint. I work alongside your team because that's what makes the work stick.</div></div>
-      <div class="anti"><div class="x">Not</div><div class="text">strategy-only. I write code. I open PRs.</div></div>
-      <div class="anti"><div class="x">Not</div><div class="text">enterprise-agency priced. Small roster, real work, no SOC-2 sales team.</div></div>
+      <div class="anti">
+        <div class="x">Not</div>
+        <div class="text">a vendor pitch. I'm not selling carbon software, and I'm not a wrapper around Claude. I work on what you already have.</div>
+      </div>
+      <div class="anti">
+        <div class="x">Not</div>
+        <div class="text">a Sam-solo sprint. If you want me to disappear for six weeks and hand back a finished thing, that's not what this is. The work has to live with your team to stick.</div>
+      </div>
+      <div class="anti">
+        <div class="x">Not</div>
+        <div class="text">strategy-only. I don't write decks. I write code. I open PRs. I deploy.</div>
+      </div>
+      <div class="anti">
+        <div class="x">Not</div>
+        <div class="text">enterprise-agency priced. Small roster, real work. If you need a 12-person consultancy with a SOC-2 contract and a sales team, I'll point you at one.</div>
+      </div>
     </div>
   </section>
 
-  <section>
-    <h2 class="sec">Proof — what I've built</h2>
-    <div class="proof">
-      <div class="build"><div class="nm">Carbon Tracker</div><div class="body"><strong>11-agent prototype</strong> for a UK carbon consultancy: PostgreSQL + Climatiq + RAG + audit trail. The most architecturally sophisticated build I've shipped.</div></div>
-      <div class="build"><div class="nm">Derwen</div><div class="body"><strong>Live AI biodiversity assistant.</strong> n8n + Perplexity + GBIF + OpenAI. Live at derwenai.replit.app.</div></div>
-      <div class="build"><div class="nm">SEAF data pipeline</div><div class="body"><strong>Three-tier data warehouse</strong> for environmental impact assessments at SEAF / UWA, built with Claude Code as a development collaborator. Systems-thinking + facilitating scientists rather than replacing them.</div></div>
-      <div class="build"><div class="nm">Turing DSG '22</div><div class="body"><strong>10-person AI sprint</strong> at the Alan Turing Institute, delivering in a week for the UK government's marine science agency.</div></div>
+  <!-- SLIDE 8 — Proof -->
+  <section class="slide" data-slide="8">
+    <div class="eyebrow">Proof</div>
+    <h2>Real systems. <span class="accent">Live or shipped.</span></h2>
+    <div class="builds">
+      <div class="build-card">
+        <div class="nm">Carbon Tracker</div>
+        <div class="lab">11-agent prototype · UK carbon consultancy</div>
+        <div class="body">PostgreSQL + Climatiq + RAG + audit trail. The most architecturally sophisticated build I've shipped.</div>
+      </div>
+      <div class="build-card">
+        <div class="nm">Derwen</div>
+        <div class="lab">Live AI biodiversity assistant</div>
+        <div class="body">n8n + Perplexity + GBIF + OpenAI. Live at <strong>derwenai.replit.app</strong>.</div>
+      </div>
+      <div class="build-card">
+        <div class="nm">SEAF data pipeline</div>
+        <div class="lab">3-tier data warehouse · environmental impact</div>
+        <div class="body">Built with Claude Code as a development collaborator. Approach: systems-thinking + facilitating the science team's domain knowledge rather than replacing it.</div>
+      </div>
+      <div class="build-card">
+        <div class="nm">Turing DSG '22</div>
+        <div class="lab">10-person AI sprint · UK government</div>
+        <div class="body">Part of a 10-person sprint at the Alan Turing Institute, delivering in a week for the UK government's marine science agency.</div>
+      </div>
     </div>
     <p class="bg-line"><strong>Background.</strong> PhD environmental &amp; ecological data science (USYD, DARE ARC). MPhys Physics &amp; Mathematics, First Class (Manchester). Seven years across the European Space Agency, the Alan Turing Institute, UK universities, and a UK carbon consultancy — always as the translator between technical depth and the people who need to use it.</p>
   </section>
 
-  <section>
-    <h2 class="sec">See also</h2>
-    <div class="demos">
-      <a class="demo-link" href="https://cradsdavis-cell.github.io/samdavis-site/onepager/">
-        <div class="arrow">→</div>
-        <div class="text">
-          <div class="ttl">Personal AI EA — for founders</div>
-          <div class="url">cradsdavis-cell.github.io/samdavis-site/onepager</div>
-          <div class="sub">Building your own executive assistant. Different audience, different ladder.</div>
-        </div>
-      </a>
-      <a class="demo-link" href="https://cradsdavis-cell.github.io/samdavis-site/overview/">
-        <div class="arrow">→</div>
-        <div class="text">
-          <div class="ttl">The system in detail</div>
-          <div class="url">cradsdavis-cell.github.io/samdavis-site/overview</div>
-          <div class="sub">What the EA architecture looks like under the hood — the live demo Sam runs his own life on.</div>
-        </div>
-      </a>
+  <!-- SLIDE 9 — Outcome -->
+  <section class="slide" data-slide="9">
+    <div class="eyebrow">The outcome</div>
+    <h2>AI that <span class="accent">actually lands.</span></h2>
+    <div class="callouts">
+      <div class="callout">
+        <div class="big">Your features ship and stay shipped.</div>
+        <div class="small">Adoption is built into the work, not bolted on after. The team that uses the feature was in the room when it was being designed.</div>
+      </div>
+      <div class="callout">
+        <div class="big">Your team gets faster, not more dependent.</div>
+        <div class="small">Capability transfers as we work. When I leave, the people who use the system every day already know how it works under the hood.</div>
+      </div>
+      <div class="callout">
+        <div class="big">The audit trail stays clean.</div>
+        <div class="small">AI placed where it compounds — designing the deterministic process, not buried inside it where it can fail silently.</div>
+      </div>
     </div>
   </section>
 
-  <a class="cta" href="https://calendly.com/cradsdavis/30min">
-    <div class="left">
-      <div class="ttl">Book a free 30-min intro. No pitch.</div>
-      <div class="sub">Thirty minutes to read your situation honestly. If I'm not the right fit I'll tell you and point you at someone who is.</div>
+  <!-- SLIDE 10 — CTA / Contact -->
+  <section class="slide contact-slide" data-slide="10">
+    <div class="eyebrow">Talk to me</div>
+    <h1>Sam Davis</h1>
+    <p class="lede" style="margin-top: 18px;">A free 30-minute intro call. No pitch, no slides. Thirty minutes to read your situation honestly. If I'm not the right fit I'll tell you and point you at someone who is.</p>
+    <div class="lines">
+      <div><a href="https://calendly.com/cradsdavis/30min">calendly.com/cradsdavis/30min</a></div>
+      <div><span>cradsdavis@gmail.com</span></div>
+      <div><span>linkedin.com/in/samuel-davis4</span></div>
+      <div><span>+61 0493 302 154</span></div>
     </div>
-    <div class="url">calendly.com/cradsdavis/30min</div>
-  </a>
+    <p class="kicker">Coogee, Sydney. Moving to the UK late 2026. Print one-pager: <a href="../build-onepager/" style="color: var(--accent); border-bottom: 1px solid var(--accent); text-decoration: none;">build-onepager →</a></p>
+  </section>
 
-  <footer class="bot">
-    <div class="left"><span>cradsdavis@gmail.com</span> · linkedin.com/in/samuel-davis4 · +61 0493 302 154</div>
-    <div class="right">AEST until September 2026, UK after.</div>
-  </footer>
+</main>
 
-</div>
+<footer class="chrome">
+  <div class="hint">← → navigate · 1–9 jump · P print · <a href="../build-onepager/">print one-pager →</a></div>
+  <div class="counter"><span id="curr">1</span> / <span id="total">10</span></div>
+</footer>
+
+<script>
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const counter = document.getElementById('curr');
+  document.getElementById('total').textContent = slides.length;
+
+  let idx = 0;
+
+  function show(n) {
+    idx = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    counter.textContent = idx + 1;
+    if (location.hash !== '#' + (idx + 1)) {
+      history.replaceState(null, '', '#' + (idx + 1));
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault(); show(idx + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault(); show(idx - 1);
+    } else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(slides.length - 1); }
+    else if (e.key === 'p' || e.key === 'P') { window.print(); }
+    else if (e.key >= '1' && e.key <= '9') {
+      const n = parseInt(e.key, 10) - 1;
+      if (n < slides.length) show(n);
+    }
+  });
+
+  const initial = parseInt((location.hash || '#1').slice(1), 10);
+  show(isFinite(initial) && initial > 0 ? initial - 1 : 0);
+
+  function fit() {
+    const designH = 640, designW = 1180;
+    const reserveH = 120, reserveW = 128;
+    const availH = window.innerHeight - reserveH;
+    const availW = window.innerWidth - reserveW;
+    const sH = availH < designH ? availH / designH : 1;
+    const sW = availW < designW ? availW / designW : 1;
+    document.documentElement.style.setProperty('--fit', Math.min(sH, sW, 1));
+  }
+  window.addEventListener('resize', fit);
+  fit();
+})();
+</script>
 
 </body>
 </html>
