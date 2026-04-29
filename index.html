@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sam Davis — AI coach &amp; systems builder</title>
-<meta name="description" content="I build AI executive assistants with real brains — for founders who want their AI to actually know them.">
+<meta name="description" content="I build AI executive assistants with real brains — for founders who want their AI to actually know them. And I work as a fractional AI lead for climate &amp; ESG businesses.">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&display=swap');
 
@@ -79,8 +79,8 @@
 
   .cards {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
     margin-bottom: 72px;
   }
 
@@ -89,7 +89,7 @@
     background: var(--bg-card);
     border: 1px solid var(--rule);
     border-radius: 10px;
-    padding: 32px 34px 28px;
+    padding: 28px 28px 24px;
     text-decoration: none;
     color: var(--ink);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -110,7 +110,7 @@
   }
   a.card h2 {
     font-family: var(--serif);
-    font-size: clamp(24px, 2.4vw, 32px);
+    font-size: clamp(22px, 2vw, 28px);
     font-weight: 800;
     line-height: 1.15;
     letter-spacing: -0.01em;
@@ -122,14 +122,14 @@
     font-style: italic;
   }
   a.card p {
-    font-size: 15.5px;
+    font-size: 14.5px;
     color: var(--ink-soft);
     line-height: 1.55;
     margin-bottom: 18px;
   }
   a.card .go {
     font-family: var(--mono);
-    font-size: 14px;
+    font-size: 13.5px;
     color: var(--accent);
     font-weight: 600;
     letter-spacing: 0.05em;
@@ -157,6 +157,9 @@
     font-family: var(--sans);
   }
 
+  @media (max-width: 960px) {
+    .cards { grid-template-columns: 1fr 1fr; }
+  }
   @media (max-width: 760px) {
     main { padding: 48px 24px 48px; }
     .cards { grid-template-columns: 1fr; }
@@ -167,19 +170,25 @@
   <main>
     <div class="eyebrow">Sam Davis · AI coach &amp; systems builder</div>
     <h1>An AI executive assistant <em>with a real brain.</em></h1>
-    <p class="lede">I build executive assistants that actually know you — your voice, your people, your priorities, your life. Not another chatbot. Not another app. A real memory underneath everything you do.</p>
+    <p class="lede">I build executive assistants that actually know you — your voice, your people, your priorities, your life. And I work as a fractional AI lead for climate &amp; ESG businesses, embedded alongside their teams.</p>
 
     <div class="cards">
       <a class="card" href="overview/">
         <div class="tag">What this is</div>
-        <h2>An executive assistant<br>that <em>actually knows me.</em></h2>
+        <h2>An assistant that<br><em>actually knows me.</em></h2>
         <p>A working demo of what's possible when AI has real context — aware of who you are, what you care about, who's in your life, and how you write.</p>
         <div class="go">See the demo →</div>
       </a>
       <a class="card" href="offer/">
-        <div class="tag">How we work together</div>
-        <h2>Four ways in,<br><em>one ladder.</em></h2>
+        <div class="tag">For founders</div>
+        <h2>Build your own EA,<br><em>one rung at a time.</em></h2>
         <p>From a single session to a one-week EA Setup to per-capability layers — pick where you start and climb as you want. Credits carry forward.</p>
+        <div class="go">See the offer →</div>
+      </a>
+      <a class="card" href="build/">
+        <div class="tag">For businesses</div>
+        <h2>Adopt AI without<br><em>breaking your product.</em></h2>
+        <p>Fractional AI lead for climate / ESG companies and the consultancies that serve them — embedded part-time, picking up AI problems and shipping them.</p>
         <div class="go">See the offer →</div>
       </a>
     </div>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Help your team adopt AI without breaking your product — Sam Davis</title>
+<meta name="description" content="Sam Davis — fractional AI lead for climate / ESG companies and the consultancies that serve them. Two rungs: AI Leverage Read ($2,500) and Fractional AI Lead (from $4,000/mo).">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&display=swap');
+
+  :root {
+    --bg: #FAF7EE;
+    --bg-soft: #F2EEDD;
+    --bg-card: #DCE0B6;
+    --bg-card-hi: #C8CEA0;
+    --ink: #3E3418;
+    --ink-soft: #6B5F3A;
+    --ink-faint: #998D6B;
+    --accent: #8F7530;
+    --accent-bright: #B89B4A;
+    --accent-deep: #6B5624;
+    --accent-glow: rgba(184, 155, 74, 0.22);
+    --rule: #B0B490;
+    --good: #7A8B3F;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  @page { size: A4 portrait; margin: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 13mm 13mm 11mm;
+    display: flex;
+    flex-direction: column;
+    gap: 6mm;
+  }
+
+  header.top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 3.5mm;
+    border-bottom: 1px solid var(--rule);
+  }
+  header.top .ident { display: flex; align-items: center; gap: 10px; }
+  header.top .who {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    line-height: 1.3;
+  }
+  header.top .who b { color: var(--ink); font-weight: 600; }
+  header.top .meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-align: right;
+    letter-spacing: 0.05em;
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: 32px;
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  h1 .accent { color: var(--accent); font-style: italic; font-weight: 700; }
+  .lede {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    max-width: 175mm;
+  }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  h2.sec {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--rule);
+    font-weight: 600;
+  }
+
+  .audience {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+  .aud-box {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 8px 10px;
+  }
+  .aud-box .lbl {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .aud-box .body {
+    font-size: 10.5px;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .aud-box .body strong { font-weight: 600; }
+
+  .patterns { display: flex; flex-direction: column; gap: 4px; }
+  .pattern {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 10px;
+    padding: 7px 11px;
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    align-items: start;
+  }
+  .pattern .num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .pattern .text { font-size: 10.5px; line-height: 1.45; color: var(--ink-soft); }
+  .pattern .text strong { color: var(--ink); font-weight: 700; }
+
+  .ladder { display: grid; grid-template-columns: 1fr 1.3fr; gap: 6px; }
+  .rung {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 10px 12px;
+  }
+  .rung .nm {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .rung .ttl {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin-bottom: 2px;
+  }
+  .rung .pr {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  .rung .body { font-size: 10.5px; color: var(--ink-soft); line-height: 1.45; }
+  .rung-hero { background: var(--accent-bright); border-color: var(--accent-deep); }
+  .rung-hero .nm { color: var(--accent-deep); }
+  .rung-hero .ttl, .rung-hero .pr { color: var(--ink); }
+  .rung-hero .body { color: var(--ink); opacity: 0.85; }
+  .ladder-note { font-style: italic; font-size: 10px; color: var(--ink-soft); margin-top: 5px; }
+
+  .antis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .anti {
+    background: var(--bg-soft);
+    border: 1px dashed var(--rule);
+    border-radius: 3px;
+    padding: 7px 9px;
+  }
+  .anti .x {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .anti .text { font-size: 10px; color: var(--ink); line-height: 1.35; font-weight: 500; }
+
+  .proof { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .build {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    border-radius: 3px;
+    padding: 8px 10px;
+  }
+  .build .nm {
+    font-family: var(--serif);
+    font-size: 12.5px;
+    color: var(--ink);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin-bottom: 3px;
+  }
+  .build .body { font-size: 9.5px; color: var(--ink-soft); line-height: 1.4; }
+  .build .body strong { color: var(--ink); font-weight: 600; }
+
+  .bg-line { margin-top: 6px; font-size: 10.5px; color: var(--ink-soft); line-height: 1.5; }
+  .bg-line strong { color: var(--ink); font-weight: 600; }
+
+  .demos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .demo-link {
+    background: var(--bg-soft);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 9px 12px;
+    text-decoration: none;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .demo-link .arrow { font-family: var(--mono); color: var(--accent); font-size: 18px; font-weight: 700; }
+  .demo-link .text { flex: 1; }
+  .demo-link .text .ttl {
+    font-family: var(--serif);
+    font-weight: 800;
+    font-size: 12.5px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .demo-link .text .url {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--accent);
+    margin-top: 2px;
+    word-break: break-all;
+  }
+  .demo-link .text .sub { font-size: 9.5px; color: var(--ink-soft); margin-top: 3px; line-height: 1.4; }
+
+  .cta {
+    background: var(--accent-bright);
+    border: 1px solid var(--accent-deep);
+    border-radius: 6px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: auto;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .cta .left .ttl {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .cta .left .sub { font-size: 10.5px; color: var(--ink); opacity: 0.8; margin-top: 3px; }
+  .cta .url {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: none;
+    background: var(--bg);
+    padding: 7px 13px;
+    border-radius: 4px;
+    border: 1px solid var(--accent-deep);
+    white-space: nowrap;
+  }
+
+  footer.bot {
+    border-top: 1px solid var(--rule);
+    padding-top: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--ink-soft);
+  }
+  footer.bot .left span { color: var(--ink); }
+  footer.bot .right { color: var(--ink-faint); font-style: italic; font-family: var(--sans); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="top">
+    <div class="ident">
+      <div class="who"><b>Sam Davis</b><br>AI builder &amp; translator · fractional AI lead</div>
+    </div>
+    <div class="meta">B2B Build · 2026<br>Coogee, Sydney</div>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">Fractional AI engagements for climate &amp; ESG companies</div>
+    <h1>Help your team adopt AI <span class="accent">without breaking your product.</span></h1>
+    <p class="lede">If you're running a climate or sustainability business with a product or service line, you've already started doing AI — and the honest answer is, it's not landing the way it should. <strong>I work as a fractional AI lead</strong> — embedded part-time, alongside your team, picking up the AI problems that are stuck and shipping them. I'm not selling software. I'm not delivering a strategy deck. I write code, I sit with your engineers, and I leave them faster than I found them.</p>
+  </section>
+
+  <section>
+    <h2 class="sec">Who this is for</h2>
+    <div class="audience">
+      <div class="aud-box">
+        <div class="lbl">Climate &amp; ESG</div>
+        <div class="body">Scaleups, consultancies, advisory firms with a product or delivery process where AI <strong>should compound but currently doesn't.</strong></div>
+      </div>
+      <div class="aud-box">
+        <div class="lbl">Service businesses</div>
+        <div class="body">Coaches, professional services, community-builders where AI inside the operations would <strong>change the unit economics.</strong></div>
+      </div>
+      <div class="aud-box">
+        <div class="lbl">Need a champion</div>
+        <div class="body">A founder, head of product or eng, ops lead — someone who can carry the work after I'm out. <strong>I work alongside, not instead of.</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">What I keep seeing</h2>
+    <div class="patterns">
+      <div class="pattern">
+        <div class="num">01</div>
+        <div class="text"><strong>The AI isn't the bottleneck — the fifteen integration points around it are.</strong> The model works in a notebook. Then it needs to read your customer's data format, write to your audit-trail schema, route to your CRM, and explain itself when it's wrong. That's the actual project, and it's where most AI initiatives stall.</div>
+      </div>
+      <div class="pattern">
+        <div class="num">02</div>
+        <div class="text"><strong>Adoption is built before the feature ships, not after.</strong> The team that has to <em>use</em> the AI — sales, customer success, the channel partner — needs to be in the room while it's being built, not in the demo afterward.</div>
+      </div>
+      <div class="pattern">
+        <div class="num">03</div>
+        <div class="text"><strong>Hand-tuning is where margin goes to die.</strong> If every new client requires a week of taxonomy mapping, supplier categorisation, or chart-of-accounts wrangling, growth caps at the rate you can hire analysts. AI applied right makes that a one-hour configuration. AI applied wrong adds a chatbot nobody uses.</div>
+      </div>
+      <div class="pattern">
+        <div class="num">04</div>
+        <div class="text"><strong>Where you put the AI matters more than which model you pick.</strong> AI sitting <em>inside</em> a deterministic pipeline tends to fail silently and break the audit trail. AI sitting <em>above</em> the pipeline — designing and adapting the deterministic steps the engine then runs — keeps the audit trail clean and the failure modes legible.</div>
+      </div>
+      <div class="pattern">
+        <div class="num">05</div>
+        <div class="text"><strong>Translation between layers is the real job.</strong> Between technical and non-technical, between platform team and customer team, between what the LLM can do and what your product needs it to do. That's where I sit.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">How we can work together — two rungs</h2>
+    <div class="ladder">
+      <div class="rung">
+        <div class="nm">Entry · pay-for-clarity</div>
+        <div class="ttl">AI Leverage Read</div>
+        <div class="pr">$2,500 fixed · 1 week</div>
+        <div class="body">I sit with your operations, product, and customer flow. I name the three places AI compounds in your business, and the three where it would add noise. You get a written read (4–6 pages), a recommended 90-day move, and a pricing-anchored plan if you want to continue. Three structured calls; I do the rest async.</div>
+      </div>
+      <div class="rung rung-hero">
+        <div class="nm">★ Embedded · ongoing</div>
+        <div class="ttl">Fractional AI Lead</div>
+        <div class="pr">From $4,000 / month · 3-month minimum</div>
+        <div class="body">1 day/week embedded + async between days. I work alongside your team — picking up AI problems as they surface, building or coaching your engineers to, translating between technical and non-technical, and making sure what ships actually lands with the customer. Quarterly review of what compounded vs what didn't.</div>
+      </div>
+    </div>
+    <p class="ladder-note">Read credits: every dollar you spend on the AI Leverage Read counts toward your first month of Fractional AI Lead if you start within 90 days.</p>
+  </section>
+
+  <section>
+    <h2 class="sec">What this isn't</h2>
+    <div class="antis">
+      <div class="anti"><div class="x">Not</div><div class="text">a vendor pitch. I'm not selling carbon software or a wrapper around Claude.</div></div>
+      <div class="anti"><div class="x">Not</div><div class="text">a Sam-solo sprint. I work alongside your team because that's what makes the work stick.</div></div>
+      <div class="anti"><div class="x">Not</div><div class="text">strategy-only. I write code. I open PRs.</div></div>
+      <div class="anti"><div class="x">Not</div><div class="text">enterprise-agency priced. Small roster, real work, no SOC-2 sales team.</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">Proof — what I've built</h2>
+    <div class="proof">
+      <div class="build"><div class="nm">Carbon Tracker</div><div class="body"><strong>11-agent prototype</strong> for a UK carbon consultancy: PostgreSQL + Climatiq + RAG + audit trail. The most architecturally sophisticated build I've shipped.</div></div>
+      <div class="build"><div class="nm">Derwen</div><div class="body"><strong>Live AI biodiversity assistant.</strong> n8n + Perplexity + GBIF + OpenAI. Live at derwenai.replit.app.</div></div>
+      <div class="build"><div class="nm">SEAF data pipeline</div><div class="body"><strong>Three-tier data warehouse</strong> for environmental impact assessments at SEAF / UWA, built with Claude Code as a development collaborator. Systems-thinking + facilitating scientists rather than replacing them.</div></div>
+      <div class="build"><div class="nm">Turing DSG '22</div><div class="body"><strong>10-person AI sprint</strong> at the Alan Turing Institute, delivering in a week for the UK government's marine science agency.</div></div>
+    </div>
+    <p class="bg-line"><strong>Background.</strong> PhD environmental &amp; ecological data science (USYD, DARE ARC). MPhys Physics &amp; Mathematics, First Class (Manchester). Seven years across the European Space Agency, the Alan Turing Institute, UK universities, and a UK carbon consultancy — always as the translator between technical depth and the people who need to use it.</p>
+  </section>
+
+  <section>
+    <h2 class="sec">See also</h2>
+    <div class="demos">
+      <a class="demo-link" href="https://cradsdavis-cell.github.io/samdavis-site/onepager/">
+        <div class="arrow">→</div>
+        <div class="text">
+          <div class="ttl">Personal AI EA — for founders</div>
+          <div class="url">cradsdavis-cell.github.io/samdavis-site/onepager</div>
+          <div class="sub">Building your own executive assistant. Different audience, different ladder.</div>
+        </div>
+      </a>
+      <a class="demo-link" href="https://cradsdavis-cell.github.io/samdavis-site/overview/">
+        <div class="arrow">→</div>
+        <div class="text">
+          <div class="ttl">The system in detail</div>
+          <div class="url">cradsdavis-cell.github.io/samdavis-site/overview</div>
+          <div class="sub">What the EA architecture looks like under the hood — the live demo Sam runs his own life on.</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <a class="cta" href="https://calendly.com/cradsdavis/30min">
+    <div class="left">
+      <div class="ttl">Book a free 30-min intro. No pitch.</div>
+      <div class="sub">Thirty minutes to read your situation honestly. If I'm not the right fit I'll tell you and point you at someone who is.</div>
+    </div>
+    <div class="url">calendly.com/cradsdavis/30min</div>
+  </a>
+
+  <footer class="bot">
+    <div class="left"><span>cradsdavis@gmail.com</span> · linkedin.com/in/samuel-davis4 · +61 0493 302 154</div>
+    <div class="right">AEST until September 2026, UK after.</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
