@@ -61,6 +61,8 @@
   }
   footer.chrome .counter { font-family: var(--mono); }
   footer.chrome .hint { opacity: 0.7; }
+  footer.chrome a { color: var(--ink-faint); text-decoration: none; border-bottom: 1px dashed var(--ink-faint); pointer-events: auto; }
+  footer.chrome a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
   main.stage {
     flex: 1;
@@ -910,13 +912,13 @@
       <div><span>linkedin.com/in/samuel-davis4</span></div>
       <div><span>+61 0493 302 154</span></div>
     </div>
-    <p class="kicker">Sam Davis · Coogee, Sydney · AEST until September 2026, UK after.</p>
+    <p class="kicker">Sam Davis · Coogee, Sydney · AEST until September 2026, UK after. Print one-pager: <a href="../onepager/" style="color: var(--accent); border-bottom: 1px solid var(--accent); text-decoration: none;">onepager →</a></p>
   </section>
 
 </main>
 
 <footer class="chrome">
-  <div class="hint">← → navigate · 1–9 jump · P print</div>
+  <div class="hint">← → navigate · 1–9 jump · P print · <a href="../onepager/">print one-pager →</a></div>
   <div class="counter"><span id="curr">1</span> / <span id="total">11</span></div>
 </footer>
 
