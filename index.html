@@ -84,6 +84,12 @@
     margin-bottom: 72px;
   }
 
+  .card-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   a.card {
     display: block;
     background: var(--bg-card);
@@ -135,6 +141,23 @@
     letter-spacing: 0.05em;
   }
 
+  a.onepager-link {
+    align-self: flex-start;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    padding: 5px 12px;
+    border-radius: 6px;
+    background: transparent;
+    transition: background 0.15s, color 0.15s;
+  }
+  a.onepager-link:hover {
+    background: rgba(143, 117, 48, 0.08);
+    color: var(--accent);
+  }
+
   .contact {
     padding-top: 36px;
     border-top: 1px solid var(--rule);
@@ -173,24 +196,32 @@
     <p class="lede">I build executive assistants that actually know you — your voice, your people, your priorities, your life. And I work as a fractional AI lead for climate &amp; ESG businesses, embedded alongside their teams.</p>
 
     <div class="cards">
-      <a class="card" href="overview/">
-        <div class="tag">What this is</div>
-        <h2>An assistant that<br><em>actually knows me.</em></h2>
-        <p>A working demo of what's possible when AI has real context — aware of who you are, what you care about, who's in your life, and how you write.</p>
-        <div class="go">See the demo →</div>
-      </a>
-      <a class="card" href="offer/">
-        <div class="tag">For founders</div>
-        <h2>Build your own EA,<br><em>one rung at a time.</em></h2>
-        <p>From a single session to a one-week EA Setup to per-capability layers — pick where you start and climb as you want. Credits carry forward.</p>
-        <div class="go">See the offer →</div>
-      </a>
-      <a class="card" href="build/">
-        <div class="tag">For businesses</div>
-        <h2>Adopt AI without<br><em>breaking your product.</em></h2>
-        <p>Fractional AI lead for climate / ESG companies and the consultancies that serve them — embedded part-time, picking up AI problems and shipping them.</p>
-        <div class="go">See the offer →</div>
-      </a>
+      <div class="card-wrap">
+        <a class="card" href="overview/">
+          <div class="tag">What this is</div>
+          <h2>An assistant that<br><em>actually knows me.</em></h2>
+          <p>A working demo of what's possible when AI has real context — aware of who you are, what you care about, who's in your life, and how you write.</p>
+          <div class="go">See the demo →</div>
+        </a>
+      </div>
+      <div class="card-wrap">
+        <a class="card" href="offer/">
+          <div class="tag">For founders</div>
+          <h2>Build your own EA,<br><em>one rung at a time.</em></h2>
+          <p>From a single session to a one-week EA Setup to per-capability layers — pick where you start and climb as you want. Credits carry forward.</p>
+          <div class="go">See the offer →</div>
+        </a>
+        <a class="onepager-link" href="onepager/">📄 One-pager</a>
+      </div>
+      <div class="card-wrap">
+        <a class="card" href="build/">
+          <div class="tag">For businesses</div>
+          <h2>Adopt AI without<br><em>breaking your product.</em></h2>
+          <p>Fractional AI lead for climate / ESG companies and the consultancies that serve them — embedded part-time, picking up AI problems and shipping them.</p>
+          <div class="go">See the offer →</div>
+        </a>
+        <a class="onepager-link" href="build-onepager/">📄 One-pager</a>
+      </div>
     </div>
 
     <div class="contact">
