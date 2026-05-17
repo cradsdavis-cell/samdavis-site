@@ -11,6 +11,6 @@ module.exports = async (req, res) => {
   if (!cal.ok) { res.status(502).json({ error: 'cal_upstream', status: cal.status }); return; }
   const bookings = (cal.body && cal.body.data) || [];
   const confirmed = bookings.length > 0;
-  const refunded = bookings.some(b => b.status === 'CANCELLED' || b.status === 'REFUNDED');
+  const refunded = bookings.some(b => /cancelled|refunded/i.test(b.status || ''));
   res.status(200).json({ confirmed, refunded });
 };
