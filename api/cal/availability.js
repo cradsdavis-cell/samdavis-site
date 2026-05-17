@@ -26,5 +26,6 @@ module.exports = async (req, res) => {
     res.status(502).json({ error: 'cal_upstream', status: cal.status, body: cal.body });
     return;
   }
-  res.status(200).json({ slots: cal.body });
+  const slotsByDate = (cal.body && cal.body.data && cal.body.data.slots) || cal.body;
+  res.status(200).json({ slots: slotsByDate });
 };
