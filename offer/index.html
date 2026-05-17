@@ -209,6 +209,59 @@
   .rung-card.hero .r-price { color: var(--ink); }
   .rung-card.hero .r-audience { color: var(--ink); opacity: 0.8; }
   .rung-card.hero .r-body { color: var(--ink); opacity: 0.85; }
+  .rung-card .r-cta {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 1px;
+    font-weight: 600;
+    align-self: flex-start;
+  }
+  .rung-card .r-cta:hover { color: var(--ink); border-bottom-color: var(--ink); }
+  .rung-card.hero .r-cta { color: var(--ink); border-bottom-color: var(--accent-deep); }
+  .rung-card.hero .r-cta:hover { color: var(--accent-deep); border-bottom-color: var(--ink); }
+  .rung-card .r-cta-soft {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-style: italic;
+    line-height: 1.45;
+  }
+  .rung-card .r-cta-soft a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
+  .rung-card .r-cta-soft a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+  .detail .price-block .price-cta {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    background: var(--bg);
+    border: 1px solid var(--accent-deep);
+    border-radius: 4px;
+    padding: 8px 14px;
+    font-weight: 700;
+  }
+  .detail .price-block .price-cta:hover { background: var(--accent-bright); }
+  .detail .price-block .price-cta-soft {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .detail .price-block .price-cta-soft a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
+  .detail .price-block .price-cta-soft a:hover { color: var(--ink); border-bottom-color: var(--ink); }
 
   .detail {
     display: grid;
@@ -641,6 +694,7 @@
         <div class="r-price">$150</div>
         <div class="r-audience">Technical founder · starting small</div>
         <div class="r-body">Bring one pain. Leave with one working piece.</div>
+        <a class="r-cta" href="/book/single-session">Book + Pay →</a>
       </div>
       <div class="rung-card">
         <div class="r-name">Coaching block</div>
@@ -648,23 +702,26 @@
         <div class="r-price">$500</div>
         <div class="r-audience">Technical founder · multi-week build</div>
         <div class="r-body">Build your EA one capability at a time. You drive, I guide.</div>
+        <a class="r-cta" href="/book/coaching-block">Book + Pay →</a>
       </div>
       <div class="rung-card hero">
-        <div class="r-name">The EA Setup</div>
+        <div class="r-name">The EA Basic Build</div>
         <div class="r-title">One-week sprint</div>
         <div class="r-price">$2,000</div>
         <div class="r-audience">Anybody · built for you</div>
         <div class="r-body">I build the whole EA and hand it over running.</div>
+        <a class="r-cta" href="/book/ea-basic-build">Book + Pay →</a>
       </div>
       <div class="rung-card">
         <div class="r-name">Layers</div>
         <div class="r-title">Per-capability add-ons</div>
         <div class="r-price">$500 – $800</div>
-        <div class="r-audience">Post-Setup · grow over time</div>
+        <div class="r-audience">Post-Basic Build · grow over time</div>
         <div class="r-body">Add CRM sync, outreach, weekly reviews — as you need them.</div>
+        <div class="r-cta-soft">Layer add-ons available — <a href="/book/discovery">book a Discovery call →</a> to scope.</div>
       </div>
     </div>
-    <p class="caption">Coaching credits apply to Setup within 90 days. A $500 block becomes $1,500 to complete Setup — no penalty for starting small.</p>
+    <p class="caption">Coaching credits apply to the EA Basic Build within 90 days. A $500 block becomes $1,500 to complete the Basic Build — no penalty for starting small.</p>
   </section>
 
   <section class="slide" data-slide="3">
@@ -675,7 +732,8 @@
         <div class="price-block">
           <div class="price-label">Price</div>
           <div class="price-value">$150</div>
-          <div class="price-note">Credits toward Setup within 90 days</div>
+          <div class="price-note">Credits toward the EA Basic Build within 90 days</div>
+          <a class="price-cta" href="/book/single-session">Book + Pay →</a>
         </div>
         <div class="audience-tag">For technical founders who want to drive</div>
         <p class="desc">Bring the one pain that's draining you most. We scope it in the first five minutes and spend the rest of the hour shipping a working piece — you on the keyboard, me guiding. You leave with something running, not a list of notes.</p>
@@ -686,7 +744,7 @@
           <li>One working piece shipped live during the call</li>
           <li>A recap email within 24 hours</li>
           <li>One concrete next step you can do solo</li>
-          <li>Full $150 credit toward Setup if you upgrade</li>
+          <li>Full $150 credit toward the EA Basic Build if you upgrade</li>
         </ul>
       </div>
     </div>
@@ -700,10 +758,11 @@
         <div class="price-block">
           <div class="price-label">Price</div>
           <div class="price-value">$500</div>
-          <div class="price-note">4 × 60-min sessions · credits toward Setup</div>
+          <div class="price-note">4 × 60-min sessions · credits toward the EA Basic Build</div>
+          <a class="price-cta" href="/book/coaching-block">Book + Pay →</a>
         </div>
         <div class="audience-tag">For technical founders · multi-week engagement</div>
-        <p class="desc">We scope the whole arc in session one, then build it together across the next three. You learn how it works as we go. At session four, you can keep going solo, buy another block, or graduate to the full Setup with your $500 applied.</p>
+        <p class="desc">We scope the whole arc in session one, then build it together across the next three. You learn how it works as we go. At session four, you can keep going solo, buy another block, or graduate to the full EA Basic Build with your $500 applied.</p>
       </div>
       <div class="right">
         <h4>What you leave with</h4>
@@ -711,14 +770,14 @@
           <li>A working starter EA you built with guidance</li>
           <li>Two custom workflows shipped in-session</li>
           <li>Light async support between sessions (48h response)</li>
-          <li>Full $500 credit toward Setup if you graduate</li>
+          <li>Full $500 credit toward the EA Basic Build if you graduate</li>
         </ul>
       </div>
     </div>
   </section>
 
   <section class="slide" data-slide="5">
-    <div class="eyebrow">The EA Setup</div>
+    <div class="eyebrow">The EA Basic Build</div>
     <h2>One week. <span class="accent">A finished EA.</span></h2>
     <div class="detail">
       <div class="left">
@@ -726,6 +785,7 @@
           <div class="price-label">Price</div>
           <div class="price-value">$2,000</div>
           <div class="price-note">Fixed · 50% at booking · 50% at handover</div>
+          <a class="price-cta" href="/book/ea-basic-build">Book + Pay →</a>
         </div>
         <div class="audience-tag">For anybody — especially non-technical founders</div>
         <p class="desc">The hero offer. I build your AI executive assistant and hand it over at the end of the week — installed, wired to your tools, populated with your voice and priorities, running three starter workflows. Three structured calls; I do the rest async.</p>
@@ -744,7 +804,7 @@
   </section>
 
   <section class="slide" data-slide="6">
-    <div class="eyebrow">A week in the Setup</div>
+    <div class="eyebrow">A week in the EA Basic Build</div>
     <h2>Three calls. <span class="accent">Everything else happens quietly.</span></h2>
 
     <div class="timeline">
@@ -784,7 +844,7 @@
   </section>
 
   <section class="slide" data-slide="7">
-    <div class="eyebrow">What the Setup delivers</div>
+    <div class="eyebrow">What the Basic Build delivers</div>
     <h2>At the end of the week, <span class="accent">you own all of this.</span></h2>
     <div class="delivs">
       <div class="deliv">
@@ -829,9 +889,10 @@
           <div class="price-label">Price</div>
           <div class="price-value">$500 – $800</div>
           <div class="price-note">Per layer · by day-estimate</div>
+          <div class="price-cta-soft">Layer add-ons available — <a href="/book/discovery">book a Discovery call →</a> to scope.</div>
         </div>
-        <div class="audience-tag">For anyone post-Setup</div>
-        <p class="desc">After Setup, add new capabilities whenever you want one. A CRM sync. A weekly review routine. An outreach drafter in your voice. Each layer is a named, self-contained capability — scoped in a free 30-min call, priced by how long it takes, delivered in 1–2 weeks.</p>
+        <div class="audience-tag">For anyone post-Basic Build</div>
+        <p class="desc">After the EA Basic Build, add new capabilities whenever you want one. A CRM sync. A weekly review routine. An outreach drafter in your voice. Each layer is a named, self-contained capability — scoped in a free 30-min call, priced by how long it takes, delivered in 1–2 weeks.</p>
       </div>
       <div class="right">
         <h4>Example layers I've shipped</h4>
@@ -866,13 +927,13 @@
       <div class="arrow">→</div>
       <div class="node hero">
         <div class="nm">Get the whole thing</div>
-        <div class="tl">The EA Setup</div>
+        <div class="tl">The EA Basic Build</div>
         <div class="pr">$2,000 total</div>
       </div>
     </div>
     <div class="path-notes">
-      <div class="note"><strong>Credits carry forward.</strong> Every dollar spent on coaching applies toward Setup within 90 days. Whether you come in cold at Setup or build up from a single session, you pay the same $2,000 total.</div>
-      <div class="note"><strong>Layers grow from there.</strong> After Setup, add capabilities as you need them. No subscription, no retainer — just pay for what you want built.</div>
+      <div class="note"><strong>Credits carry forward.</strong> Every dollar spent on coaching applies toward the EA Basic Build within 90 days. Whether you come in cold at the Basic Build or build up from a single session, you pay the same $2,000 total.</div>
+      <div class="note"><strong>Layers grow from there.</strong> After the EA Basic Build, add capabilities as you need them. No subscription, no retainer — just pay for what you want built.</div>
     </div>
   </section>
 
@@ -884,9 +945,9 @@
         <h4>How you pay</h4>
         <ul>
           <li><span class="tag">Single &amp; Block</span>Upfront via Stripe when you book</li>
-          <li><span class="tag">Setup</span>50% at booking · 50% at handover call</li>
+          <li><span class="tag">Basic Build</span>50% at booking · 50% at handover call</li>
           <li><span class="tag">Layers</span>50% on scoping · 50% on delivery</li>
-          <li><span class="tag">Credits</span>Coaching spend applies to Setup within 90 days</li>
+          <li><span class="tag">Credits</span>Coaching spend applies to the EA Basic Build within 90 days</li>
           <li><span class="tag">Intro call</span>Always free · 30 minutes · no pitch</li>
         </ul>
       </div>

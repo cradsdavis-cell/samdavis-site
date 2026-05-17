@@ -231,6 +231,32 @@
     color: var(--ink-soft);
     margin-top: 5px;
   }
+  .rung .rung-cta {
+    display: inline-block;
+    margin-top: 6px;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 1px;
+    font-weight: 600;
+  }
+  .rung .rung-cta:hover { color: var(--ink); border-bottom-color: var(--ink); }
+  .rung-hero .rung-cta { color: var(--ink); border-bottom-color: var(--accent-deep); }
+  .rung-hero .rung-cta:hover { color: var(--accent-deep); border-bottom-color: var(--ink); }
+  .rung .rung-cta-soft {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 10px;
+    color: var(--ink-soft);
+    font-style: italic;
+    line-height: 1.4;
+  }
+  .rung .rung-cta-soft a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
+  .rung .rung-cta-soft a:hover { color: var(--ink); border-bottom-color: var(--ink); }
 
   .demos {
     display: grid;
@@ -430,27 +456,31 @@
         <div class="ttl">60 min, one thing</div>
         <div class="pr">$150</div>
         <div class="body">Bring one pain. Leave with one working piece.</div>
+        <a class="rung-cta" href="/book/single-session">Book + Pay →</a>
       </div>
       <div class="rung">
         <div class="nm">Coaching block</div>
         <div class="ttl">4 × 60 min</div>
         <div class="pr">$500</div>
         <div class="body">Build your EA one capability at a time. You drive, I guide.</div>
+        <a class="rung-cta" href="/book/coaching-block">Book + Pay →</a>
       </div>
       <div class="rung rung-hero">
-        <div class="nm">★ The EA Setup</div>
+        <div class="nm">★ The EA Basic Build</div>
         <div class="ttl">One-week sprint</div>
         <div class="pr">$2,000</div>
         <div class="body">I build your whole EA and hand it over running. Built for anybody.</div>
+        <a class="rung-cta" href="/book/ea-basic-build">Book + Pay →</a>
       </div>
       <div class="rung">
         <div class="nm">Layers</div>
         <div class="ttl">Per-capability add-ons</div>
         <div class="pr">$500 – $800</div>
         <div class="body">CRM sync, outreach, reviews — added as you need them.</div>
+        <div class="rung-cta-soft">Layer add-ons available — <a href="/book/discovery">book a Discovery call →</a> to scope.</div>
       </div>
     </div>
-    <p class="ladder-note">Coaching credits apply to Setup within 90 days. No subscription. No lock-in.</p>
+    <p class="ladder-note">Coaching credits apply to the EA Basic Build within 90 days. No subscription. No lock-in.</p>
   </section>
 
   <section>
