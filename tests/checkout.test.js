@@ -53,3 +53,27 @@ test('returns 400 for unknown SKU', async () => {
   }), res);
   assert.strictEqual(res.statusCode, 400);
 });
+
+// === Task 16: free Discovery path ===
+process.env.CAL_EVENT_TYPE_DISCOVERY = '100';
+
+require.cache[require.resolve('../lib/cal')] = {
+  exports: {
+    createBooking: async (args) => ({ ok: true, status: 201, body: { id: 555, _args: args } }),
+  },
+};
+// re-require handler with new mocks
+delete require.cache[require.resolve('../api/checkout')];
+const handlerFree = require('../api/checkout');
+
+test('free discovery booking calls Cal directly, returns redirect path', async () => {
+  const res = mockRes();
+  const reqFree = {
+    method: 'POST',
+    query: { free: '1' },
+    body: { sku: 'discovery', slot_iso: '2026-05-20T15:00:00+10:00', name: 'Alex', email: 'a@b.com' },
+  };
+  await handlerFree(reqFree, res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(res.body.free, true);
+});
