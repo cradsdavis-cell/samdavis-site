@@ -31,10 +31,21 @@
     }
   }
 
-  // Cal v2 /slots/available returns either an array or { data: { date: [slots] } } shape — handle both
+  // /api/cal/availability returns { date: [slots] } flat (unwrapped from Cal v2).
+  // Handle that, plus legacy array + { data: ... } shapes defensively.
   function normaliseSlots(raw) {
     if (Array.isArray(raw)) return raw;
-    if (raw && raw.data) {
+    if (!raw || typeof raw !== 'object') return [];
+    const dateKeyPattern = /^\d{4}-\d{2}-\d{2}$/;
+    const keys = Object.keys(raw);
+    if (keys.length && dateKeyPattern.test(keys[0])) {
+      const out = [];
+      for (const [date, slots] of Object.entries(raw)) {
+        for (const s of slots) out.push({ time: s.time || s, date });
+      }
+      return out;
+    }
+    if (raw.data) {
       const out = [];
       for (const [date, slots] of Object.entries(raw.data)) {
         for (const s of slots) out.push({ time: s.time || s, date });
