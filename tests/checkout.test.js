@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert');
 
 // Mock env
-process.env.BASE_URL = 'https://samdavis.ai';
+process.env.BASE_URL = 'https://crads-ai.com';
 process.env.STRIPE_PRICE_SINGLE = 'price_test_single';
 process.env.CAL_EVENT_TYPE_SINGLE = '101';
 
