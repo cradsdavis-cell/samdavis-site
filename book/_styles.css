@@ -1,8 +1,7 @@
 /* book/_styles.css — shared styles for /book and /book/<sku> pages */
+/* Depends on lib/site.css for tokens (--rule, --sans, --accent, --ink-deep, --bg-main, etc.) */
 
 :root {
-  --ink: #1f1d1a;
-  --paper: #fafaee;
   --accent-soft: rgba(143, 117, 48, 0.08);
 }
 
@@ -12,58 +11,47 @@ body {
   font-family: var(--sans);
   margin: 0;
   padding: 0;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--bg-main);
+  color: var(--ink-deep);
   line-height: 1.55;
 }
 
-/* shared floating nav — matches existing subpage pattern */
-.site-nav-bar {
-  position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 14px;
-  padding: 7px 16px;
-  background: rgba(250, 247, 238, 0.93);
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  font-family: var(--sans);
-  font-size: 12.5px;
-  z-index: 300;
-  white-space: nowrap;
-  backdrop-filter: blur(4px);
-}
-.site-nav-bar a { color: var(--ink-soft); text-decoration: none; letter-spacing: 0.01em; transition: color 0.15s; }
-.site-nav-bar a:hover { color: var(--accent); }
-.site-nav-bar a.current { color: var(--ink); font-weight: 600; }
-.site-nav-bar .sep { color: var(--ink-faint); opacity: 0.5; }
-@media print { .site-nav-bar { display: none; } }
-@media (max-width: 760px) {
-  .site-nav-bar { font-size: 11.5px; padding: 6px 12px; gap: 10px; }
-}
-
 /* book page layout */
-.book-container { max-width: 1080px; margin: 0 auto; padding: 5rem 2rem 3rem; }
-.book-header h1 { font-size: 2.4rem; margin-bottom: 0.5rem; color: var(--accent); }
+.book-container { max-width: 1080px; margin: 0 auto; padding: var(--space-5) var(--space-3) var(--space-4); }
+.book-header h1 {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--ink-deep);
+  margin-bottom: var(--space-3);
+}
+.book-header h1 em { color: var(--accent); font-style: italic; font-weight: 700; }
 .book-header p { font-size: 1.1rem; color: var(--ink-soft); margin-top: 0; }
 .book-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
 .book-card {
-  background: #fff;
+  background: var(--bg-soft);
   border: 1px solid var(--rule);
   border-radius: 8px;
-  padding: 2rem 1.5rem;
+  padding: var(--space-4) var(--space-3);
   display: flex;
   flex-direction: column;
 }
-.book-card h2 { color: var(--accent); margin: 0 0 0.5rem; font-size: 1.35rem; }
+.book-card h2 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(20px, 2vw, 24px);
+  color: var(--ink-deep);
+  margin: 0 0 var(--space-2);
+  letter-spacing: -0.005em;
+}
 .book-card .meta { color: var(--ink-soft); font-size: 0.95rem; margin-bottom: 1rem; }
 .book-card .for { font-size: 0.95rem; flex-grow: 1; margin-bottom: 1.5rem; color: var(--ink-soft); }
 .book-cta {
   display: inline-block;
   background: var(--accent);
-  color: #fff;
+  color: var(--bg-main);
   text-decoration: none;
   padding: 0.75rem 1.25rem;
   border-radius: 6px;
@@ -74,15 +62,15 @@ body {
   font-size: 1rem;
   font-family: var(--sans);
 }
-.book-cta:hover { background: #6B5624; }
+.book-cta:hover { background: var(--accent-deep); }
 .book-cta:disabled { opacity: 0.6; cursor: not-allowed; }
-.book-policy { margin-top: 3rem; padding: 1.5rem; background: #fff; border: 1px solid var(--rule); border-radius: 6px; font-size: 0.95rem; color: var(--ink-soft); }
+.book-policy { margin-top: 3rem; padding: var(--space-3); background: var(--bg-soft); border: 1px solid var(--rule); border-radius: 6px; font-size: 0.95rem; color: var(--ink-soft); }
 
 /* slot picker */
-.slot-form { background: #fff; padding: 2rem; border-radius: 8px; border: 1px solid var(--rule); margin-top: 2rem; }
+.slot-form { background: var(--bg-soft); padding: 2rem; border-radius: 8px; border: 1px solid var(--rule); margin-top: 2rem; }
 .slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.5rem; margin-top: 1rem; }
 .slot-button {
-  background: #fff;
+  background: var(--bg-soft);
   border: 1px solid var(--rule);
   padding: 0.6rem;
   cursor: pointer;
@@ -92,19 +80,19 @@ body {
 }
 .slot-button:hover { border-color: var(--accent); }
 .slot-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.slot-button.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
-.slot-button[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+.slot-button.selected { background: var(--accent); color: var(--bg-main); border-color: var(--accent); }
+.slot-button[aria-pressed="true"] { background: var(--accent); color: var(--bg-main); border-color: var(--accent); }
 .book-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* Hero card on /book menu — promote the most-popular SKU */
 .book-card-hero { border: 2px solid var(--accent); box-shadow: 0 4px 12px rgba(143,117,48,0.12); position: relative; }
-.book-card-hero::before { content: '★ Most popular'; position: absolute; top: -10px; left: 16px; background: var(--accent); color: #fff; font-size: 0.75rem; padding: 2px 10px; border-radius: 4px; letter-spacing: 0.02em; }
+.book-card-hero::before { content: '★ Most popular'; position: absolute; top: -10px; left: 16px; background: var(--accent); color: var(--bg-main); font-size: 0.75rem; padding: 2px 10px; border-radius: 4px; letter-spacing: 0.02em; }
 
 /* mobile: tighter slot grid */
 @media (max-width: 480px) {
   .slot-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.4rem; }
   .slot-button { padding: 0.5rem 0.3rem; font-size: 0.85rem; }
-  .book-container { padding: 4.5rem 1rem 2rem; }
+  .book-container { padding: var(--space-4) var(--space-2) var(--space-3); }
 }
 .slot-day { margin-top: 1.5rem; }
 .slot-day-label { font-weight: 600; margin-bottom: 0.5rem; color: var(--ink-soft); }
@@ -112,4 +100,4 @@ body {
 .field label { display: block; font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--ink-soft); }
 .field input { width: 100%; padding: 0.6rem; border: 1px solid var(--rule); border-radius: 4px; font-size: 1rem; font-family: var(--sans); }
 .slot-loading { text-align: center; color: var(--ink-soft); padding: 2rem; }
-.slot-error { color: #b00020; padding: 1rem; background: #fee; border-radius: 4px; }
+.slot-error { color: #8B2A1F; padding: 1rem; background: #F4E4DE; border-radius: 4px; }

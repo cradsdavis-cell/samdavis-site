@@ -4,10 +4,9 @@
   <meta charset="UTF-8">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Booking confirmed — Sam Davis. Calendar invite and details on the way to your inbox.">
   <title>Confirmed — Sam Davis</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/lib/site.css">
   <link rel="stylesheet" href="/book/_styles.css">
   <style>
     #header.polling::after { content: ''; display: inline-block; width: 1.5em; text-align: left; animation: dots 1.4s steps(3, end) infinite; }
@@ -16,8 +15,16 @@
 </head>
 <body>
   <nav class="site-nav-bar">
-    <a href="/">Home</a><span class="sep">·</span>
-    <a href="/book">More offers</a>
+    <a href="/" class="brand">
+      <img src="/lib/img/sam-illustration-sm.png" alt="">
+      <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/overview">Overview</a>
+      <a href="/offer">Offer</a>
+      <a href="/book">Book →</a>
+    </div>
   </nav>
   <div class="book-container">
     <div class="book-header" aria-live="polite">
