@@ -1043,3 +1043,26 @@ a:hover { color: var(--accent-deep); }
 @media (min-width: 900px) {
   .price-panel.sticky { position: sticky; top: var(--space-4); }
 }
+
+/* ============================================================
+   v2 — .credit-callout (brass-tinted callout box)
+   Used by: /offer V5
+   ============================================================ */
+
+.credit-callout {
+  background: var(--bg-soft);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  padding: var(--space-3);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.credit-callout strong {
+  color: var(--ink-deep);
+  font-style: normal;
+  font-weight: 700;
+}
