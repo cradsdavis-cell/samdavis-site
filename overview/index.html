@@ -22,6 +22,10 @@
     width: 140px;
     height: auto;
   }
+  .prose-lead {
+    max-width: var(--read-col);
+    margin-bottom: var(--space-3);
+  }
   @media (max-width: 900px) {
     .overview-hero {
       grid-template-columns: 1fr;
@@ -55,66 +59,215 @@
     </div>
   </section>
 
-  <section class="section wrap" id="knows-me">
+  <!-- § The missing layer + V1 callout-grid (compact) -->
+  <section class="section wrap" id="missing-layer">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">§ It knows me</p>
-      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Context, not prompts.</h2>
-      <p class="reveal-on-scroll" style="--reveal-index: 2">A generic AI assistant is a stranger you brief every time. The thing I build instead is a long-term context layer: <em>who you are, what you care about right now, what you're trying to build, and the eight layers of knowledge that change rarely.</em> When you ask it something, it doesn't start from zero. It starts from a year of you.</p>
-      <p class="reveal-on-scroll" style="--reveal-index: 3">The layers are deliberate — North Star, Philosophy, Self, Network, Past, Goals, Tasks, Workflow. Each one is a single source of truth. The assistant pulls from them when relevant. You don't paste your bio into every prompt.</p>
+      <p class="eyebrow reveal-on-scroll">§ The missing layer</p>
+      <h2 class="reveal-on-scroll">Every AI forgets you the moment you close the tab.</h2>
+      <p class="reveal-on-scroll prose-lead">A generic AI assistant is a stranger you brief every time. The thing I build instead is a long-term context layer — yours, held somewhere the AI can read.</p>
+    </div>
+    <div class="interlude callout-grid compact stagger-grid">
+      <div class="callout"><div class="big">ChatGPT doesn't know your people, your deals, or your decisions.</div></div>
+      <div class="callout"><div class="big">Your calendar doesn't know what was said in the meeting.</div></div>
+      <div class="callout"><div class="big">Your notes don't know your voice.</div></div>
+      <div class="callout"><div class="big">Your inbox doesn't know what matters this week.</div></div>
+      <div class="callout"><div class="big">Seven tools open. Nothing shared between them.</div></div>
     </div>
   </section>
 
-  <section class="section wrap" id="knows-people">
+  <!-- § It knows me + V2 layer-grid -->
+  <section class="section wrap" id="one-brain">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">§ It knows my people</p>
-      <h2 class="reveal-on-scroll" style="--reveal-index: 1">A network, tiered.</h2>
-      <p class="reveal-on-scroll" style="--reveal-index: 2">Every person who matters has a page — what you've talked about, what they're working on, how often you should be in touch, what the next ask might be. Tiered: <em>core</em> (family + chosen-family), <em>live</em> (active threads), <em>warm</em> (alive but slower), <em>dormant</em>, <em>stub</em>.</p>
-      <p class="reveal-on-scroll" style="--reveal-index: 3">When a name comes up in conversation, the assistant already knows the relationship history. It catches when you haven't pinged someone in two weeks and they're a "live" thread. It drafts outreach in your voice, with the right context, at the right altitude for the relationship.</p>
+      <p class="eyebrow reveal-on-scroll">§ It knows me</p>
+      <h2 class="reveal-on-scroll">Eight layers of <em>structured self-knowledge.</em></h2>
+      <p class="reveal-on-scroll prose-lead">Not a notes app. A real model of you — read, written, and reasoned over by the AI. The layers are deliberate: each one a single source of truth, pulled in when relevant. You don't paste your bio into every prompt.</p>
+    </div>
+    <div class="interlude layer-grid stagger-grid">
+      <div class="layer"><span class="num">1</span><strong>North Star</strong><p>What you're building a life toward. The frame above the frame.</p></div>
+      <div class="layer"><span class="num">2</span><strong>Philosophy</strong><p>How you operate when no one's watching. Your values, as filters.</p></div>
+      <div class="layer"><span class="num">3</span><strong>Self</strong><p>Who you are when you show up. Identity, strengths, voice, patterns.</p></div>
+      <div class="layer"><span class="num">4</span><strong>Network</strong><p>Every person in your life — tiered, recalled, linked to the work you share.</p></div>
+      <div class="layer"><span class="num">5</span><strong>Past</strong><p>What's happened that still shapes today. Decisions, pivots, lessons.</p></div>
+      <div class="layer"><span class="num">6</span><strong>Goals</strong><p>What you're trying to do, now and next. Reviewed weekly.</p></div>
+      <div class="layer"><span class="num">7</span><strong>Tasks</strong><p>What's on your plate today — synced with calendar and inbox.</p></div>
+      <div class="layer"><span class="num">8</span><strong>Workflow</strong><p>How your days actually run. The routines that hold the rest together.</p></div>
     </div>
   </section>
 
-  <section class="section wrap" id="writes-in-voice">
+  <!-- § Under the hood + V3 tier-stack -->
+  <section class="section wrap" id="under-hood">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">§ It writes in my voice</p>
-      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Concrete. Vulnerable. <em>Yours.</em></h2>
-      <p class="reveal-on-scroll" style="--reveal-index: 2">Generic AI output is detectable in three seconds — em-dashes everywhere, "delve into" everything, every sentence the same length. I build a voice profile from your actual writing: signature phrases, sentence rhythms, the things you don't say. The assistant runs every outbound draft through a seven-check audit before it shows you anything.</p>
-      <p class="reveal-on-scroll" style="--reveal-index: 3">When a draft sounds like a LinkedIn post, it gets flagged. When it crosses into corporate-fluent register, it gets rewritten. The first draft you see already sounds like you.</p>
+      <p class="eyebrow reveal-on-scroll">§ Under the hood</p>
+      <h2 class="reveal-on-scroll">Real tools. Open protocols. <em>Your data, your system.</em></h2>
+      <p class="reveal-on-scroll prose-lead">Not magic. Not a black box. A specific stack — built on open standards so you're never locked in. If the system ever stops serving you, you walk away with everything in plain text.</p>
+    </div>
+    <div class="interlude-bare tier-stack stagger-grid">
+      <div class="tier">
+        <span class="label">The engine</span>
+        <p><strong>Claude</strong> — Anthropic's frontier AI model, running through the Claude Code harness. Handles reasoning, drafting, decision-making, conversation.</p>
+      </div>
+      <div class="tier">
+        <span class="label">The connectors</span>
+        <p>Seven live integrations via the open <strong>Model Context Protocol</strong>. Gmail · Calendar · Google Sheets · Todoist · WhatsApp · Perplexity · Browser (Playwright).</p>
+      </div>
+      <div class="tier">
+        <span class="label">The memory</span>
+        <p>A <strong>plain-text wiki</strong> on your own machine. Every person, decision, project, routine — stored as markdown files you can read, edit, export, walk away with.</p>
+      </div>
+      <div class="tier">
+        <span class="label">The automation</span>
+        <p><strong>Scheduled watchers</strong> running in the background. Inbox scanned every 15 minutes. Calendar on the hour. Tasks every 30. Nothing you have to remember to run.</p>
+      </div>
     </div>
   </section>
 
-  <section class="section wrap" id="catches-drift">
+  <!-- § What it knows about me + V4 self-portrait -->
+  <section class="section wrap" id="knows-me-portrait">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">§ It catches drift</p>
-      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Working memory, not a filing cabinet.</h2>
-      <p class="reveal-on-scroll" style="--reveal-index: 2">The assistant updates the wiki as conversation surfaces material — a new person mentioned, a decision stated, a priority shift. These trigger silent edits: a person page gets bumped, a decision lands in the log, a stale fact gets flagged for review.</p>
-      <p class="reveal-on-scroll" style="--reveal-index: 3">A daily lint catches drift — schema violations, stale pages, broken references. A weekly sync reconciles your goals against the active projects. Coherence isn't something you maintain. It's something the system surfaces when it slips.</p>
+      <p class="eyebrow reveal-on-scroll">§ What it knows about me</p>
+      <h2 class="reveal-on-scroll">To a T. <em>To the sentence.</em></h2>
+      <p class="reveal-on-scroll prose-lead">The kind of context a great human assistant builds over ten years — in a system that can be queried in a second.</p>
+    </div>
+    <div class="interlude self-portrait">
+      <div class="column reveal-on-scroll">
+        <h4>The person</h4>
+        <div class="row"><span class="lab">Values</span><span class="val">Freedom · impact · connection · adventure · nature</span></div>
+        <div class="row"><span class="lab">Voice</span><span class="val">Direct, concrete, contrast-framed. <em>No LinkedIn register.</em></span></div>
+        <div class="row"><span class="lab">Patterns</span><span class="val">Pivots are deepening, not quitting. Wild and calm, always both.</span></div>
+        <div class="row"><span class="lab">Filters</span><span class="val">Any decision runs through five North-Star checks before it's made.</span></div>
+        <div class="row"><span class="lab">Red lines</span><span class="val">No performative masculinity. No inflated positioning. No flattery.</span></div>
+      </div>
+      <div class="column reveal-on-scroll">
+        <h4>The life, right now</h4>
+        <div class="row"><span class="lab">Network</span><span class="val">127 people tiered by closeness; 8 core, 14 live.</span></div>
+        <div class="row"><span class="lab">Priorities</span><span class="val">Earn this month · land a UK placement · ship PhD</span></div>
+        <div class="row"><span class="lab">Live threads</span><span class="val">Abbey · Eleni · 3 TES apps</span></div>
+        <div class="row"><span class="lab">Open loops</span><span class="val">Mum's birthday in 9 days · climbing off 6 weeks</span></div>
+        <div class="row"><span class="lab">On the horizon</span><span class="val">UK move late Aug · farewell tour · overland dream after</span></div>
+      </div>
     </div>
   </section>
 
-  <section class="section wrap" id="right-tool">
+  <!-- § How it gets sharper + V5 reflex-cards -->
+  <section class="section wrap" id="how-sharper">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">§ It uses the right tool for the job</p>
-      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Skills + connectors.</h2>
-      <p class="reveal-on-scroll" style="--reveal-index: 2">The assistant has named skills — short workflows for specific tasks. Open a session. Outreach. Draft a follow-up. Audit the inbox. Each one is a small set of steps that knows when to fire, what tools to use, and what to write back.</p>
-      <p class="reveal-on-scroll" style="--reveal-index: 3">It connects to Gmail, Calendar, Todoist, WhatsApp, GitHub, Drive — whatever your operational surface actually is. The assistant lives in the tools you already use, not in a new app you have to remember to open.</p>
+      <p class="eyebrow reveal-on-scroll">§ How it gets sharper</p>
+      <h2 class="reveal-on-scroll">It updates itself <em>while you work.</em></h2>
+      <p class="reveal-on-scroll prose-lead">You don't maintain the brain. You use it, and it keeps itself current — quietly, in the background. Real things that happened in mine last month:</p>
+    </div>
+    <div class="interlude reflex-cards stagger-grid">
+      <div class="reflex">
+        <span class="trigger">When I decided</span>
+        <h5>It captured the decision and the reasoning.</h5>
+        <p>I decided to raise my coaching rate. The brain logged <em>"market puts sole-operator AI coaching at $180–300/hr mid-band"</em>, backlinked to my pricing page, and flagged the three prospects still attached to the old rate.</p>
+      </div>
+      <div class="reflex">
+        <span class="trigger">When someone new entered</span>
+        <h5>It built them a page.</h5>
+        <p>A mentor mentioned a school head I should know. The brain created her entity page, inferred the two-way relationship to the mentor, and had her context ready the next time I drafted outreach.</p>
+      </div>
+      <div class="reflex">
+        <span class="trigger">When facts contradicted</span>
+        <h5>It flagged the conflict.</h5>
+        <p>My draft bio said <em>"coaching since 2024"</em>. The wiki said 2025. The brain paused, asked which was right, and updated the single source of truth once I confirmed.</p>
+      </div>
     </div>
   </section>
 
+  <!-- § In your work + V6 mock-terminal -->
+  <section class="section wrap" id="in-your-work">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll">§ In your work</p>
+      <h2 class="reveal-on-scroll">It holds <em>every thread</em> across every channel.</h2>
+      <p class="reveal-on-scroll prose-lead">A prospect replies. Before you answer, the brain pulls their full history — every email, every meeting, every message, what you charged, what you promised, what you decided last time. Ten seconds. One view. Then it drafts the reply in your voice.</p>
+    </div>
+    <div class="interlude-bare mock-terminal" data-typewriter>
+      <span class="tw-line prompt">&gt; jane replied · pull context?</span>
+      <hr>
+      <span class="tw-line row"><span class="key">Wiki</span>· tier: live · last update: 19 Apr</span>
+      <span class="tw-line row"><span class="key">Gmail</span>· 14 msgs · last: today 9:04am</span>
+      <span class="tw-line row"><span class="key">WhatsApp</span>· 6 msgs · last: today 8:47am</span>
+      <span class="tw-line row"><span class="key">Calendar</span>· 2 past · 1 upcoming</span>
+      <span class="tw-line row"><span class="key">Todoist</span>· 3 open tasks</span>
+      <span class="tw-line row"><span class="key">Decisions</span>· 2 (proposal $4k · CFO gate)</span>
+      <hr>
+      <span class="tw-line comment">Pattern: when you're blocked on a CFO gate,</span>
+      <span class="tw-line comment">offering to meet direct has unblocked it before.</span>
+      <span class="tw-line comment">Want to try that line?</span>
+      <span class="tw-line">Draft reply? <span class="affordance">y / edit / no</span><span class="cursor"></span></span>
+    </div>
+  </section>
+
+  <!-- § Case study + V7 callout-grid -->
   <section class="section wrap" id="carbon-tracker">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">§ Case study · Carbon Tracker</p>
-      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Eleven agents. <em>Six weeks.</em></h2>
-      <p class="reveal-on-scroll" style="--reveal-index: 2">A UK climate consultancy was spending three days per client triaging Scope-3 carbon-accounting questions across multiple frameworks. The framework-mapping was rote, the cross-referencing was painful, and every analyst had a slightly different opinion about how it should be done.</p>
-      <p class="reveal-on-scroll" style="--reveal-index: 3">I designed an eleven-agent pipeline that triages incoming questions, decides which carbon framework applies, cross-checks against the consultancy's historical decisions, and surfaces an auditable chain of reasoning. Each agent has one job. Each handoff is logged. The output is a document the analyst reviews and signs off, not replaces.</p>
-      <p class="reveal-on-scroll" style="--reveal-index: 4">Time-to-answer dropped from three days to under twenty minutes. The system shipped in around six weeks. The consultancy now uses it as the first-pass on every client engagement.</p>
+      <p class="eyebrow reveal-on-scroll">§ Case study · Carbon Tracker</p>
+      <h2 class="reveal-on-scroll">Eleven agents. <em>Six weeks.</em></h2>
+      <p class="reveal-on-scroll prose-lead">A UK climate consultancy was spending three days per client triaging Scope-3 carbon-accounting questions across multiple frameworks. I designed an eleven-agent pipeline that triages incoming questions, decides which framework applies, cross-checks against historical decisions, and surfaces auditable reasoning. Each agent has one job. Each handoff is logged. Time-to-answer dropped from three days to under twenty minutes; the consultancy now uses it as the first-pass on every client engagement.</p>
+    </div>
+    <div class="interlude callout-grid stagger-grid">
+      <div class="callout">
+        <div class="big">Nothing falls through.</div>
+        <div class="small">Every promise, every decision, every person — held. Your mind stops doing the job of a filing cabinet.</div>
+      </div>
+      <div class="callout">
+        <div class="big">You sound like yourself.</div>
+        <div class="small">Every reply, every message, every draft — in your voice, from your actual memory. Not generic AI output.</div>
+      </div>
+      <div class="callout">
+        <div class="big">You think more clearly.</div>
+        <div class="small">Because the system holds the context, you don't have to. Your best hours go to the work, not to remembering.</div>
+      </div>
     </div>
   </section>
 
+  <!-- § For your business + V8 tool-grid -->
+  <section class="section wrap" id="for-your-business">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll">§ For your business</p>
+      <h2 class="reveal-on-scroll">Any tool you use already. <em>Wired into one brain.</em></h2>
+      <p class="reveal-on-scroll prose-lead">Seven integrations live in my own system. Hundreds more exist — and if your tool has an API, it can wire into yours. Built around your stack, not mine.</p>
+    </div>
+    <div class="interlude tool-grid stagger-grid">
+      <div class="tool">
+        <h5>Customer systems</h5>
+        <p class="tag">Your CRM, your deals, your pipeline.</p>
+        <p class="eg">HubSpot · Salesforce · Pipedrive · Airtable · Attio</p>
+      </div>
+      <div class="tool">
+        <h5>Communications</h5>
+        <p class="tag">Every channel your clients and team use.</p>
+        <p class="eg">Slack · Teams · Email · WhatsApp · SMS</p>
+      </div>
+      <div class="tool">
+        <h5>Operations</h5>
+        <p class="tag">Your workspace — read and written to.</p>
+        <p class="eg">Notion · Asana · Linear · Trello · Google Workspace</p>
+      </div>
+      <div class="tool">
+        <h5>Money</h5>
+        <p class="tag">Invoicing, payments, book-keeping.</p>
+        <p class="eg">Stripe · Xero · QuickBooks · bank feeds</p>
+      </div>
+      <div class="tool">
+        <h5>Client-facing</h5>
+        <p class="tag">Scheduling, proposals, follow-through.</p>
+        <p class="eg">Calendly · Cal.com · DocuSign · Mailchimp · Beehiiv</p>
+      </div>
+      <div class="tool">
+        <h5>Anything bespoke</h5>
+        <p class="tag">Your internal tools, your own database.</p>
+        <p class="eg">REST APIs · webhooks · custom MCP servers</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing CTA -->
   <section class="section section-tight wrap" id="overview-cta">
     <div class="read-col">
-      <h2 class="reveal-on-scroll" style="--reveal-index: 0">Want to see one of these run live?</h2>
-      <p class="lede reveal-on-scroll" style="--reveal-index: 1">Book a thirty-minute call. I'll demo the system that runs this site.</p>
-      <a class="cta-primary reveal-on-scroll" style="--reveal-index: 2" href="/book">Book a 30-minute call</a>
+      <h2 class="reveal-on-scroll">Want to see one of these run live?</h2>
+      <p class="lede reveal-on-scroll">Book a thirty-minute call. I'll demo the system that runs this site.</p>
+      <a class="cta-primary reveal-on-scroll" href="/book">Book a 30-minute call</a>
     </div>
   </section>
 </main>
