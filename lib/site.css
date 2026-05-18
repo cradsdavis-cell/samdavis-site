@@ -777,3 +777,57 @@ a:hover { color: var(--accent-deep); }
 @media (max-width: 540px) {
   .tool-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   v2 — .work-cards (3 work entries with glyph + stat)
+   Used by: / (landing) V3
+   ============================================================ */
+
+.work-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.work-cards .work {
+  padding: var(--space-3);
+  background: var(--bg-main);
+  border-radius: 6px;
+  border-top: 2px solid var(--accent);
+}
+
+.work-cards .work .glyph {
+  display: inline-block;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+
+.work-cards .work h3 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink-deep);
+  margin-bottom: 6px;
+}
+
+.work-cards .work .stat {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.work-cards .work p {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 900px) {
+  .work-cards { grid-template-columns: 1fr; gap: var(--space-2); }
+}
