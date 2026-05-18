@@ -502,3 +502,51 @@ a:hover { color: var(--accent-deep); }
 @media (max-width: 480px) {
   .layer-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   v2 — .tier-stack (4 horizontal tech-stack bars)
+   Used by: /overview V3
+   ============================================================ */
+
+.tier-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tier-stack .tier {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-main);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  align-items: start;
+}
+
+.tier-stack .tier .label {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  padding-top: 3px;
+}
+
+.tier-stack .tier p {
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.tier-stack .tier p strong {
+  color: var(--ink-deep);
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .tier-stack .tier { grid-template-columns: 1fr; gap: 6px; }
+}
