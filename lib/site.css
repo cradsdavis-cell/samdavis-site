@@ -356,3 +356,33 @@ a:hover { color: var(--accent-deep); }
     transition: none;
   }
 }
+
+/* ============================================================
+   v2 — Visual interlude wrappers
+   ============================================================ */
+
+.interlude {
+  background: var(--bg-soft);
+  border-radius: 8px;
+  padding: var(--space-4) var(--space-3);
+  margin: var(--space-4) 0;
+  max-width: var(--wrap-max);
+}
+
+.interlude-bare {
+  /* No background — used by components that carry their own card styling */
+  margin: var(--space-4) 0;
+  max-width: var(--wrap-max);
+}
+
+/* Stagger-grid — parent class signals direct children should reveal with --stagger-index delay */
+.stagger-grid > .reveal-on-scroll[style*="--stagger-index"] {
+  transition-delay: calc(var(--stagger-index, 0) * 80ms);
+}
+
+@media (max-width: 600px) {
+  .interlude, .interlude-bare {
+    padding: var(--space-3) var(--space-2);
+    margin: var(--space-3) 0;
+  }
+}
