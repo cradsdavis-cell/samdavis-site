@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sam Davis — AI coach &amp; systems builder</title>
+<meta name="description" content="I build AI executive assistants with real brains — for founders who want their AI to actually know them. And I work as a fractional AI lead for climate &amp; ESG businesses.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&display=swap');
+
+  :root {
+    --bg: #FAF7EE;
+    --bg-soft: #F2EEDD;
+    --bg-card: #DCE0B6;
+    --bg-card-hi: #C8CEA0;
+    --ink: #3E3418;
+    --ink-soft: #6B5F3A;
+    --ink-faint: #998D6B;
+    --accent: #8F7530;
+    --accent-bright: #B89B4A;
+    --accent-deep: #6B5624;
+    --accent-glow: rgba(184, 155, 74, 0.22);
+    --rule: #B0B490;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --serif: "Playfair Display", Georgia, serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 18px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 32px 60px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    font-weight: 800;
+    margin-bottom: 20px;
+    max-width: 900px;
+  }
+  h1 em {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  .lede {
+    font-size: clamp(18px, 1.6vw, 23px);
+    color: var(--ink-soft);
+    line-height: 1.5;
+    max-width: 720px;
+    margin-bottom: 64px;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 72px;
+  }
+
+  .card-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  a.card {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 28px 28px 24px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+  }
+  a.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 32px rgba(62, 52, 24, 0.1);
+  }
+  a.card .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  a.card h2 {
+    font-family: var(--serif);
+    font-size: clamp(22px, 2vw, 28px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  a.card h2 em {
+    color: var(--accent);
+    font-style: italic;
+  }
+  a.card p {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin-bottom: 18px;
+  }
+  a.card .go {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  a.onepager-link {
+    align-self: flex-start;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    padding: 5px 12px;
+    border-radius: 6px;
+    background: transparent;
+    transition: background 0.15s, color 0.15s;
+  }
+  a.onepager-link:hover {
+    background: rgba(143, 117, 48, 0.08);
+    color: var(--accent);
+  }
+
+  .contact {
+    padding-top: 36px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 2;
+  }
+  .contact a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--ink-faint);
+  }
+  .contact a:hover { border-bottom-color: var(--accent); }
+  .contact .kicker {
+    margin-top: 20px;
+    color: var(--ink-faint);
+    font-style: italic;
+    font-size: 13.5px;
+    font-family: var(--sans);
+  }
+
+  @media (max-width: 960px) {
+    .cards { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 760px) {
+    main { padding: 48px 24px 48px; }
+    .cards { grid-template-columns: 1fr; }
+  }
+
+  .site-nav-bar {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 14px;
+    padding: 7px 16px;
+    background: rgba(250, 247, 238, 0.93);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 12.5px;
+    z-index: 300;
+    white-space: nowrap;
+    backdrop-filter: blur(4px);
+  }
+  .site-nav-bar a { color: var(--ink-soft); text-decoration: none; letter-spacing: 0.01em; transition: color 0.15s; }
+  .site-nav-bar a:hover { color: var(--accent); }
+  .site-nav-bar a.current { color: var(--ink); font-weight: 600; }
+  .site-nav-bar .sep { color: var(--ink-faint); opacity: 0.5; }
+  @media print { .site-nav-bar { display: none; } }
+  @media (max-width: 760px) {
+    .site-nav-bar { font-size: 11.5px; padding: 6px 12px; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+<nav class="site-nav-bar">
+  <a href="/" class="current">Home</a>
+  <span class="sep">·</span>
+  <a href="overview">Overview</a>
+  <span class="sep">·</span>
+  <a href="offer">For founders</a>
+  <span class="sep">·</span>
+  <a href="build">For businesses</a>
+  <span class="sep">·</span>
+  <a href="book">Book →</a>
+</nav>
+  <main>
+    <div class="eyebrow">Sam Davis · AI coach &amp; systems builder</div>
+    <h1>An AI executive assistant <em>with a real brain.</em></h1>
+    <p class="lede">I build executive assistants that actually know you — your voice, your people, your priorities, your life. And I work as a fractional AI lead for climate &amp; ESG businesses, embedded alongside their teams.</p>
+
+    <div class="cards">
+      <div class="card-wrap">
+        <a class="card" href="overview">
+          <div class="tag">What this is</div>
+          <h2>An assistant that<br><em>actually knows me.</em></h2>
+          <p>A working demo of what's possible when AI has real context — aware of who you are, what you care about, who's in your life, and how you write.</p>
+          <div class="go">See the demo →</div>
+        </a>
+      </div>
+      <div class="card-wrap">
+        <a class="card" href="offer">
+          <div class="tag">For founders</div>
+          <h2>Build your own EA,<br><em>one rung at a time.</em></h2>
+          <p>From a single session to a one-week EA Setup to per-capability layers — pick where you start and climb as you want. Credits carry forward.</p>
+          <div class="go">See the offer →</div>
+        </a>
+        <a class="onepager-link" href="onepager">📄 One-pager</a>
+      </div>
+      <div class="card-wrap">
+        <a class="card" href="build">
+          <div class="tag">For businesses</div>
+          <h2>Adopt AI without<br><em>breaking your product.</em></h2>
+          <p>Fractional AI lead for climate / ESG companies and the consultancies that serve them — embedded part-time, picking up AI problems and shipping them.</p>
+          <div class="go">See the offer →</div>
+        </a>
+        <a class="onepager-link" href="build-onepager">📄 One-pager</a>
+      </div>
+    </div>
+
+    <div class="contact">
+      <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+      <div><a href="https://linkedin.com/in/samuel-davis4">linkedin.com/in/samuel-davis4</a></div>
+      <div>+61 0493 302 154</div>
+      <p class="kicker">Coogee, Sydney. Moving to the UK late 2026.</p>
+    </div>
+  </main>
+</body>
+</html>

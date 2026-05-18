@@ -4,36 +4,17 @@
 <meta charset="UTF-8">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+  <link rel="stylesheet" href="/lib/site.css">
 <title>An executive assistant that actually knows you — Sam Davis</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&display=swap');
-
-  :root {
-    --bg: #FAF7EE;
-    --bg-soft: #F2EEDD;
-    --bg-card: #DCE0B6;
-    --bg-card-hi: #C8CEA0;
-    --ink: #3E3418;
-    --ink-soft: #6B5F3A;
-    --ink-faint: #998D6B;
-    --accent: #8F7530;
-    --accent-bright: #B89B4A;
-    --accent-deep: #6B5624;
-    --accent-glow: rgba(184, 155, 74, 0.22);
-    --rule: #B0B490;
-    --good: #7A8B3F;
-    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-    --serif: "Playfair Display", Georgia, "Times New Roman", serif;
-  }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   @page { size: A4 portrait; margin: 0; }
 
   html, body {
-    background: var(--bg);
-    color: var(--ink);
+    background: var(--bg-main);
+    color: var(--ink-deep);
     font-family: var(--sans);
     -webkit-font-smoothing: antialiased;
     -webkit-print-color-adjust: exact;
@@ -65,7 +46,7 @@
     color: var(--ink-soft);
     line-height: 1.3;
   }
-  header.top .who b { color: var(--ink); font-weight: 600; }
+  header.top .who b { color: var(--ink-deep); font-weight: 600; }
   header.top .meta {
     font-family: var(--mono);
     font-size: 10px;
@@ -92,7 +73,7 @@
     line-height: 1.05;
     letter-spacing: -0.01em;
     font-weight: 800;
-    color: var(--ink);
+    color: var(--ink-deep);
   }
   h1 .accent { color: var(--accent); font-style: italic; font-weight: 700; }
   .lede {
@@ -137,10 +118,10 @@
   }
   .tier-box .body {
     font-size: 10.5px;
-    color: var(--ink);
+    color: var(--ink-deep);
     line-height: 1.4;
   }
-  .tier-box .body strong { font-weight: 600; color: var(--ink); }
+  .tier-box .body strong { font-weight: 600; color: var(--ink-deep); }
   .tier-box .body .mono {
     font-family: var(--mono);
     font-size: 9.5px;
@@ -172,7 +153,7 @@
   .layer-chip .nm {
     font-size: 9.5px;
     font-weight: 700;
-    color: var(--ink);
+    color: var(--ink-deep);
     margin-top: 3px;
     letter-spacing: -0.01em;
     line-height: 1.1;
@@ -202,7 +183,7 @@
     font-family: var(--serif);
     font-size: 13.5px;
     font-weight: 800;
-    color: var(--ink);
+    color: var(--ink-deep);
     letter-spacing: -0.01em;
     line-height: 1.15;
     margin-bottom: 2px;
@@ -210,7 +191,7 @@
   .rung .pr {
     font-family: var(--mono);
     font-size: 11px;
-    color: var(--ink);
+    color: var(--ink-deep);
     font-weight: 600;
     margin-bottom: 4px;
   }
@@ -224,8 +205,8 @@
     border-color: var(--accent-deep);
   }
   .rung-hero .nm { color: var(--accent-deep); }
-  .rung-hero .ttl, .rung-hero .pr { color: var(--ink); }
-  .rung-hero .body { color: var(--ink); opacity: 0.85; }
+  .rung-hero .ttl, .rung-hero .pr { color: var(--ink-deep); }
+  .rung-hero .body { color: var(--ink-deep); opacity: 0.85; }
 
   .ladder-note {
     font-style: italic;
@@ -246,9 +227,9 @@
     padding-bottom: 1px;
     font-weight: 600;
   }
-  .rung .rung-cta:hover { color: var(--ink); border-bottom-color: var(--ink); }
-  .rung-hero .rung-cta { color: var(--ink); border-bottom-color: var(--accent-deep); }
-  .rung-hero .rung-cta:hover { color: var(--accent-deep); border-bottom-color: var(--ink); }
+  .rung .rung-cta:hover { color: var(--ink-deep); border-bottom-color: var(--ink-deep); }
+  .rung-hero .rung-cta { color: var(--ink-deep); border-bottom-color: var(--accent-deep); }
+  .rung-hero .rung-cta:hover { color: var(--accent-deep); border-bottom-color: var(--ink-deep); }
   .rung .rung-cta-soft {
     display: inline-block;
     margin-top: 6px;
@@ -258,7 +239,7 @@
     line-height: 1.4;
   }
   .rung .rung-cta-soft a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent); }
-  .rung .rung-cta-soft a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+  .rung .rung-cta-soft a:hover { color: var(--ink-deep); border-bottom-color: var(--ink-deep); }
 
   .demos {
     display: grid;
@@ -271,7 +252,7 @@
     border-radius: 5px;
     padding: 10px 12px;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--ink-deep);
     display: flex;
     align-items: center;
     gap: 12px;
@@ -287,7 +268,7 @@
     font-family: var(--serif);
     font-weight: 800;
     font-size: 13px;
-    color: var(--ink);
+    color: var(--ink-deep);
     letter-spacing: -0.01em;
     line-height: 1.2;
   }
@@ -316,29 +297,29 @@
     gap: 16px;
     margin-top: auto;
     text-decoration: none;
-    color: var(--ink);
+    color: var(--ink-deep);
   }
   .cta .left .ttl {
     font-family: var(--serif);
     font-size: 18px;
     font-weight: 800;
-    color: var(--ink);
+    color: var(--ink-deep);
     letter-spacing: -0.01em;
     line-height: 1.15;
   }
   .cta .left .sub {
     font-size: 10.5px;
-    color: var(--ink);
+    color: var(--ink-deep);
     opacity: 0.8;
     margin-top: 3px;
   }
   .cta .url {
     font-family: var(--mono);
     font-size: 12.5px;
-    color: var(--ink);
+    color: var(--ink-deep);
     font-weight: 700;
     text-decoration: none;
-    background: var(--bg);
+    background: var(--bg-main);
     padding: 8px 14px;
     border-radius: 4px;
     border: 1px solid var(--accent-deep);
@@ -355,7 +336,7 @@
     font-size: 9.5px;
     color: var(--ink-soft);
   }
-  footer.bot .left span { color: var(--ink); }
+  footer.bot .left span { color: var(--ink-deep); }
   footer.bot .right { color: var(--ink-faint); font-style: italic; font-family: var(--sans); }
   .site-nav-bar {
     position: fixed;
@@ -376,7 +357,7 @@
   }
   .site-nav-bar a { color: var(--ink-soft); text-decoration: none; letter-spacing: 0.01em; transition: color 0.15s; }
   .site-nav-bar a:hover { color: var(--accent); }
-  .site-nav-bar a.current { color: var(--ink); font-weight: 600; }
+  .site-nav-bar a.current { color: var(--ink-deep); font-weight: 600; }
   .site-nav-bar .sep { color: var(--ink-faint); opacity: 0.5; }
   @media print { .site-nav-bar { display: none; } }
   @media (max-width: 760px) {
@@ -395,8 +376,6 @@
   <a href="../overview">Overview</a>
   <span class="sep">·</span>
   <a href="../offer" class="current">For founders</a>
-  <span class="sep">·</span>
-  <a href="../build">For businesses</a>
   <span class="sep">·</span>
   <a href="../book">Book →</a>
 </nav>

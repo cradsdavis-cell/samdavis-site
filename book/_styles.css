@@ -2,13 +2,8 @@
 
 :root {
   --ink: #1f1d1a;
-  --ink-soft: #4a463f;
-  --ink-faint: #847d70;
   --paper: #fafaee;
-  --rule: #d8d2c4;
-  --accent: #0E5484;
-  --sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --accent-soft: rgba(14, 84, 132, 0.08);
+  --accent-soft: rgba(143, 117, 48, 0.08);
 }
 
 * { box-sizing: border-box; }
@@ -79,7 +74,7 @@ body {
   font-size: 1rem;
   font-family: var(--sans);
 }
-.book-cta:hover { background: #0a3f64; }
+.book-cta:hover { background: #6B5624; }
 .book-cta:disabled { opacity: 0.6; cursor: not-allowed; }
 .book-policy { margin-top: 3rem; padding: 1.5rem; background: #fff; border: 1px solid var(--rule); border-radius: 6px; font-size: 0.95rem; color: var(--ink-soft); }
 
@@ -102,7 +97,7 @@ body {
 .book-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* Hero card on /book menu — promote the most-popular SKU */
-.book-card-hero { border: 2px solid var(--accent); box-shadow: 0 4px 12px rgba(14,84,132,0.12); position: relative; }
+.book-card-hero { border: 2px solid var(--accent); box-shadow: 0 4px 12px rgba(143,117,48,0.12); position: relative; }
 .book-card-hero::before { content: '★ Most popular'; position: absolute; top: -10px; left: 16px; background: var(--accent); color: #fff; font-size: 0.75rem; padding: 2px 10px; border-radius: 4px; letter-spacing: 0.02em; }
 
 /* mobile: tighter slot grid */
