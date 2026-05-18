@@ -52,6 +52,18 @@
     .hero-ctas { flex-direction: column; align-items: stretch; }
     .hero-ctas .cta-secondary { text-align: center; }
   }
+  .work-entry {
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .work-entry:last-of-type { border-bottom: none; }
+  .work-entry h3 { margin-bottom: var(--space-2); }
+  .work-entry p { color: var(--ink-soft); }
+  .work-closing {
+    margin-top: var(--space-3);
+    color: var(--ink-soft);
+    font-style: italic;
+  }
 </style>
 </head>
 <body>
@@ -95,7 +107,29 @@
       <p class="reveal-on-scroll" style="--reveal-index: 5"><a class="cta-secondary" href="/offer">See the full offer →</a></p>
     </div>
   </section>
-  <!-- Selected work (Task 2.6) -->
+  <section class="section wrap" id="work">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">Selected work</p>
+      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Eight AI systems shipped in twelve months.</h2>
+
+      <div class="work-entry reveal-on-scroll" style="--reveal-index: 2">
+        <h3>Carbon Tracker</h3>
+        <p>An eleven-agent system built for a UK climate consultancy in around six weeks. The agents triage incoming carbon-accounting questions across multiple Scope-3 frameworks, cross-check against the client's historical decisions, and surface the answers with auditable reasoning. The system replaced a process that previously took the consultancy three days per client; the agentic pipeline does it in under twenty minutes.</p>
+      </div>
+
+      <div class="work-entry reveal-on-scroll" style="--reveal-index: 3">
+        <h3>Derwen</h3>
+        <p>A live AI biodiversity assistant. Reads a habitat description, recommends species, surfaces evidence from peer-reviewed literature. Built in two weeks as a working demo of "AI as conservation translator." Live at <a href="https://derwenai.replit.app" target="_blank" rel="noopener">derwenai.replit.app</a>.</p>
+      </div>
+
+      <div class="work-entry reveal-on-scroll" style="--reveal-index: 4">
+        <h3>This system</h3>
+        <p>The AI executive assistant that runs this site, drafts these words, tracks every conversation I have with a client. Built layer by layer over a year. I demo it live on prospect calls — easier than explaining what an EA-with-real-context actually means.</p>
+      </div>
+
+      <p class="reveal-on-scroll work-closing" style="--reveal-index: 5">Five more builds rounded out the twelve months — a second-hand gear finder, a wildlife-monitoring system, climate-data tooling. Happy to walk through any of them on a call.</p>
+    </div>
+  </section>
   <!-- Final CTA (Task 2.7) -->
 </main>
 
