@@ -728,3 +728,52 @@ a:hover { color: var(--accent-deep); }
 @media (prefers-reduced-motion: reduce) {
   .mock-terminal .cursor { animation: none; }
 }
+
+/* ============================================================
+   v2 — .tool-grid (6 tool-category cells)
+   Used by: /overview V8
+   ============================================================ */
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.tool-grid .tool {
+  padding: var(--space-3);
+  background: var(--bg-main);
+  border-radius: 6px;
+  border-top: 2px solid var(--accent);
+}
+
+.tool-grid .tool h5 {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink-deep);
+  margin-bottom: 4px;
+  letter-spacing: -0.005em;
+}
+
+.tool-grid .tool .tag {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin-bottom: var(--space-2);
+}
+
+.tool-grid .tool .eg {
+  font-size: 13px;
+  color: var(--ink-faint);
+  letter-spacing: 0.01em;
+  line-height: 1.55;
+}
+
+@media (max-width: 900px) {
+  .tool-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+  .tool-grid { grid-template-columns: 1fr; }
+}
