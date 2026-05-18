@@ -452,3 +452,53 @@ a:hover { color: var(--accent-deep); }
   font-family: var(--sans);
   margin-bottom: 4px;
 }
+
+/* ============================================================
+   v2 — .layer-grid (8 numbered layers in 4-col grid)
+   Used by: /overview V2
+   ============================================================ */
+
+.layer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  background: var(--bg-soft);
+}
+
+.layer-grid .layer {
+  padding: var(--space-3) var(--space-2);
+  border-top: 1px solid var(--rule);
+}
+
+.layer-grid .layer .num {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 800;
+  font-style: italic;
+  color: var(--accent);
+  line-height: 1;
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+.layer-grid .layer strong {
+  display: block;
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink-deep);
+  margin-bottom: 6px;
+}
+
+.layer-grid .layer p {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 900px) {
+  .layer-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .layer-grid { grid-template-columns: 1fr; }
+}
