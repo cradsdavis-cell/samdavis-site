@@ -605,3 +605,55 @@ a:hover { color: var(--accent-deep); }
 @media (max-width: 700px) {
   .self-portrait { grid-template-columns: 1fr; gap: var(--space-3); }
 }
+
+/* ============================================================
+   v2 — .reflex-cards (3 trigger-cards)
+   Used by: /overview V5
+   ============================================================ */
+
+.reflex-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.reflex-cards .reflex {
+  padding: var(--space-3);
+  background: var(--bg-main);
+  border-radius: 6px;
+  border-bottom: 2px solid var(--rule);
+}
+
+.reflex-cards .reflex .trigger {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+.reflex-cards .reflex h5 {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink-deep);
+  line-height: 1.25;
+  margin-bottom: var(--space-2);
+}
+
+.reflex-cards .reflex p {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.reflex-cards .reflex p em {
+  color: var(--ink-deep);
+  font-style: italic;
+}
+
+@media (max-width: 900px) {
+  .reflex-cards { grid-template-columns: 1fr; gap: var(--space-2); }
+}
