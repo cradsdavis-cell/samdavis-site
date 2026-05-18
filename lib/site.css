@@ -550,3 +550,58 @@ a:hover { color: var(--accent-deep); }
 @media (max-width: 700px) {
   .tier-stack .tier { grid-template-columns: 1fr; gap: 6px; }
 }
+
+/* ============================================================
+   v2 — .self-portrait (2-col label/value rows)
+   Used by: /overview V4
+   ============================================================ */
+
+.self-portrait {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.self-portrait .column h4 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--accent);
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--rule);
+}
+
+.self-portrait .column .row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: var(--space-2);
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--rule);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.self-portrait .column .row:last-child { border-bottom: none; }
+
+.self-portrait .column .row .lab {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding-top: 3px;
+}
+
+.self-portrait .column .row .val {
+  color: var(--ink-soft);
+}
+.self-portrait .column .row .val em {
+  font-style: italic;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .self-portrait { grid-template-columns: 1fr; gap: var(--space-3); }
+}
