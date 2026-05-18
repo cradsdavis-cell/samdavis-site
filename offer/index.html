@@ -15,22 +15,34 @@
     align-items: center;
     gap: var(--space-4);
     padding-top: var(--space-6);
-    padding-bottom: var(--space-5);
+    padding-bottom: var(--space-4);
   }
   .offer-hero img { width: 140px; height: auto; }
-  .rung {
+  .prose-lead { max-width: var(--read-col); margin-bottom: var(--space-3); }
+  .rung-detail {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--space-4);
     padding: var(--space-4) 0;
     border-bottom: 1px solid var(--rule);
   }
-  .rung:last-of-type { border-bottom: none; }
-  .rung .meta {
-    display: block;
-    margin: var(--space-2) 0 var(--space-3);
+  .rung-detail:last-of-type { border-bottom: none; }
+  .rung-detail .prose .best-for { font-size: 14.5px; color: var(--ink-soft); margin-top: var(--space-2); }
+  .rung-detail .prose .best-for strong { color: var(--ink-deep); }
+  .discovery-card {
+    background: var(--bg-soft);
+    border-radius: 6px;
+    padding: var(--space-4);
+    text-align: center;
+    margin-top: var(--space-4);
   }
-  .rung-cta { margin-top: var(--space-3); }
+  .discovery-card h2 { margin-bottom: var(--space-2); }
+  .discovery-card .meta { display: inline-block; margin-bottom: var(--space-3); }
+  .discovery-card p { max-width: 540px; margin: 0 auto var(--space-3); color: var(--ink-soft); }
   @media (max-width: 900px) {
     .offer-hero { grid-template-columns: 1fr; }
     .offer-hero img { margin: 0 auto; }
+    .rung-detail { grid-template-columns: 1fr; gap: var(--space-3); }
   }
 </style>
 </head>
@@ -50,6 +62,7 @@
 </nav>
 
 <main>
+  <!-- Hero (preserved from v1) -->
   <section class="offer-hero wrap">
     <img src="/lib/img/sam-illustration.png" alt="" class="float-gentle">
     <div>
@@ -58,44 +71,105 @@
     </div>
   </section>
 
-  <section class="section wrap">
-    <div class="read-col">
+  <!-- V1 — Ladder at a glance (4 rungs) -->
+  <section class="section section-tight wrap" id="ladder">
+    <p class="eyebrow reveal-on-scroll" style="text-align: center;">The ladder at a glance</p>
+    <h2 class="reveal-on-scroll" style="text-align: center; margin-bottom: var(--space-4);">Pick where you start.</h2>
+    <div class="interlude-bare rung-ladder stagger-grid">
+      <a class="rung-card" href="#coaching-block">
+        <p class="r-name">Coaching Block</p>
+        <p class="r-meta">4 × 60 min</p>
+        <p class="r-price">$500</p>
+        <p class="r-pitch">Build alongside me, weekly.</p>
+        <span class="r-cta">Read more →</span>
+      </a>
+      <a class="rung-card hero" href="#ea-basic-build">
+        <span class="badge">★ Most popular</span>
+        <p class="r-name">EA Basic Build</p>
+        <p class="r-meta">One-week sprint</p>
+        <p class="r-price">$2,000</p>
+        <p class="r-pitch">I install the whole assistant.</p>
+        <span class="r-cta">Read more →</span>
+      </a>
+      <a class="rung-card" href="#layers">
+        <p class="r-name">Layers</p>
+        <p class="r-meta">Async add-ons</p>
+        <p class="r-price">$500–800</p>
+        <p class="r-pitch">Capabilities stack post-build.</p>
+        <span class="r-cta">Read more →</span>
+      </a>
+      <a class="rung-card" href="#discovery">
+        <p class="r-name">Discovery</p>
+        <p class="r-meta">30 min · free</p>
+        <p class="r-price">Free</p>
+        <p class="r-pitch">Not sure which fits? Start here.</p>
+        <span class="r-cta">Read more →</span>
+      </a>
+    </div>
+  </section>
 
-      <article class="rung reveal-on-scroll" id="coaching-block">
+  <!-- V2 — Coaching Block rung (2-col with price-panel) -->
+  <section class="section wrap">
+    <article class="rung-detail reveal-on-scroll" id="coaching-block">
+      <div class="prose">
         <p class="eyebrow">Coaching Block</p>
         <h2>Build alongside me. <em>Four sessions, $500.</em></h2>
-        <span class="meta">4 × 60 min · $500 AUD ($125/session)</span>
         <p>For founders who want the assistant installed into their actual workflow, in real time, with me alongside. Session one establishes context. Sessions two through four are us building together — your voice profile, your people, your priorities. By session four it knows you well enough to draft in your voice.</p>
-        <p><strong>Best for:</strong> technical or semi-technical founders who want hands-on learning while we install. Sessions 2–4 are booked after Session 1 so we can pace to your reality.</p>
-        <p class="rung-cta"><a class="cta-primary" href="/book/coaching-block">Book Coaching Block</a></p>
-      </article>
+        <p class="best-for"><strong>Best for:</strong> technical or semi-technical founders who want hands-on learning while we install. Sessions 2–4 booked after Session 1 so we pace to your reality.</p>
+      </div>
+      <aside class="price-panel sticky">
+        <p class="label">Price</p>
+        <p class="value">$500</p>
+        <p class="note">4 × 60-min sessions · credits toward EA Basic Build within 90 days</p>
+        <a class="cta-primary" href="/book/coaching-block">Book + Pay →</a>
+      </aside>
+    </article>
 
-      <article class="rung reveal-on-scroll" id="ea-basic-build">
+    <!-- V3 — EA Basic Build rung -->
+    <article class="rung-detail reveal-on-scroll" id="ea-basic-build">
+      <div class="prose">
         <p class="eyebrow">EA Basic Build</p>
         <h2>I install your assistant. <em>One week, $2,000.</em></h2>
-        <span class="meta">5 working days · $2,000 AUD fixed</span>
         <p>For founders who want the assistant installed quickly and don't want to be in the build process. We meet once at the start — I walk away with everything I need (your tools, your voice samples, your top three people, your current priorities). End of the week we meet again and your assistant is live in your stack.</p>
-        <p><strong>Best for:</strong> non-technical founders who want the end state, not the building process. Two meetings total, asynchronous in between.</p>
-        <p class="rung-cta"><a class="cta-primary" href="/book/ea-basic-build">Book EA Basic Build</a></p>
-      </article>
+        <p class="best-for"><strong>Best for:</strong> non-technical founders who want the end state, not the building process. Two meetings total, asynchronous in between.</p>
+      </div>
+      <aside class="price-panel hero sticky">
+        <span class="panel-badge">★ Most popular</span>
+        <p class="label">Price</p>
+        <p class="value">$2,000</p>
+        <p class="note">One-week sprint · 2 meetings + async build</p>
+        <a class="cta-primary" href="/book/ea-basic-build">Book + Pay →</a>
+      </aside>
+    </article>
 
-      <article class="rung reveal-on-scroll" id="layers">
+    <!-- V4 — Layers rung -->
+    <article class="rung-detail reveal-on-scroll" id="layers">
+      <div class="prose">
         <p class="eyebrow">Layers</p>
         <h2>Capabilities, added async. <em>$500–$800 each.</em></h2>
-        <span class="meta">Async · $500–800 AUD per layer</span>
         <p>After your assistant exists, capabilities stack. Want it to draft emails in your voice? Add a layer. Watch your calendar for conflicts and propose reschedules? Add a layer. Pull from your existing knowledge base and answer client questions? Add a layer. Each one is a small scoped engagement.</p>
-        <p><strong>Best for:</strong> existing clients who've completed Coaching Block or EA Basic Build and want to extend the assistant's reach.</p>
-        <p class="rung-cta"><a class="cta-secondary" href="mailto:cradsdavis@gmail.com?subject=Layer%20scope%20request">Email to scope a layer</a></p>
-      </article>
+        <p class="best-for"><strong>Best for:</strong> existing clients who've completed Coaching Block or EA Basic Build and want to extend the assistant's reach.</p>
+      </div>
+      <aside class="price-panel sticky">
+        <p class="label">Price</p>
+        <p class="value">$500–800</p>
+        <p class="note">Per layer · async scoping + delivery</p>
+        <a class="cta-secondary" href="mailto:cradsdavis@gmail.com?subject=Layer%20scope%20request">Email to scope a layer →</a>
+      </aside>
+    </article>
 
-      <article class="rung reveal-on-scroll" id="discovery">
-        <p class="eyebrow">Not sure which fits?</p>
-        <h2>Start with a call.</h2>
-        <span class="meta">30 min · free</span>
-        <p>Discovery is free. Thirty minutes. I'll ask what you're trying to build, you'll ask what I do, and by the end one of three things is true: a rung above fits, you've got a smaller problem we can solve in a single session, or this isn't the right shape and I'll point you somewhere better.</p>
-        <p class="rung-cta"><a class="cta-primary" href="/book/discovery">Book a Discovery call</a></p>
-      </article>
+    <!-- V5 — Credit callout -->
+    <div class="interlude credit-callout reveal-on-scroll" style="margin-top: var(--space-4);">
+      <p><strong>Coaching credits</strong> apply to the EA Basic Build within 90 days. A $500 Coaching Block becomes $1,500 to complete the Basic Build — no penalty for starting small.</p>
+    </div>
 
+    <!-- V6 — Discovery card -->
+    <div class="discovery-card reveal-on-scroll" id="discovery">
+      <p class="eyebrow">Not sure which fits?</p>
+      <h2>Start with a call.</h2>
+      <span class="meta">30 min · free</span>
+      <p>Discovery is free. Thirty minutes. I'll ask what you're trying to build, you'll ask what I do, and by the end one of three things is true: a rung above fits, you've got a smaller problem we can solve in a single session, or this isn't the right shape and I'll point you somewhere better.</p>
+      <a class="cta-primary" href="/book/discovery">Book a Discovery call</a>
     </div>
   </section>
 </main>
