@@ -386,3 +386,18 @@ a:hover { color: var(--accent-deep); }
     margin: var(--space-3) 0;
   }
 }
+
+/* Typewriter reveal — used by .mock-terminal etc */
+.tw-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+.tw-line.tw-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tw-line { opacity: 1; transform: none; transition: none; }
+}
