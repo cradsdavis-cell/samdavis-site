@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>An executive assistant that actually knows you — Sam Davis</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&display=swap');
@@ -378,6 +379,9 @@
   .site-nav-bar .sep { color: var(--ink-faint); opacity: 0.5; }
   @media print { .site-nav-bar { display: none; } }
   @media (max-width: 760px) {
+    .page { width: 100% !important; min-height: auto !important; padding: 6mm 5mm !important; }
+    .what-grid, .ladder, .demos, .layer-strip { grid-template-columns: 1fr 1fr !important; gap: 6px !important; }
+
     .site-nav-bar { font-size: 11.5px; padding: 6px 12px; gap: 10px; }
   }
 </style>
@@ -486,31 +490,31 @@
   <section>
     <h2 class="sec">See it in detail</h2>
     <div class="demos">
-      <a class="demo-link" href="https://cradsdavis-cell.github.io/samdavis-site/overview">
+      <a class="demo-link" href="https://crads-ai.com/overview">
         <div class="arrow">→</div>
         <div class="text">
           <div class="ttl">The full overview</div>
-          <div class="url">cradsdavis-cell.github.io/samdavis-site/overview</div>
+          <div class="url">crads-ai.com/overview</div>
           <div class="sub">What it is, how it learns, what lives inside the brain.</div>
         </div>
       </a>
-      <a class="demo-link" href="https://cradsdavis-cell.github.io/samdavis-site/offer">
+      <a class="demo-link" href="https://crads-ai.com/offer">
         <div class="arrow">→</div>
         <div class="text">
           <div class="ttl">How we work together</div>
-          <div class="url">cradsdavis-cell.github.io/samdavis-site/offer</div>
+          <div class="url">crads-ai.com/offer</div>
           <div class="sub">The full ladder — pricing, week shape, what you own.</div>
         </div>
       </a>
     </div>
   </section>
 
-  <a class="cta" href="https://calendly.com/cradsdavis/30min">
+  <a class="cta" href="https://crads-ai.com/book/discovery">
     <div class="left">
       <div class="ttl">Book a free 30-min intro. No pitch.</div>
       <div class="sub">Whether the shape of your business actually suits a system like this — and whether I'm the right person to help you build it.</div>
     </div>
-    <div class="url">calendly.com/cradsdavis/30min</div>
+    <div class="url">crads-ai.com/book/discovery</div>
   </a>
 
   <footer class="bot">
