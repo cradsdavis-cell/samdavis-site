@@ -18,51 +18,22 @@
     padding-top: var(--space-7);
     padding-bottom: var(--space-6);
   }
-  .hero-illustration img {
-    width: 100%;
-    max-width: 480px;
-    height: auto;
-  }
+  .hero-illustration img { width: 100%; max-width: 480px; height: auto; }
   .hero-copy h1 { margin: var(--space-3) 0; }
   .hero-copy .lede { margin-bottom: var(--space-4); }
-  .hero-ctas {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    margin-bottom: var(--space-3);
-    flex-wrap: wrap;
-  }
-  .hero-proof {
-    font-size: 15px;
-    color: var(--ink-faint);
-    line-height: 1.5;
-    max-width: 540px;
-  }
+  .hero-ctas { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); flex-wrap: wrap; }
+  .hero-proof { font-size: 15px; color: var(--ink-faint); line-height: 1.5; max-width: 540px; }
   .hero-proof em { font-style: italic; }
+
+  .prose-lead { max-width: var(--read-col); margin-bottom: var(--space-3); }
+
   @media (max-width: 900px) {
-    .hero {
-      grid-template-columns: 1fr;
-      padding-top: var(--space-5);
-      padding-bottom: var(--space-5);
-      gap: var(--space-3);
-    }
+    .hero { grid-template-columns: 1fr; padding-top: var(--space-5); padding-bottom: var(--space-5); gap: var(--space-3); }
     .hero-illustration { order: -1; max-width: 160px; margin: 0 auto; }
   }
   @media (max-width: 600px) {
     .hero-ctas { flex-direction: column; align-items: stretch; }
     .hero-ctas .cta-secondary { text-align: center; }
-  }
-  .work-entry {
-    padding: var(--space-3) 0;
-    border-bottom: 1px solid var(--rule);
-  }
-  .work-entry:last-of-type { border-bottom: none; }
-  .work-entry h3 { margin-bottom: var(--space-2); }
-  .work-entry p { color: var(--ink-soft); }
-  .work-closing {
-    margin-top: var(--space-3);
-    color: var(--ink-soft);
-    font-style: italic;
   }
 </style>
 </head>
@@ -82,9 +53,10 @@
 </nav>
 
 <main>
+  <!-- Hero (preserved from v1) -->
   <section class="hero wrap">
     <div class="hero-illustration">
-      <img src="/lib/img/sam-illustration.png" srcset="/lib/img/sam-illustration-sm.png 320w, /lib/img/sam-illustration.png 1200w" sizes="(max-width: 900px) 320px, 480px" alt="Sam Davis — illustration of a person holding a small tech-and-leaves icon" class="float-gentle">
+      <img src="/lib/img/sam-illustration.png" srcset="/lib/img/sam-illustration-sm.png 320w, /lib/img/sam-illustration.png 1200w" sizes="(max-width: 900px) 160px, 480px" alt="Sam Davis — illustration of a person holding a small tech-and-leaves icon" class="float-gentle">
     </div>
     <div class="hero-copy">
       <p class="eyebrow">SAM DAVIS · PhD ENVIRONMENTAL DATA SCIENCE · 8 AI BUILDS IN 12 MONTHS</p>
@@ -97,44 +69,105 @@
       <p class="hero-proof"><em>Eight AI systems shipped in twelve months — Carbon Tracker for a UK climate consultancy, Derwen, the system running this site.</em></p>
     </div>
   </section>
+
+  <!-- V1 — Capability callouts -->
+  <section class="section wrap" id="capabilities">
+    <div class="interlude callout-grid stagger-grid">
+      <div class="callout">
+        <div class="big">Drafts in your voice.</div>
+        <div class="small">Not generic AI output — your phrasing, your rhythms, your signature moves. Seven-check audit on every outbound draft.</div>
+      </div>
+      <div class="callout">
+        <div class="big">Knows every person.</div>
+        <div class="small">Every name has a page. The assistant pulls relationship history before you reply. Tiered: core, live, warm, dormant.</div>
+      </div>
+      <div class="callout">
+        <div class="big">Catches drift before you do.</div>
+        <div class="small">Daily lint surfaces what's slipping. Weekly sync reconciles goals against active work. You stop maintaining; the system surfaces.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- V2 — 3-rung ladder -->
   <section class="section wrap" id="how">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">How I work</p>
-      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Three rungs. <em>Start anywhere.</em></h2>
-      <p class="reveal-on-scroll" style="--reveal-index: 2">Most founders begin with a <strong>Coaching Block</strong> — four sessions over a few weeks, $500. We build alongside each other: your AI executive assistant gets installed into your workflow, with you, in real time. By session four it knows you well enough to write in your voice.</p>
-      <p class="reveal-on-scroll" style="--reveal-index: 3">If you want it installed faster, the <strong>EA Basic Build</strong> — $2,000 fixed, one week — is the "I'll do it for you" option. End of the week, you have an assistant that knows your people, your priorities, and how you write. We meet once at the start and once at the end.</p>
-      <p class="reveal-on-scroll" style="--reveal-index: 4">After either of those, <strong>Layers</strong> come async — $500–$800 per capability. Want it to draft emails? Add a layer. Watch your calendar for conflicts? Add a layer. Pull from your existing knowledge base? Add a layer. Each one stacks.</p>
-      <p class="reveal-on-scroll" style="--reveal-index: 5"><a class="cta-secondary" href="/offer">See the full offer →</a></p>
+      <p class="eyebrow reveal-on-scroll">How I work</p>
+      <h2 class="reveal-on-scroll">Three rungs. <em>Start anywhere.</em></h2>
     </div>
+    <div class="interlude-bare rung-ladder stagger-grid" style="margin-top: var(--space-3);">
+      <a class="rung-card" href="/book/coaching-block">
+        <p class="r-name">Coaching Block</p>
+        <p class="r-meta">4 × 60 min</p>
+        <p class="r-price">$500</p>
+        <p class="r-pitch">Build alongside me, weekly.</p>
+        <span class="r-cta">Book →</span>
+      </a>
+      <a class="rung-card hero" href="/book/ea-basic-build">
+        <span class="badge">★ Most popular</span>
+        <p class="r-name">EA Basic Build</p>
+        <p class="r-meta">One-week sprint</p>
+        <p class="r-price">$2,000</p>
+        <p class="r-pitch">I install the whole assistant for you.</p>
+        <span class="r-cta">Book →</span>
+      </a>
+      <a class="rung-card" href="/offer#layers">
+        <p class="r-name">Layers</p>
+        <p class="r-meta">Async add-ons</p>
+        <p class="r-price">$500–800</p>
+        <p class="r-pitch">Capabilities stack post-build.</p>
+        <span class="r-cta">Learn more →</span>
+      </a>
+    </div>
+    <p class="reveal-on-scroll" style="text-align: center; margin-top: var(--space-3);"><a class="cta-secondary" href="/offer">See the full offer →</a></p>
   </section>
+
+  <!-- V3 — Work cards -->
   <section class="section wrap" id="work">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">Selected work</p>
-      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Eight AI systems shipped in twelve months.</h2>
-
-      <div class="work-entry reveal-on-scroll" style="--reveal-index: 2">
-        <h3>Carbon Tracker</h3>
-        <p>An eleven-agent system built for a UK climate consultancy in around six weeks. The agents triage incoming carbon-accounting questions across multiple Scope-3 frameworks, cross-check against the client's historical decisions, and surface the answers with auditable reasoning. The system replaced a process that previously took the consultancy three days per client; the agentic pipeline does it in under twenty minutes.</p>
-      </div>
-
-      <div class="work-entry reveal-on-scroll" style="--reveal-index: 3">
-        <h3>Derwen</h3>
-        <p>A live AI biodiversity assistant. Reads a habitat description, recommends species, surfaces evidence from peer-reviewed literature. Built in two weeks as a working demo of "AI as conservation translator." Live at <a href="https://derwenai.replit.app" target="_blank" rel="noopener">derwenai.replit.app</a>.</p>
-      </div>
-
-      <div class="work-entry reveal-on-scroll" style="--reveal-index: 4">
-        <h3>This system</h3>
-        <p>The AI executive assistant that runs this site, drafts these words, tracks every conversation I have with a client. Built layer by layer over a year. I demo it live on prospect calls — easier than explaining what an EA-with-real-context actually means.</p>
-      </div>
-
-      <p class="reveal-on-scroll work-closing" style="--reveal-index: 5">Five more builds rounded out the twelve months — a second-hand gear finder, a wildlife-monitoring system, climate-data tooling. Happy to walk through any of them on a call.</p>
+      <p class="eyebrow reveal-on-scroll">Selected work</p>
+      <h2 class="reveal-on-scroll">Eight AI systems shipped in twelve months.</h2>
     </div>
+    <div class="interlude work-cards stagger-grid">
+      <div class="work">
+        <span class="glyph">⏱</span>
+        <h3>Carbon Tracker</h3>
+        <p class="stat">3 days → 20 min</p>
+        <p>An eleven-agent system for a UK climate consultancy. Triages Scope-3 carbon-accounting questions, cross-checks against historical decisions. Shipped in ~6 weeks.</p>
+      </div>
+      <div class="work">
+        <span class="glyph">🌿</span>
+        <h3>Derwen</h3>
+        <p class="stat">Live in 2 weeks</p>
+        <p>AI biodiversity assistant — reads a habitat description, recommends species, surfaces peer-reviewed evidence. Live at <a href="https://derwenai.replit.app" target="_blank" rel="noopener">derwenai.replit.app</a>.</p>
+      </div>
+      <div class="work">
+        <span class="glyph">◆</span>
+        <h3>This system</h3>
+        <p class="stat">Drafts every page here</p>
+        <p>The executive assistant that runs this site, tracks every conversation, drafts in my voice. Demo'd live on prospect calls — easier than explaining.</p>
+      </div>
+    </div>
+
+    <!-- V4 — Builds strip -->
+    <div class="interlude-bare builds-strip" style="margin-top: var(--space-4);">
+      <div class="build named">Carbon Tracker</div>
+      <div class="build named">Derwen</div>
+      <div class="build named">This system</div>
+      <div class="build hint">Owls Eat Rats</div>
+      <div class="build hint">TrailMate</div>
+      <div class="build hint">Calm &amp; Storm</div>
+      <div class="build hint">Waste2Wattage</div>
+      <div class="build hint">Sasha</div>
+    </div>
+    <p class="reveal-on-scroll work-closing" style="text-align: center; margin-top: var(--space-3); font-style: italic; color: var(--ink-soft); font-size: 14.5px;">Happy to walk through any of them on a call.</p>
   </section>
+
+  <!-- Final CTA (preserved from v1) -->
   <section class="section section-tight wrap" id="final-cta">
     <div class="read-col">
-      <h2 class="reveal-on-scroll" style="--reveal-index: 0">If any of this is the shape of what you've been trying to build —</h2>
-      <p class="lede reveal-on-scroll" style="--reveal-index: 1">Book a thirty-minute call. No pitch.</p>
-      <a class="cta-primary reveal-on-scroll" style="--reveal-index: 2" href="/book">Book a 30-minute call</a>
+      <h2 class="reveal-on-scroll">If any of this is the shape of what you've been trying to build —</h2>
+      <p class="lede reveal-on-scroll">Book a thirty-minute call. No pitch.</p>
+      <a class="cta-primary reveal-on-scroll" href="/book">Book a 30-minute call</a>
     </div>
   </section>
 </main>

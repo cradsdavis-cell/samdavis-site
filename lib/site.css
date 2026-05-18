@@ -356,3 +356,713 @@ a:hover { color: var(--accent-deep); }
     transition: none;
   }
 }
+
+/* ============================================================
+   v2 — Visual interlude wrappers
+   ============================================================ */
+
+.interlude {
+  background: var(--bg-soft);
+  border-radius: 8px;
+  padding: var(--space-4) var(--space-3);
+  margin: var(--space-4) 0;
+  max-width: var(--wrap-max);
+}
+
+.interlude-bare {
+  /* No background — used by components that carry their own card styling */
+  margin: var(--space-4) 0;
+  max-width: var(--wrap-max);
+}
+
+/* Stagger-grid — parent class signals direct children should reveal with --stagger-index delay */
+.stagger-grid > .reveal-on-scroll[style*="--stagger-index"] {
+  transition-delay: calc(var(--stagger-index, 0) * 80ms);
+}
+
+@media (max-width: 600px) {
+  .interlude, .interlude-bare {
+    padding: var(--space-3) var(--space-2);
+    margin: var(--space-3) 0;
+  }
+}
+
+/* Typewriter reveal — used by .mock-terminal etc */
+.tw-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+.tw-line.tw-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tw-line { opacity: 1; transform: none; transition: none; }
+}
+
+/* ============================================================
+   v2 — .callout-grid (reusable big-phrase + caption grid)
+   Used by: /overview V1 + V7, / (landing) V1
+   ============================================================ */
+
+.callout-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-3);
+}
+
+.callout-grid .callout {
+  padding: var(--space-3);
+  border-top: 2px solid var(--accent);
+  background: transparent;
+}
+
+.callout-grid .callout .big {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(22px, 2.2vw, 28px);
+  line-height: 1.2;
+  color: var(--ink-deep);
+  margin-bottom: var(--space-2);
+}
+
+.callout-grid .callout .small {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+/* Compact variant — used by /overview V1 (5-line "AI forgets" list) */
+.callout-grid.compact {
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+}
+.callout-grid.compact .callout {
+  padding: var(--space-2) 0 var(--space-2) var(--space-3);
+  border-top: none;
+  border-left: 2px solid var(--accent);
+}
+.callout-grid.compact .callout .big {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  font-family: var(--sans);
+  margin-bottom: 4px;
+}
+
+/* ============================================================
+   v2 — .layer-grid (8 numbered layers in 4-col grid)
+   Used by: /overview V2
+   ============================================================ */
+
+.layer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  background: var(--bg-soft);
+}
+
+.layer-grid .layer {
+  padding: var(--space-3) var(--space-2);
+  border-top: 1px solid var(--rule);
+}
+
+.layer-grid .layer .num {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 800;
+  font-style: italic;
+  color: var(--accent);
+  line-height: 1;
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+.layer-grid .layer strong {
+  display: block;
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink-deep);
+  margin-bottom: 6px;
+}
+
+.layer-grid .layer p {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 900px) {
+  .layer-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .layer-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   v2 — .tier-stack (4 horizontal tech-stack bars)
+   Used by: /overview V3
+   ============================================================ */
+
+.tier-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tier-stack .tier {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-main);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  align-items: start;
+}
+
+.tier-stack .tier .label {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  padding-top: 3px;
+}
+
+.tier-stack .tier p {
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.tier-stack .tier p strong {
+  color: var(--ink-deep);
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .tier-stack .tier { grid-template-columns: 1fr; gap: 6px; }
+}
+
+/* ============================================================
+   v2 — .self-portrait (2-col label/value rows)
+   Used by: /overview V4
+   ============================================================ */
+
+.self-portrait {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.self-portrait .column h4 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--accent);
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--rule);
+}
+
+.self-portrait .column .row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: var(--space-2);
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--rule);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.self-portrait .column .row:last-child { border-bottom: none; }
+
+.self-portrait .column .row .lab {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding-top: 3px;
+}
+
+.self-portrait .column .row .val {
+  color: var(--ink-soft);
+}
+.self-portrait .column .row .val em {
+  font-style: italic;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .self-portrait { grid-template-columns: 1fr; gap: var(--space-3); }
+}
+
+/* ============================================================
+   v2 — .reflex-cards (3 trigger-cards)
+   Used by: /overview V5
+   ============================================================ */
+
+.reflex-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.reflex-cards .reflex {
+  padding: var(--space-3);
+  background: var(--bg-main);
+  border-radius: 6px;
+  border-bottom: 2px solid var(--rule);
+}
+
+.reflex-cards .reflex .trigger {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+.reflex-cards .reflex h5 {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink-deep);
+  line-height: 1.25;
+  margin-bottom: var(--space-2);
+}
+
+.reflex-cards .reflex p {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.reflex-cards .reflex p em {
+  color: var(--ink-deep);
+  font-style: italic;
+}
+
+@media (max-width: 900px) {
+  .reflex-cards { grid-template-columns: 1fr; gap: var(--space-2); }
+}
+
+/* ============================================================
+   v2 — .mock-terminal (UI mockup card with typewriter motion)
+   Used by: /overview V6 (with data-typewriter attribute)
+   ============================================================ */
+
+.mock-terminal {
+  font-family: var(--mono);
+  font-size: 13.5px;
+  line-height: 1.7;
+  background: #fdfbf2;
+  color: var(--ink-deep);
+  padding: var(--space-3) var(--space-3);
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 2px 12px rgba(143, 117, 48, 0.08);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mock-terminal .tw-line.prompt {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.mock-terminal hr {
+  border: none;
+  border-top: 1px dashed var(--rule);
+  margin: 8px 0;
+}
+
+.mock-terminal .tw-line.row {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.mock-terminal .tw-line.row .key {
+  display: inline-block;
+  min-width: 80px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.mock-terminal .tw-line.comment {
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.mock-terminal .affordance {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.mock-terminal .cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background: var(--accent);
+  vertical-align: middle;
+  animation: cursor-blink 0.9s steps(2, start) infinite;
+}
+
+@keyframes cursor-blink {
+  to { visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mock-terminal .cursor { animation: none; }
+}
+
+/* ============================================================
+   v2 — .tool-grid (6 tool-category cells)
+   Used by: /overview V8
+   ============================================================ */
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.tool-grid .tool {
+  padding: var(--space-3);
+  background: var(--bg-main);
+  border-radius: 6px;
+  border-top: 2px solid var(--accent);
+}
+
+.tool-grid .tool h5 {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink-deep);
+  margin-bottom: 4px;
+  letter-spacing: -0.005em;
+}
+
+.tool-grid .tool .tag {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin-bottom: var(--space-2);
+}
+
+.tool-grid .tool .eg {
+  font-size: 13px;
+  color: var(--ink-faint);
+  letter-spacing: 0.01em;
+  line-height: 1.55;
+}
+
+@media (max-width: 900px) {
+  .tool-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+  .tool-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   v2 — .work-cards (3 work entries with glyph + stat)
+   Used by: / (landing) V3
+   ============================================================ */
+
+.work-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.work-cards .work {
+  padding: var(--space-3);
+  background: var(--bg-main);
+  border-radius: 6px;
+  border-top: 2px solid var(--accent);
+}
+
+.work-cards .work .glyph {
+  display: inline-block;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+
+.work-cards .work h3 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink-deep);
+  margin-bottom: 6px;
+}
+
+.work-cards .work .stat {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.work-cards .work p {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 900px) {
+  .work-cards { grid-template-columns: 1fr; gap: var(--space-2); }
+}
+
+/* ============================================================
+   v2 — .builds-strip (8 mini-squares — 3 named + 5 hinted)
+   Used by: / (landing) V4
+   ============================================================ */
+
+.builds-strip {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.builds-strip .build {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 4px;
+  padding: 4px;
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+.builds-strip .build.named {
+  background: var(--accent);
+  color: var(--bg-main);
+}
+
+.builds-strip .build.hint {
+  background: var(--bg-card);
+  color: var(--ink-soft);
+  opacity: 0.7;
+  font-weight: 500;
+  font-size: 9.5px;
+}
+
+@media (max-width: 600px) {
+  .builds-strip { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ============================================================
+   v2 — .rung-ladder (horizontal price-card row)
+   Used by: / (landing) V2 (3-rung), /offer V1 (4-rung)
+   ============================================================ */
+
+.rung-ladder {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-2);
+}
+
+.rung-ladder .rung-card {
+  position: relative;
+  display: block;
+  padding: var(--space-3);
+  background: var(--bg-main);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.rung-ladder .rung-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(143, 117, 48, 0.15);
+  border-color: var(--accent);
+}
+
+.rung-ladder .rung-card.hero {
+  border: 2px solid var(--accent);
+  background: var(--bg-soft);
+}
+
+.rung-ladder .rung-card.hero .badge {
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: var(--accent);
+  color: var(--bg-main);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+
+.rung-ladder .rung-card .r-name {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.rung-ladder .rung-card .r-meta {
+  font-size: 13px;
+  color: var(--ink-faint);
+  margin-bottom: var(--space-2);
+}
+
+.rung-ladder .rung-card .r-price {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--ink-deep);
+  line-height: 1;
+  margin-bottom: var(--space-2);
+}
+
+.rung-ladder .rung-card .r-pitch {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin-bottom: var(--space-3);
+}
+
+.rung-ladder .rung-card .r-cta {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--accent);
+  border-bottom: 1px dashed var(--accent);
+  padding-bottom: 1px;
+}
+.rung-ladder .rung-card:hover .r-cta {
+  color: var(--accent-deep);
+}
+
+/* ============================================================
+   v2 — .price-panel (right-col sidebar for /offer rung sections)
+   Used by: /offer V2, V3, V4
+   ============================================================ */
+
+.price-panel {
+  background: var(--bg-soft);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: var(--space-3);
+  position: relative;
+}
+
+.price-panel.hero {
+  border: 2px solid var(--accent);
+  background: var(--bg-main);
+}
+
+.price-panel.hero .panel-badge {
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: var(--accent);
+  color: var(--bg-main);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+
+.price-panel .label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.price-panel .value {
+  font-family: var(--serif);
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--ink-deep);
+  line-height: 1;
+  margin-bottom: var(--space-2);
+}
+
+.price-panel .note {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin-bottom: var(--space-3);
+}
+
+.price-panel .cta-primary {
+  width: 100%;
+  text-align: center;
+}
+
+.price-panel .cta-secondary {
+  display: inline-block;
+  margin-top: var(--space-2);
+}
+
+@media (min-width: 900px) {
+  .price-panel.sticky { position: sticky; top: var(--space-4); }
+}
+
+/* ============================================================
+   v2 — .credit-callout (brass-tinted callout box)
+   Used by: /offer V5
+   ============================================================ */
+
+.credit-callout {
+  background: var(--bg-soft);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  padding: var(--space-3);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.credit-callout strong {
+  color: var(--ink-deep);
+  font-style: normal;
+  font-weight: 700;
+}

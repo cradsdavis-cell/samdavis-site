@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How we work together — Sam Davis</title>
+<meta name="description" content="The full founder ladder — Coaching Block, EA Basic Build, Layers — plus the free Discovery call to scope.">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+<style>
+  .offer-hero {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-5);
+  }
+  .offer-hero img { width: 140px; height: auto; }
+  .rung {
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .rung:last-of-type { border-bottom: none; }
+  .rung .meta {
+    display: block;
+    margin: var(--space-2) 0 var(--space-3);
+  }
+  .rung-cta { margin-top: var(--space-3); }
+  @media (max-width: 900px) {
+    .offer-hero { grid-template-columns: 1fr; }
+    .offer-hero img { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav-bar">
+  <a href="/" class="brand">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/overview">Overview</a>
+    <a href="/offer" class="current">Offer</a>
+    <a href="/book">Book →</a>
+  </div>
+</nav>
+
+<main>
+  <section class="offer-hero wrap">
+    <img src="/lib/img/sam-illustration.png" alt="" class="float-gentle">
+    <div>
+      <p class="eyebrow">Offer</p>
+      <h1>How we <em>work together.</em></h1>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="read-col">
+
+      <article class="rung reveal-on-scroll" id="coaching-block">
+        <p class="eyebrow">Coaching Block</p>
+        <h2>Build alongside me. <em>Four sessions, $500.</em></h2>
+        <span class="meta">4 × 60 min · $500 AUD ($125/session)</span>
+        <p>For founders who want the assistant installed into their actual workflow, in real time, with me alongside. Session one establishes context. Sessions two through four are us building together — your voice profile, your people, your priorities. By session four it knows you well enough to draft in your voice.</p>
+        <p><strong>Best for:</strong> technical or semi-technical founders who want hands-on learning while we install. Sessions 2–4 are booked after Session 1 so we can pace to your reality.</p>
+        <p class="rung-cta"><a class="cta-primary" href="/book/coaching-block">Book Coaching Block</a></p>
+      </article>
+
+      <article class="rung reveal-on-scroll" id="ea-basic-build">
+        <p class="eyebrow">EA Basic Build</p>
+        <h2>I install your assistant. <em>One week, $2,000.</em></h2>
+        <span class="meta">5 working days · $2,000 AUD fixed</span>
+        <p>For founders who want the assistant installed quickly and don't want to be in the build process. We meet once at the start — I walk away with everything I need (your tools, your voice samples, your top three people, your current priorities). End of the week we meet again and your assistant is live in your stack.</p>
+        <p><strong>Best for:</strong> non-technical founders who want the end state, not the building process. Two meetings total, asynchronous in between.</p>
+        <p class="rung-cta"><a class="cta-primary" href="/book/ea-basic-build">Book EA Basic Build</a></p>
+      </article>
+
+      <article class="rung reveal-on-scroll" id="layers">
+        <p class="eyebrow">Layers</p>
+        <h2>Capabilities, added async. <em>$500–$800 each.</em></h2>
+        <span class="meta">Async · $500–800 AUD per layer</span>
+        <p>After your assistant exists, capabilities stack. Want it to draft emails in your voice? Add a layer. Watch your calendar for conflicts and propose reschedules? Add a layer. Pull from your existing knowledge base and answer client questions? Add a layer. Each one is a small scoped engagement.</p>
+        <p><strong>Best for:</strong> existing clients who've completed Coaching Block or EA Basic Build and want to extend the assistant's reach.</p>
+        <p class="rung-cta"><a class="cta-secondary" href="mailto:cradsdavis@gmail.com?subject=Layer%20scope%20request">Email to scope a layer</a></p>
+      </article>
+
+      <article class="rung reveal-on-scroll" id="discovery">
+        <p class="eyebrow">Not sure which fits?</p>
+        <h2>Start with a call.</h2>
+        <span class="meta">30 min · free</span>
+        <p>Discovery is free. Thirty minutes. I'll ask what you're trying to build, you'll ask what I do, and by the end one of three things is true: a rung above fits, you've got a smaller problem we can solve in a single session, or this isn't the right shape and I'll point you somewhere better.</p>
+        <p class="rung-cta"><a class="cta-primary" href="/book/discovery">Book a Discovery call</a></p>
+      </article>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+
+</body>
+</html>

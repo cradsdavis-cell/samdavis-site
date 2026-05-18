@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sam Davis — AI executive assistants for founders</title>
+<meta name="description" content="I build AI executive assistants that learn your voice, your people, your priorities. For founders who want their AI to actually understand them.">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: var(--space-5);
+    padding-top: var(--space-7);
+    padding-bottom: var(--space-6);
+  }
+  .hero-illustration img {
+    width: 100%;
+    max-width: 480px;
+    height: auto;
+  }
+  .hero-copy h1 { margin: var(--space-3) 0; }
+  .hero-copy .lede { margin-bottom: var(--space-4); }
+  .hero-ctas {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .hero-proof {
+    font-size: 15px;
+    color: var(--ink-faint);
+    line-height: 1.5;
+    max-width: 540px;
+  }
+  .hero-proof em { font-style: italic; }
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr;
+      padding-top: var(--space-5);
+      padding-bottom: var(--space-5);
+      gap: var(--space-3);
+    }
+    .hero-illustration { order: -1; max-width: 160px; margin: 0 auto; }
+  }
+  @media (max-width: 600px) {
+    .hero-ctas { flex-direction: column; align-items: stretch; }
+    .hero-ctas .cta-secondary { text-align: center; }
+  }
+  .work-entry {
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .work-entry:last-of-type { border-bottom: none; }
+  .work-entry h3 { margin-bottom: var(--space-2); }
+  .work-entry p { color: var(--ink-soft); }
+  .work-closing {
+    margin-top: var(--space-3);
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav-bar">
+  <a href="/" class="brand">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="/" class="current">Home</a>
+    <a href="/overview">Overview</a>
+    <a href="/offer">Offer</a>
+    <a href="/book">Book →</a>
+  </div>
+</nav>
+
+<main>
+  <section class="hero wrap">
+    <div class="hero-illustration">
+      <img src="/lib/img/sam-illustration.png" srcset="/lib/img/sam-illustration-sm.png 320w, /lib/img/sam-illustration.png 1200w" sizes="(max-width: 900px) 320px, 480px" alt="Sam Davis — illustration of a person holding a small tech-and-leaves icon" class="float-gentle">
+    </div>
+    <div class="hero-copy">
+      <p class="eyebrow">SAM DAVIS · PhD ENVIRONMENTAL DATA SCIENCE · 8 AI BUILDS IN 12 MONTHS</p>
+      <h1>An AI executive assistant that <span class="italic-morph" data-phrases="chief of staff would|longtime colleague would|thoughtful editor would">chief of staff would</span>.</h1>
+      <p class="lede">I build AI that learns your voice, your people, your priorities — for founders who want their AI to actually understand them.</p>
+      <div class="hero-ctas">
+        <a class="cta-primary" href="/book">Book a 30-minute call</a>
+        <a class="cta-secondary" href="#work">See the work</a>
+      </div>
+      <p class="hero-proof"><em>Eight AI systems shipped in twelve months — Carbon Tracker for a UK climate consultancy, Derwen, the system running this site.</em></p>
+    </div>
+  </section>
+  <section class="section wrap" id="how">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">How I work</p>
+      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Three rungs. <em>Start anywhere.</em></h2>
+      <p class="reveal-on-scroll" style="--reveal-index: 2">Most founders begin with a <strong>Coaching Block</strong> — four sessions over a few weeks, $500. We build alongside each other: your AI executive assistant gets installed into your workflow, with you, in real time. By session four it knows you well enough to write in your voice.</p>
+      <p class="reveal-on-scroll" style="--reveal-index: 3">If you want it installed faster, the <strong>EA Basic Build</strong> — $2,000 fixed, one week — is the "I'll do it for you" option. End of the week, you have an assistant that knows your people, your priorities, and how you write. We meet once at the start and once at the end.</p>
+      <p class="reveal-on-scroll" style="--reveal-index: 4">After either of those, <strong>Layers</strong> come async — $500–$800 per capability. Want it to draft emails? Add a layer. Watch your calendar for conflicts? Add a layer. Pull from your existing knowledge base? Add a layer. Each one stacks.</p>
+      <p class="reveal-on-scroll" style="--reveal-index: 5"><a class="cta-secondary" href="/offer">See the full offer →</a></p>
+    </div>
+  </section>
+  <section class="section wrap" id="work">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">Selected work</p>
+      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Eight AI systems shipped in twelve months.</h2>
+
+      <div class="work-entry reveal-on-scroll" style="--reveal-index: 2">
+        <h3>Carbon Tracker</h3>
+        <p>An eleven-agent system built for a UK climate consultancy in around six weeks. The agents triage incoming carbon-accounting questions across multiple Scope-3 frameworks, cross-check against the client's historical decisions, and surface the answers with auditable reasoning. The system replaced a process that previously took the consultancy three days per client; the agentic pipeline does it in under twenty minutes.</p>
+      </div>
+
+      <div class="work-entry reveal-on-scroll" style="--reveal-index: 3">
+        <h3>Derwen</h3>
+        <p>A live AI biodiversity assistant. Reads a habitat description, recommends species, surfaces evidence from peer-reviewed literature. Built in two weeks as a working demo of "AI as conservation translator." Live at <a href="https://derwenai.replit.app" target="_blank" rel="noopener">derwenai.replit.app</a>.</p>
+      </div>
+
+      <div class="work-entry reveal-on-scroll" style="--reveal-index: 4">
+        <h3>This system</h3>
+        <p>The AI executive assistant that runs this site, drafts these words, tracks every conversation I have with a client. Built layer by layer over a year. I demo it live on prospect calls — easier than explaining what an EA-with-real-context actually means.</p>
+      </div>
+
+      <p class="reveal-on-scroll work-closing" style="--reveal-index: 5">Five more builds rounded out the twelve months — a second-hand gear finder, a wildlife-monitoring system, climate-data tooling. Happy to walk through any of them on a call.</p>
+    </div>
+  </section>
+  <section class="section section-tight wrap" id="final-cta">
+    <div class="read-col">
+      <h2 class="reveal-on-scroll" style="--reveal-index: 0">If any of this is the shape of what you've been trying to build —</h2>
+      <p class="lede reveal-on-scroll" style="--reveal-index: 1">Book a thirty-minute call. No pitch.</p>
+      <a class="cta-primary reveal-on-scroll" style="--reveal-index: 2" href="/book">Book a 30-minute call</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+
+</body>
+</html>
