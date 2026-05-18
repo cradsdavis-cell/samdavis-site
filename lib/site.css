@@ -657,3 +657,74 @@ a:hover { color: var(--accent-deep); }
 @media (max-width: 900px) {
   .reflex-cards { grid-template-columns: 1fr; gap: var(--space-2); }
 }
+
+/* ============================================================
+   v2 — .mock-terminal (UI mockup card with typewriter motion)
+   Used by: /overview V6 (with data-typewriter attribute)
+   ============================================================ */
+
+.mock-terminal {
+  font-family: var(--mono);
+  font-size: 13.5px;
+  line-height: 1.7;
+  background: #fdfbf2;
+  color: var(--ink-deep);
+  padding: var(--space-3) var(--space-3);
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 2px 12px rgba(143, 117, 48, 0.08);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mock-terminal .tw-line.prompt {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.mock-terminal hr {
+  border: none;
+  border-top: 1px dashed var(--rule);
+  margin: 8px 0;
+}
+
+.mock-terminal .tw-line.row {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.mock-terminal .tw-line.row .key {
+  display: inline-block;
+  min-width: 80px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.mock-terminal .tw-line.comment {
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.mock-terminal .affordance {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.mock-terminal .cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background: var(--accent);
+  vertical-align: middle;
+  animation: cursor-blink 0.9s steps(2, start) infinite;
+}
+
+@keyframes cursor-blink {
+  to { visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mock-terminal .cursor { animation: none; }
+}
