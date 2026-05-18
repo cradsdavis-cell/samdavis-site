@@ -401,3 +401,54 @@ a:hover { color: var(--accent-deep); }
 @media (prefers-reduced-motion: reduce) {
   .tw-line { opacity: 1; transform: none; transition: none; }
 }
+
+/* ============================================================
+   v2 — .callout-grid (reusable big-phrase + caption grid)
+   Used by: /overview V1 + V7, / (landing) V1
+   ============================================================ */
+
+.callout-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-3);
+}
+
+.callout-grid .callout {
+  padding: var(--space-3);
+  border-top: 2px solid var(--accent);
+  background: transparent;
+}
+
+.callout-grid .callout .big {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(22px, 2.2vw, 28px);
+  line-height: 1.2;
+  color: var(--ink-deep);
+  margin-bottom: var(--space-2);
+}
+
+.callout-grid .callout .small {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+/* Compact variant — used by /overview V1 (5-line "AI forgets" list) */
+.callout-grid.compact {
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+}
+.callout-grid.compact .callout {
+  padding: var(--space-2) 0 var(--space-2) var(--space-3);
+  border-top: none;
+  border-left: 2px solid var(--accent);
+}
+.callout-grid.compact .callout .big {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  font-family: var(--sans);
+  margin-bottom: 4px;
+}
