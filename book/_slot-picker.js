@@ -41,14 +41,24 @@
     if (keys.length && dateKeyPattern.test(keys[0])) {
       const out = [];
       for (const [date, slots] of Object.entries(raw)) {
-        for (const s of slots) out.push({ time: s.time || s, date });
+        if (!Array.isArray(slots)) continue;
+        for (const s of slots) {
+          const time = typeof s === 'string' ? s : s.time;
+          if (typeof time !== 'string' || !/^\d{4}-\d{2}-\d{2}T/.test(time)) continue;
+          out.push({ time, date });
+        }
       }
       return out;
     }
     if (raw.data) {
       const out = [];
       for (const [date, slots] of Object.entries(raw.data)) {
-        for (const s of slots) out.push({ time: s.time || s, date });
+        if (!Array.isArray(slots)) continue;
+        for (const s of slots) {
+          const time = typeof s === 'string' ? s : s.time;
+          if (typeof time !== 'string' || !/^\d{4}-\d{2}-\d{2}T/.test(time)) continue;
+          out.push({ time, date });
+        }
       }
       return out;
     }
