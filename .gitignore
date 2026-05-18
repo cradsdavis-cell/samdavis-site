@@ -3,8 +3,16 @@ Thumbs.db
 *.swp
 node_modules/
 .vercel/
+
+# Env vars — bare .env, anything env.X, plus .X.env variants
+.env
+.env.*
 .env*.local
+!.env.example
+
 .superpowers/
+
+# Audit reports (regenerated; describe attack surface)
 REVIEW.md
 SECURITY.md
 UI-REVIEW.md

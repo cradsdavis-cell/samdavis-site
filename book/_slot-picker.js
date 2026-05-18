@@ -74,7 +74,7 @@
       html += `<div class="slot-day-label">${fmtDay(day + 'T12:00:00')}</div>`;
       html += `<div class="slot-grid">`;
       for (const iso of byDay[day]) {
-        html += `<button class="slot-button" data-iso="${iso}">${fmtTime(iso)}</button>`;
+        html += `<button class="slot-button" data-iso="${iso}" aria-pressed="false">${fmtTime(iso)}</button>`;
       }
       html += `</div></div>`;
     }
@@ -87,8 +87,8 @@
     return `
       <form id="slot-form" class="slot-form" style="display:none;">
         <p><strong>Selected:</strong> <span id="selected-label"></span></p>
-        <div class="field"><label>Your name</label><input type="text" name="name" required></div>
-        <div class="field"><label>Email</label><input type="email" name="email" required></div>
+        <div class="field"><label for="bk-name">Your name</label><input id="bk-name" type="text" name="name" autocomplete="name" required></div>
+        <div class="field"><label for="bk-email">Email</label><input id="bk-email" type="email" name="email" autocomplete="email" required></div>
         <input type="hidden" name="slot_iso" id="slot-iso">
         <button class="book-cta" type="submit" id="submit-btn">
           ${isPaid ? 'Book + Pay →' : 'Book →'}
@@ -104,8 +104,9 @@
     document.querySelectorAll('.slot-button').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        document.querySelectorAll('.slot-button').forEach(b => b.classList.remove('selected'));
+        document.querySelectorAll('.slot-button').forEach(b => { b.classList.remove('selected'); b.setAttribute('aria-pressed', 'false'); });
         btn.classList.add('selected');
+        btn.setAttribute('aria-pressed', 'true');
         const iso = btn.dataset.iso;
         slotInput.value = iso;
         selectedLabel.textContent = `${fmtDay(iso)} at ${fmtTime(iso)}`;
