@@ -831,3 +831,49 @@ a:hover { color: var(--accent-deep); }
 @media (max-width: 900px) {
   .work-cards { grid-template-columns: 1fr; gap: var(--space-2); }
 }
+
+/* ============================================================
+   v2 — .builds-strip (8 mini-squares — 3 named + 5 hinted)
+   Used by: / (landing) V4
+   ============================================================ */
+
+.builds-strip {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.builds-strip .build {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 4px;
+  padding: 4px;
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+.builds-strip .build.named {
+  background: var(--accent);
+  color: var(--bg-main);
+}
+
+.builds-strip .build.hint {
+  background: var(--bg-card);
+  color: var(--ink-soft);
+  opacity: 0.7;
+  font-weight: 500;
+  font-size: 9.5px;
+}
+
+@media (max-width: 600px) {
+  .builds-strip { grid-template-columns: repeat(4, 1fr); }
+}
