@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What an AI that knows you actually does — Sam Davis</title>
+<meta name="description" content="A walk through the executive-assistant system Sam Davis builds — context, people, voice, drift-catching, and tooling.">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+<style>
+  .overview-hero {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-5);
+  }
+  .overview-hero img {
+    width: 140px;
+    height: auto;
+  }
+  @media (max-width: 900px) {
+    .overview-hero {
+      grid-template-columns: 1fr;
+      padding-top: var(--space-5);
+    }
+    .overview-hero img { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav-bar">
+  <a href="/" class="brand">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/overview" class="current">Overview</a>
+    <a href="/offer">Offer</a>
+    <a href="/book">Book →</a>
+  </div>
+</nav>
+
+<main>
+  <section class="overview-hero wrap">
+    <img src="/lib/img/sam-illustration.png" alt="" class="float-gentle">
+    <div>
+      <p class="eyebrow">Overview</p>
+      <h1>What an AI that <em>knows you</em> actually does.</h1>
+    </div>
+  </section>
+
+  <section class="section wrap" id="knows-me">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">§ It knows me</p>
+      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Context, not prompts.</h2>
+      <p class="reveal-on-scroll" style="--reveal-index: 2">A generic AI assistant is a stranger you brief every time. The thing I build instead is a long-term context layer: <em>who you are, what you care about right now, what you're trying to build, and the eight layers of knowledge that change rarely.</em> When you ask it something, it doesn't start from zero. It starts from a year of you.</p>
+      <p class="reveal-on-scroll" style="--reveal-index: 3">The layers are deliberate — North Star, Philosophy, Self, Network, Past, Goals, Tasks, Workflow. Each one is a single source of truth. The assistant pulls from them when relevant. You don't paste your bio into every prompt.</p>
+    </div>
+  </section>
+
+  <section class="section wrap" id="knows-people">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">§ It knows my people</p>
+      <h2 class="reveal-on-scroll" style="--reveal-index: 1">A network, tiered.</h2>
+      <p class="reveal-on-scroll" style="--reveal-index: 2">Every person who matters has a page — what you've talked about, what they're working on, how often you should be in touch, what the next ask might be. Tiered: <em>core</em> (family + chosen-family), <em>live</em> (active threads), <em>warm</em> (alive but slower), <em>dormant</em>, <em>stub</em>.</p>
+      <p class="reveal-on-scroll" style="--reveal-index: 3">When a name comes up in conversation, the assistant already knows the relationship history. It catches when you haven't pinged someone in two weeks and they're a "live" thread. It drafts outreach in your voice, with the right context, at the right altitude for the relationship.</p>
+    </div>
+  </section>
+
+  <section class="section wrap" id="writes-in-voice">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">§ It writes in my voice</p>
+      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Concrete. Vulnerable. <em>Yours.</em></h2>
+      <p class="reveal-on-scroll" style="--reveal-index: 2">Generic AI output is detectable in three seconds — em-dashes everywhere, "delve into" everything, every sentence the same length. I build a voice profile from your actual writing: signature phrases, sentence rhythms, the things you don't say. The assistant runs every outbound draft through a seven-check audit before it shows you anything.</p>
+      <p class="reveal-on-scroll" style="--reveal-index: 3">When a draft sounds like a LinkedIn post, it gets flagged. When it crosses into corporate-fluent register, it gets rewritten. The first draft you see already sounds like you.</p>
+    </div>
+  </section>
+
+  <section class="section wrap" id="catches-drift">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">§ It catches drift</p>
+      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Working memory, not a filing cabinet.</h2>
+      <p class="reveal-on-scroll" style="--reveal-index: 2">The assistant updates the wiki as conversation surfaces material — a new person mentioned, a decision stated, a priority shift. These trigger silent edits: a person page gets bumped, a decision lands in the log, a stale fact gets flagged for review.</p>
+      <p class="reveal-on-scroll" style="--reveal-index: 3">A daily lint catches drift — schema violations, stale pages, broken references. A weekly sync reconciles your goals against the active projects. Coherence isn't something you maintain. It's something the system surfaces when it slips.</p>
+    </div>
+  </section>
+
+  <section class="section wrap" id="right-tool">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">§ It uses the right tool for the job</p>
+      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Skills + connectors.</h2>
+      <p class="reveal-on-scroll" style="--reveal-index: 2">The assistant has named skills — short workflows for specific tasks. Open a session. Outreach. Draft a follow-up. Audit the inbox. Each one is a small set of steps that knows when to fire, what tools to use, and what to write back.</p>
+      <p class="reveal-on-scroll" style="--reveal-index: 3">It connects to Gmail, Calendar, Todoist, WhatsApp, GitHub, Drive — whatever your operational surface actually is. The assistant lives in the tools you already use, not in a new app you have to remember to open.</p>
+    </div>
+  </section>
+
+  <section class="section wrap" id="carbon-tracker">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll" style="--reveal-index: 0">§ Case study · Carbon Tracker</p>
+      <h2 class="reveal-on-scroll" style="--reveal-index: 1">Eleven agents. <em>Six weeks.</em></h2>
+      <p class="reveal-on-scroll" style="--reveal-index: 2">A UK climate consultancy was spending three days per client triaging Scope-3 carbon-accounting questions across multiple frameworks. The framework-mapping was rote, the cross-referencing was painful, and every analyst had a slightly different opinion about how it should be done.</p>
+      <p class="reveal-on-scroll" style="--reveal-index: 3">I designed an eleven-agent pipeline that triages incoming questions, decides which carbon framework applies, cross-checks against the consultancy's historical decisions, and surfaces an auditable chain of reasoning. Each agent has one job. Each handoff is logged. The output is a document the analyst reviews and signs off, not replaces.</p>
+      <p class="reveal-on-scroll" style="--reveal-index: 4">Time-to-answer dropped from three days to under twenty minutes. The system shipped in around six weeks. The consultancy now uses it as the first-pass on every client engagement.</p>
+    </div>
+  </section>
+
+  <section class="section section-tight wrap" id="overview-cta">
+    <div class="read-col">
+      <h2 class="reveal-on-scroll" style="--reveal-index: 0">Want to see one of these run live?</h2>
+      <p class="lede reveal-on-scroll" style="--reveal-index: 1">Book a thirty-minute call. I'll demo the system that runs this site.</p>
+      <a class="cta-primary reveal-on-scroll" style="--reveal-index: 2" href="/book">Book a 30-minute call</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+
+</body>
+</html>
