@@ -116,3 +116,19 @@ test('side practice block contains Wildly Calm with label', () => {
   assert.ok(h.includes('Wildly Calm'), 'expected Wildly Calm');
   assert.ok(h.includes('side-practice-label'), 'expected side-practice label badge');
 });
+
+test('builds renders all 7 build names', () => {
+  const h = readAbout();
+  const builds = [
+    'EA / Second Brain',
+    'Carbon Tracker',
+    'Derwen',
+    'TrailMate',
+    'The Calm and the Storm',
+    'Waste2Wattage',
+    'Sasha',
+  ];
+  for (const b of builds) {
+    assert.ok(h.includes(b), `expected build: ${b}`);
+  }
+});
