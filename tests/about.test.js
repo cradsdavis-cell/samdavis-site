@@ -44,3 +44,32 @@ test('about page renders the canonical site-footer', () => {
   assert.ok(html.includes('<footer class="site-footer wrap">'),
     'expected canonical site-footer');
 });
+
+const NAV_PAGES = [
+  'index.html',
+  'overview/index.html',
+  'offer/index.html',
+  'thanks.html',
+  'booking-failed.html',
+  'book/index.html',
+  'book/coaching-block.html',
+  'book/discovery.html',
+  'book/ea-basic-build.html',
+  'book/single-session.html',
+];
+
+test('every nav-bearing page links to /about between Overview and Offer', () => {
+  for (const rel of NAV_PAGES) {
+    const fp = path.join(__dirname, '..', rel);
+    const src = fs.readFileSync(fp, 'utf8');
+    // The About link must appear AFTER the Overview link and BEFORE the Offer link.
+    const idxOverview = src.indexOf('<a href="/overview"');
+    const idxAbout = src.indexOf('<a href="/about"');
+    const idxOffer = src.indexOf('<a href="/offer"');
+    assert.ok(idxOverview > -1, `${rel}: missing Overview link`);
+    assert.ok(idxAbout > -1, `${rel}: missing About link`);
+    assert.ok(idxOffer > -1, `${rel}: missing Offer link`);
+    assert.ok(idxOverview < idxAbout && idxAbout < idxOffer,
+      `${rel}: About must sit between Overview and Offer`);
+  }
+});
