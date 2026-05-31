@@ -92,3 +92,21 @@ test('every nav-bearing page links to /about between Overview and Offer', () => 
       `${rel}: About must sit between Overview and Offer`);
   }
 });
+
+test('experience renders 9 accordion rows in reverse-chronological order', () => {
+  const h = readAbout();
+  const roleMarkers = [
+    'Independent AI coach',
+    'SEAF / UWA',
+    'AMME, USYD',
+    'DARE ARC',
+    'Alan Turing Institute',
+    'Satellite Catapult',
+    'Apadmi Ltd',
+    'European Space Agency',
+    'Harrow International School',
+  ];
+  for (const marker of roleMarkers) {
+    assert.ok(h.includes(marker), `expected role marker: ${marker}`);
+  }
+});
