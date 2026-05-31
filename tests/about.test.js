@@ -39,9 +39,11 @@ test('about page has identity rail with name', () => {
     'expected name with line break');
 });
 
-test('about page has the three main section headings', () => {
+test('about page has the four main section headings + intro heading', () => {
   const html = readAbout();
+  assert.ok(html.includes('>Who is Sam?<'), 'expected intro heading');
   assert.ok(html.includes('>Experience<'), 'expected Experience heading');
+  assert.match(html, /<h2[^>]*>Education</, 'expected Education H2 heading');
   assert.ok(html.includes('>Side practice<'), 'expected Side practice heading');
   assert.match(html, /<h2[^>]*>Builds/, 'expected Builds H2 heading');
 });
@@ -52,16 +54,46 @@ test('about page renders the canonical site-footer', () => {
     'expected canonical site-footer');
 });
 
-test('identity rail renders Skills, Education, Recognition blocks', () => {
+test('identity rail renders Skills and Recognition blocks (Education now in main column)', () => {
   const html = readAbout();
   assert.ok(html.includes('class="about-sidebar"'), 'expected sidebar');
   assert.ok(html.includes('Data scientist · AI builder'), 'expected role line');
   assert.match(html, />Skills</, 'expected Skills heading');
-  assert.match(html, />Education</, 'expected Education heading');
   assert.match(html, />Recognition</, 'expected Recognition heading');
   // Recognition rule — Pik Perseverance framed as team member
   assert.match(html, /first-ascent team/i,
     'Kyrgyzstan must be framed as team member, never expedition leader');
+  // Education should NOT be a sidebar h4 — extract sidebar HTML to verify
+  const sidebarMatch = html.match(/<aside class="about-sidebar">[\s\S]*?<\/aside>/);
+  assert.ok(sidebarMatch, 'sidebar block must exist');
+  assert.ok(!sidebarMatch[0].includes('<h4>Education</h4>'),
+    'Education should have been moved out of sidebar');
+});
+
+test('education renders 4 accordion rows', () => {
+  const h = readAbout();
+  const eduMarkers = [
+    'University of Sydney',
+    'University of Manchester',
+    'Coleg Meirion Dwyfor',
+    'Ysgol y Moelwyn',
+  ];
+  for (const m of eduMarkers) {
+    assert.ok(h.includes(m), `expected education marker: ${m}`);
+  }
+  // 4 accordion bodies with edu-1 through edu-4
+  for (let i = 1; i <= 4; i++) {
+    assert.ok(h.includes(`id="edu-${i}"`), `expected body id edu-${i}`);
+  }
+});
+
+test('about page intro section renders with sibling-page pointers', () => {
+  const h = readAbout();
+  assert.match(h, /<section class="about-intro">/, 'expected intro section');
+  assert.match(h, /Welsh-born.*PhD environmental data scientist/,
+    'expected Welsh-born identity line');
+  assert.match(h, /href="\/overview"/, 'expected /overview sibling link');
+  assert.match(h, /href="\/offer"/, 'expected /offer sibling link');
 });
 
 const NAV_PAGES = [
