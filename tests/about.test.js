@@ -4,12 +4,15 @@ const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
 
-const html = fs.readFileSync(
-  path.join(__dirname, '..', 'about', 'index.html'),
-  'utf8'
-);
+function readAbout() {
+  return fs.readFileSync(
+    path.join(__dirname, '..', 'about', 'index.html'),
+    'utf8'
+  );
+}
 
 test('about page has the canonical head', () => {
+  const html = readAbout();
   assert.ok(html.includes('<title>About — Sam Davis</title>'),
     'expected canonical title');
   assert.ok(html.includes('href="/lib/site.css"'),
@@ -19,6 +22,7 @@ test('about page has the canonical head', () => {
 });
 
 test('about page renders the canonical nav with About marked current', () => {
+  const html = readAbout();
   assert.ok(html.includes('<nav class="site-nav-bar">'),
     'expected canonical site-nav-bar');
   assert.match(html, /<a[^>]*href="\/about"[^>]*class="current"[^>]*>About<\/a>|<a[^>]*class="current"[^>]*href="\/about"[^>]*>About<\/a>/,
@@ -30,19 +34,34 @@ test('about page renders the canonical nav with About marked current', () => {
 });
 
 test('about page has identity rail with name', () => {
+  const html = readAbout();
   assert.match(html, /Samuel<br>Caradog Davis/,
     'expected name with line break');
 });
 
 test('about page has the three main section headings', () => {
+  const html = readAbout();
   assert.ok(html.includes('>Experience<'), 'expected Experience heading');
   assert.ok(html.includes('>Side practice<'), 'expected Side practice heading');
   assert.match(html, /<h2[^>]*>Builds/, 'expected Builds H2 heading');
 });
 
 test('about page renders the canonical site-footer', () => {
+  const html = readAbout();
   assert.ok(html.includes('<footer class="site-footer wrap">'),
     'expected canonical site-footer');
+});
+
+test('identity rail renders Skills, Education, Recognition blocks', () => {
+  const html = readAbout();
+  assert.ok(html.includes('class="about-sidebar"'), 'expected sidebar');
+  assert.ok(html.includes('Data scientist · AI builder'), 'expected role line');
+  assert.match(html, />Skills</, 'expected Skills heading');
+  assert.match(html, />Education</, 'expected Education heading');
+  assert.match(html, />Recognition</, 'expected Recognition heading');
+  // Recognition rule — Pik Perseverance framed as team member
+  assert.match(html, /first-ascent team/i,
+    'Kyrgyzstan must be framed as team member, never expedition leader');
 });
 
 const NAV_PAGES = [
