@@ -110,3 +110,9 @@ test('experience renders 9 accordion rows in reverse-chronological order', () =>
     assert.ok(h.includes(marker), `expected role marker: ${marker}`);
   }
 });
+
+test('side practice block contains Wildly Calm with label', () => {
+  const h = readAbout();
+  assert.ok(h.includes('Wildly Calm'), 'expected Wildly Calm');
+  assert.ok(h.includes('side-practice-label'), 'expected side-practice label badge');
+});
