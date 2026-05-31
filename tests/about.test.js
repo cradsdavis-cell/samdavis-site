@@ -21,8 +21,8 @@ test('about page has the canonical head', () => {
 test('about page renders the canonical nav with About marked current', () => {
   assert.ok(html.includes('<nav class="site-nav-bar">'),
     'expected canonical site-nav-bar');
-  assert.match(html, /<a href="\/about" class="current">About<\/a>/,
-    'expected About link marked current');
+  assert.match(html, /<a[^>]*href="\/about"[^>]*class="current"[^>]*>About<\/a>|<a[^>]*class="current"[^>]*href="\/about"[^>]*>About<\/a>/,
+    'expected About link marked current (attribute order agnostic)');
   assert.ok(html.includes('<a href="/">Home</a>'));
   assert.ok(html.includes('<a href="/overview">Overview</a>'));
   assert.ok(html.includes('<a href="/offer">Offer</a>'));
@@ -37,7 +37,7 @@ test('about page has identity rail with name', () => {
 test('about page has the three main section headings', () => {
   assert.ok(html.includes('>Experience<'), 'expected Experience heading');
   assert.ok(html.includes('>Side practice<'), 'expected Side practice heading');
-  assert.ok(html.includes('>Builds'), 'expected Builds heading');
+  assert.match(html, /<h2[^>]*>Builds/, 'expected Builds H2 heading');
 });
 
 test('about page renders the canonical site-footer', () => {
