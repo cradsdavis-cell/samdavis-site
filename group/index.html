@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Group Block — Sam Davis</title>
+<meta name="description" content="Build your AI executive assistant alongside two other founders. 4 × 90 min sessions, cohort of three, A$500 per seat. Next cohort starts Wed 10 June 2026.">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+</head>
+<body class="group-page">
+
+<nav class="site-nav-bar">
+  <a href="/" class="brand">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/overview">Overview</a>
+    <a href="/about">About</a>
+    <a href="/how-it-works">How it works</a>
+    <a href="/offer">Offer</a>
+    <a href="/book">Book →</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- Hero -->
+  <section class="wrap group-hero">
+    <p class="eyebrow">GROUP BLOCK · COHORT OF 3 FOUNDERS · 4 × 90 MINUTES</p>
+    <h1>Build alongside other founders.</h1>
+    <p class="lede">Four 90-minute live sessions with two other founders, working in parallel on your own AI executive assistant. Peer-amplified, lower-priced, cohort-scheduled — the Coaching Block, run as a small group.</p>
+  </section>
+
+  <!-- Pricing -->
+  <section class="wrap group-pricing">
+    <div class="group-price-card">
+      <p class="price-headline">A$500 per seat upfront</p>
+      <p class="price-alt">or A$550 over 4 × A$138 (pay-in-4)</p>
+      <p class="price-detail">All 4 sessions included. 24h cancellation policy on each individual session.</p>
+    </div>
+  </section>
+
+  <!-- Active cohort — Sam manually edits this section in tandem with lib/cohorts.js -->
+  <!-- ACTIVE COHORT BLOCK START -->
+  <section class="wrap active-cohort">
+    <h2>Next cohort starts Wed 10 June 2026.</h2>
+    <p class="cohort-meta">Live sessions Wednesday afternoons:</p>
+    <ul class="cohort-dates">
+      <li>Wed 10 Jun · 14:00–15:30 AEST</li>
+      <li>Wed 17 Jun · 14:00–15:30 AEST</li>
+      <li>Wed 24 Jun · 14:00–15:30 AEST</li>
+      <li>Wed 1 Jul · 14:00–15:30 AEST</li>
+    </ul>
+    <p class="cohort-seats"><strong>3 seats remaining of 3.</strong></p>
+    <div class="cohort-cta">
+      <a class="cta-primary" href="/book/group-block">Book your seat →</a>
+    </div>
+    <p class="cohort-fineprint">Booking takes you through to a Stripe checkout. Once paid, you'll get a calendar invite for all four sessions plus the onboarding pack.</p>
+  </section>
+  <!-- ACTIVE COHORT BLOCK END -->
+
+  <!--
+    NO COHORT FALLBACK — when the active cohort fills or between cohorts,
+    flip lib/cohorts.js activeCohort to null AND replace the ACTIVE COHORT
+    BLOCK above with the NO COHORT BLOCK below (uncomment).
+
+    NO COHORT BLOCK START
+    <section class="wrap no-cohort">
+      <h2>No cohort scheduled right now.</h2>
+      <p>Drop your email and I'll let you know when the next Group Block opens for booking. Usually one cohort every 4–6 weeks.</p>
+      <form class="group-interest-form" id="group-interest-form">
+        <label for="gi-email" class="sr-only">Email</label>
+        <input type="email" id="gi-email" name="email" placeholder="you@example.com" required>
+        <button type="submit">Notify me</button>
+        <p class="status" data-kind="info" hidden></p>
+      </form>
+      <p class="cohort-fineprint">One email per cohort opening. No spam, no drip sequence.</p>
+    </section>
+    NO COHORT BLOCK END
+
+    Browser submission script (also uncomment when flipping to no-cohort mode):
+
+    <script>
+      (function () {
+        var form = document.getElementById('group-interest-form');
+        if (!form) return;
+        var input = form.querySelector('input[type=email]');
+        var btn = form.querySelector('button[type=submit]');
+        var status = form.querySelector('.status');
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var email = input.value.trim().toLowerCase();
+          btn.disabled = true;
+          status.hidden = false;
+          status.textContent = 'Submitting…';
+          status.setAttribute('data-kind', 'info');
+          fetch('/api/group-interest', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email })
+          }).then(function (res) {
+            return res.json().then(function (body) { return { ok: res.ok, body: body }; });
+          }).then(function (r) {
+            if (r.ok) {
+              status.textContent = "You're on the list. I'll email when the next cohort opens.";
+              status.setAttribute('data-kind', 'info');
+              input.disabled = true;
+            } else {
+              status.textContent = "Couldn't save that — try again or email cradsdavis@gmail.com.";
+              status.setAttribute('data-kind', 'error');
+              btn.disabled = false;
+            }
+          }).catch(function () {
+            status.textContent = "Network error. Try again or email cradsdavis@gmail.com.";
+            status.setAttribute('data-kind', 'error');
+            btn.disabled = false;
+          });
+        });
+      })();
+    </script>
+  -->
+
+  <!-- Who it's for -->
+  <section class="wrap who-its-for">
+    <h2>Who this is for</h2>
+    <ul class="who-list">
+      <li><strong>Solo founders and small-business owners</strong> who want their AI to actually understand their work — voice, people, priorities.</li>
+      <li><strong>Founders who learn faster with peers in the room.</strong> A cohort of three keeps the energy up and surfaces patterns you'd miss alone.</li>
+      <li><strong>Anyone curious about an AI EA but not ready to commit to 1:1.</strong> The Group Block is the lower-stakes way in.</li>
+    </ul>
+    <p class="who-fineprint">If you'd rather work one-on-one, see the <a href="/offer">Coaching Block</a> — same shape, 1:1, scheduled at your pace.</p>
+  </section>
+
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+
+</body>
+</html>

@@ -16,15 +16,27 @@ process.env.CAL_EVENT_TYPE_GROUP = '103';
 process.env.CAL_EVENT_TYPE_RETAINER = '104';
 process.env.CAL_EVENT_TYPE_DISCOVERY = '100';
 
-// Stub lib/stripe + lib/cal BEFORE requiring handler
+// Stub lib/stripe + lib/cal BEFORE requiring handler.
+// We capture stripe call args via a shared object so individual tests can
+// assert the args passed (mode, slot_iso, etc.).
+const STRIPE_CALLS = [];
+function resetStripeCalls() { STRIPE_CALLS.length = 0; }
 require.cache[require.resolve('../lib/stripe')] = {
   exports: {
-    createCheckoutSession: async (args) => ({ id: 'cs_test_123', url: 'https://stripe.test/cs_test_123', _args: args }),
+    createCheckoutSession: async (args) => {
+      STRIPE_CALLS.push(args);
+      return { id: 'cs_test_123', url: 'https://stripe.test/cs_test_123', _args: args };
+    },
   },
 };
+const CAL_CALLS = [];
+function resetCalCalls() { CAL_CALLS.length = 0; }
 require.cache[require.resolve('../lib/cal')] = {
   exports: {
-    createBooking: async (args) => ({ ok: true, status: 201, body: { data: { id: 555, _args: args } } }),
+    createBooking: async (args) => {
+      CAL_CALLS.push(args);
+      return { ok: true, status: 201, body: { data: { id: 555, _args: args } } };
+    },
     findBookingByStripeSession: async () => ({ ok: true, status: 200, body: { data: [] } }),
   },
 };
@@ -127,4 +139,113 @@ test('name sanitization strips URLs', async () => {
   await h(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, name: 'Sam https://evil.com/phish', email: 'a@b.com' }), res);
   assert.strictEqual(res.statusCode, 200);
   assert.ok(!/https?:/.test(captured.name), `name "${captured.name}" should have URL stripped`);
+});
+
+// --- Group Block + Continuation Retainer (no-Cal / subscription SKUs) ---
+
+test('group-block: returns 200, Stripe called, slot_iso optional', async () => {
+  resetStripeCalls(); resetCalCalls();
+  const res = mockRes();
+  await handler(mockReq({
+    sku: 'group-block',
+    email: 'cohort@example.com',
+    name: 'Cohort Founder',
+    // intentionally omit slot_iso — cohort sessions are pre-blocked in GCal
+  }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.ok(res.body.checkout_url.startsWith('https://stripe.test/'));
+  assert.strictEqual(STRIPE_CALLS.length, 1, 'Stripe.createCheckoutSession should be called once');
+  const args = STRIPE_CALLS[0];
+  assert.strictEqual(args.sku, 'group-block');
+  assert.strictEqual(args.priceId, 'price_test_group');
+  assert.strictEqual(args.mode, 'payment', 'group-block is one-time payment, not subscription');
+  // Cal must NOT be called at checkout time for group-block
+  assert.strictEqual(CAL_CALLS.length, 0, 'Cal.createBooking should NOT be called for group-block');
+});
+
+test('group-block-pay4: returns 200 with pay4 price, no Cal call', async () => {
+  resetStripeCalls(); resetCalCalls();
+  const res = mockRes();
+  await handler(mockReq({
+    sku: 'group-block-pay4',
+    email: 'cohort@example.com',
+    name: 'Cohort Founder',
+  }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(STRIPE_CALLS.length, 1);
+  const args = STRIPE_CALLS[0];
+  assert.strictEqual(args.sku, 'group-block-pay4');
+  assert.strictEqual(args.priceId, 'price_test_group_pay4');
+  assert.strictEqual(args.mode, 'payment');
+  assert.strictEqual(CAL_CALLS.length, 0);
+});
+
+test('group-block: rejects invalid email even though slot_iso optional', async () => {
+  resetStripeCalls();
+  const res = mockRes();
+  await handler(mockReq({
+    sku: 'group-block',
+    email: 'not-an-email',
+    name: 'X',
+  }), res);
+  assert.strictEqual(res.statusCode, 400);
+  assert.strictEqual(res.body.error, 'invalid_email');
+  assert.strictEqual(STRIPE_CALLS.length, 0);
+});
+
+test('group-block: rejects missing name even though slot_iso optional', async () => {
+  resetStripeCalls();
+  const res = mockRes();
+  await handler(mockReq({
+    sku: 'group-block',
+    email: 'a@b.com',
+    // missing name
+  }), res);
+  assert.strictEqual(res.statusCode, 400);
+  assert.strictEqual(STRIPE_CALLS.length, 0);
+});
+
+test('continuation-retainer: returns 200 with subscription mode, no Cal call', async () => {
+  resetStripeCalls(); resetCalCalls();
+  const res = mockRes();
+  await handler(mockReq({
+    sku: 'continuation-retainer',
+    email: 'retainer@example.com',
+    name: 'Retainer Client',
+  }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(STRIPE_CALLS.length, 1);
+  const args = STRIPE_CALLS[0];
+  assert.strictEqual(args.sku, 'continuation-retainer');
+  assert.strictEqual(args.priceId, 'price_test_retainer');
+  assert.strictEqual(args.mode, 'subscription', 'retainer must use Stripe subscription mode');
+  assert.strictEqual(CAL_CALLS.length, 0, 'Cal.createBooking should NOT be called for retainer');
+});
+
+test('single-session: still uses payment mode + requires slot_iso (regression)', async () => {
+  resetStripeCalls();
+  const res = mockRes();
+  await handler(mockReq({
+    sku: 'single-session',
+    slot_iso: FUTURE_SLOT,
+    email: 'alex@example.com',
+    name: 'Alex',
+  }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(STRIPE_CALLS.length, 1);
+  const args = STRIPE_CALLS[0];
+  assert.strictEqual(args.mode, 'payment');
+  assert.strictEqual(args.slotIso, FUTURE_SLOT);
+});
+
+test('single-session: still rejects missing slot_iso (regression — non-NO_CAL SKU)', async () => {
+  resetStripeCalls();
+  const res = mockRes();
+  await handler(mockReq({
+    sku: 'single-session',
+    email: 'alex@example.com',
+    name: 'Alex',
+  }), res);
+  assert.strictEqual(res.statusCode, 400);
+  assert.strictEqual(res.body.error, 'invalid_slot_iso');
 });
