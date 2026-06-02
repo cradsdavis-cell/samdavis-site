@@ -2052,3 +2052,22 @@ a:hover { color: var(--accent-deep); }
   .sidebar-logout { margin-top: 0; padding-top: 0; }
   .dashboard-main { padding: var(--space-3); }
 }
+
+.dashboard-main .engagements-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--space-2);
+}
+.dashboard-main .engagements-table th,
+.dashboard-main .engagements-table td {
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.dashboard-main .engagements-table th {
+  font-family: var(--sans);
+  color: var(--ink-soft);
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
