@@ -1,6 +1,13 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/book/ea-basic-build",
+      "destination": "/book/discovery",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
