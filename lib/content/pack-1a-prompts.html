@@ -1,0 +1,169 @@
+<!-- Pack #1a prompts — Karpathy wiki pattern + Nate Herk EA bootstrap -->
+<!-- Source: Overleaf master `ai-coaching-pack-1-master` (projectId 6a0f9208eac63b897e4626c1) -->
+<!-- Sections sourced: "The wiki pattern (why we're doing this)" + "Reference: Nate Herk bootstrap prompt" -->
+<!-- Last refreshed: 2026-06-03 -->
+<div class="pack-1a-content">
+  <h4>Why this approach — the Karpathy wiki pattern</h4>
+  <p>Most people use LLMs like chat: ask, get answer, history fades. The LLM has to rediscover context every time. You repeat yourself.</p>
+  <p>The wiki pattern is different. Instead of throwing prompts at the LLM, you <strong>incrementally build a persistent knowledge base</strong> — a structured, interlinked collection of markdown files. The LLM doesn't just retrieve and answer; it reads, integrates new info into the existing wiki, updates cross-references, flags contradictions. Knowledge compounds.</p>
+  <p><strong>Three layers:</strong></p>
+  <ol>
+    <li><strong>Raw sources</strong> (<code>references/</code>) — articles, files, notes you drop in. Immutable. The LLM reads but doesn't modify these.</li>
+    <li><strong>The wiki</strong> (<code>notes/</code>) — what the LLM builds + maintains: summary pages, entity pages, concepts, connections. The LLM owns this layer entirely.</li>
+    <li><strong>The schema</strong> (<code>CLAUDE.md</code>) — tells the LLM how the wiki is structured + conventions to follow. Makes the LLM a disciplined wiki-maintainer rather than a generic chatbot.</li>
+  </ol>
+  <p>Full Karpathy gist: <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank" rel="noopener">karpathy/442a6bf555914893e9891c11519de94f</a></p>
+
+  <h4>Nate Herk bootstrap — what Sam will run with you in Session 1</h4>
+  <p>This is the prompt Sam fires in Session 1 to scaffold your initial EA folder. Four phases below — Sam pastes them as one continuous prompt into Claude Code while you watch and answer the interview questions in real-time. <em>Don't run this solo before S1.</em></p>
+
+  <details>
+    <summary><strong>Phase 1 — folder structure + starter files</strong></summary>
+<pre>I want you to set up this project folder as my personal
+executive assistant / second brain in Claude Code. You're
+going to do this in 3 phases. Complete each phase fully
+before moving to the next.
+
+## Phase 1: Create the folder structure
+
+First, initialize a git repo in this folder if one doesn't
+exist already.
+
+Then create the following template structure. Don't put any
+content in the files yet -- just create the skeleton with
+placeholder files where noted.
+
+CLAUDE.md                   # Main brain file (filled in P3)
+CLAUDE.local.md             # Personal overrides (git-ignored)
+.gitignore                  # Ignore .env, CLAUDE.local.md
+.claude/
+  settings.json             # Empty JSON object for now: {}
+  rules/                    # Add rule files in Phase 3
+  skills/                   # Empty -- build skills over time
+context/
+  me.md                     # About me (filled in Phase 3)
+  work.md                   # Business/work details (P3)
+  team.md                   # My team (filled in Phase 3)
+  current-priorities.md     # Current focus
+  goals.md                  # Quarterly goals
+templates/
+  session-summary.md        # Template for session closeout
+references/
+  sops/                     # Standard operating procedures
+  examples/                 # Example outputs / style guides
+projects/                   # Active workstreams (empty)
+decisions/
+  log.md                    # Decision log (append-only)
+archives/                   # Completed/outdated material
+
+For empty directories, create a .gitkeep file inside them so
+git tracks them.</pre>
+  </details>
+
+  <details>
+    <summary><strong>Phase 2 — onboarding interview (Sam answers live with you)</strong></summary>
+<pre>## Phase 2: Ask me onboarding questions
+
+Before filling in the context files, rules, and CLAUDE.md,
+interview me. Ask these questions one section at a time.
+Don't dump all questions at once -- go section by section
+and wait for my answers before moving on.
+
+### Section 1: About You
+- What's your name?
+- What's your role/title?
+- What's your timezone?
+- In one sentence, what do you do?
+- What's your #1 priority -- the thing everything else
+  should support?
+
+### Section 2: Your Business / Work
+- What's your company or business called?
+- What are your products, services, or revenue streams?
+- What tools do you use day-to-day? (ClickUp, Notion, Slack,
+  Google Workspace, etc.)
+
+### Section 3: Your Team
+- Do you have a team? If yes, how many people?
+- Who are the 2-3 key people I should know about?
+- Where does your team communicate?
+
+### Section 4: Priorities, Goals & Projects
+- What are the 3-5 things you're most focused on right now?
+- Any deadlines I should know about?
+- What active projects are you managing right now?
+
+### Section 5: Communication Preferences
+- How do you like information presented? (bullets, prose, etc.)
+- Any writing pet peeves? (e.g., "never use emojis")
+- What tone do you want internally vs externally?
+
+### Section 6: What Do You Want Help With?
+- What recurring tasks eat up your time?
+- What would you hand off to an assistant first?
+- Any specific workflows you want to automate?</pre>
+  </details>
+
+  <details>
+    <summary><strong>Phase 3 — build the files from the interview</strong></summary>
+<pre>## Phase 3: Build out the files
+
+Based on my answers, fill in all the files:
+
+### Context files
+- context/me.md           -- profile from Section 1
+- context/work.md         -- business/work from Section 2
+- context/team.md         -- team from Section 3
+- context/current-priorities.md -- priorities from S4, dated today
+- context/goals.md        -- quarterly goals from S4
+
+### Rule files in .claude/rules/
+Create rule files based on communication preferences (S5):
+- communication-style.md  -- writing tone, formatting, pet peeves
+- Plus any other domain-specific rule that emerged
+Keep each rule file focused on ONE topic. Max 3-4 rule files
+to start.
+
+### CLAUDE.md (the main brain file)
+Keep UNDER 150 lines. Should contain:
+
+1. One-line identity -- "You are [Name]'s executive assistant."
+2. Top priority -- the #1 thing everything supports
+3. Context imports -- @context/me.md, @context/team.md,
+   @context/goals.md, etc.
+4. Tool integrations -- what tools are connected
+5. Skills directory -- point to .claude/skills/
+6. Decision log -- point to decisions/log.md
+7. Memory -- explain auto-memory works out of the box
+
+Do NOT put communication style rules in CLAUDE.md -- those
+go in .claude/rules/communication-style.md.
+Do NOT repeat context from the context files -- just import
+them with @.</pre>
+  </details>
+
+  <details>
+    <summary><strong>Final step + important rules</strong></summary>
+<pre>## Final Step
+
+After everything is created:
+1. Show me a tree view of every file and folder you created.
+2. Show me a brief summary of what's in each file (one line each).
+3. List the "Skills to Build" backlog from Section 6 answers.
+4. Show me the maintenance cheat sheet.
+5. Create the first git commit with all the files.
+
+## Important Rules for You (Claude)
+
+- Do NOT create any skills yet. Skills directory must be
+  empty after setup.
+- Keep CLAUDE.md UNDER 150 lines.
+- Use @ imports (e.g. @context/me.md) in CLAUDE.md instead
+  of repeating information.
+- One rule file = one topic. Max 3-4 rule files to start.
+- Ask onboarding questions ONE SECTION AT A TIME. Wait for
+  my response before asking the next section.</pre>
+  </details>
+
+  <p><em>After S1, this scaffolding becomes your sandbox to play with Claude Code between sessions. In Session 2, Sam replaces the flat structure with the layered EA architecture (P0+P1 sequence). The setup work isn't wasted — it's your fluency-builder.</em></p>
+</div>
