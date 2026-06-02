@@ -8,6 +8,7 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
+<script defer src="/lib/leadCapture.browser.js"></script>
 <style>
   .how-hero {
     display: grid;
@@ -176,6 +177,18 @@
         <a class="cta-secondary" href="/book/discovery">Book a Discovery call</a>
       </div>
     </div>
+
+    <section class="lead-capture-section">
+      <div class="lead-capture-card">
+        <h3>Not ready to book? Get the free install guide.</h3>
+        <p>Karpathy + Nate Herk method, packaged from real coaching sessions. Four short emails over two weeks — case study, what working with me looks like, and the guide itself.</p>
+        <form data-lead-capture data-source="/how-it-works">
+          <input type="email" name="email" required placeholder="your@email.com" autocomplete="email" />
+          <button type="submit">Send me the guide</button>
+          <p class="status" hidden></p>
+        </form>
+      </div>
+    </section>
 
   </section>
 </main>

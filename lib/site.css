@@ -1569,3 +1569,84 @@ a:hover { color: var(--accent-deep); }
   .decision-helper { padding: var(--space-2) var(--space-3); margin: var(--space-3) 0; }
   .payment-toggle { flex-wrap: wrap; }
 }
+
+/* ============================================================
+   Lead Capture form — opt-in card on /about + /how-it-works.
+   Per coaching co-primary spec § 5.2.
+   ============================================================ */
+.lead-capture-section {
+  margin: var(--space-5) 0;
+}
+.lead-capture-card {
+  background: var(--bg-soft);
+  border: 1px solid var(--bg-card);
+  border-radius: 12px;
+  padding: var(--space-3);
+  max-width: 560px;
+  margin: 0 auto;
+}
+.lead-capture-card h3 {
+  margin-top: 0;
+  color: var(--ink-deep);
+}
+.lead-capture-card p {
+  color: var(--ink-soft);
+  margin-bottom: var(--space-2);
+}
+.lead-capture-card form[data-lead-capture] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.lead-capture-card input[type="email"] {
+  font: inherit;
+  padding: 0.6em 0.8em;
+  border: 1px solid var(--bg-card-hi);
+  border-radius: 6px;
+  background: var(--bg-main);
+  color: var(--ink-deep);
+}
+.lead-capture-card input[type="email"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.lead-capture-card button[type="submit"] {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.65em 1.1em;
+  background: var(--accent);
+  color: var(--bg-main);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+.lead-capture-card button[type="submit"]:hover:not(:disabled) {
+  background: var(--accent-deep);
+}
+.lead-capture-card button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.lead-capture-card .status {
+  font-size: 0.9em;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.lead-capture-card .status[data-kind="error"] {
+  color: #a3401c;
+}
+.lead-capture-done {
+  background: var(--bg-soft);
+  border: 1px solid var(--bg-card);
+  border-radius: 12px;
+  padding: var(--space-3);
+  max-width: 560px;
+  margin: 0 auto;
+  text-align: center;
+}
+.lead-capture-done h3 {
+  margin-top: 0;
+  color: var(--accent-deep);
+}
