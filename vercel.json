@@ -15,7 +15,8 @@
     { "source": "/account/login", "destination": "/account/login.html" },
     { "source": "/account/verify", "destination": "/account/verify.html" },
     { "source": "/account", "destination": "/api/account" },
-    { "source": "/account/", "destination": "/api/account" }
+    { "source": "/account/", "destination": "/api/account" },
+    { "source": "/account/sessions", "destination": "/api/account/sessions" }
   ],
   "headers": [
     {
