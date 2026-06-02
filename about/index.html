@@ -9,6 +9,7 @@
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
+<script defer src="/lib/leadCapture.browser.js"></script>
 </head>
 <body>
 
@@ -21,6 +22,7 @@
     <a href="/">Home</a>
     <a href="/overview">Overview</a>
     <a href="/about" class="current">About</a>
+    <a href="/how-it-works">How it works</a>
     <a href="/offer">Offer</a>
     <a href="/book">Book →</a>
   </div>
@@ -383,6 +385,18 @@
         </div>
       </div>
     </div>
+
+    <section class="lead-capture-section">
+      <div class="lead-capture-card">
+        <h3>Get the free Karpathy + Nate Herk install guide</h3>
+        <p>Built from real coaching sessions. No fluff. A short email series follows — case study, what working with me looks like, and the guide itself.</p>
+        <form data-lead-capture data-source="/about">
+          <input type="email" name="email" required placeholder="your@email.com" autocomplete="email" />
+          <button type="submit">Send me the guide</button>
+          <p class="status" hidden></p>
+        </form>
+      </div>
+    </section>
 
   </div>
 </main>

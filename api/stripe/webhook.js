@@ -57,13 +57,28 @@ module.exports = async (req, res) => {
 
   // H4: required metadata defensive — bad metadata won't succeed on Stripe retries either,
   // so acknowledge (200) to stop retry storm + alert Sam for manual recovery.
+  // SKIP-CAL SKUs (group-block + retainer): cal_event_type_id is the sentinel 0;
+  // slot_iso is allowed empty. Short-circuit before Cal logic — Sam manages
+  // cohort sessions / retainer ad-hoc out of band.
   const eventTypeIdInt = parseInt(cal_event_type_id, 10);
-  if (!sku || !slot_iso || !name || !customerEmail || Number.isNaN(eventTypeIdInt)) {
+  const skipCal = eventTypeIdInt === 0;
+  const requiresSlot = !skipCal;
+  if (!sku || !name || !customerEmail || Number.isNaN(eventTypeIdInt) || (requiresSlot && !slot_iso)) {
     await safeAlert(
       `webhook payload missing required fields for ${stripeSessionId}`,
       `One or more required fields missing/invalid: sku=${sku} slot_iso=${slot_iso} name=${name} email=${customerEmail} eventTypeId=${cal_event_type_id}. Manual recovery required.`,
     );
     res.status(200).json({ received: true, error: 'invalid_metadata' });
+    return;
+  }
+  if (skipCal) {
+    // No Cal booking; payment captured, downstream (cohort onboarding /
+    // retainer kickoff) handled by Sam manually for now. Alert as audit trail.
+    await safeAlert(
+      `Stripe payment landed (no-Cal SKU) — ${sku}`,
+      `Customer ${customerEmail} (${name}) paid for ${sku}. Stripe session: ${stripeSessionId}. No Cal booking created (cohort/retainer flow). Confirm onboarding manually.`,
+    );
+    res.status(200).json({ received: true, skipped_cal: true });
     return;
   }
 

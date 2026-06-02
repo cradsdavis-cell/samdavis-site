@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Book your seat in the next Group Block cohort with Sam Davis — A$500 upfront or A$550 over 4 instalments. Wed 10 Jun 2026 start.">
+  <title>Book Group Block — Sam Davis</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+  <link rel="stylesheet" href="/lib/site.css">
+  <link rel="stylesheet" href="/book/_styles.css">
+  <style>
+    .group-book-card {
+      max-width: 560px;
+      margin: var(--space-3) auto;
+      padding: var(--space-3);
+      background: var(--bg-soft);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+    }
+    .cohort-dates-mini {
+      list-style: none;
+      padding: 0;
+      margin: var(--space-2) 0 var(--space-3);
+      font-family: var(--mono);
+      font-size: 0.92em;
+      color: var(--ink-deep);
+    }
+    .cohort-dates-mini li {
+      padding: 4px 0;
+      border-bottom: 1px dashed var(--bg-card);
+    }
+    .plan-toggle {
+      display: flex;
+      gap: var(--space-2);
+      margin: var(--space-3) 0;
+      flex-direction: column;
+    }
+    .plan-option {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-2);
+      padding: var(--space-2);
+      background: var(--bg-main);
+      border: 2px solid var(--rule);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .plan-option:hover { border-color: var(--accent); }
+    .plan-option input[type="radio"] { margin-top: 4px; }
+    .plan-option.is-selected {
+      border-color: var(--accent);
+      background: var(--bg-soft);
+    }
+    .plan-option .plan-label { font-weight: 600; color: var(--ink-deep); }
+    .plan-option .plan-detail {
+      display: block;
+      font-size: 0.9em;
+      color: var(--ink-soft);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+    .group-book-form {
+      display: grid;
+      gap: var(--space-2);
+      margin-top: var(--space-3);
+    }
+    .group-book-form input {
+      font: inherit;
+      padding: 0.6em 0.8em;
+      border: 1px solid var(--bg-card-hi);
+      border-radius: 6px;
+      background: var(--bg-main);
+      color: var(--ink-deep);
+    }
+    .group-book-form input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .group-book-form button {
+      font: inherit;
+      font-weight: 600;
+      padding: 0.75em 1.2em;
+      background: var(--accent);
+      color: var(--bg-main);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .group-book-form button:hover:not(:disabled) { background: var(--accent-deep); }
+    .group-book-form button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .group-book-status {
+      font-size: 0.9em;
+      color: var(--ink-soft);
+      margin: var(--space-2) 0 0;
+    }
+    .group-book-status[data-kind="error"] { color: #a3401c; }
+  </style>
+</head>
+<body>
+  <nav class="site-nav-bar">
+    <a href="/" class="brand">
+      <img src="/lib/img/sam-illustration-sm.png" alt="">
+      <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/overview">Overview</a>
+      <a href="/about">About</a>
+      <a href="/how-it-works">How it works</a>
+      <a href="/offer">Offer</a>
+      <a href="/book" class="current">Book →</a>
+    </div>
+  </nav>
+
+  <div class="book-container">
+    <div class="book-header">
+      <h1>Group Block — Wed 10 Jun cohort</h1>
+      <p>4 × 90-minute live sessions · cohort of 3 founders.</p>
+    </div>
+
+    <!-- ACTIVE COHORT BOOK BLOCK START -->
+    <div class="group-book-card">
+      <p style="margin:0 0 var(--space-1); color:var(--ink-soft); font-size:0.92em;">Session schedule (all 14:00–15:30 AEST):</p>
+      <ul class="cohort-dates-mini">
+        <li>Wed 10 Jun 2026</li>
+        <li>Wed 17 Jun 2026</li>
+        <li>Wed 24 Jun 2026</li>
+        <li>Wed 1 Jul 2026</li>
+      </ul>
+
+      <p style="font-weight:600; margin:0 0 var(--space-1);">Choose a payment plan:</p>
+      <div class="plan-toggle" role="radiogroup" aria-label="Payment plan">
+        <label class="plan-option is-selected">
+          <input type="radio" name="plan" value="full" checked>
+          <span>
+            <span class="plan-label">Pay in full — A$500</span>
+            <span class="plan-detail">One charge, all four sessions covered.</span>
+          </span>
+        </label>
+        <label class="plan-option">
+          <input type="radio" name="plan" value="pay4">
+          <span>
+            <span class="plan-label">Pay in 4 — 4 × A$138 (A$550 total)</span>
+            <span class="plan-detail">First charge now, three more weekly. A$50 surcharge covers admin.</span>
+          </span>
+        </label>
+      </div>
+
+      <form class="group-book-form" id="group-book-form">
+        <label>
+          <span style="font-size:0.9em; color:var(--ink-soft);">Your name</span>
+          <input type="text" name="name" id="gb-name" required maxlength="80" autocomplete="name">
+        </label>
+        <label>
+          <span style="font-size:0.9em; color:var(--ink-soft);">Your email</span>
+          <input type="email" name="email" id="gb-email" required autocomplete="email">
+        </label>
+        <button type="submit" id="gb-submit">Continue to checkout →</button>
+        <p class="group-book-status" id="gb-status" hidden></p>
+      </form>
+    </div>
+    <!-- ACTIVE COHORT BOOK BLOCK END -->
+
+    <!--
+      NO COHORT FALLBACK — when activeCohort flips to null, replace the
+      ACTIVE COHORT BOOK BLOCK above with:
+
+      <div class="group-book-card" style="text-align:center;">
+        <p style="font-size:1.1em; color:var(--ink-deep);">No cohort scheduled right now.</p>
+        <p>Head over to <a href="/group">/group</a> to join the waitlist for the next cohort.</p>
+      </div>
+    -->
+
+    <div class="book-policy">24h cancellation policy on each individual session. Payment covers all 4 cohort sessions upfront (or in 4 instalments).</div>
+  </div>
+
+  <script>
+    (function () {
+      var form = document.getElementById('group-book-form');
+      var status = document.getElementById('gb-status');
+      var btn = document.getElementById('gb-submit');
+      var nameInput = document.getElementById('gb-name');
+      var emailInput = document.getElementById('gb-email');
+      var planRadios = form.querySelectorAll('input[name="plan"]');
+
+      // Visual feedback on radio change
+      planRadios.forEach(function (r) {
+        r.addEventListener('change', function () {
+          form.querySelectorAll('.plan-option').forEach(function (el) { el.classList.remove('is-selected'); });
+          r.closest('.plan-option').classList.add('is-selected');
+        });
+      });
+
+      function selectedPlan() {
+        var checked = form.querySelector('input[name="plan"]:checked');
+        return checked ? checked.value : 'full';
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var plan = selectedPlan();
+        var sku = plan === 'pay4' ? 'group-block-pay4' : 'group-block';
+        var name = nameInput.value.trim();
+        var email = emailInput.value.trim().toLowerCase();
+        if (!name || !email) return;
+        btn.disabled = true;
+        status.hidden = false;
+        status.textContent = 'Redirecting to Stripe…';
+        status.setAttribute('data-kind', 'info');
+        fetch('/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sku: sku, email: email, name: name })
+        }).then(function (res) {
+          return res.json().then(function (body) { return { ok: res.ok, body: body }; });
+        }).then(function (r) {
+          if (r.ok && r.body.checkout_url) {
+            window.location.assign(r.body.checkout_url);
+          } else {
+            var msg = (r.body && r.body.error) ? r.body.error : 'unknown_error';
+            status.textContent = "Couldn't start checkout (" + msg + "). Refresh or email cradsdavis@gmail.com.";
+            status.setAttribute('data-kind', 'error');
+            btn.disabled = false;
+          }
+        }).catch(function () {
+          status.textContent = "Network error. Try again or email cradsdavis@gmail.com.";
+          status.setAttribute('data-kind', 'error');
+          btn.disabled = false;
+        });
+      });
+    })();
+  </script>
+
+  <footer class="site-footer wrap">
+    <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+    <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+    <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+    <div>+61 0493 302 154</div>
+    <div class="location">Coogee, Sydney.</div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How it works — Sam Davis</title>
+<meta name="description" content="What working with me actually looks like — the 4-session Coaching Block arc, the onboarding pack, and the shape of your first two weeks.">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+<script defer src="/lib/leadCapture.browser.js"></script>
+<style>
+  .how-hero {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-4);
+  }
+  .how-hero img { width: 140px; height: auto; }
+  .how-hero p.lead {
+    max-width: var(--read-col);
+    color: var(--ink-soft);
+    margin-top: var(--space-2);
+  }
+
+  .how-it-works .arc-intro {
+    max-width: var(--read-col);
+    color: var(--ink-soft);
+    margin-bottom: var(--space-4);
+  }
+
+  .how-it-works .session-block {
+    background: var(--bg-soft);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-3);
+  }
+  .how-it-works .session-block h3 {
+    margin: 0 0 var(--space-2);
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--ink-deep);
+  }
+  .how-it-works .session-block p {
+    margin: 0;
+    color: var(--ink-soft);
+    max-width: var(--read-col);
+  }
+
+  .how-it-works .sub-block {
+    margin-bottom: var(--space-4);
+  }
+  .how-it-works .sub-block h2 {
+    margin-bottom: var(--space-2);
+  }
+  .how-it-works .sub-block p,
+  .how-it-works .sub-block ul {
+    max-width: var(--read-col);
+    color: var(--ink-soft);
+  }
+  .how-it-works .sub-block ul {
+    padding-left: var(--space-3);
+  }
+  .how-it-works .sub-block li {
+    margin-bottom: 6px;
+  }
+
+  .how-it-works .ready-card {
+    background: var(--bg-soft);
+    border-radius: 6px;
+    padding: var(--space-4);
+    text-align: center;
+    margin-top: var(--space-5);
+  }
+  .how-it-works .ready-card h2 { margin-bottom: var(--space-2); }
+  .how-it-works .ready-card p {
+    max-width: 540px;
+    margin: 0 auto var(--space-3);
+    color: var(--ink-soft);
+  }
+  .how-it-works .ready-card .ctas {
+    display: flex;
+    gap: var(--space-3);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 900px) {
+    .how-hero { grid-template-columns: 1fr; }
+    .how-hero img { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav-bar">
+  <a href="/" class="brand">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/overview">Overview</a>
+    <a href="/about">About</a>
+    <a href="/how-it-works" class="current">How it works</a>
+    <a href="/offer">Offer</a>
+    <a href="/book">Book →</a>
+  </div>
+</nav>
+
+<main>
+  <!-- Hero -->
+  <section class="how-hero wrap">
+    <img src="/lib/img/sam-illustration.png" alt="" class="float-gentle">
+    <div>
+      <p class="eyebrow">How it works</p>
+      <h1>What working with me <em>actually looks like.</em></h1>
+      <p class="lead">No deck, no theatre. Here's the shape of a Coaching Block from the first email to graduation.</p>
+    </div>
+  </section>
+
+  <section class="section section-tight wrap how-it-works">
+
+    <!-- The 4-session arc -->
+    <div class="sub-block">
+      <h2>The 4-session arc</h2>
+      <p class="arc-intro">Most clients come in via a Coaching Block — four 60-min 1:1 sessions over four weeks.</p>
+
+      <div class="session-block reveal-on-scroll">
+        <h3>Session 1 — install + foundation</h3>
+        <p>Stack working on your machine (Claude Code + VS Code + Obsidian). I sit beside you while we wire it up. You leave with a working EA skeleton.</p>
+      </div>
+
+      <div class="session-block reveal-on-scroll">
+        <h3>Session 2 — first build</h3>
+        <p>You pick one workflow that's eating your week. We build the skill that handles it. You operate it live; we refine together.</p>
+      </div>
+
+      <div class="session-block reveal-on-scroll">
+        <h3>Session 3 — second build + integration</h3>
+        <p>Second workflow. Plus integrations to the tools you already use (Gmail, Calendar, Slack, Notion, whatever).</p>
+      </div>
+
+      <div class="session-block reveal-on-scroll">
+        <h3>Session 4 — graduation</h3>
+        <p>We review what's running, what you'd build next, and what to do without me. Most clients continue with a $600/mo retainer; some don't need to.</p>
+      </div>
+    </div>
+
+    <!-- Onboarding -->
+    <div class="sub-block">
+      <h2>Onboarding (before Session 1)</h2>
+      <p>You get a personalised onboarding pack 3–4 days before Session 1. It includes:</p>
+      <ul>
+        <li><strong>Install doc</strong> — what to download + set up before we talk.</li>
+        <li><strong>Your context worksheet</strong> — what you do, what's painful, what good would look like.</li>
+        <li><strong>Pre-read</strong> on how an AI EA fits a business like yours.</li>
+      </ul>
+    </div>
+
+    <!-- First 2 weeks -->
+    <div class="sub-block">
+      <h2>Your first 2 weeks</h2>
+      <p>Front-loaded. Most of the install + first build happens in week 1. Week 2 is consolidation + the second build. Weeks 3 and 4 are integration + graduation. After that, optional Continuation Retainer for ongoing support.</p>
+    </div>
+
+    <!-- Ready -->
+    <div class="ready-card reveal-on-scroll">
+      <p class="eyebrow">Ready?</p>
+      <h2>Two ways in.</h2>
+      <p>See the full pricing ladder, or book a free 30-minute discovery call to see if it fits.</p>
+      <div class="ctas">
+        <a class="cta-primary" href="/offer">See pricing →</a>
+        <a class="cta-secondary" href="/book/discovery">Book a Discovery call</a>
+      </div>
+    </div>
+
+    <section class="lead-capture-section">
+      <div class="lead-capture-card">
+        <h3>Not ready to book? Get the free install guide.</h3>
+        <p>Karpathy + Nate Herk method, packaged from real coaching sessions. Four short emails over two weeks — case study, what working with me looks like, and the guide itself.</p>
+        <form data-lead-capture data-source="/how-it-works">
+          <input type="email" name="email" required placeholder="your@email.com" autocomplete="email" />
+          <button type="submit">Send me the guide</button>
+          <p class="status" hidden></p>
+        </form>
+      </div>
+    </section>
+
+  </section>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+
+</body>
+</html>

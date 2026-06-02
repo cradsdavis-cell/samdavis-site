@@ -1,6 +1,16 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "crons": [
+    { "path": "/api/cron/nurture", "schedule": "0 23 * * *" }
+  ],
+  "redirects": [
+    {
+      "source": "/book/ea-basic-build",
+      "destination": "/book/discovery",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

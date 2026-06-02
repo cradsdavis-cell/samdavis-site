@@ -10,6 +10,14 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NAME_MAX = 80;
 const MAX_BOOKING_WINDOW_MS = 60 * 86400000; // 60 days
 
+// SKUs that skip per-session Cal booking entirely:
+//   - group-block / group-block-pay4: cohort sessions pre-blocked in GCal
+//     manually (sentinel CAL_EVENT_TYPE_GROUP=0). slot_iso optional.
+//   - continuation-retainer: recurring subscription, no Cal booking on
+//     checkout; sessions scheduled ad-hoc out of band. slot_iso optional.
+const NO_CAL_SKUS = new Set(['group-block', 'group-block-pay4', 'continuation-retainer']);
+const SUBSCRIPTION_SKUS = new Set(['continuation-retainer']);
+
 function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', process.env.BASE_URL || 'https://crads-ai.com');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -27,9 +35,12 @@ function sanitize(name) {
 
 function validateBody({ sku, slot_iso, email, name }) {
   if (!sku || typeof sku !== 'string') return 'missing_sku';
-  if (!slot_iso || !ISO_RE.test(slot_iso)) return 'invalid_slot_iso';
   if (!email || !EMAIL_RE.test(email) || email.length > 254) return 'invalid_email';
   if (!name || typeof name !== 'string') return 'missing_name';
+  // SKUs that don't book a per-customer Cal slot don't need slot_iso validation.
+  // Cohort sessions are pre-blocked in GCal; retainer is scheduled out of band.
+  if (NO_CAL_SKUS.has(sku)) return null;
+  if (!slot_iso || !ISO_RE.test(slot_iso)) return 'invalid_slot_iso';
   const slotMs = Date.parse(slot_iso);
   if (Number.isNaN(slotMs)) return 'invalid_slot_iso';
   const now = Date.now();
@@ -106,10 +117,17 @@ module.exports = async (req, res) => {
   try { cfg = getSku(sku); }
   catch { res.status(400).json({ error: 'unknown_sku' }); return; }
 
+  // Skip Cal booking entirely for cohort/retainer SKUs (sentinel cal_event_type_id=0
+  // for group-block; retainer scheduled out of band). Webhook reads cal_event_type_id
+  // from session metadata and short-circuits when it's 0.
+  // Subscription mode for recurring SKUs (retainer); one-time payment for the rest.
+  const stripeMode = SUBSCRIPTION_SKUS.has(sku) ? 'subscription' : 'payment';
+
   try {
     const session = await createCheckoutSession({
-      sku, priceId: cfg.stripe_price_id, slotIso: slot_iso, name, email,
+      sku, priceId: cfg.stripe_price_id, slotIso: slot_iso || '', name, email,
       calEventTypeId: cfg.cal_event_type_id, baseUrl: process.env.BASE_URL,
+      mode: stripeMode,
     });
     res.status(200).json({ checkout_url: session.url, session_id: session.id });
   } catch (err) {
