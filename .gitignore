@@ -16,3 +16,5 @@ node_modules/
 REVIEW.md
 SECURITY.md
 UI-REVIEW.md
+
+.vercel

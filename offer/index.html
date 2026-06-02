@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How we work together — Sam Davis</title>
-<meta name="description" content="The full founder ladder — Single Session, Coaching Block, EA Basic Build — plus the free Discovery call to scope.">
+<meta name="description" content="Four ways in: Single Session, Group Block, Coaching Block, Continuation Retainer. Plus a free Discovery call to scope.">
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
@@ -19,30 +19,229 @@
   }
   .offer-hero img { width: 140px; height: auto; }
   .prose-lead { max-width: var(--read-col); margin-bottom: var(--space-3); }
-  .rung-detail {
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: var(--space-4);
-    padding: var(--space-4) 0;
-    border-bottom: 1px solid var(--rule);
+
+  /* Decision helper — "Which one's right for you?" */
+  .decision-helper {
+    background: var(--bg-soft);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-4);
   }
-  .rung-detail:last-of-type { border-bottom: none; }
-  .rung-detail .prose .best-for { font-size: 14.5px; color: var(--ink-soft); margin-top: var(--space-2); }
-  .rung-detail .prose .best-for strong { color: var(--ink-deep); }
+  .decision-helper h2 {
+    margin: 0 0 var(--space-2);
+    font-size: 22px;
+  }
+  .decision-helper ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-1);
+  }
+  .decision-helper li {
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .decision-helper li strong {
+    color: var(--ink-deep);
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  /* Payment toggle */
+  .payment-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    margin: var(--space-4) 0 var(--space-3);
+    font-family: var(--sans);
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+  .payment-toggle .switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+  }
+  .payment-toggle .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .payment-toggle .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--bg-card);
+    border-radius: 28px;
+    transition: 0.2s;
+  }
+  .payment-toggle .slider::before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--bg-main);
+    border-radius: 50%;
+    transition: 0.2s;
+  }
+  .payment-toggle input:checked + .slider { background-color: var(--accent); }
+  .payment-toggle input:checked + .slider::before { transform: translateX(24px); }
+  .payment-toggle .label-on,
+  .payment-toggle .label-off {
+    user-select: none;
+    cursor: pointer;
+  }
+  .payment-toggle .active { color: var(--ink-deep); font-weight: 600; }
+
+  /* Pricing grid — 4 SKUs */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  .rung {
+    position: relative;
+    background: var(--bg-main);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .rung:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(143, 117, 48, 0.15);
+    border-color: var(--accent);
+  }
+  .rung.featured {
+    border: 2px solid var(--accent);
+    background: var(--bg-soft);
+  }
+  .rung .rung-badge {
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: var(--accent);
+    color: var(--bg-main);
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+  .rung .rung-name {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .rung .rung-meta {
+    font-size: 13px;
+    color: var(--ink-faint);
+    margin-bottom: var(--space-2);
+  }
+  .rung .price {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--ink-deep);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .rung .price .price-suffix {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    font-family: var(--sans);
+  }
+  .rung .price-detail {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--ink-faint);
+    margin-bottom: var(--space-2);
+    min-height: 1.2em;
+  }
+  .rung .rung-pitch {
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-bottom: var(--space-3);
+    flex-grow: 1;
+  }
+  .rung .cta {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--bg-main);
+    background: var(--accent);
+    padding: 10px 18px;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+  .rung .cta:hover { background: var(--accent-deep); }
+
+  /* Testimonials strip styling (renders when >=3 testimonials live) */
+  .testimonials-strip {
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--rule);
+  }
+  .testimonials-strip h2 {
+    text-align: center;
+    margin-bottom: var(--space-4);
+  }
+  .testimonials-strip .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-3);
+  }
+  .testimonial-card {
+    background: var(--bg-soft);
+    border-radius: 6px;
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .testimonial-card .attribution {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+  .testimonial-card .attribution strong { color: var(--ink-deep); }
+
   .discovery-card {
     background: var(--bg-soft);
     border-radius: 6px;
     padding: var(--space-4);
     text-align: center;
-    margin-top: var(--space-4);
+    margin-top: var(--space-5);
   }
   .discovery-card h2 { margin-bottom: var(--space-2); }
   .discovery-card .meta { display: inline-block; margin-bottom: var(--space-3); }
   .discovery-card p { max-width: 540px; margin: 0 auto var(--space-3); color: var(--ink-soft); }
+
   @media (max-width: 900px) {
     .offer-hero { grid-template-columns: 1fr; }
     .offer-hero img { margin: 0 auto; }
-    .rung-detail { grid-template-columns: 1fr; gap: var(--space-3); }
   }
 </style>
 </head>
@@ -63,7 +262,7 @@
 </nav>
 
 <main>
-  <!-- Hero (preserved from v1) -->
+  <!-- Hero -->
   <section class="offer-hero wrap">
     <img src="/lib/img/sam-illustration.png" alt="" class="float-gentle">
     <div>
@@ -72,99 +271,81 @@
     </div>
   </section>
 
-  <!-- V1 — Ladder at a glance (4 rungs) -->
-  <section class="section section-tight wrap" id="ladder">
-    <p class="eyebrow reveal-on-scroll" style="text-align: center;">The ladder at a glance</p>
-    <h2 class="reveal-on-scroll" style="text-align: center; margin-bottom: var(--space-4);">Pick where you start.</h2>
-    <div class="interlude-bare rung-ladder stagger-grid">
-      <a class="rung-card" href="#single-session">
-        <p class="r-name">Single Session</p>
-        <p class="r-meta">60 min</p>
-        <p class="r-price">$150</p>
-        <p class="r-pitch">One pain, one working piece.</p>
-        <span class="r-cta">Read more →</span>
-      </a>
-      <a class="rung-card hero" href="#coaching-block">
-        <span class="badge">★ Most popular</span>
-        <p class="r-name">Coaching Block</p>
-        <p class="r-meta">4 × 60 min</p>
-        <p class="r-price">$500</p>
-        <p class="r-pitch">Build alongside me, weekly.</p>
-        <span class="r-cta">Read more →</span>
-      </a>
-      <a class="rung-card" href="#ea-basic-build">
-        <p class="r-name">EA Basic Build</p>
-        <p class="r-meta">One-week sprint</p>
-        <p class="r-price">$2,000</p>
-        <p class="r-pitch">I install the whole assistant.</p>
-        <span class="r-cta">Read more →</span>
-      </a>
-      <a class="rung-card" href="#discovery">
-        <p class="r-name">Discovery</p>
-        <p class="r-meta">30 min · free</p>
-        <p class="r-price">Free</p>
-        <p class="r-pitch">Not sure which fits? Start here.</p>
-        <span class="r-cta">Read more →</span>
-      </a>
-    </div>
-  </section>
+  <section class="section section-tight wrap">
 
-  <!-- V2 — Single Session rung (2-col with price-panel) -->
-  <section class="section wrap">
-    <article class="rung-detail reveal-on-scroll" id="single-session">
-      <div class="prose">
-        <p class="eyebrow">Single Session</p>
-        <h2>One pain. <em>Sixty minutes. $150.</em></h2>
-        <p>For founders scoping fit or working through one specific problem. Bring something you're stuck on — a workflow that isn't clicking, a draft you can't shape, a process you want automated. We work it through together and you leave with one working piece.</p>
-        <p class="best-for"><strong>Best for:</strong> try-before-the-block. The lowest-commitment way to see how I work. Counts as credit toward the EA Basic Build if you decide to go further.</p>
-      </div>
-      <aside class="price-panel sticky">
-        <p class="label">Price</p>
-        <p class="value">$150</p>
-        <p class="note">60-min session · credits toward EA Basic Build within 90 days</p>
-        <a class="cta-primary" href="/book/single-session">Book + Pay →</a>
-      </aside>
-    </article>
-
-    <!-- V3 — Coaching Block rung -->
-    <article class="rung-detail reveal-on-scroll" id="coaching-block">
-      <div class="prose">
-        <p class="eyebrow">Coaching Block</p>
-        <h2>Build alongside me. <em>Four sessions, $500.</em></h2>
-        <p>For founders who want the assistant installed into their actual workflow, in real time, with me alongside. Session one establishes context. Sessions two through four are us building together — your voice profile, your people, your priorities. By session four it knows you well enough to draft in your voice.</p>
-        <p class="best-for"><strong>Best for:</strong> technical or semi-technical founders who want hands-on learning while we install. Sessions 2–4 booked after Session 1 so we pace to your reality.</p>
-      </div>
-      <aside class="price-panel hero sticky">
-        <span class="panel-badge">★ Most popular</span>
-        <p class="label">Price</p>
-        <p class="value">$500</p>
-        <p class="note">4 × 60-min sessions · credits toward EA Basic Build within 90 days</p>
-        <a class="cta-primary" href="/book/coaching-block">Book + Pay →</a>
-      </aside>
-    </article>
-
-    <!-- V4 — EA Basic Build rung -->
-    <article class="rung-detail reveal-on-scroll" id="ea-basic-build">
-      <div class="prose">
-        <p class="eyebrow">EA Basic Build</p>
-        <h2>I install your assistant. <em>One week, $2,000.</em></h2>
-        <p>For founders who want the assistant installed quickly and don't want to be in the build process. We meet once at the start — I walk away with everything I need (your tools, your voice samples, your top three people, your current priorities). End of the week we meet again and your assistant is live in your stack.</p>
-        <p class="best-for"><strong>Best for:</strong> non-technical founders who want the end state, not the building process. Two meetings total, asynchronous in between.</p>
-      </div>
-      <aside class="price-panel sticky">
-        <p class="label">Price</p>
-        <p class="value">$2,000</p>
-        <p class="note">One-week sprint · 2 meetings + async build</p>
-        <a class="cta-primary" href="/book/ea-basic-build">Book + Pay →</a>
-      </aside>
-    </article>
-
-    <!-- V5 — Credit callout -->
-    <div class="interlude credit-callout reveal-on-scroll" style="margin-top: var(--space-4);">
-      <p><strong>Coaching credits</strong> apply to the EA Basic Build within 90 days. A $150 Single Session credits to $1,850; a $500 Coaching Block credits to $1,500. No penalty for starting small.</p>
+    <!-- Decision helper -->
+    <div class="decision-helper reveal-on-scroll">
+      <h2>Which one's right for you?</h2>
+      <ul>
+        <li><strong>Single Session —</strong> focused 60 min on one specific pain.</li>
+        <li><strong>Group Block —</strong> build alongside 2 other founders at a lower price.</li>
+        <li><strong>Coaching Block —</strong> 4 sessions of 1:1, deep build, full personalised pack.</li>
+        <li><strong>Continuation Retainer —</strong> already a client, want to keep going.</li>
+      </ul>
     </div>
 
-    <!-- V6 — Discovery card -->
+    <!-- Payment plan toggle -->
+    <div class="payment-toggle" role="group" aria-label="Payment plan">
+      <span class="label-off active" id="label-upfront">Pay upfront</span>
+      <label class="switch">
+        <input type="checkbox" id="payment-plan-toggle" aria-label="Switch to pay in 4 instalments">
+        <span class="slider"></span>
+      </label>
+      <span class="label-on" id="label-pay4">Pay in 4 (+10%)</span>
+    </div>
+
+    <!-- Pricing grid — 4 SKUs -->
+    <div class="pricing-grid stagger-grid">
+
+      <!-- Single Session — no pay-in-4 -->
+      <article class="rung" data-sku="single-session">
+        <p class="rung-name">Single Session</p>
+        <p class="rung-meta">60 min · 1:1</p>
+        <p class="price" data-upfront="A$250" data-pay4="A$250">A$250</p>
+        <p class="price-detail" data-upfront="" data-pay4="(no instalment plan on this one)"></p>
+        <p class="rung-pitch">One focused hour on a specific pain. Try-before-the-block.</p>
+        <a class="cta" href="/book/single-session" data-base-href="/book/single-session">Book →</a>
+      </article>
+
+      <!-- Group Block — NEW -->
+      <article class="rung" data-sku="group-block">
+        <span class="rung-badge">★ New</span>
+        <p class="rung-name">Group Block</p>
+        <p class="rung-meta">4 × 90 min · cohort of 3 founders</p>
+        <p class="price" data-upfront="A$500" data-pay4="A$550"><span data-price-value>A$500</span><span class="price-suffix">/seat</span></p>
+        <p class="price-detail" data-upfront="× 3 founders per cohort" data-pay4="4 × A$138 — last session free">× 3 founders per cohort</p>
+        <p class="rung-pitch">Build alongside two other founders. Peer-amplified, lower price, cohort-scheduled.</p>
+        <a class="cta" href="/group" data-base-href="/group">See next cohort →</a>
+      </article>
+
+      <!-- Coaching Block — Most popular -->
+      <article class="rung featured" data-sku="coaching-block">
+        <span class="rung-badge">★ Most popular</span>
+        <p class="rung-name">Coaching Block</p>
+        <p class="rung-meta">4 × 60 min · 1:1</p>
+        <p class="price" data-upfront="A$800" data-pay4="A$880">A$800</p>
+        <p class="price-detail" data-upfront="Full personalised pack between sessions" data-pay4="4 × A$220 — last session free">Full personalised pack between sessions</p>
+        <p class="rung-pitch">Four sessions of deep 1:1 build. Full pack between each session. The standard way in.</p>
+        <a class="cta" href="/book/coaching-block" data-base-href="/book/coaching-block">Book + Pay →</a>
+      </article>
+
+      <!-- Continuation Retainer — no pay-in-4 -->
+      <article class="rung" data-sku="continuation-retainer">
+        <p class="rung-name">Continuation Retainer</p>
+        <p class="rung-meta">2 × 60 min/mo + async Slack</p>
+        <p class="price" data-upfront="A$600" data-pay4="A$600"><span data-price-value>A$600</span><span class="price-suffix">/mo</span></p>
+        <p class="price-detail" data-upfront="Monthly · cancel anytime" data-pay4="(monthly subscription — no instalment plan)">Monthly · cancel anytime</p>
+        <p class="rung-pitch">For existing clients who want to keep building. Default post-Block continuation.</p>
+        <a class="cta" href="/book/discovery" data-base-href="/book/discovery">Talk to Sam →</a>
+      </article>
+
+    </div>
+
+    <!-- Testimonials strip anchor — populated by build step / future SSR.
+         Empty on first ship (testimonials.length < 3 → renders nothing). -->
+    <div id="testimonials-anchor"></div>
+
+    <!-- Discovery card -->
     <div class="discovery-card reveal-on-scroll" id="discovery">
       <p class="eyebrow">Not sure which fits?</p>
       <h2>Start with a call.</h2>
@@ -174,6 +355,74 @@
     </div>
   </section>
 </main>
+
+<script>
+  // Payment plan toggle — swaps prices + appends ?plan=pay4 to CTA hrefs.
+  // SKUs with no pay-in-4 (Single Session, Continuation Retainer) leave the
+  // price untouched but show a clarifying detail line.
+  (function () {
+    'use strict';
+    var toggle = document.getElementById('payment-plan-toggle');
+    if (!toggle) return;
+    var labelUpfront = document.getElementById('label-upfront');
+    var labelPay4 = document.getElementById('label-pay4');
+    var rungs = document.querySelectorAll('.rung');
+
+    function applyMode(pay4) {
+      labelUpfront.classList.toggle('active', !pay4);
+      labelPay4.classList.toggle('active', pay4);
+
+      rungs.forEach(function (rung) {
+        var sku = rung.getAttribute('data-sku');
+        var supportsPay4 = (sku === 'coaching-block' || sku === 'group-block');
+
+        var priceEl = rung.querySelector('.price');
+        var detailEl = rung.querySelector('.price-detail');
+        var ctaEl = rung.querySelector('.cta');
+
+        if (priceEl) {
+          var newPrice = pay4 ? priceEl.getAttribute('data-pay4') : priceEl.getAttribute('data-upfront');
+          var valueSpan = priceEl.querySelector('[data-price-value]');
+          var suffixSpan = priceEl.querySelector('.price-suffix');
+          if (valueSpan) {
+            valueSpan.textContent = newPrice;
+          } else {
+            // Reset and re-render (no suffix case)
+            priceEl.textContent = newPrice;
+          }
+          // Re-append suffix span if it existed
+          if (suffixSpan && !priceEl.contains(suffixSpan)) {
+            priceEl.appendChild(suffixSpan);
+          }
+        }
+        if (detailEl) {
+          detailEl.textContent = pay4
+            ? detailEl.getAttribute('data-pay4')
+            : detailEl.getAttribute('data-upfront');
+        }
+        if (ctaEl) {
+          var baseHref = ctaEl.getAttribute('data-base-href');
+          if (pay4 && supportsPay4) {
+            ctaEl.setAttribute('href', baseHref + '?plan=pay4');
+          } else {
+            ctaEl.setAttribute('href', baseHref);
+          }
+        }
+      });
+    }
+
+    toggle.addEventListener('change', function () {
+      applyMode(toggle.checked);
+    });
+    // Allow clicking the labels to toggle too
+    labelUpfront.addEventListener('click', function () {
+      toggle.checked = false; applyMode(false);
+    });
+    labelPay4.addEventListener('click', function () {
+      toggle.checked = true; applyMode(true);
+    });
+  })();
+</script>
 
 <footer class="site-footer wrap">
   <span class="wordmark">Sam Davis<span class="accent">.</span></span>

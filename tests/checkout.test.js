@@ -2,10 +2,18 @@
 const test = require('node:test');
 const assert = require('node:assert');
 
-// Mock env
+// Mock env (v2 SKU env-var names per 2026-06-02 coaching co-primary spec)
 process.env.BASE_URL = 'https://crads-ai.com';
-process.env.STRIPE_PRICE_SINGLE = 'price_test_single';
+process.env.STRIPE_PRICE_SINGLE_V2 = 'price_test_single';
+process.env.STRIPE_PRICE_BLOCK_V2_FULL = 'price_test_block';
+process.env.STRIPE_PRICE_BLOCK_V2_PAY4_FIRST = 'price_test_block_pay4';
+process.env.STRIPE_PRICE_GROUP = 'price_test_group';
+process.env.STRIPE_PRICE_GROUP_PAY4 = 'price_test_group_pay4';
+process.env.STRIPE_PRICE_RETAINER = 'price_test_retainer';
 process.env.CAL_EVENT_TYPE_SINGLE = '101';
+process.env.CAL_EVENT_TYPE_BLOCK = '102';
+process.env.CAL_EVENT_TYPE_GROUP = '103';
+process.env.CAL_EVENT_TYPE_RETAINER = '104';
 process.env.CAL_EVENT_TYPE_DISCOVERY = '100';
 
 // Stub lib/stripe + lib/cal BEFORE requiring handler
