@@ -1820,3 +1820,70 @@ a:hover { color: var(--accent-deep); }
   white-space: nowrap;
   border: 0;
 }
+
+/* ============================================================
+   /account/* — auth pages + dashboard shell (2026-06-03 spec)
+   ============================================================ */
+
+.account-page {
+  background: var(--bg-main);
+  color: var(--ink-deep);
+  font-family: var(--sans);
+  min-height: 100vh;
+  margin: 0;
+}
+
+.account-page .login-wrap {
+  max-width: 420px;
+  margin: 12vh auto;
+  padding: var(--space-4) var(--space-3);
+  text-align: center;
+}
+
+.account-page .login-wrap h1 {
+  font-family: var(--serif);
+  color: var(--ink-deep);
+  margin: 0 0 var(--space-2);
+  font-size: 1.9em;
+}
+
+.account-page .login-wrap .subtitle {
+  color: var(--ink-soft);
+  margin: 0 0 var(--space-4);
+}
+
+.account-page form input[type="email"] {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 1em;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--bg-soft);
+  color: var(--ink-deep);
+  margin-bottom: var(--space-2);
+  box-sizing: border-box;
+}
+
+.account-page form button.cta {
+  width: 100%;
+  padding: 12px 18px;
+  background: var(--accent);
+  color: var(--bg-main);
+  border: none;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.account-page form button.cta:hover {
+  background: var(--accent-deep);
+}
+
+.account-page form .status {
+  margin-top: var(--space-2);
+  color: var(--ink-soft);
+  font-size: 0.95em;
+}

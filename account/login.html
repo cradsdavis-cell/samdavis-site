@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · crads-ai</title>
+  <link rel="stylesheet" href="/lib/site.css">
+  <meta name="robots" content="noindex">
+</head>
+<body class="account-page">
+  <main class="login-wrap">
+    <h1 class="serif">Sign in to your account</h1>
+    <p class="subtitle">We'll email you a link. No password needed.</p>
+    <form id="login-form" class="lead-capture-card">
+      <input type="email" name="email" id="login-email" required placeholder="your@email.com" autocomplete="email">
+      <button type="submit" class="cta">Send sign-in link →</button>
+      <p class="status" id="login-status" hidden></p>
+    </form>
+  </main>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.currentTarget;
+      const status = document.getElementById('login-status');
+      const email = document.getElementById('login-email').value;
+      status.hidden = false;
+      status.textContent = 'Sending…';
+      try {
+        const r = await fetch('/api/auth/request-link', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        const data = await r.json();
+        if (r.ok) {
+          form.style.display = 'none';
+          status.textContent = `Check your inbox — link sent to ${email}. It expires in 15 minutes.`;
+        } else if (r.status === 429) {
+          status.textContent = 'Too many sign-in requests. Try again in 15 minutes.';
+        } else {
+          status.textContent = data.error || 'Something broke. Try again.';
+        }
+      } catch (err) {
+        status.textContent = 'Network error. Try again.';
+      }
+    });
+  </script>
+</body>
+</html>

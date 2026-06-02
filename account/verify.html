@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · crads-ai</title>
+  <link rel="stylesheet" href="/lib/site.css">
+  <meta name="robots" content="noindex">
+</head>
+<body class="account-page">
+  <main class="login-wrap">
+    <div id="verify-message">
+      <h1 class="serif">Signing you in…</h1>
+      <p class="subtitle">One moment.</p>
+    </div>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const error = params.get('error');
+    const messages = {
+      missing: 'No sign-in token in the link. <a href="/account/login">Request a new one</a>.',
+      invalid: 'This sign-in link is invalid or already used. <a href="/account/login">Request a new one</a>.',
+      expired: 'This sign-in link has expired (links last 15 minutes). <a href="/account/login">Request a new one</a>.',
+    };
+    if (error) {
+      const div = document.getElementById('verify-message');
+      div.innerHTML = `<h1 class="serif">Sign-in link not valid</h1><p class="subtitle">${messages[error] || messages.invalid}</p>`;
+    }
+  </script>
+</body>
+</html>
