@@ -18,7 +18,8 @@
     { "source": "/account/", "destination": "/api/account" },
     { "source": "/account/sessions", "destination": "/api/account/sessions" },
     { "source": "/account/packs", "destination": "/api/account/packs" },
-    { "source": "/account/subscription", "destination": "/api/account/subscription" }
+    { "source": "/account/subscription", "destination": "/api/account/subscription" },
+    { "source": "/account/profile", "destination": "/api/account/profile" }
   ],
   "headers": [
     {
