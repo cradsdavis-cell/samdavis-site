@@ -11,6 +11,10 @@
       "permanent": true
     }
   ],
+  "rewrites": [
+    { "source": "/account/login", "destination": "/account/login.html" },
+    { "source": "/account/verify", "destination": "/account/verify.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
