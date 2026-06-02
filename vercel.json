@@ -19,7 +19,8 @@
     { "source": "/account/sessions", "destination": "/api/account/sessions" },
     { "source": "/account/packs", "destination": "/api/account/packs" },
     { "source": "/account/subscription", "destination": "/api/account/subscription" },
-    { "source": "/account/profile", "destination": "/api/account/profile" }
+    { "source": "/account/profile", "destination": "/api/account/profile" },
+    { "source": "/account/onboarding", "destination": "/api/account/onboarding" }
   ],
   "headers": [
     {

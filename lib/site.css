@@ -2083,3 +2083,50 @@ a:hover { color: var(--accent-deep); }
   margin: 4px 0 0;
   color: var(--ink-soft);
 }
+
+/* Onboarding stepper */
+.dashboard-main .step-ladder {
+  list-style: none; padding: 0; margin: 0 0 var(--space-4);
+  display: flex; gap: var(--space-2); flex-wrap: wrap;
+}
+.dashboard-main .step-ladder li {
+  flex: 1; min-width: 150px; padding: 10px 14px;
+  background: var(--bg-soft); border-left: 3px solid var(--rule);
+  border-radius: 4px; font-size: 0.9em;
+}
+.dashboard-main .step-ladder li a { color: var(--ink-soft); text-decoration: none; }
+.dashboard-main .step-ladder li.active { background: var(--bg-card); border-left-color: var(--accent); }
+.dashboard-main .step-ladder li.active a { color: var(--ink-deep); font-weight: 600; }
+.dashboard-main .step-ladder li.done a { color: var(--good); }
+.dashboard-main .step-ladder li.done a::after { content: ' ✓'; }
+.dashboard-main .step-content section { margin: var(--space-3) 0; }
+.dashboard-main .step-content h2 { font-family: var(--serif); margin: var(--space-3) 0 var(--space-1); }
+.dashboard-main .step-content h3 { font-family: var(--serif); margin: var(--space-3) 0 var(--space-1); font-size: 1.1em; }
+.dashboard-main .step-content textarea,
+.dashboard-main .step-content input[type="text"],
+.dashboard-main .step-content input[type="email"] {
+  width: 100%; padding: 10px; border: 1px solid var(--rule);
+  border-radius: 4px; background: var(--bg-soft);
+  font-family: var(--sans); font-size: 0.95em;
+  box-sizing: border-box; margin-top: 4px;
+}
+.dashboard-main .step-content label { display: block; margin: var(--space-2) 0; color: var(--ink-deep); }
+.dashboard-main .step-content .install-item,
+.dashboard-main .step-content .cw-checkbox,
+.dashboard-main .step-content .cw-radio {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin: 4px 12px 4px 0; font-weight: normal;
+}
+.dashboard-main .step-content details { margin: var(--space-2) 0; padding: var(--space-2); background: var(--bg-soft); border-radius: 4px; }
+.dashboard-main .step-content details pre { white-space: pre-wrap; font-size: 0.85em; }
+.dashboard-main .step-content .cta {
+  display: inline-block; padding: 10px 20px; background: var(--accent); color: var(--bg-main);
+  border: none; border-radius: 4px; font-weight: 600; cursor: pointer;
+  text-decoration: none; margin-top: var(--space-3);
+}
+.dashboard-main .step-content .cta-secondary {
+  display: inline-block; padding: 8px 16px; background: transparent;
+  color: var(--accent); border: 1px solid var(--accent);
+  border-radius: 4px; cursor: pointer; margin-top: var(--space-1); font-size: 0.9em;
+}
+.dashboard-main .cal-embed-wrap { background: var(--bg-soft); border-radius: 4px; padding: var(--space-2); margin: var(--space-3) 0; }
