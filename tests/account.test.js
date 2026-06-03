@@ -90,3 +90,24 @@ test('renderShell wraps content in HTML shell + sidebar + main', () => {
   assert.match(html, /sidebar-nav/);
   assert.match(html, /<p>hi<\/p>/);
 });
+
+test('requireAdmin returns 403 for non-admin user', async () => {
+  const kv = makeKv(fakeKvClient());
+  await kv.setUser('other@example.com', { email: 'other@example.com', state_version: 1 });
+  const jwt = signSession({ email: 'other@example.com', state_version: 1 });
+  const res = mockRes();
+  const { requireAdmin } = require('../lib/account');
+  const result = await requireAdmin({ kv, req: mockReq(`session_jwt=${jwt}`), res });
+  assert.strictEqual(result, null);
+  assert.strictEqual(res.statusCode, 403);
+});
+
+test('requireAdmin returns user for cradsdavis@gmail.com', async () => {
+  const kv = makeKv(fakeKvClient());
+  await kv.setUser('cradsdavis@gmail.com', { email: 'cradsdavis@gmail.com', state_version: 1 });
+  const jwt = signSession({ email: 'cradsdavis@gmail.com', state_version: 1 });
+  const res = mockRes();
+  const { requireAdmin } = require('../lib/account');
+  const result = await requireAdmin({ kv, req: mockReq(`session_jwt=${jwt}`), res });
+  assert.strictEqual(result.email, 'cradsdavis@gmail.com');
+});
