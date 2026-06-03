@@ -24,7 +24,8 @@
     { "source": "/account/profile/edit", "destination": "/api/account/profile-edit" },
     { "source": "/account/onboarding", "destination": "/api/account/onboarding" },
     { "source": "/account/admin", "destination": "/api/account/admin" },
-    { "source": "/account/admin/", "destination": "/api/account/admin" }
+    { "source": "/account/admin/", "destination": "/api/account/admin" },
+    { "source": "/account/admin/client", "destination": "/api/account/admin/client" }
   ],
   "headers": [
     {
