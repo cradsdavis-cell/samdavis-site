@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>What an AI that knows you actually does — Sam Davis</title>
-<meta name="description" content="A walk through the executive-assistant system Sam Davis builds — context, people, voice, drift-catching, and tooling.">
+<meta name="description" content="A walk through the AI executive-assistant we coach founders to build — context, people, voice, drift-catching, and the tools it wires into.">
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <link rel="stylesheet" href="/lib/site.css">
@@ -18,14 +18,21 @@
     padding-top: var(--space-6);
     padding-bottom: var(--space-5);
   }
-  .overview-hero img {
-    width: 140px;
-    height: auto;
+  .overview-hero img { width: 140px; height: auto; }
+  .prose-lead { max-width: var(--read-col); margin-bottom: var(--space-3); }
+
+  /* Hand-drawn diagrams */
+  .diagram { margin: var(--space-4) 0 var(--space-3); }
+  .diagram svg { width: 100%; height: auto; display: block; }
+  .diagram figcaption {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
+    text-align: center;
+    margin-top: var(--space-2);
   }
-  .prose-lead {
-    max-width: var(--read-col);
-    margin-bottom: var(--space-3);
-  }
+
   @media (max-width: 900px) {
     .overview-hero {
       grid-template-columns: 1fr;
@@ -49,6 +56,7 @@
     <a href="/how-it-works">How it works</a>
     <a href="/offer">Offer</a>
     <a href="/book">Book →</a>
+    <a href="/account/login" class="nav-account">Sign in</a>
   </div>
 </nav>
 
@@ -66,7 +74,7 @@
     <div class="read-col">
       <p class="eyebrow reveal-on-scroll">§ The missing layer</p>
       <h2 class="reveal-on-scroll">Every AI forgets you the moment you close the tab.</h2>
-      <p class="reveal-on-scroll prose-lead">A generic AI assistant is a stranger you brief every time. The thing I build instead is a long-term context layer — yours, held somewhere the AI can read.</p>
+      <p class="reveal-on-scroll prose-lead">A generic AI assistant is a stranger you brief every time. What we coach you to build instead is a long-term context layer — yours, held somewhere the AI can read it.</p>
     </div>
     <div class="interlude callout-grid compact stagger-grid">
       <div class="callout"><div class="big">ChatGPT doesn't know your people, your deals, or your decisions.</div></div>
@@ -75,20 +83,99 @@
       <div class="callout"><div class="big">Your inbox doesn't know what matters this week.</div></div>
       <div class="callout"><div class="big">Seven tools open. Nothing shared between them.</div></div>
     </div>
+
+    <!-- One-brain diagram -->
+    <figure class="diagram reveal-on-scroll">
+      <svg viewBox="0 0 1000 430" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Diagram: your scattered tools — email, calendar, notes, chat, docs — wired into one structured context layer that Claude reads and writes, producing drafts in your voice, recall in seconds, and drift it catches before you do.">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="#8F7530"/>
+          </marker>
+          <style>
+            .inp { fill: #F2EEDD; stroke: #B0B490; stroke-width: 1.6; }
+            .inp-t { font-family: var(--sans); font-size: 13px; fill: #6B5F3A; }
+            .brain { fill: #FAF7EE; stroke: #8F7530; stroke-width: 2.2; }
+            .brain-lab { font-family: var(--mono); font-size: 11px; letter-spacing: 1.4px; fill: #6B5624; font-weight: 600; }
+            .chip { fill: #DCE0B6; stroke: none; }
+            .chip-t { font-family: var(--sans); font-size: 10.5px; fill: #3E3418; }
+            .ai { fill: #8F7530; stroke: #6B5624; stroke-width: 2; }
+            .ai-t { font-family: var(--serif); font-size: 17px; fill: #FAF7EE; font-weight: 700; }
+            .out-t { font-family: var(--sans); font-size: 13px; fill: #3E3418; font-weight: 600; }
+            .lk { stroke: #B0B490; stroke-width: 1.8; }
+            .lk-a { stroke: #8F7530; stroke-width: 2; }
+          </style>
+        </defs>
+
+        <!-- scattered inputs -->
+        <g>
+          <rect x="20" y="50" width="120" height="40" rx="9" class="inp" transform="rotate(-4 80 70)"/>
+          <text x="80" y="74" text-anchor="middle" class="inp-t" transform="rotate(-4 80 70)">Email</text>
+          <rect x="34" y="120" width="120" height="40" rx="9" class="inp" transform="rotate(3 94 140)"/>
+          <text x="94" y="144" text-anchor="middle" class="inp-t" transform="rotate(3 94 140)">Calendar</text>
+          <rect x="18" y="190" width="120" height="40" rx="9" class="inp" transform="rotate(-3 78 210)"/>
+          <text x="78" y="214" text-anchor="middle" class="inp-t" transform="rotate(-3 78 210)">Notes</text>
+          <rect x="36" y="260" width="120" height="40" rx="9" class="inp" transform="rotate(4 96 280)"/>
+          <text x="96" y="284" text-anchor="middle" class="inp-t" transform="rotate(4 96 280)">Chats</text>
+          <rect x="22" y="330" width="120" height="40" rx="9" class="inp" transform="rotate(-2 82 350)"/>
+          <text x="82" y="354" text-anchor="middle" class="inp-t" transform="rotate(-2 82 350)">Docs</text>
+        </g>
+        <!-- converging arrows -->
+        <path d="M150 70  C 220 90, 250 150, 320 175" class="lk" fill="none" marker-end="url(#ar)"/>
+        <path d="M158 140 C 230 150, 250 175, 320 200" class="lk" fill="none" marker-end="url(#ar)"/>
+        <path d="M142 210 L 318 210" class="lk" fill="none" marker-end="url(#ar)"/>
+        <path d="M160 280 C 230 270, 250 245, 320 220" class="lk" fill="none" marker-end="url(#ar)"/>
+        <path d="M150 350 C 220 330, 250 270, 320 245" class="lk" fill="none" marker-end="url(#ar)"/>
+
+        <!-- the brain / context layer -->
+        <rect x="322" y="78" width="320" height="270" rx="20" class="brain"/>
+        <text x="482" y="104" text-anchor="middle" class="brain-lab">YOUR CONTEXT · STRUCTURED</text>
+        <g>
+          <rect x="344" y="124" width="130" height="26" rx="13" class="chip"/><text x="409" y="141" text-anchor="middle" class="chip-t">North Star</text>
+          <rect x="490" y="124" width="130" height="26" rx="13" class="chip"/><text x="555" y="141" text-anchor="middle" class="chip-t">Philosophy</text>
+          <rect x="344" y="160" width="130" height="26" rx="13" class="chip"/><text x="409" y="177" text-anchor="middle" class="chip-t">Self &amp; voice</text>
+          <rect x="490" y="160" width="130" height="26" rx="13" class="chip"/><text x="555" y="177" text-anchor="middle" class="chip-t">Network</text>
+          <rect x="344" y="196" width="130" height="26" rx="13" class="chip"/><text x="409" y="213" text-anchor="middle" class="chip-t">Past</text>
+          <rect x="490" y="196" width="130" height="26" rx="13" class="chip"/><text x="555" y="213" text-anchor="middle" class="chip-t">Goals</text>
+          <rect x="344" y="232" width="130" height="26" rx="13" class="chip"/><text x="409" y="249" text-anchor="middle" class="chip-t">Tasks</text>
+          <rect x="490" y="232" width="130" height="26" rx="13" class="chip"/><text x="555" y="249" text-anchor="middle" class="chip-t">Workflow</text>
+        </g>
+        <text x="482" y="296" text-anchor="middle" class="inp-t" font-style="italic">plain-text on your machine — yours to keep</text>
+        <text x="482" y="324" text-anchor="middle" class="inp-t" font-style="italic">every person, decision, project, routine</text>
+
+        <!-- AI node + read/write -->
+        <path d="M644 180 L 712 180" class="lk-a" fill="none" marker-end="url(#ar)"/>
+        <path d="M712 230 L 644 230" class="lk-a" fill="none" marker-end="url(#ar)"/>
+        <text x="678" y="172" text-anchor="middle" class="chip-t">reads</text>
+        <text x="678" y="252" text-anchor="middle" class="chip-t">writes</text>
+        <rect x="714" y="158" width="150" height="94" rx="16" class="ai"/>
+        <text x="789" y="200" text-anchor="middle" class="ai-t">Claude</text>
+        <text x="789" y="224" text-anchor="middle" class="chip-t" fill="#FAF7EE">the reasoning engine</text>
+
+        <!-- outputs -->
+        <path d="M789 252 L 789 290" class="lk-a" fill="none" marker-end="url(#ar)"/>
+        <rect x="690" y="296" width="200" height="34" rx="10" class="inp" stroke="#8F7530"/>
+        <text x="790" y="318" text-anchor="middle" class="out-t">Drafts in your voice</text>
+        <rect x="690" y="340" width="200" height="34" rx="10" class="inp" stroke="#8F7530"/>
+        <text x="790" y="362" text-anchor="middle" class="out-t">Recall in seconds</text>
+        <rect x="690" y="384" width="200" height="34" rx="10" class="inp" stroke="#8F7530"/>
+        <text x="790" y="406" text-anchor="middle" class="out-t">Drift it catches first</text>
+      </svg>
+      <figcaption>Scattered tools and loose context, wired into one brain the AI can read and write.</figcaption>
+    </figure>
   </section>
 
   <!-- § It knows me + V2 layer-grid -->
   <section class="section wrap" id="one-brain">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll">§ It knows me</p>
+      <p class="eyebrow reveal-on-scroll">§ It knows you</p>
       <h2 class="reveal-on-scroll">Eight layers of <em>structured self-knowledge.</em></h2>
-      <p class="reveal-on-scroll prose-lead">Not a notes app. A real model of you — read, written, and reasoned over by the AI. The layers are deliberate: each one a single source of truth, pulled in when relevant. You don't paste your bio into every prompt.</p>
+      <p class="reveal-on-scroll prose-lead">Not a notes app. A real model of you — read, written, and reasoned over by the AI. The layers are deliberate: each one a single source of truth, pulled in when relevant. You never paste your bio into a prompt again.</p>
     </div>
     <div class="interlude layer-grid stagger-grid">
       <div class="layer"><span class="num">1</span><strong>North Star</strong><p>What you're building a life toward. The frame above the frame.</p></div>
       <div class="layer"><span class="num">2</span><strong>Philosophy</strong><p>How you operate when no one's watching. Your values, as filters.</p></div>
       <div class="layer"><span class="num">3</span><strong>Self</strong><p>Who you are when you show up. Identity, strengths, voice, patterns.</p></div>
-      <div class="layer"><span class="num">4</span><strong>Network</strong><p>Every person in your life — tiered, recalled, linked to the work you share.</p></div>
+      <div class="layer"><span class="num">4</span><strong>Network</strong><p>Every person in your work — tiered, recalled, linked to what you share.</p></div>
       <div class="layer"><span class="num">5</span><strong>Past</strong><p>What's happened that still shapes today. Decisions, pivots, lessons.</p></div>
       <div class="layer"><span class="num">6</span><strong>Goals</strong><p>What you're trying to do, now and next. Reviewed weekly.</p></div>
       <div class="layer"><span class="num">7</span><strong>Tasks</strong><p>What's on your plate today — synced with calendar and inbox.</p></div>
@@ -101,51 +188,51 @@
     <div class="read-col">
       <p class="eyebrow reveal-on-scroll">§ Under the hood</p>
       <h2 class="reveal-on-scroll">Real tools. Open protocols. <em>Your data, your system.</em></h2>
-      <p class="reveal-on-scroll prose-lead">Not magic. Not a black box. A specific stack — built on open standards so you're never locked in. If the system ever stops serving you, you walk away with everything in plain text.</p>
+      <p class="reveal-on-scroll prose-lead">A specific, named stack — built on open standards, so you're never locked in. If it ever stops serving you, you walk away with everything in plain text.</p>
     </div>
     <div class="interlude-bare tier-stack stagger-grid">
       <div class="tier">
         <span class="label">The engine</span>
-        <p><strong>Claude</strong> — Anthropic's frontier AI model, running through the Claude Code harness. Handles reasoning, drafting, decision-making, conversation.</p>
+        <p><strong>Claude</strong> — Anthropic's frontier AI model, running through the Claude Code harness. Handles reasoning, drafting, decisions, conversation.</p>
       </div>
       <div class="tier">
         <span class="label">The connectors</span>
-        <p>Seven live integrations via the open <strong>Model Context Protocol</strong>. Gmail · Calendar · Google Sheets · Todoist · WhatsApp · Perplexity · Browser (Playwright).</p>
+        <p>Live integrations via the open <strong>Model Context Protocol</strong>. Gmail · Calendar · Google Sheets · Todoist · WhatsApp · Browser (Playwright) — and a dozen more if your stack needs them.</p>
       </div>
       <div class="tier">
         <span class="label">The memory</span>
         <p>A <strong>plain-text wiki</strong> on your own machine. Every person, decision, project, routine — stored as markdown files you can read, edit, export, walk away with.</p>
       </div>
       <div class="tier">
-        <span class="label">The automation</span>
-        <p><strong>Scheduled watchers</strong> running in the background. Inbox scanned every 15 minutes. Calendar on the hour. Tasks every 30. Nothing you have to remember to run.</p>
+        <span class="label">The controls</span>
+        <p>A library of <strong>skills you invoke on demand</strong> — a morning brief, a follow-up scan, a draft in your voice. You run them when you want them; nothing fires behind your back.</p>
       </div>
     </div>
   </section>
 
-  <!-- § What it knows about me + V4 self-portrait -->
+  <!-- § What it knows about you + V4 self-portrait (generic) -->
   <section class="section wrap" id="knows-me-portrait">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll">§ What it knows about me</p>
-      <h2 class="reveal-on-scroll">To a T. <em>To the sentence.</em></h2>
-      <p class="reveal-on-scroll prose-lead">The kind of context a great human assistant builds over ten years — in a system that can be queried in a second.</p>
+      <p class="eyebrow reveal-on-scroll">§ What it knows</p>
+      <h2 class="reveal-on-scroll">It knows you <em>to the sentence.</em></h2>
+      <p class="reveal-on-scroll prose-lead">The kind of context a great human assistant builds over ten years — in a system that can be queried in a second. Here's the shape of what a founder's looks like.</p>
     </div>
     <div class="interlude self-portrait">
       <div class="column reveal-on-scroll">
-        <h4>The person</h4>
-        <div class="row"><span class="lab">Values</span><span class="val">Freedom · impact · connection · adventure · nature</span></div>
-        <div class="row"><span class="lab">Voice</span><span class="val">Direct, concrete, contrast-framed. <em>No LinkedIn register.</em></span></div>
-        <div class="row"><span class="lab">Patterns</span><span class="val">Pivots are deepening, not quitting. Wild and calm, always both.</span></div>
-        <div class="row"><span class="lab">Filters</span><span class="val">Any decision runs through five North-Star checks before it's made.</span></div>
-        <div class="row"><span class="lab">Red lines</span><span class="val">No performative masculinity. No inflated positioning. No flattery.</span></div>
+        <h4>You, the person</h4>
+        <div class="row"><span class="lab">Voice</span><span class="val">How you actually write — so its drafts sound like you, not like AI.</span></div>
+        <div class="row"><span class="lab">Values</span><span class="val">What you care about, as filters every decision runs through.</span></div>
+        <div class="row"><span class="lab">Strengths</span><span class="val">What only you should be spending time on.</span></div>
+        <div class="row"><span class="lab">Patterns</span><span class="val">How you tend to decide, stall, and recover.</span></div>
+        <div class="row"><span class="lab">Red lines</span><span class="val">Words you'd never use. Things you'd never send.</span></div>
       </div>
       <div class="column reveal-on-scroll">
-        <h4>The life, right now</h4>
-        <div class="row"><span class="lab">Network</span><span class="val">127 people tiered by closeness; 8 core, 14 live.</span></div>
-        <div class="row"><span class="lab">Priorities</span><span class="val">Earn this month · land a UK placement · ship PhD</span></div>
-        <div class="row"><span class="lab">Live threads</span><span class="val">Abbey · Eleni · 3 TES apps</span></div>
-        <div class="row"><span class="lab">Open loops</span><span class="val">Mum's birthday in 9 days · climbing off 6 weeks</span></div>
-        <div class="row"><span class="lab">On the horizon</span><span class="val">UK move late Aug · farewell tour · overland dream after</span></div>
+        <h4>Your work, right now</h4>
+        <div class="row"><span class="lab">People</span><span class="val">Clients, team, partners — tiered by closeness, with the history attached.</span></div>
+        <div class="row"><span class="lab">Priorities</span><span class="val">What matters this quarter, this week, today.</span></div>
+        <div class="row"><span class="lab">Live deals</span><span class="val">Every open thread — what was said, what you promised, what's next.</span></div>
+        <div class="row"><span class="lab">Open loops</span><span class="val">The follow-ups and small obligations it holds so you don't have to.</span></div>
+        <div class="row"><span class="lab">What's coming</span><span class="val">The dates and decisions on the horizon, surfaced before they're urgent.</span></div>
       </div>
     </div>
   </section>
@@ -155,25 +242,114 @@
     <div class="read-col">
       <p class="eyebrow reveal-on-scroll">§ How it gets sharper</p>
       <h2 class="reveal-on-scroll">It updates itself <em>while you work.</em></h2>
-      <p class="reveal-on-scroll prose-lead">You don't maintain the brain. You use it, and it keeps itself current — quietly, in the background. Real things that happened in mine last month:</p>
+      <p class="reveal-on-scroll prose-lead">You don't maintain the brain. You use it, and it keeps itself current — quietly, in the background. The kind of thing it does in a normal week:</p>
     </div>
     <div class="interlude reflex-cards stagger-grid">
       <div class="reflex">
-        <span class="trigger">When I decided</span>
-        <h5>It captured the decision and the reasoning.</h5>
-        <p>I decided to raise my coaching rate. The brain logged <em>"market puts sole-operator AI coaching at $180–300/hr mid-band"</em>, backlinked to my pricing page, and flagged the three prospects still attached to the old rate.</p>
+        <span class="trigger">When you decide</span>
+        <h5>It captures the decision and the reasoning.</h5>
+        <p>You decide to raise your rate. The brain logs why, backlinks it to your pricing, and flags the three clients still attached to the old number — so the next time you draft to one of them, it knows.</p>
       </div>
       <div class="reflex">
-        <span class="trigger">When someone new entered</span>
-        <h5>It built them a page.</h5>
-        <p>A mentor mentioned a school head I should know. The brain created her entity page, inferred the two-way relationship to the mentor, and had her context ready the next time I drafted outreach.</p>
+        <span class="trigger">When someone new shows up</span>
+        <h5>It builds them a page.</h5>
+        <p>A client mentions a partner you should know. The brain creates their page, infers how they connect to the client, and has the context ready the next time you write to either of them.</p>
       </div>
       <div class="reflex">
-        <span class="trigger">When facts contradicted</span>
-        <h5>It flagged the conflict.</h5>
-        <p>My draft bio said <em>"coaching since 2024"</em>. The wiki said 2025. The brain paused, asked which was right, and updated the single source of truth once I confirmed.</p>
+        <span class="trigger">When facts contradict</span>
+        <h5>It flags the conflict.</h5>
+        <p>A draft says one thing, the wiki says another. The brain pauses, asks which is right, and updates the single source of truth once you confirm — instead of quietly carrying the error forward.</p>
       </div>
     </div>
+  </section>
+
+  <!-- § Hold its hand, then let go — the bike analogy -->
+  <section class="section wrap" id="trust-handoff">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll">§ Earning trust</p>
+      <h2 class="reveal-on-scroll">Like teaching someone to <em>ride a bike.</em></h2>
+      <p class="reveal-on-scroll prose-lead">You don't hand the AI the keys on day one. Early on we hold the seat — explicit instructions, you checking every move. As it proves itself, you build trust and hand it more: more tools, more judgement, more it can do without asking. The whole point is the third stage, where it runs and you steer.</p>
+    </div>
+    <figure class="diagram reveal-on-scroll">
+      <svg viewBox="0 0 1000 320" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Three stages of trust, drawn as learning to ride a bike: first with training wheels and a hand on the seat with explicit instructions; then finding balance as you let go and hand over more; then riding solo, where it runs and you choose the route.">
+        <defs>
+          <marker id="hd" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="#B89B4A"/>
+          </marker>
+          <style>
+            .gnd { stroke: #B0B490; stroke-width: 2; stroke-linecap: round; }
+            .frame { stroke: #6B5624; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+            .wheel { stroke: #8F7530; stroke-width: 3; fill: #FAF7EE; }
+            .tw { stroke: #B89B4A; stroke-width: 2.5; fill: #FAF7EE; }
+            .stg { font-family: var(--mono); font-size: 12px; letter-spacing: 1.4px; fill: #8F7530; font-weight: 600; }
+            .cap { font-family: var(--sans); font-size: 13px; fill: #6B5F3A; }
+            .motion { stroke: #B89B4A; stroke-width: 2.5; stroke-linecap: round; }
+            .hand { stroke: #6B5624; stroke-width: 3; fill: none; stroke-linecap: round; }
+          </style>
+        </defs>
+
+        <!-- STAGE 1 -->
+        <g>
+          <line x1="30" y1="150" x2="300" y2="150" class="gnd"/>
+          <!-- wheels -->
+          <circle cx="95" cy="128" r="22" class="wheel"/>
+          <circle cx="175" cy="128" r="22" class="wheel"/>
+          <!-- frame -->
+          <path class="frame" d="M95 128 L140 90 L175 128 M140 90 L122 128 M140 90 L155 78 M148 82 L168 80"/>
+          <line x1="118" y1="105" x2="100" y2="98" class="frame"/>
+          <!-- training wheels -->
+          <circle cx="190" cy="146" r="9" class="tw"/>
+          <circle cx="160" cy="146" r="9" class="tw"/>
+          <!-- hand on seat -->
+          <path class="hand" d="M122 128 q -22 -6 -34 8"/>
+          <circle cx="86" cy="138" r="4" fill="#6B5624"/>
+          <text x="165" y="200" text-anchor="middle" class="stg">STAGE 1</text>
+          <text x="165" y="224" text-anchor="middle" class="cap">We hold the seat.</text>
+          <text x="165" y="242" text-anchor="middle" class="cap">Explicit instructions,</text>
+          <text x="165" y="260" text-anchor="middle" class="cap">nothing assumed.</text>
+        </g>
+
+        <!-- arrow -->
+        <path d="M312 130 L 360 130" class="motion" marker-end="url(#hd)"/>
+
+        <!-- STAGE 2 -->
+        <g>
+          <line x1="375" y1="150" x2="645" y2="150" class="gnd"/>
+          <circle cx="450" cy="128" r="22" class="wheel"/>
+          <circle cx="530" cy="128" r="22" class="wheel"/>
+          <path class="frame" d="M450 128 L495 90 L530 128 M495 90 L477 128 M495 90 L510 78 M503 82 L523 80"/>
+          <line x1="473" y1="105" x2="455" y2="98" class="frame"/>
+          <!-- hand lifting off (dashed) -->
+          <path class="hand" d="M477 128 q -26 -14 -40 0" stroke-dasharray="4 5"/>
+          <circle cx="436" cy="124" r="4" fill="#B89B4A"/>
+          <text x="510" y="200" text-anchor="middle" class="stg">STAGE 2</text>
+          <text x="510" y="224" text-anchor="middle" class="cap">We let go a little.</text>
+          <text x="510" y="242" text-anchor="middle" class="cap">Build trust,</text>
+          <text x="510" y="260" text-anchor="middle" class="cap">hand over more.</text>
+        </g>
+
+        <!-- arrow -->
+        <path d="M657 130 L 705 130" class="motion" marker-end="url(#hd)"/>
+
+        <!-- STAGE 3 -->
+        <g>
+          <line x1="720" y1="150" x2="985" y2="150" class="gnd"/>
+          <circle cx="800" cy="128" r="22" class="wheel"/>
+          <circle cx="880" cy="128" r="22" class="wheel"/>
+          <path class="frame" d="M800 128 L845 90 L880 128 M845 90 L827 128 M845 90 L860 78 M853 82 L873 80"/>
+          <line x1="823" y1="105" x2="805" y2="98" class="frame"/>
+          <!-- motion lines -->
+          <line x1="735" y1="110" x2="765" y2="110" class="motion"/>
+          <line x1="728" y1="128" x2="762" y2="128" class="motion"/>
+          <line x1="735" y1="146" x2="765" y2="146" class="motion"/>
+          <text x="852" y="200" text-anchor="middle" class="stg">STAGE 3</text>
+          <text x="852" y="224" text-anchor="middle" class="cap">You ride.</text>
+          <text x="852" y="242" text-anchor="middle" class="cap">It runs;</text>
+          <text x="852" y="260" text-anchor="middle" class="cap">you choose the route.</text>
+        </g>
+      </svg>
+      <figcaption>Hold the seat · let go a little · ride solo</figcaption>
+    </figure>
   </section>
 
   <!-- § In your work + V6 mock-terminal -->
@@ -200,35 +376,12 @@
     </div>
   </section>
 
-  <!-- § Case study + V7 callout-grid -->
-  <section class="section wrap" id="carbon-tracker">
-    <div class="read-col">
-      <p class="eyebrow reveal-on-scroll">§ Case study · Carbon Tracker</p>
-      <h2 class="reveal-on-scroll">Eleven agents. <em>Six weeks.</em></h2>
-      <p class="reveal-on-scroll prose-lead">A UK climate consultancy was spending three days per client triaging Scope-3 carbon-accounting questions across multiple frameworks. I designed an eleven-agent pipeline that triages incoming questions, decides which framework applies, cross-checks against historical decisions, and surfaces auditable reasoning. Each agent has one job. Each handoff is logged. Time-to-answer dropped from three days to under twenty minutes; the consultancy now uses it as the first-pass on every client engagement.</p>
-    </div>
-    <div class="interlude callout-grid stagger-grid">
-      <div class="callout">
-        <div class="big">Nothing falls through.</div>
-        <div class="small">Every promise, every decision, every person — held. Your mind stops doing the job of a filing cabinet.</div>
-      </div>
-      <div class="callout">
-        <div class="big">You sound like yourself.</div>
-        <div class="small">Every reply, every message, every draft — in your voice, from your actual memory. Not generic AI output.</div>
-      </div>
-      <div class="callout">
-        <div class="big">You think more clearly.</div>
-        <div class="small">Because the system holds the context, you don't have to. Your best hours go to the work, not to remembering.</div>
-      </div>
-    </div>
-  </section>
-
   <!-- § For your business + V8 tool-grid -->
   <section class="section wrap" id="for-your-business">
     <div class="read-col">
       <p class="eyebrow reveal-on-scroll">§ For your business</p>
       <h2 class="reveal-on-scroll">Any tool you use already. <em>Wired into one brain.</em></h2>
-      <p class="reveal-on-scroll prose-lead">Seven integrations live in my own system. Hundreds more exist — and if your tool has an API, it can wire into yours. Built around your stack, not mine.</p>
+      <p class="reveal-on-scroll prose-lead">A dozen-plus integrations run in the system behind this site. Hundreds more exist — and if your tool has an API, it can wire into yours. Built around your stack, not ours.</p>
     </div>
     <div class="interlude tool-grid stagger-grid">
       <div class="tool">
@@ -268,8 +421,8 @@
   <section class="section section-tight wrap" id="overview-cta">
     <div class="read-col">
       <h2 class="reveal-on-scroll">Want to see one of these run live?</h2>
-      <p class="lede reveal-on-scroll">Book a thirty-minute call. I'll demo the system that runs this site.</p>
-      <a class="cta-primary reveal-on-scroll" href="/book">Book a 30-minute call</a>
+      <p class="lede reveal-on-scroll">Book a free 30-minute call. We'll demo the system that runs this site, and work out what yours would look like.</p>
+      <a class="cta-primary reveal-on-scroll" href="/book/discovery">Book a 30-minute call</a>
     </div>
   </section>
 </main>
@@ -279,6 +432,7 @@
   <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
   <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
   <div>+61 0493 302 154</div>
+  <div><a href="/account/login">Sign in</a></div>
   <div class="location">Coogee, Sydney.</div>
 </footer>
 

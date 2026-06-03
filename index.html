@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sam Davis — AI executive assistants for founders</title>
-<meta name="description" content="I build AI executive assistants that learn your voice, your people, your priorities. For founders who want their AI to actually understand them.">
+<title>Sam Davis — AI coaching for founders</title>
+<meta name="description" content="We don't build your AI assistant for you — we teach you to build it. Coaching for founders who want an AI executive assistant that learns their voice, people and priorities, and the skill to keep growing it.">
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <link rel="stylesheet" href="/lib/site.css">
@@ -26,6 +26,11 @@
   .hero-proof em { font-style: italic; }
 
   .prose-lead { max-width: var(--read-col); margin-bottom: var(--space-3); }
+
+  .who-list { list-style: none; padding: 0; display: grid; gap: var(--space-2); margin-top: var(--space-3); }
+  .who-list li { max-width: var(--read-col); color: var(--ink-soft); padding-left: var(--space-3); position: relative; }
+  .who-list li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  .who-list li strong { color: var(--ink-deep); }
 
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; padding-top: var(--space-5); padding-bottom: var(--space-5); gap: var(--space-3); }
@@ -51,125 +56,144 @@
     <a href="/how-it-works">How it works</a>
     <a href="/offer">Offer</a>
     <a href="/book">Book →</a>
+    <a href="/account/login" class="nav-account">Sign in</a>
   </div>
 </nav>
 
 <main>
-  <!-- Hero (preserved from v1) -->
+  <!-- Hero -->
   <section class="hero wrap">
     <div class="hero-illustration">
       <img src="/lib/img/sam-illustration.png" srcset="/lib/img/sam-illustration-sm.png 320w, /lib/img/sam-illustration.png 1200w" sizes="(max-width: 900px) 160px, 480px" alt="Sam Davis — illustration of a person holding a small tech-and-leaves icon" class="float-gentle">
     </div>
     <div class="hero-copy">
-      <p class="eyebrow">SAM DAVIS · PhD ENVIRONMENTAL DATA SCIENCE · 8 AI BUILDS IN 12 MONTHS</p>
-      <h1>An AI executive assistant <span class="italic-morph" data-phrases="like a chief of staff|like a longtime colleague|like a thoughtful editor">like a chief of staff</span>.</h1>
-      <p class="lede">I build AI that learns your voice, your people, your priorities — for founders who want their AI to actually understand them.</p>
+      <p class="eyebrow">AI COACHING FOR FOUNDERS · BUILD YOUR OWN AI EXECUTIVE ASSISTANT</p>
+      <h1>We don't build it <em>for</em> you. We teach you to build it — and to <span class="italic-morph" data-phrases="ride it|run it|own it|grow it">ride it</span>.</h1>
+      <p class="lede">Over four sessions you'll stand up an AI executive assistant that learns your voice, your people, your priorities — and you'll know how to keep growing it long after we're done.</p>
       <div class="hero-ctas">
-        <a class="cta-primary" href="/book">Book a 30-minute call</a>
-        <a class="cta-secondary" href="#work">See the work</a>
+        <a class="cta-primary" href="/book/discovery">Book a free 30-minute call</a>
+        <a class="cta-secondary" href="/how-it-works">How it works →</a>
       </div>
-      <p class="hero-proof"><em>Eight AI systems shipped in twelve months — Carbon Tracker for a UK climate consultancy, Derwen, the system running this site.</em></p>
+      <p class="hero-proof"><em>Coaching, not done-for-you. You leave owning the system and the skill — most people never need me again.</em></p>
     </div>
   </section>
 
-  <!-- V1 — Capability callouts -->
+  <!-- What you'll build -->
   <section class="section wrap" id="capabilities">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll">What you'll build</p>
+      <h2 class="reveal-on-scroll">An assistant that <em>actually knows you.</em></h2>
+    </div>
     <div class="interlude callout-grid stagger-grid">
       <div class="callout">
         <div class="big">Drafts in your voice.</div>
-        <div class="small">Not generic AI output — your phrasing, your rhythms, your signature moves. Seven-check audit on every outbound draft.</div>
+        <div class="small">Your phrasing, your rhythms, your signature moves — so the replies read like you actually wrote them.</div>
       </div>
       <div class="callout">
-        <div class="big">Knows every person.</div>
-        <div class="small">Every name has a page. The assistant pulls relationship history before you reply. Tiered: core, live, warm, dormant.</div>
+        <div class="big">Knows your people.</div>
+        <div class="small">Every client, partner and lead has a page. It pulls the relationship history before you reply — tiered by closeness.</div>
       </div>
       <div class="callout">
-        <div class="big">Catches drift before you do.</div>
-        <div class="small">Daily lint surfaces what's slipping. Weekly sync reconciles goals against active work. You stop maintaining; the system surfaces.</div>
+        <div class="big">Catches what's slipping.</div>
+        <div class="small">It surfaces the follow-up you forgot, the loop you left open, the thread going cold — so nothing falls through.</div>
       </div>
     </div>
   </section>
 
-  <!-- V2 — 3-rung ladder -->
+  <!-- Who it's for -->
+  <section class="section wrap" id="who">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll">Who it's for</p>
+      <h2 class="reveal-on-scroll">Built for owners, not engineers.</h2>
+      <ul class="who-list reveal-on-scroll">
+        <li><strong>Solo founders and small-business owners</strong> drowning in admin, who want their best hours back.</li>
+        <li><strong>Coaches, consultants and service providers</strong> whose business runs on relationships and follow-through.</li>
+        <li><strong>People who are curious about AI but not technical</strong> — you don't need to code. That's the whole point of coaching it.</li>
+      </ul>
+      <p class="reveal-on-scroll prose-lead" style="margin-top: var(--space-3);">It started with eight business owners I coached through Impact Collab's Expert Pod in late 2025. They didn't want another tool — they wanted to learn to build their own. That's still the offer.</p>
+    </div>
+  </section>
+
+  <!-- The ladder -->
   <section class="section wrap" id="how">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll">How I work</p>
-      <h2 class="reveal-on-scroll">Three rungs. <em>Start anywhere.</em></h2>
+      <p class="eyebrow reveal-on-scroll">Ways in</p>
+      <h2 class="reveal-on-scroll">Start small, or go deep. <em>Free call first.</em></h2>
     </div>
     <div class="interlude-bare rung-ladder stagger-grid" style="margin-top: var(--space-3);">
       <a class="rung-card" href="/book/single-session">
         <p class="r-name">Single Session</p>
-        <p class="r-meta">60 min</p>
-        <p class="r-price">$150</p>
-        <p class="r-pitch">One pain, one working piece.</p>
+        <p class="r-meta">60 min · 1:1</p>
+        <p class="r-price">$250</p>
+        <p class="r-pitch">One pain, one working piece. Try before the block.</p>
         <span class="r-cta">Book →</span>
       </a>
       <a class="rung-card hero" href="/book/coaching-block">
         <span class="badge">★ Most popular</span>
         <p class="r-name">Coaching Block</p>
-        <p class="r-meta">4 × 60 min</p>
-        <p class="r-price">$500</p>
-        <p class="r-pitch">Build alongside me, weekly.</p>
+        <p class="r-meta">4 × 60 min · 1:1</p>
+        <p class="r-price">$800</p>
+        <p class="r-pitch">Four sessions, full pack between each. The standard way in.</p>
         <span class="r-cta">Book →</span>
       </a>
-      <a class="rung-card" href="/book/ea-basic-build">
-        <p class="r-name">EA Basic Build</p>
-        <p class="r-meta">One-week sprint</p>
-        <p class="r-price">$2,000</p>
-        <p class="r-pitch">I install the whole assistant for you.</p>
-        <span class="r-cta">Book →</span>
+      <a class="rung-card" href="/group">
+        <p class="r-name">Group Block</p>
+        <p class="r-meta">4 × 90 min · cohort of 3</p>
+        <p class="r-price">$500<span style="font-size:14px;font-weight:500;">/seat</span></p>
+        <p class="r-pitch">Build alongside two other founders. Lower price, more energy.</p>
+        <span class="r-cta">See next cohort →</span>
       </a>
     </div>
-    <p class="reveal-on-scroll" style="text-align: center; margin-top: var(--space-3);"><a class="cta-secondary" href="/offer">See the full offer →</a></p>
+    <p class="reveal-on-scroll" style="text-align: center; margin-top: var(--space-3);"><a class="cta-secondary" href="/offer">See the full offer, including the Continuation Retainer →</a></p>
   </section>
 
-  <!-- V3 — Work cards -->
+  <!-- Proof -->
   <section class="section wrap" id="work">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll">Selected work</p>
-      <h2 class="reveal-on-scroll">Eight AI systems shipped in twelve months.</h2>
+      <p class="eyebrow reveal-on-scroll">Why learn it from me</p>
+      <h2 class="reveal-on-scroll">I built one that runs my whole life.</h2>
+      <p class="reveal-on-scroll prose-lead">Seven AI systems in twelve months — and the one I use every day is the executive assistant I'll teach you to build. This is the method my own days run on, not a theory.</p>
     </div>
     <div class="interlude work-cards stagger-grid">
       <div class="work">
-        <span class="glyph">⏱</span>
-        <h3>Carbon Tracker</h3>
-        <p class="stat">3 days → 20 min</p>
-        <p>An eleven-agent system for a UK climate consultancy. Triages Scope-3 carbon-accounting questions, cross-checks against historical decisions. Shipped in ~6 weeks.</p>
+        <span class="glyph">◆</span>
+        <h3>This system</h3>
+        <p class="stat">Runs my days</p>
+        <p>The executive assistant that drafts this site, tracks every conversation, plans my week and writes in my voice. The live blueprint for what you'll build.</p>
       </div>
       <div class="work">
         <span class="glyph">🌿</span>
         <h3>Derwen</h3>
         <p class="stat">Live in 2 weeks</p>
-        <p>AI biodiversity assistant — reads a habitat description, recommends species, surfaces peer-reviewed evidence. Live at <a href="https://derwenai.replit.app" target="_blank" rel="noopener">derwenai.replit.app</a>.</p>
+        <p>An AI biodiversity assistant — reads a habitat, recommends species, surfaces the evidence. Live at <a href="https://derwenai.replit.app" target="_blank" rel="noopener">derwenai.replit.app</a>.</p>
       </div>
       <div class="work">
-        <span class="glyph">◆</span>
-        <h3>This system</h3>
-        <p class="stat">Drafts every page here</p>
-        <p>The executive assistant that runs this site, tracks every conversation, drafts in my voice. Demo'd live on prospect calls — easier than explaining.</p>
+        <span class="glyph">⏱</span>
+        <h3>Carbon Tracker</h3>
+        <p class="stat">3 days → 20 min</p>
+        <p>An eleven-agent system for a UK climate consultancy — triages Scope-3 carbon-accounting questions against historical decisions.</p>
       </div>
     </div>
 
-    <!-- V4 — Builds strip -->
+    <!-- Builds strip -->
     <div class="interlude-bare builds-strip" style="margin-top: var(--space-4);">
+      <div class="build named">This system</div>
       <div class="build named">Carbon Tracker</div>
       <div class="build named">Derwen</div>
-      <div class="build named">This system</div>
-      <div class="build hint">Owls Eat Rats</div>
       <div class="build hint">TrailMate</div>
       <div class="build hint">Calm &amp; Storm</div>
       <div class="build hint">Waste2Wattage</div>
       <div class="build hint">Sasha</div>
     </div>
-    <p class="reveal-on-scroll work-closing" style="text-align: center; margin-top: var(--space-3); font-style: italic; color: var(--ink-soft); font-size: 14.5px;">Happy to walk through any of them on a call.</p>
+    <p class="reveal-on-scroll work-closing" style="text-align: center; margin-top: var(--space-3); font-style: italic; color: var(--ink-soft); font-size: 14.5px;">Seven builds in twelve months. Happy to walk through any of them on a call.</p>
   </section>
 
-  <!-- Final CTA (preserved from v1) -->
+  <!-- Final CTA -->
   <section class="section section-tight wrap" id="final-cta">
     <div class="read-col">
-      <h2 class="reveal-on-scroll">If any of this is the shape of what you've been trying to build —</h2>
-      <p class="lede reveal-on-scroll">Book a thirty-minute call. No pitch.</p>
-      <a class="cta-primary reveal-on-scroll" href="/book">Book a 30-minute call</a>
+      <h2 class="reveal-on-scroll">If you want an AI that actually gets you —</h2>
+      <p class="lede reveal-on-scroll">Book a free thirty-minute call. We'll work out what yours would look like. No pitch.</p>
+      <a class="cta-primary reveal-on-scroll" href="/book/discovery">Book a free 30-minute call</a>
     </div>
   </section>
 </main>
@@ -179,6 +203,7 @@
   <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
   <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
   <div>+61 0493 302 154</div>
+  <div><a href="/account/login">Sign in</a></div>
   <div class="location">Coogee, Sydney.</div>
 </footer>
 

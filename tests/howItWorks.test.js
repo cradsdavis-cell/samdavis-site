@@ -34,24 +34,28 @@ test('how-it-works page renders the canonical nav with How it works marked curre
   assert.ok(html.includes('<a href="/book">Book →</a>'));
 });
 
-test('how-it-works page contains all 4 session-arc heading lines', () => {
+test('how-it-works page contains the 4 canonical session-arc headings', () => {
   const html = readHIW();
-  assert.ok(html.includes('Session 1 — install + foundation'),
-    'expected Session 1 heading');
-  assert.ok(html.includes('Session 2 — first build'),
-    'expected Session 2 heading');
-  assert.ok(html.includes('Session 3 — second build + integration'),
-    'expected Session 3 heading');
-  assert.ok(html.includes('Session 4 — graduation'),
-    'expected Session 4 heading');
+  assert.ok(html.includes('Get Claude Code running, build a sandbox'),
+    'expected Session 1 heading (install + sandbox)');
+  assert.ok(html.includes('Introduce Pack #1, start the flower exercise'),
+    'expected Session 2 heading (Pack #1 + flower)');
+  assert.ok(html.includes('Connect your tools'),
+    'expected Session 3 heading (connect tools)');
+  assert.ok(html.includes('Wrap up, connect more, go solo'),
+    'expected Session 4 heading (wrap-up + go solo)');
 });
 
-test('how-it-works page contains onboarding + first 2 weeks blocks', () => {
+test('how-it-works page names the materials and is discovery-only (no lead-magnet)', () => {
   const html = readHIW();
-  assert.match(html, />Onboarding \(before Session 1\)</,
-    'expected Onboarding heading');
-  assert.match(html, />Your first 2 weeks</,
-    'expected Your first 2 weeks heading');
+  assert.match(html, />Everything you get</, 'expected materials section');
+  assert.ok(html.includes('Pack #1a'), 'expected Pack #1a named');
+  assert.ok(html.includes('Pack #1b'), 'expected Pack #1b named');
+  assert.ok(html.includes('Pack #2'), 'expected Pack #2 named');
+  assert.ok(!html.includes('data-lead-capture'),
+    'lead-magnet capture form must be removed (discovery-only)');
+  assert.ok(!/free install guide/i.test(html),
+    'free-install-guide lead-magnet copy must be removed');
 });
 
 test('how-it-works page contains CTAs to /offer and /book/discovery', () => {
