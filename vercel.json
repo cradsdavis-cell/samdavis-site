@@ -17,6 +17,7 @@
   "rewrites": [
     { "source": "/account/login", "destination": "/account/login.html" },
     { "source": "/account/verify", "destination": "/account/verify.html" },
+    { "source": "/account/set-password", "destination": "/account/set-password.html" },
     { "source": "/account", "destination": "/api/account" },
     { "source": "/account/", "destination": "/api/account" },
     { "source": "/account/sessions", "destination": "/api/account/sessions" },

@@ -6,46 +6,142 @@
   <title>Sign in · crads-ai</title>
   <link rel="stylesheet" href="/lib/site.css">
   <meta name="robots" content="noindex">
+  <style>
+    .auth-google {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 12px 18px; margin-bottom: var(--space-3);
+      background: var(--bg-main); color: var(--ink-deep);
+      border: 1px solid var(--rule); border-radius: 4px;
+      font-family: var(--sans); font-size: 1em; font-weight: 600;
+      text-decoration: none; transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .auth-google:hover { border-color: var(--accent); background: var(--bg-soft); }
+    .auth-google svg { width: 18px; height: 18px; flex: 0 0 auto; }
+    .auth-divider {
+      display: flex; align-items: center; gap: 12px;
+      color: var(--ink-faint); font-size: 0.85em; margin: var(--space-3) 0;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: ""; flex: 1; height: 1px; background: var(--rule);
+    }
+    .auth-actions { display: flex; gap: 10px; margin-top: var(--space-2); }
+    .auth-actions button { flex: 1; }
+    .auth-actions .secondary {
+      background: var(--bg-main); color: var(--accent); border: 1px solid var(--rule);
+    }
+    .auth-actions .secondary:hover { background: var(--bg-soft); border-color: var(--accent); }
+    .auth-forgot {
+      display: block; margin-top: var(--space-2); font-size: 0.85em; color: var(--ink-faint);
+      background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0;
+    }
+    .auth-forgot:hover { color: var(--accent); }
+    .login-wrap input[type="password"] {
+      width: 100%; font: inherit; padding: 0.6em 0.8em;
+      border: 1px solid var(--bg-card-hi); border-radius: 6px;
+      background: var(--bg-main); color: var(--ink-deep);
+    }
+    .login-wrap input[type="password"]:focus {
+      outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+  </style>
 </head>
 <body class="account-page">
   <main class="login-wrap">
     <div class="site-return"><a href="/" class="wordmark">Sam Davis<span class="accent">.</span></a></div>
     <h1 class="serif">Sign in to your account</h1>
-    <p class="subtitle">We'll email you a link. No password needed.</p>
-    <form id="login-form" class="lead-capture-card">
-      <input type="email" name="email" id="login-email" required placeholder="your@email.com" autocomplete="email">
-      <button type="submit" class="cta">Send sign-in link →</button>
-      <p class="status" id="login-status" hidden></p>
+    <p class="subtitle" id="auth-subtitle">Use Google, or an email and password.</p>
+
+    <a class="auth-google" href="/api/auth/google/start">
+      <svg viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.71-1.57 2.68-3.89 2.68-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>
+      Continue with Google
+    </a>
+
+    <div class="auth-divider">or</div>
+
+    <form id="pw-form" class="lead-capture-card" autocomplete="on">
+      <input type="email" name="email" id="auth-email" required placeholder="your@email.com" autocomplete="email">
+      <input type="password" name="password" id="auth-password" required minlength="10" placeholder="password (10+ characters)" autocomplete="current-password">
+      <div class="auth-actions">
+        <button type="submit" class="cta" data-mode="login">Sign in</button>
+        <button type="button" class="cta secondary" id="auth-register" data-mode="register">Create account</button>
+      </div>
+      <p class="status" id="auth-status" hidden></p>
     </form>
+    <button type="button" class="auth-forgot" id="auth-forgot">Forgot password?</button>
+
     <a href="/" class="login-back">← Back to crads-ai.com</a>
   </main>
+
   <script>
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.currentTarget;
-      const status = document.getElementById('login-status');
-      const email = document.getElementById('login-email').value;
-      status.hidden = false;
-      status.textContent = 'Sending…';
-      try {
-        const r = await fetch('/api/auth/request-link', {
+    (function () {
+      var form = document.getElementById('pw-form');
+      var emailEl = document.getElementById('auth-email');
+      var pwEl = document.getElementById('auth-password');
+      var status = document.getElementById('auth-status');
+      var registerBtn = document.getElementById('auth-register');
+      var forgotBtn = document.getElementById('auth-forgot');
+
+      function show(msg, isError) {
+        status.hidden = false;
+        status.textContent = msg;
+        status.setAttribute('data-kind', isError ? 'error' : 'info');
+      }
+
+      async function post(path, body) {
+        var r = await fetch(path, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email }),
+          body: JSON.stringify(body),
         });
-        const data = await r.json();
-        if (r.ok) {
-          form.style.display = 'none';
-          status.textContent = `Check your inbox — link sent to ${email}. It expires in 15 minutes.`;
-        } else if (r.status === 429) {
-          status.textContent = 'Too many sign-in requests. Try again in 15 minutes.';
-        } else {
-          status.textContent = data.error || 'Something broke. Try again.';
-        }
-      } catch (err) {
-        status.textContent = 'Network error. Try again.';
+        var data = await r.json().catch(function () { return {}; });
+        return { ok: r.ok, status: r.status, data: data };
       }
-    });
+
+      async function submit(mode) {
+        var email = emailEl.value.trim().toLowerCase();
+        var password = pwEl.value;
+        if (!email || password.length < 10) {
+          show('Enter your email and a password of at least 10 characters.', true);
+          return;
+        }
+        show(mode === 'register' ? 'Creating your account…' : 'Signing you in…', false);
+        var path = mode === 'register' ? '/api/auth/register' : '/api/auth/login';
+        var res = await post(path, { email: email, password: password });
+        if (res.ok) {
+          window.location.assign((res.data && res.data.redirect) || '/account/');
+        } else if (res.status === 409) {
+          show('That email already has an account — try “Sign in”, or “Forgot password?”.', true);
+        } else if (res.status === 429) {
+          show('Too many attempts. Wait 15 minutes and try again.', true);
+        } else if (mode === 'login') {
+          show('That email and password didn’t match. Check them, or set a password via “Forgot password?”.', true);
+        } else {
+          show((res.data && res.data.message) || 'Something went wrong. Try again.', true);
+        }
+      }
+
+      form.addEventListener('submit', function (e) { e.preventDefault(); submit('login'); });
+      registerBtn.addEventListener('click', function () { submit('register'); });
+
+      forgotBtn.addEventListener('click', async function () {
+        var email = emailEl.value.trim().toLowerCase();
+        if (!email) { show('Enter your email above first, then tap “Forgot password?”.', true); return; }
+        show('Sending…', false);
+        var res = await post('/api/auth/request-link', { email: email });
+        if (res.ok) {
+          show('If that email has an account, we’ve sent a link to set your password. Check your inbox.', false);
+        } else if (res.status === 429) {
+          show('Too many requests. Wait 15 minutes and try again.', true);
+        } else {
+          show('Couldn’t send that. Try again or email cradsdavis@gmail.com.', true);
+        }
+      });
+
+      // Surface Google callback errors (?error=google).
+      if (/[?&]error=google/.test(location.search)) {
+        show('Google sign-in didn’t complete. Try again, or use email and password.', true);
+      }
+    })();
   </script>
 </body>
 </html>
