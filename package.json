@@ -10,8 +10,8 @@
     "test": "node --test tests/*.test.js"
   },
   "dependencies": {
-    "@upstash/redis": "^1.38.0",
     "googleapis": "~144.0.0",
+    "ioredis": "^5.11.0",
     "jsonwebtoken": "^9.0.3",
     "resend": "~3.0.0",
     "stripe": "~14.0.0"
