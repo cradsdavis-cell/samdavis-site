@@ -2,15 +2,14 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { kv } = require('@vercel/kv');
-const { Resend } = require('resend');
-const { createOrUpdateUser } = require('../lib/createOrUpdateUser');
-const { makeKv } = require('../lib/kv');
-
 require('dotenv').config({ path: path.join(__dirname, '..', '.env.local') });
 
+const { Resend } = require('resend');
+const { createOrUpdateUser } = require('../lib/createOrUpdateUser');
+const { defaultKv } = require('../lib/kv');
+
 const resend = new Resend(process.env.RESEND_API_KEY);
-const kvWrapped = makeKv(kv);
+const kvWrapped = defaultKv();
 
 async function main() {
   const csvPath = path.join(__dirname, 'seed-clients.csv');
@@ -23,12 +22,19 @@ async function main() {
     return obj;
   });
 
+  // For backfill: skip welcome emails. Existing clients shouldn't get
+  // a "Welcome to crads-ai!" email when they've been working with Sam for weeks.
+  // Pass resend=null so createOrUpdateUser's email-send guard short-circuits.
+  // Sam can use /account/admin "Resend welcome magic link" for selective re-sends.
+  const SKIP_WELCOME_EMAIL = true;
+
   for (const row of rows) {
     const { email, name, stripe_customer_id, initial_state, cohort_id } = row;
     if (!email) continue;
     console.log(`Seeding: ${email}`);
     const { created, user } = await createOrUpdateUser({
-      kv: kvWrapped, resend,
+      kv: kvWrapped,
+      resend: SKIP_WELCOME_EMAIL ? null : resend,
       email, name, stripeCustomerId: stripe_customer_id || null,
       sku: 'coaching-block',
       stripeSessionId: null,
@@ -43,7 +49,8 @@ async function main() {
     }
     console.log(`  ${created ? 'created' : 'updated'} — state: ${user.state}`);
   }
-  console.log('\nDone. Welcome magic links sent to new records.');
+  console.log('\nDone. No welcome emails sent (backfill mode). Use /account/admin to send individual magic links.');
+  process.exit(0); // ioredis keeps connection alive otherwise
 }
 
 main().catch(e => { console.error(e); process.exit(1); });
