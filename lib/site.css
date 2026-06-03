@@ -1852,6 +1852,58 @@ a:hover { color: var(--accent-deep); }
   margin: 0 0 var(--space-4);
 }
 
+/* Account <-> site navigation (added 2026-06-03) */
+.site-nav-bar .nav-links a.nav-account {
+  color: var(--accent);
+  border: 1px solid var(--rule);
+}
+.site-nav-bar .nav-links a.nav-account:hover {
+  background: var(--bg-soft);
+  border-color: var(--accent);
+}
+.account-page .site-return {
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+.account-page .site-return a.wordmark {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--ink-deep);
+  letter-spacing: -0.015em;
+  text-decoration: none;
+}
+.account-page .site-return a.wordmark .accent { color: var(--accent); font-style: italic; }
+.account-page .login-back {
+  display: inline-block;
+  margin-top: var(--space-4);
+  font-size: 0.9em;
+  color: var(--ink-faint);
+}
+.account-page .login-back:hover { color: var(--accent); }
+.sidebar-brand {
+  display: block;
+  padding: 0 var(--space-3) var(--space-3);
+  margin-bottom: var(--space-2);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink-deep);
+  text-decoration: none;
+}
+.sidebar-brand:hover { color: var(--accent); }
+.sidebar-brand .accent { color: var(--accent); font-style: italic; }
+.sidebar-brand small {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  font-weight: 400;
+  margin-top: 2px;
+}
+
 .account-page form input[type="email"] {
   width: 100%;
   padding: 12px 14px;

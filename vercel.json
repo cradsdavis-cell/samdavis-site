@@ -2,7 +2,6 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "crons": [
-    { "path": "/api/cron/nurture", "schedule": "0 23 * * *" },
     { "path": "/api/cron/graduate-check", "schedule": "0 23 * * *" }
   ],
   "redirects": [
@@ -10,7 +9,10 @@
       "source": "/book/ea-basic-build",
       "destination": "/book/discovery",
       "permanent": true
-    }
+    },
+    { "source": "/onepager", "destination": "/offer", "permanent": true },
+    { "source": "/build", "destination": "/offer", "permanent": true },
+    { "source": "/build-onepager", "destination": "/offer", "permanent": true }
   ],
   "rewrites": [
     { "source": "/account/login", "destination": "/account/login.html" },
