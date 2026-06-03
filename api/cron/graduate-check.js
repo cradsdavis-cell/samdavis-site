@@ -14,7 +14,9 @@ module.exports = async function handler(req, res) {
 
   for (const user of users) {
     if (user.state !== 'post-s4-decision') continue;
+    if (!user.state_updated_at) continue;
     const updated = new Date(user.state_updated_at);
+    if (isNaN(updated.getTime())) continue;
     const daysSince = Math.floor((now - updated) / 86400000);
     if (daysSince < 14) continue;
     // Check if they have an active retainer engagement
