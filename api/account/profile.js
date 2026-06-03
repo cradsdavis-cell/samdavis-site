@@ -33,7 +33,7 @@ module.exports = async function handler(req, res) {
     <section class="panel">
       <div class="panel-title">Your context worksheet</div>
       ${worksheetHtml}
-      <p class="panel-content"><a href="/account/profile/edit">Edit answers</a> (coming in Phase 6)</p>
+      <p class="panel-content"><a href="/account/profile/edit" class="cta-secondary">Edit answers</a></p>
     </section>
   `;
 
