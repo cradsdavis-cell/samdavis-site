@@ -2,7 +2,8 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "crons": [
-    { "path": "/api/cron/nurture", "schedule": "0 23 * * *" }
+    { "path": "/api/cron/nurture", "schedule": "0 23 * * *" },
+    { "path": "/api/cron/graduate-check", "schedule": "0 23 * * *" }
   ],
   "redirects": [
     {
