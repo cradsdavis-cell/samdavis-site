@@ -22,7 +22,9 @@
     { "source": "/account/subscription", "destination": "/api/account/subscription" },
     { "source": "/account/profile", "destination": "/api/account/profile" },
     { "source": "/account/profile/edit", "destination": "/api/account/profile-edit" },
-    { "source": "/account/onboarding", "destination": "/api/account/onboarding" }
+    { "source": "/account/onboarding", "destination": "/api/account/onboarding" },
+    { "source": "/account/admin", "destination": "/api/account/admin" },
+    { "source": "/account/admin/", "destination": "/api/account/admin" }
   ],
   "headers": [
     {

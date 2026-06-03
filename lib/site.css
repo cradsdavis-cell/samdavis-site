@@ -2130,3 +2130,19 @@ a:hover { color: var(--accent-deep); }
   border-radius: 4px; cursor: pointer; margin-top: var(--space-1); font-size: 0.9em;
 }
 .dashboard-main .cal-embed-wrap { background: var(--bg-soft); border-radius: 4px; padding: var(--space-2); margin: var(--space-3) 0; }
+
+.dashboard-main .admin-filter { margin-bottom: var(--space-3); }
+.dashboard-main .admin-table { width: 100%; border-collapse: collapse; }
+.dashboard-main .admin-table th, .dashboard-main .admin-table td {
+  text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule); font-size: 0.95em;
+}
+.dashboard-main .admin-table th {
+  font-family: var(--sans); color: var(--ink-soft); font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.dashboard-main .state-badge {
+  display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.8em; background: var(--bg-soft); color: var(--ink-deep);
+}
+.dashboard-main .state-badge.state-onboarding-incomplete { background: #FEE; }
+.dashboard-main .state-badge.state-pre-s1 { background: var(--bg-card); }
+.dashboard-main .state-badge.state-retainer-active { background: #DFE5C2; color: var(--accent-deep); }
+.dashboard-main .state-badge.state-graduated { background: var(--bg-soft); color: var(--ink-faint); }
