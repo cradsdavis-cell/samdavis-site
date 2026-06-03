@@ -2,7 +2,8 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "crons": [
-    { "path": "/api/cron/nurture", "schedule": "0 23 * * *" }
+    { "path": "/api/cron/nurture", "schedule": "0 23 * * *" },
+    { "path": "/api/cron/graduate-check", "schedule": "0 23 * * *" }
   ],
   "redirects": [
     {
@@ -10,6 +11,21 @@
       "destination": "/book/discovery",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    { "source": "/account/login", "destination": "/account/login.html" },
+    { "source": "/account/verify", "destination": "/account/verify.html" },
+    { "source": "/account", "destination": "/api/account" },
+    { "source": "/account/", "destination": "/api/account" },
+    { "source": "/account/sessions", "destination": "/api/account/sessions" },
+    { "source": "/account/packs", "destination": "/api/account/packs" },
+    { "source": "/account/subscription", "destination": "/api/account/subscription" },
+    { "source": "/account/profile", "destination": "/api/account/profile" },
+    { "source": "/account/profile/edit", "destination": "/api/account/profile-edit" },
+    { "source": "/account/onboarding", "destination": "/api/account/onboarding" },
+    { "source": "/account/admin", "destination": "/api/account/admin" },
+    { "source": "/account/admin/", "destination": "/api/account/admin" },
+    { "source": "/account/admin/client", "destination": "/api/account/admin/client" }
   ],
   "headers": [
     {

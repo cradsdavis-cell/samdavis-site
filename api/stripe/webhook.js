@@ -6,7 +6,9 @@
 
 const { constructWebhookEvent, refundSession, retrievePaymentIntent, updatePaymentIntentMetadata } = require('../../lib/stripe');
 const { findBookingByStripeSession, createBooking } = require('../../lib/cal');
-const { sendRaceLossEmail, sendSamAlert } = require('../../lib/email');
+const { sendRaceLossEmail, sendSamAlert, getResendClient } = require('../../lib/email');
+const { createOrUpdateUser } = require('../../lib/createOrUpdateUser');
+const { defaultKv } = require('../../lib/kv');
 
 // Disable Vercel body parsing — Stripe needs raw bytes for signature verification
 module.exports.config = { api: { bodyParser: false } };
@@ -25,6 +27,31 @@ async function readRawBody(req) {
 
 async function safeAlert(subject, body) {
   try { await sendSamAlert({ subject, body }); } catch (_) { /* swallow; never let alert failure mask the real error */ }
+}
+
+// Best-effort user-record create/update + welcome magic link send. Never fails the webhook —
+// Stripe must still 200 even if KV write or welcome-email send fails (Sam can recover manually).
+async function safeCreateOrUpdateUser({ session, sku, customerEmail }) {
+  try {
+    const cohortId = (session.metadata && session.metadata.cohort) || null;
+    await createOrUpdateUser({
+      kv: defaultKv(),
+      resend: getResendClient(),
+      email: customerEmail,
+      name: session.customer_details && session.customer_details.name,
+      stripeCustomerId: session.customer,
+      sku,
+      stripeSessionId: session.id,
+      stripeSubscriptionId: session.subscription || null,
+      cohortId,
+    });
+  } catch (userErr) {
+    console.error('createOrUpdateUser failed:', userErr && userErr.message);
+    await safeAlert(
+      `createOrUpdateUser failed for ${customerEmail}`,
+      `User record create/update failed for ${customerEmail} (session ${session.id}, sku ${sku}): ${userErr && userErr.message}. Booking/payment unaffected; manually create the account if needed.`,
+    );
+  }
 }
 
 module.exports = async (req, res) => {
@@ -78,6 +105,7 @@ module.exports = async (req, res) => {
       `Stripe payment landed (no-Cal SKU) — ${sku}`,
       `Customer ${customerEmail} (${name}) paid for ${sku}. Stripe session: ${stripeSessionId}. No Cal booking created (cohort/retainer flow). Confirm onboarding manually.`,
     );
+    await safeCreateOrUpdateUser({ session, sku, customerEmail });
     res.status(200).json({ received: true, skipped_cal: true });
     return;
   }
@@ -123,6 +151,7 @@ module.exports = async (req, res) => {
     if (paymentIntentId && bookingId) {
       try { await updatePaymentIntentMetadata(paymentIntentId, { cal_booking_id: String(bookingId) }); } catch (_) {}
     }
+    await safeCreateOrUpdateUser({ session, sku, customerEmail });
     res.status(200).json({ received: true, booked: true });
     return;
   }

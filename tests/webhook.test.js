@@ -20,6 +20,18 @@ require.cache[require.resolve('../lib/email')] = {
   exports: {
     sendRaceLossEmail: (args) => emailStub.sendRaceLossEmail(args),
     sendSamAlert: (args) => emailStub.sendSamAlert(args),
+    getResendClient: () => ({ emails: { send: async () => ({ id: 'em-stub' }) } }),
+  },
+};
+require.cache[require.resolve('../lib/createOrUpdateUser')] = {
+  exports: {
+    createOrUpdateUser: async () => ({ created: false, user: null }),
+  },
+};
+require.cache[require.resolve('../lib/kv')] = {
+  exports: {
+    defaultKv: () => ({}),
+    makeKv: () => ({}),
   },
 };
 
