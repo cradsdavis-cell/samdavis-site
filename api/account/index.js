@@ -2,6 +2,8 @@
 const { requireAuth, renderShell } = require('../../lib/account');
 const { isAdmin } = require('../../lib/auth');
 const { defaultKv } = require('../../lib/kv');
+const { renderHeroCard } = require('../../lib/journeyTracker');
+const { fetchNextSession } = require('../../lib/calBookings');
 
 module.exports = async function handler(req, res) {
   const user = await requireAuth({ kv: defaultKv(), req, res });
@@ -12,13 +14,12 @@ module.exports = async function handler(req, res) {
     return res.redirect(302, '/account/onboarding');
   }
 
+  const nextSession = await fetchNextSession(user.email).catch(() => null);
+  const heroHtml = renderHeroCard({ user, nextSession });
+
   const mainContent = `
     <h1 class="serif">Home</h1>
-    <div class="hero-card">
-      <div class="label">Right now</div>
-      <div class="title">${user.state}</div>
-      <div class="meta">(Hero card content per state lands in Phase 5)</div>
-    </div>
+    ${heroHtml}
     <section class="panel">
       <div class="panel-title">Quick links</div>
       <div class="panel-content">
