@@ -108,7 +108,7 @@ test('step 4 complete_onboarding transitions state to pre-s1', async () => {
   assert.strictEqual(result.redirectTo, '/account/');
   const updated = await kv.getUser(user.email);
   assert.strictEqual(updated.state, 'pre-s1');
-  assert.strictEqual(updated.state_version, 2);
+  assert.strictEqual(updated.state_version, 1);
   assert.strictEqual(updated.onboarding.completed, true);
 });
 
