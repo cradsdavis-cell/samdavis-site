@@ -7,19 +7,19 @@ The public site for Sam Davis — AI coach & systems builder.
 - `/` — landing page (index.html)
 - `/overview/` — product demo deck (what the EA is)
 - `/offer/` — offer deck (how we work together)
+- `/account/` — client portal (auth + onboarding + packs)
 
 ## Hosting
 
-Deployed via GitHub Pages. Once Pages is enabled in repo settings (Source: Deploy from branch, main / root), the site is live at:
+Deployed via **Vercel** (static pages + serverless functions in `/api`). The custom domain is set in `CNAME` (crads-ai.com).
 
-- `https://cradsdavis-cell.github.io/samdavis-site/`
-- Or the custom domain set in `CNAME`.
+## Accounts / auth
 
-## Custom domain (when registered)
+Google SSO + email/password, with magic-link as the hidden password-reset channel (`lib/auth.js`, `lib/passwordAuth.js`, `lib/googleAuth.js`). Required Vercel **Production** env vars:
 
-1. Register domain (e.g. samdavis.ai).
-2. Edit `CNAME` in this repo to contain the domain.
-3. At the registrar, add DNS records:
-   - Apex (`samdavis.ai`): four A records → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
-   - www CNAME: `cradsdavis-cell.github.io.`
-4. In repo Settings → Pages, set custom domain + enable HTTPS (wait ~15 min for cert).
+- `SESSION_SECRET` (32+ chars)
+- `REDIS_URL`
+- `RESEND_API_KEY`, `RESEND_FROM_EMAIL`
+- `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET` (Google OAuth web client; redirect URI `https://crads-ai.com/api/auth/google/callback`)
+
+Changing env vars requires a redeploy to take effect.
