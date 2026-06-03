@@ -21,7 +21,7 @@ module.exports = async function handler(req, res) {
 
   const token = generateMagicLinkToken();
   const expiresAt = new Date(Date.now() + TOKEN_TTL_SECONDS * 1000).toISOString();
-  await kv.setAuthToken(token, { email, expires_at: expiresAt, created_at: new Date().toISOString() }, TOKEN_TTL_SECONDS);
+  await kv.setAuthToken(token, { email, purpose: 'verify', expires_at: expiresAt, created_at: new Date().toISOString() }, TOKEN_TTL_SECONDS);
 
   const baseUrl = process.env.BASE_URL || 'https://crads-ai.com';
   await resend.emails.send({

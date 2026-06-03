@@ -38,7 +38,7 @@ test('formatSessionCookie produces httpOnly + secure + sameSite=Lax + 7-day Max-
   assert.match(cookie, /HttpOnly/);
   assert.match(cookie, /Secure/);
   assert.match(cookie, /SameSite=Lax/);
-  assert.match(cookie, /Max-Age=604800/);
+  assert.match(cookie, /Max-Age=5184000/);
   assert.match(cookie, /Path=\//);
 });
 

@@ -25,7 +25,8 @@ module.exports = async function handler(req, res) {
       <div class="panel-content">
         <a href="/account/sessions">Sessions</a> ·
         <a href="/account/packs">Packs</a> ·
-        <a href="/account/subscription">Subscription</a>
+        <a href="/account/subscription">Subscription</a> ·
+        <a href="/account/set-password">Password</a>
       </div>
     </section>
   `;

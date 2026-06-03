@@ -122,7 +122,7 @@ test('POST known email returns 200 + email sent + token stored', async () => {
   assert.strictEqual(res.statusCode, 200);
   assert.strictEqual(sends.length, 1);
   assert.strictEqual(sends[0].to, 'alex@example.com');
-  assert.ok(sends[0].html.includes('/account/verify?token='));
+  assert.ok(sends[0].html.includes('/account/set-password?token='));
   const tokenKeys = Array.from(kvClient._store.keys()).filter(k => k.startsWith('auth_token:'));
   assert.strictEqual(tokenKeys.length, 1);
 });
