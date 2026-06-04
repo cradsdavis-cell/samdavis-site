@@ -28,7 +28,7 @@ module.exports = async function handler(req, res) {
     from: process.env.RESEND_FROM_EMAIL,
     to: email,
     subject: 'Sign in to your crads-ai account (resent by Sam)',
-    html: `<p>Hi,</p><p>Here's a fresh sign-in link: <a href="${baseUrl}/account/verify?token=${token}">${baseUrl}/account/verify?token=${token}</a></p><p>Expires in 15 minutes.</p><p>— Sam</p>`,
+    html: `<p>Hi,</p><p>Here's a fresh sign-in link: <a href="${baseUrl}/api/auth/verify-token?token=${token}">${baseUrl}/api/auth/verify-token?token=${token}</a></p><p>Expires in 15 minutes.</p><p>— Sam</p>`,
   });
 
   return res.redirect(302, `/account/admin/client?email=${encodeURIComponent(email)}&resent=1`);
