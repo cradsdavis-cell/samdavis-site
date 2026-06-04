@@ -97,7 +97,24 @@ body {
 .slot-day { margin-top: 1.5rem; }
 .slot-day-label { font-weight: 600; margin-bottom: 0.5rem; color: var(--ink-soft); }
 .field { margin-top: 1rem; }
-.field label { display: block; font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--ink-soft); }
-.field input { width: 100%; padding: 0.6rem; border: 1px solid var(--rule); border-radius: 4px; font-size: 1rem; font-family: var(--sans); }
+.field label { display: block; font-size: 0.95rem; margin-bottom: 0.35rem; color: var(--ink-soft); }
+/* Canonical text control — matches the unified form style in lib/site.css */
+.field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.6em 0.85em;
+  border: 1px solid var(--bg-card-hi);
+  border-radius: 6px;
+  background: var(--bg-main);
+  color: var(--ink-deep);
+  font-size: 1rem;
+  font-family: var(--sans);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.field input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
 .slot-loading { text-align: center; color: var(--ink-soft); padding: 2rem; }
 .slot-error { color: #8B2A1F; padding: 1rem; background: #F4E4DE; border-radius: 4px; }
