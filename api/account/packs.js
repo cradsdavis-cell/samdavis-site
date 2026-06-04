@@ -15,13 +15,26 @@ const PACK_VISIBILITY = {
   'cohort-active': ['cohort'],
 };
 
+// Pack links are resolved at request time from env vars (Overleaf read-only / Drive
+// view links Sam sets in Vercel) — NOT hardcoded file paths. The previous static
+// /install-guide.pdf etc. 404'd because those PDFs never existed; packs are delivered
+// per-client via Overleaf/Drive. When a pack's URL isn't configured we degrade
+// gracefully (a "Sam shares this with you" note) instead of rendering a dead button —
+// the same way the cohort pack already handles a null URL.
 const PACK_META = {
-  '1a-preview': { title: 'Pack #1a — preview', desc: 'Karpathy + Nate Herk prompts (preview — Sam walks you through these in S1).', href: '/install-guide.pdf' },
-  '1a': { title: 'Pack #1a — sandbox prompts', desc: 'Karpathy + Nate Herk prompts to fire in your sandbox between sessions.', href: '/install-guide.pdf' },
-  '1b': { title: 'Pack #1b — flower exercise + EA build', desc: 'Restructure your stack + Parachute flower exercise.', href: '/pack-1b.pdf' },
-  '2': { title: 'Pack #2 — integration + advanced', desc: 'MCP connections + advanced workflows.', href: '/pack-2.pdf' },
-  'cohort': { title: 'Cohort Pack', desc: 'Shared cohort pack.', href: null },
+  '1a-preview': { title: 'Pack #1a — preview', desc: 'Karpathy + Nate Herk prompts (preview — Sam walks you through these in S1).', env: 'PACK_1A_URL' },
+  '1a': { title: 'Pack #1a — sandbox prompts', desc: 'Karpathy + Nate Herk prompts to fire in your sandbox between sessions.', env: 'PACK_1A_URL' },
+  '1b': { title: 'Pack #1b — flower exercise + EA build', desc: 'Restructure your stack + Parachute flower exercise.', env: 'PACK_1B_URL' },
+  '2': { title: 'Pack #2 — integration + advanced', desc: 'MCP connections + advanced workflows.', env: 'PACK_2_URL' },
+  'cohort': { title: 'Cohort Pack', desc: 'Shared cohort pack.', env: null },
 };
+
+// Only allow http(s) links through to the href to avoid javascript:/data: URIs sneaking
+// in from a misconfigured env var or cohort record, and escape the attribute value.
+function safeHref(url) {
+  if (typeof url !== 'string' || !/^https?:\/\//i.test(url.trim())) return null;
+  return url.trim().replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 
 module.exports = async function handler(req, res) {
   const kv = defaultKv();
@@ -33,16 +46,20 @@ module.exports = async function handler(req, res) {
   for (const key of visible) {
     const meta = PACK_META[key];
     if (!meta) continue;
-    let href = meta.href;
+    let rawHref = meta.env ? process.env[meta.env] : null;
     if (key === 'cohort' && user.cohort_id) {
       const cohort = await kv.getCohort(user.cohort_id);
-      href = cohort && cohort.pack_overleaf_url;
+      rawHref = cohort && cohort.pack_overleaf_url;
     }
+    const href = safeHref(rawHref);
+    const action = href
+      ? `<a href="${href}" class="cta" target="_blank" rel="noopener">Open →</a>`
+      : `<p class="panel-content" style="opacity:.75;font-style:italic;">Sam shares this with you directly — it'll be in your Drive folder, or ask in your session.</p>`;
     packsHtml += `
       <section class="panel">
         <div class="panel-title">${meta.title}</div>
         <div class="panel-content">${meta.desc}</div>
-        ${href ? `<a href="${href}" class="cta" target="_blank" rel="noopener">Open →</a>` : ''}
+        ${action}
       </section>
     `;
   }
