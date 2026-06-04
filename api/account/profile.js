@@ -16,7 +16,7 @@ module.exports = async function handler(req, res) {
     <dl class="worksheet">
       <dt>Business</dt><dd>${escapeHTML(cw.business || '—')}</dd>
       <dt>Current pain</dt><dd>${escapeHTML(cw.current_pain || '—')}</dd>
-      <dt>Tools</dt><dd>${(cw.current_tools || []).join(', ') || '—'}</dd>
+      <dt>Tools</dt><dd>${(cw.current_tools || []).map(escapeHTML).join(', ') || '—'}</dd>
       <dt>Desired outcome</dt><dd>${escapeHTML(cw.desired_outcome || '—')}</dd>
       <dt>Nervous about</dt><dd>${escapeHTML(cw.nervous_about || '—')}</dd>
       <dt>Technical level</dt><dd>${escapeHTML(cw.technical_level || '—')}</dd>

@@ -81,7 +81,7 @@ function renderStep2(user) {
         ${item('obsidian', 'Obsidian')}
         ${item('cal_app', 'Cal.com app (optional)')}
         ${item('slack', 'Slack invite (if cohort or retainer)')}
-        <p><a href="#" id="stuck-link">Stuck on installation?</a></p>
+        <p><a href="mailto:cradsdavis@gmail.com?subject=Stuck%20on%20installation">Stuck on installation? Email Sam.</a></p>
         <button type="submit" class="cta-secondary">Save progress</button>
       </form>
     </section>
