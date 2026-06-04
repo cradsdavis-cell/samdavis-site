@@ -291,7 +291,8 @@ a:hover { color: var(--accent-deep); }
   html, body { font-size: 16px; }
   .wrap { padding: 0 var(--side-pad-mobile); }
   .site-nav-bar { padding: var(--space-2) var(--side-pad-mobile); flex-wrap: wrap; }
-  .site-nav-bar .nav-links { font-size: 13px; gap: 4px; }
+  .site-nav-bar .nav-links { font-size: 13px; gap: 2px 4px; flex-wrap: wrap; }
+  .site-nav-bar .nav-links a { padding: 6px 7px; }
   .section { padding: 56px 0; }
   .cta-primary { width: 100%; text-align: center; padding: 16px 24px; }
 }

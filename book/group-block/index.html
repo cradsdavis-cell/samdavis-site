@@ -185,18 +185,21 @@
       var btn = document.getElementById('gb-submit');
       var nameInput = document.getElementById('gb-name');
       var emailInput = document.getElementById('gb-email');
-      var planRadios = form.querySelectorAll('input[name="plan"]');
+      // The .plan-toggle radios live OUTSIDE #group-book-form, so query the document,
+      // not the form — otherwise the pay-in-4 selection is never seen and checkout
+      // always falls back to pay-in-full.
+      var planRadios = document.querySelectorAll('input[name="plan"]');
 
       // Visual feedback on radio change
       planRadios.forEach(function (r) {
         r.addEventListener('change', function () {
-          form.querySelectorAll('.plan-option').forEach(function (el) { el.classList.remove('is-selected'); });
+          document.querySelectorAll('.plan-option').forEach(function (el) { el.classList.remove('is-selected'); });
           r.closest('.plan-option').classList.add('is-selected');
         });
       });
 
       function selectedPlan() {
-        var checked = form.querySelector('input[name="plan"]:checked');
+        var checked = document.querySelector('input[name="plan"]:checked');
         return checked ? checked.value : 'full';
       }
 
