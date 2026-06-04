@@ -2199,3 +2199,125 @@ a:hover { color: var(--accent-deep); }
 .dashboard-main .state-badge.state-pre-s1 { background: var(--bg-card); }
 .dashboard-main .state-badge.state-retainer-active { background: #DFE5C2; color: var(--accent-deep); }
 .dashboard-main .state-badge.state-graduated { background: var(--bg-soft); color: var(--ink-faint); }
+
+/* ───────────────────────────────────────────────────────────────
+   Unified form controls — single source of truth (2026-06-04)
+   Consolidates the previously-divergent input / button / label /
+   status styles across login, set-password, booking, group,
+   onboarding, profile and admin forms so every form matches.
+   Canonical text control = 6px radius, --bg-card-hi border,
+   --bg-main bg, accent focus-glow. Canonical primary button =
+   accent fill, 6px, accent-deep hover, visible focus ring.
+   New forms can use .form-control / .form-button / .form-label /
+   .form-status; the context selectors retrofit existing markup.
+   These rules are intentionally LAST in the file so they win over
+   the older scattered definitions by source order.
+   ─────────────────────────────────────────────────────────────── */
+.form-control,
+.account-page form input[type="text"],
+.account-page form input[type="email"],
+.account-page form input[type="password"],
+.account-page form textarea,
+.dashboard-main form input[type="text"],
+.dashboard-main form input[type="email"],
+.dashboard-main form input[type="password"],
+.dashboard-main form textarea,
+.dashboard-main form select {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  padding: 0.6em 0.85em;
+  border: 1px solid var(--bg-card-hi);
+  border-radius: 6px;
+  background: var(--bg-main);
+  color: var(--ink-deep);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.form-control:focus,
+.account-page form input:focus,
+.account-page form textarea:focus,
+.dashboard-main form input:focus,
+.dashboard-main form textarea:focus,
+.dashboard-main form select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.form-control::placeholder,
+.account-page form input::placeholder,
+.dashboard-main form input::placeholder { color: var(--ink-faint); }
+
+/* primary form button */
+.form-button,
+.account-page form button.cta,
+.dashboard-main form button.cta,
+.dashboard-main .step-content .cta {
+  display: inline-block;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.7em 1.2em;
+  background: var(--accent);
+  color: var(--bg-main);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+.form-button:hover:not(:disabled),
+.account-page form button.cta:hover:not(:disabled),
+.dashboard-main form button.cta:hover:not(:disabled),
+.dashboard-main .step-content .cta:hover { background: var(--accent-deep); }
+.form-button:disabled,
+.account-page form button:disabled,
+.dashboard-main form button:disabled { opacity: 0.6; cursor: not-allowed; }
+.form-button:focus-visible,
+.account-page form button.cta:focus-visible,
+.dashboard-main form button.cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* secondary form button — align radius across contexts */
+.dashboard-main .step-content .cta-secondary,
+.dashboard-main form .cta-secondary { border-radius: 6px; }
+
+/* direct field labels (leaves inline checkbox/radio rows intact) */
+.dashboard-main form > label,
+.account-page form > label { display: block; margin: var(--space-2) 0 0.35em; color: var(--ink-deep); font-size: 0.95em; }
+
+/* status / inline messages */
+.form-status,
+.dashboard-main form .status { font-size: 0.9em; color: var(--ink-soft); margin: var(--space-1) 0 0; }
+.form-status[data-kind="error"],
+.dashboard-main form .status[data-kind="error"] { color: #a3401c; }
+
+/* keep autofilled fields on-brand — Chrome/Safari paint them light-blue by default */
+.form-control:-webkit-autofill,
+.account-page form input:-webkit-autofill,
+.dashboard-main form input:-webkit-autofill,
+.field input:-webkit-autofill,
+.group-book-form input:-webkit-autofill,
+.lead-capture-card input:-webkit-autofill,
+.group-interest-form input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 100px var(--bg-main) inset;
+  -webkit-text-fill-color: var(--ink-deep);
+  caret-color: var(--ink-deep);
+}
+
+/* secondary form button — outlined, used for Cancel / Save notes / Resend etc. */
+.form-button-secondary,
+.dashboard-main form .cta-secondary,
+.account-page form .cta-secondary {
+  display: inline-block;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.55em 1em;
+  background: var(--bg-main);
+  color: var(--accent);
+  border: 1px solid var(--bg-card-hi);
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.form-button-secondary:hover,
+.dashboard-main form .cta-secondary:hover,
+.account-page form .cta-secondary:hover { border-color: var(--accent); color: var(--accent-deep); }
