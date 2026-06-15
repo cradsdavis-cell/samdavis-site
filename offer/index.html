@@ -279,7 +279,7 @@
     <div class="decision-helper reveal-on-scroll">
       <h2>Which one's right for you?</h2>
       <ul>
-        <li><strong>Single Session —</strong> focused 60 min on one specific pain.</li>
+        <li><strong>Single Session —</strong> focused 90 min on one specific pain.</li>
         <li><strong>Group Block —</strong> build alongside 2 other founders at a lower price.</li>
         <li><strong>Coaching Block —</strong> 4 sessions of 1:1, deep build, full personalised pack.</li>
         <li><strong>Continuation Retainer —</strong> already a client, want to keep going.</li>
@@ -302,10 +302,10 @@
       <!-- Single Session — no pay-in-4 -->
       <article class="rung" data-sku="single-session">
         <p class="rung-name">Single Session</p>
-        <p class="rung-meta">60 min · 1:1</p>
+        <p class="rung-meta">90 min · 1:1</p>
         <p class="price" data-upfront="A$300" data-pay4="A$300">A$300</p>
         <p class="price-detail" data-upfront="" data-pay4="(no instalment plan on this one)"></p>
-        <p class="rung-pitch">One focused hour on a specific pain. Try-before-the-block.</p>
+        <p class="rung-pitch">One focused session on a specific pain. Try-before-the-block.</p>
         <a class="cta" href="/book/single-session" data-base-href="/book/single-session">Book →</a>
       </article>
 
@@ -324,7 +324,7 @@
       <article class="rung featured" data-sku="coaching-block">
         <span class="rung-badge">★ Most popular</span>
         <p class="rung-name">Coaching Block</p>
-        <p class="rung-meta">4 × 60 min · 1:1</p>
+        <p class="rung-meta">4 × 90 min · 1:1</p>
         <p class="price" data-upfront="A$1,000" data-pay4="A$1,100">A$1,000</p>
         <p class="price-detail" data-upfront="Full personalised pack between sessions" data-pay4="4 × A$275 — last session free">Full personalised pack between sessions</p>
         <p class="rung-pitch">Four sessions of deep 1:1 build. Full pack between each session. The standard way in.</p>
@@ -334,8 +334,8 @@
       <!-- Continuation Retainer — no pay-in-4 -->
       <article class="rung" data-sku="continuation-retainer">
         <p class="rung-name">Continuation Retainer</p>
-        <p class="rung-meta">2 × 60 min/mo + async Slack</p>
-        <p class="price" data-upfront="A$750" data-pay4="A$750"><span data-price-value>A$750</span><span class="price-suffix">/mo</span></p>
+        <p class="rung-meta">2 × 90 min/mo + async Slack</p>
+        <p class="price" data-upfront="A$650" data-pay4="A$650"><span data-price-value>A$650</span><span class="price-suffix">/mo</span></p>
         <p class="price-detail" data-upfront="Monthly · cancel anytime" data-pay4="(monthly subscription — no instalment plan)">Monthly · cancel anytime</p>
         <p class="rung-pitch">For existing clients who want to keep building. Default post-Block continuation.</p>
         <a class="cta" href="/book/discovery" data-base-href="/book/discovery">Talk to Sam →</a>
@@ -389,10 +389,8 @@
           if (valueSpan) {
             valueSpan.textContent = newPrice;
           } else {
-            // Reset and re-render (no suffix case)
             priceEl.textContent = newPrice;
           }
-          // Re-append suffix span if it existed
           if (suffixSpan && !priceEl.contains(suffixSpan)) {
             priceEl.appendChild(suffixSpan);
           }
@@ -416,7 +414,6 @@
     toggle.addEventListener('change', function () {
       applyMode(toggle.checked);
     });
-    // Allow clicking the labels to toggle too
     labelUpfront.addEventListener('click', function () {
       toggle.checked = false; applyMode(false);
     });
