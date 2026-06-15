@@ -38,7 +38,7 @@ test('post-s4-decision hero offers retainer', () => {
   const user = { state: 'post-s4-decision', email: 'a@b.com' };
   const html = renderHeroCard({ user, nextSession: null });
   assert.match(html, /Retainer|retainer/);
-  assert.match(html, /\$600/);
+  assert.match(html, /\$750/);
 });
 
 test('retainer-active hero shows monthly cadence', () => {
