@@ -46,7 +46,7 @@ function renderStep({ step, user }) {
 function renderStep1() {
   return `
     <h2 class="serif">Welcome to your first 4 sessions.</h2>
-    <p>Over the next 4 weeks we'll move through 4 sessions of about 60 minutes each, with a couple of hours of self-paced work between each.</p>
+    <p>Over the next 4 weeks we'll move through 4 sessions of about 90 minutes each, with a couple of hours of self-paced work between each.</p>
     <p>The arc: get the stack working → play in a sandbox → build your first real workflows → leave with the confidence to keep building on your own.</p>
     <p>This onboarding takes about 15 minutes. Three more steps after this one. Let's go.</p>
     <form method="POST" action="/api/account/onboarding-step">
