@@ -389,8 +389,10 @@
           if (valueSpan) {
             valueSpan.textContent = newPrice;
           } else {
+            // Reset and re-render (no suffix case)
             priceEl.textContent = newPrice;
           }
+          // Re-append suffix span if it existed
           if (suffixSpan && !priceEl.contains(suffixSpan)) {
             priceEl.appendChild(suffixSpan);
           }
@@ -414,6 +416,7 @@
     toggle.addEventListener('change', function () {
       applyMode(toggle.checked);
     });
+    // Allow clicking the labels to toggle too
     labelUpfront.addEventListener('click', function () {
       toggle.checked = false; applyMode(false);
     });
