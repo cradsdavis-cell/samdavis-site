@@ -3,6 +3,7 @@ const { requireAuth, renderShell } = require('../../lib/account');
 const { isAdmin } = require('../../lib/auth');
 const { defaultKv } = require('../../lib/kv');
 const { fetchUpcomingAndPast } = require('../../lib/calBookings');
+const { renderUpcomingBooking, renderBookCta } = require('../../lib/accountViews');
 
 function escapeHtml(s) {
   return String(s == null ? '' : s)
@@ -32,7 +33,7 @@ module.exports = async function handler(req, res) {
     .catch(() => ({ upcoming: [], past: [], error: true }));
 
   const upcomingHtml = upcoming.length
-    ? `<ul class="panel-content">${upcoming.map(renderBookingItem).join('')}</ul>`
+    ? `<ul class="panel-content">${upcoming.map(renderUpcomingBooking).join('')}</ul>`
     : `<div class="panel-content">No upcoming bookings.</div>`;
 
   const pastHtml = past.length
@@ -45,6 +46,8 @@ module.exports = async function handler(req, res) {
 
   const mainContent = `
     <h1 class="serif">Sessions</h1>
+    <div class="panel-content" style="margin-bottom:1rem;">${renderBookCta()}</div>
+    <p class="book-policy">Reschedule/cancel opens Cal. Policy: &gt;24h notice = full refund or free reschedule; inside 24h = no refund, one reschedule offered.</p>
     <section class="panel">
       <div class="panel-title">Upcoming</div>
       ${upcomingHtml}

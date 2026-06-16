@@ -4,6 +4,7 @@ const { isAdmin } = require('../../lib/auth');
 const { defaultKv } = require('../../lib/kv');
 const { renderHeroCard } = require('../../lib/journeyTracker');
 const { fetchNextSession } = require('../../lib/calBookings');
+const { renderBookCta } = require('../../lib/accountViews');
 
 module.exports = async function handler(req, res) {
   const user = await requireAuth({ kv: defaultKv(), req, res });
@@ -20,6 +21,12 @@ module.exports = async function handler(req, res) {
   const mainContent = `
     <h1 class="serif">Home</h1>
     ${heroHtml}
+    <section class="panel">
+      <div class="panel-title">Book &amp; manage</div>
+      <div class="panel-content">
+        ${renderBookCta()} &nbsp;·&nbsp; <a href="/account/sessions">Your sessions →</a>
+      </div>
+    </section>
     <section class="panel">
       <div class="panel-title">Quick links</div>
       <div class="panel-content">
