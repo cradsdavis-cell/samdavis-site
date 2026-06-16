@@ -29,8 +29,12 @@ module.exports = async function handler(req, res) {
   const user = await requireAuth({ kv: defaultKv(), req, res });
   if (!user) return;
 
-  const { upcoming, past } = await fetchUpcomingAndPast(user.email)
+  const { upcoming, past, error } = await fetchUpcomingAndPast(user.email)
     .catch(() => ({ upcoming: [], past: [], error: true }));
+
+  const errorNote = error
+    ? `<p style="color:#8B2A1F;background:#F4E4DE;padding:0.75rem;border-radius:4px;">Couldn't load your sessions just now — refresh, or email <a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a>.</p>`
+    : '';
 
   const upcomingHtml = upcoming.length
     ? `<ul class="panel-content">${upcoming.map(renderUpcomingBooking).join('')}</ul>`
@@ -48,6 +52,7 @@ module.exports = async function handler(req, res) {
     <h1 class="serif">Sessions</h1>
     <div class="panel-content" style="margin-bottom:1rem;">${renderBookCta()}</div>
     <p class="book-policy">Reschedule/cancel opens Cal. Policy: &gt;24h notice = full refund or free reschedule; inside 24h = no refund, one reschedule offered.</p>
+    ${errorNote}
     <section class="panel">
       <div class="panel-title">Upcoming</div>
       ${upcomingHtml}
