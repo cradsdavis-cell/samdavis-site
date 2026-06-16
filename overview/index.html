@@ -47,7 +47,7 @@
 <nav class="site-nav-bar">
   <a href="/" class="brand">
     <img src="/lib/img/sam-illustration-sm.png" alt="">
-    <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
   </a>
   <div class="nav-links">
     <a href="/">Home</a>
@@ -89,20 +89,20 @@
       <svg viewBox="0 0 1000 430" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Diagram: your scattered tools — email, calendar, notes, chat, docs — wired into one structured context layer that Claude reads and writes, producing drafts in your voice, recall in seconds, and drift it catches before you do.">
         <defs>
           <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0 L10 5 L0 10 z" fill="#8F7530"/>
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/>
           </marker>
           <style>
-            .inp { fill: #F2EEDD; stroke: #B0B490; stroke-width: 1.6; }
-            .inp-t { font-family: var(--sans); font-size: 13px; fill: #6B5F3A; }
-            .brain { fill: #FAF7EE; stroke: #8F7530; stroke-width: 2.2; }
-            .brain-lab { font-family: var(--mono); font-size: 11px; letter-spacing: 1.4px; fill: #6B5624; font-weight: 600; }
-            .chip { fill: #DCE0B6; stroke: none; }
-            .chip-t { font-family: var(--sans); font-size: 10.5px; fill: #3E3418; }
-            .ai { fill: #8F7530; stroke: #6B5624; stroke-width: 2; }
-            .ai-t { font-family: var(--serif); font-size: 17px; fill: #FAF7EE; font-weight: 700; }
-            .out-t { font-family: var(--sans); font-size: 13px; fill: #3E3418; font-weight: 600; }
-            .lk { stroke: #B0B490; stroke-width: 1.8; }
-            .lk-a { stroke: #8F7530; stroke-width: 2; }
+            .inp { fill: var(--bg-soft); stroke: var(--rule); stroke-width: 1.6; }
+            .inp-t { font-family: var(--sans); font-size: 13px; fill: var(--ink-soft); }
+            .brain { fill: var(--bg-main); stroke: var(--ink-deep); stroke-width: 2.2; }
+            .brain-lab { font-family: var(--mono); font-size: 11px; letter-spacing: 1.4px; fill: var(--accent); font-weight: 600; }
+            .chip { fill: var(--bg-card); stroke: none; }
+            .chip-t { font-family: var(--sans); font-size: 10.5px; fill: var(--ink-deep); }
+            .ai { fill: var(--ink-deep); stroke: var(--ink-deep); stroke-width: 2; }
+            .ai-t { font-family: var(--serif); font-size: 17px; fill: var(--bg-main); font-weight: 700; }
+            .out-t { font-family: var(--sans); font-size: 13px; fill: var(--ink-deep); font-weight: 600; }
+            .lk { stroke: var(--ink-faint); stroke-width: 1.8; }
+            .lk-a { stroke: var(--accent); stroke-width: 2; }
           </style>
         </defs>
 
@@ -153,11 +153,11 @@
 
         <!-- outputs -->
         <path d="M789 252 L 789 290" class="lk-a" fill="none" marker-end="url(#ar)"/>
-        <rect x="690" y="296" width="200" height="34" rx="10" class="inp" stroke="#8F7530"/>
+        <rect x="690" y="296" width="200" height="34" rx="10" class="inp" stroke="var(--accent)"/>
         <text x="790" y="318" text-anchor="middle" class="out-t">Drafts in your voice</text>
-        <rect x="690" y="340" width="200" height="34" rx="10" class="inp" stroke="#8F7530"/>
+        <rect x="690" y="340" width="200" height="34" rx="10" class="inp" stroke="var(--accent)"/>
         <text x="790" y="362" text-anchor="middle" class="out-t">Recall in seconds</text>
-        <rect x="690" y="384" width="200" height="34" rx="10" class="inp" stroke="#8F7530"/>
+        <rect x="690" y="384" width="200" height="34" rx="10" class="inp" stroke="var(--accent)"/>
         <text x="790" y="406" text-anchor="middle" class="out-t">Drift it catches first</text>
       </svg>
       <figcaption>Scattered tools and loose context, wired into one brain the AI can read and write.</figcaption>
@@ -274,17 +274,17 @@
       <svg viewBox="0 0 1000 320" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Three stages of trust, drawn as learning to ride a bike: first with training wheels and a hand on the seat with explicit instructions; then finding balance as you let go and hand over more; then riding solo, where it runs and you choose the route.">
         <defs>
           <marker id="hd" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0 L10 5 L0 10 z" fill="#B89B4A"/>
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/>
           </marker>
           <style>
-            .gnd { stroke: #B0B490; stroke-width: 2; stroke-linecap: round; }
-            .frame { stroke: #6B5624; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-            .wheel { stroke: #8F7530; stroke-width: 3; fill: #FAF7EE; }
-            .tw { stroke: #B89B4A; stroke-width: 2.5; fill: #FAF7EE; }
-            .stg { font-family: var(--mono); font-size: 12px; letter-spacing: 1.4px; fill: #8F7530; font-weight: 600; }
-            .cap { font-family: var(--sans); font-size: 13px; fill: #6B5F3A; }
-            .motion { stroke: #B89B4A; stroke-width: 2.5; stroke-linecap: round; }
-            .hand { stroke: #6B5624; stroke-width: 3; fill: none; stroke-linecap: round; }
+            .gnd { stroke: var(--rule); stroke-width: 2; stroke-linecap: round; }
+            .frame { stroke: var(--ink-deep); stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+            .wheel { stroke: var(--ink-deep); stroke-width: 3; fill: var(--bg-main); }
+            .tw { stroke: var(--accent); stroke-width: 2.5; fill: var(--bg-main); }
+            .stg { font-family: var(--mono); font-size: 12px; letter-spacing: 1.4px; fill: var(--accent); font-weight: 600; }
+            .cap { font-family: var(--sans); font-size: 13px; fill: var(--ink-soft); }
+            .motion { stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; }
+            .hand { stroke: var(--ink-deep); stroke-width: 3; fill: none; stroke-linecap: round; }
           </style>
         </defs>
 
@@ -302,7 +302,7 @@
           <circle cx="160" cy="146" r="9" class="tw"/>
           <!-- hand on seat -->
           <path class="hand" d="M122 128 q -22 -6 -34 8"/>
-          <circle cx="86" cy="138" r="4" fill="#6B5624"/>
+          <circle cx="86" cy="138" r="4" fill="var(--ink-deep)"/>
           <text x="165" y="200" text-anchor="middle" class="stg">STAGE 1</text>
           <text x="165" y="224" text-anchor="middle" class="cap">We hold the seat.</text>
           <text x="165" y="242" text-anchor="middle" class="cap">Explicit instructions,</text>
@@ -321,7 +321,7 @@
           <line x1="473" y1="105" x2="455" y2="98" class="frame"/>
           <!-- hand lifting off (dashed) -->
           <path class="hand" d="M477 128 q -26 -14 -40 0" stroke-dasharray="4 5"/>
-          <circle cx="436" cy="124" r="4" fill="#B89B4A"/>
+          <circle cx="436" cy="124" r="4" fill="var(--accent)"/>
           <text x="510" y="200" text-anchor="middle" class="stg">STAGE 2</text>
           <text x="510" y="224" text-anchor="middle" class="cap">We let go a little.</text>
           <text x="510" y="242" text-anchor="middle" class="cap">Build trust,</text>
@@ -428,7 +428,7 @@
 </main>
 
 <footer class="site-footer wrap">
-  <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+  <span class="wordmark">crads-<span class="accent">ai</span></span>
   <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
   <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
   <div>+61 0493 302 154</div>

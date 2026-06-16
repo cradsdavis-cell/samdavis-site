@@ -12,13 +12,17 @@
 <style>
   .hero {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.15fr 0.85fr;
     align-items: center;
     gap: var(--space-5);
-    padding-top: var(--space-7);
-    padding-bottom: var(--space-6);
+    padding: var(--space-7) var(--space-6);
+    margin-top: var(--space-4);
+    background: linear-gradient(104deg, var(--bg-main) 0%, var(--bg-main) 44%, #CBD8C1 60%, #587862 80%, #3C5544 100%);
+    border-radius: 20px;
   }
-  .hero-illustration img { width: 100%; max-width: 480px; height: auto; }
+  .hero-copy { order: 1; }
+  .hero-illustration { order: 2; display: flex; justify-content: center; }
+  .hero-illustration img { width: 100%; max-width: 280px; height: auto; }
   .hero-copy h1 { margin: var(--space-3) 0; }
   .hero-copy .lede { margin-bottom: var(--space-4); }
   .hero-ctas { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); flex-wrap: wrap; }
@@ -32,9 +36,14 @@
   .who-list li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
   .who-list li strong { color: var(--ink-deep); }
 
+  .home-diagram { max-width: 900px; margin: var(--space-5) auto var(--space-2); }
+  .home-diagram svg { width: 100%; height: auto; display: block; }
+  .home-diagram figcaption { text-align: center; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--ink-faint); margin-top: var(--space-2); }
+
   @media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; padding-top: var(--space-5); padding-bottom: var(--space-5); gap: var(--space-3); }
-    .hero-illustration { order: -1; max-width: 160px; margin: 0 auto; }
+    .hero { grid-template-columns: 1fr; padding: var(--space-5) var(--space-4); gap: var(--space-4); background: linear-gradient(165deg, var(--bg-main) 0%, var(--bg-main) 50%, #CBD8C1 72%, #3C5544 100%); }
+    .hero-copy { order: 1; }
+    .hero-illustration { order: 2; max-width: 170px; margin: 0 auto; }
   }
   @media (max-width: 600px) {
     .hero-ctas { flex-direction: column; align-items: stretch; }
@@ -47,7 +56,7 @@
 <nav class="site-nav-bar">
   <a href="/" class="brand">
     <img src="/lib/img/sam-illustration-sm.png" alt="">
-    <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
   </a>
   <div class="nav-links">
     <a href="/" class="current">Home</a>
@@ -85,6 +94,44 @@
       <p class="eyebrow reveal-on-scroll">What you'll build</p>
       <h2 class="reveal-on-scroll">An assistant that <em>actually knows you.</em></h2>
     </div>
+    <figure class="home-diagram reveal-on-scroll" aria-label="Your scattered tools — email, calendar, chats, notes, docs — converge into one AI executive assistant that knows you.">
+      <svg viewBox="0 0 700 250" role="img" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="hda" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/>
+          </marker>
+          <style>
+            .hsrc { fill: var(--bg-soft); stroke: var(--rule); stroke-width: 1.5; }
+            .hsrc-t { font-family: var(--sans); font-size: 13px; fill: var(--ink-soft); }
+            .hcore { fill: var(--ink-deep); }
+            .hcore-t { font-family: var(--serif); font-size: 19px; fill: var(--bg-main); font-weight: 700; }
+            .hcore-s { font-family: var(--mono); font-size: 9.5px; letter-spacing: 1.3px; fill: var(--bg-card); }
+            .hln { stroke: var(--ink-faint); stroke-width: 1.6; fill: none; }
+            .hnd { fill: var(--accent); }
+          </style>
+        </defs>
+        <rect x="36" y="22" width="110" height="34" rx="9" class="hsrc" transform="rotate(-3 91 39)"/>
+        <text x="91" y="44" text-anchor="middle" class="hsrc-t" transform="rotate(-3 91 39)">Email</text>
+        <rect x="70" y="70" width="110" height="34" rx="9" class="hsrc" transform="rotate(2 125 87)"/>
+        <text x="125" y="92" text-anchor="middle" class="hsrc-t" transform="rotate(2 125 87)">Calendar</text>
+        <rect x="28" y="118" width="110" height="34" rx="9" class="hsrc" transform="rotate(-2 83 135)"/>
+        <text x="83" y="140" text-anchor="middle" class="hsrc-t" transform="rotate(-2 83 135)">Chats</text>
+        <rect x="74" y="166" width="110" height="34" rx="9" class="hsrc" transform="rotate(3 129 183)"/>
+        <text x="129" y="188" text-anchor="middle" class="hsrc-t" transform="rotate(3 129 183)">Notes</text>
+        <rect x="40" y="206" width="110" height="34" rx="9" class="hsrc" transform="rotate(-2 95 223)"/>
+        <text x="95" y="228" text-anchor="middle" class="hsrc-t" transform="rotate(-2 95 223)">Docs</text>
+        <path d="M146 39 C 250 39, 300 110, 404 120" class="hln" marker-end="url(#hda)"/>
+        <path d="M180 87 C 270 95, 320 118, 404 124" class="hln" marker-end="url(#hda)"/>
+        <path d="M138 135 C 250 130, 320 126, 404 128" class="hln" marker-end="url(#hda)"/>
+        <path d="M184 183 C 280 168, 320 140, 404 132" class="hln" marker-end="url(#hda)"/>
+        <path d="M150 223 C 260 210, 300 145, 404 136" class="hln" marker-end="url(#hda)"/>
+        <rect x="410" y="80" width="230" height="92" rx="18" class="hcore"/>
+        <circle cx="434" cy="102" r="4.5" class="hnd"/>
+        <text x="525" y="124" text-anchor="middle" class="hcore-t">Your AI EA</text>
+        <text x="525" y="147" text-anchor="middle" class="hcore-s">ONE CONTEXT · KNOWS YOU</text>
+      </svg>
+      <figcaption>Scattered tools become one assistant that actually knows you</figcaption>
+    </figure>
     <div class="interlude callout-grid stagger-grid">
       <div class="callout">
         <div class="big">Drafts in your voice.</div>
@@ -201,7 +248,7 @@
 </main>
 
 <footer class="site-footer wrap">
-  <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+  <span class="wordmark">crads-<span class="accent">ai</span></span>
   <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
   <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
   <div>+61 0493 302 154</div>
