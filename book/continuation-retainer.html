@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Continuation Retainer with Sam Davis — A$650/month, 2 × 90-min sessions plus async Slack. Keep building your AI executive assistant. Cancel anytime.">
+  <title>Continuation Retainer — Sam Davis</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+  <link rel="stylesheet" href="/lib/site.css">
+  <link rel="stylesheet" href="/book/_styles.css">
+  <style>
+    .retainer-card {
+      max-width: 560px;
+      margin: var(--space-3) auto;
+      padding: var(--space-3);
+      background: var(--bg-soft);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+    }
+    .retainer-card ul {
+      margin: var(--space-2) 0 var(--space-3);
+      padding-left: 1.2em;
+      color: var(--ink-soft);
+    }
+    .retainer-card li { padding: 3px 0; }
+    .retainer-form { display: grid; gap: var(--space-2); margin-top: var(--space-2); }
+    .retainer-form input {
+      font: inherit; padding: 0.6em 0.8em;
+      border: 1px solid var(--bg-card-hi); border-radius: 6px;
+      background: var(--bg-main); color: var(--ink-deep);
+    }
+    .retainer-form input:focus {
+      outline: none; border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .retainer-form button {
+      font: inherit; font-weight: 600; padding: 0.75em 1.2em;
+      background: var(--accent); color: var(--bg-main);
+      border: none; border-radius: 6px; cursor: pointer;
+    }
+    .retainer-form button:hover:not(:disabled) { background: var(--accent-deep); }
+    .retainer-form button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .retainer-status { font-size: 0.9em; color: var(--ink-soft); margin: var(--space-2) 0 0; }
+    .retainer-status[data-kind="error"] { color: #a3401c; }
+  </style>
+</head>
+<body>
+  <nav class="site-nav-bar">
+    <a href="/" class="brand">
+      <img src="/lib/img/sam-illustration-sm.png" alt="">
+      <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/overview">Overview</a>
+      <a href="/about">About</a>
+      <a href="/how-it-works">How it works</a>
+      <a href="/offer">Offer</a>
+      <a href="/book" class="current">Book →</a>
+      <a href="/account/login" class="nav-account">Sign in</a>
+    </div>
+  </nav>
+
+  <div class="book-container">
+    <div class="book-header">
+      <h1>Continuation Retainer</h1>
+      <p>A$650/month · 2 × 90-min sessions + async Slack · cancel anytime.</p>
+    </div>
+
+    <div class="retainer-card">
+      <p style="margin-top:0; color:var(--ink-deep);">For when the Coaching Block is done and you want me alongside while the system compounds.</p>
+      <ul>
+        <li>Two 90-minute 1:1 sessions a month.</li>
+        <li>Async Slack between sessions.</li>
+        <li>Monthly — cancel anytime from your account, no lock-in.</li>
+      </ul>
+      <form class="retainer-form" id="retainer-form">
+        <input type="text" id="r-name" name="name" placeholder="Your name" autocomplete="name" required>
+        <input type="email" id="r-email" name="email" placeholder="Email" autocomplete="email" required>
+        <button type="submit" id="r-submit">Subscribe — A$650/month →</button>
+        <p class="retainer-status" id="r-status" style="display:none;"></p>
+      </form>
+    </div>
+
+    <div class="book-policy">Monthly subscription billed by Stripe. Manage or cancel anytime from your account. Sessions are scheduled with me directly once you are subscribed.</div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+      var form = document.getElementById('retainer-form');
+      var status = document.getElementById('r-status');
+      var btn = document.getElementById('r-submit');
+      function showError(msg) {
+        status.textContent = msg;
+        status.setAttribute('data-kind', 'error');
+        status.style.display = 'block';
+      }
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        status.style.display = 'none';
+        btn.disabled = true; btn.textContent = 'Starting…';
+        var payload = {
+          sku: 'continuation-retainer',
+          name: document.getElementById('r-name').value,
+          email: document.getElementById('r-email').value,
+        };
+        try {
+          var res = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          var json = await res.json();
+          if (!res.ok) throw new Error(json.error || ('HTTP ' + res.status));
+          window.location.href = json.checkout_url;
+        } catch (err) {
+          showError("Couldn't start the subscription: " + err.message + ". Email cradsdavis@gmail.com and I will sort it.");
+          btn.disabled = false; btn.textContent = 'Subscribe — A$650/month →';
+        }
+      });
+    })();
+  </script>
+
+  <footer class="site-footer wrap">
+    <span class="wordmark">Sam Davis<span class="accent">.</span></span>
+    <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+    <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+    <div>+61 0493 302 154</div>
+    <div class="location">Coogee, Sydney.</div>
+  </footer>
+</body>
+</html>
