@@ -43,3 +43,9 @@ test('renderBookCta links to the account book page', () => {
   assert.match(renderBookCta(), /href="\/account\/book"/);
   assert.match(renderBookCta(), /Book another session/i);
 });
+
+test('renderBookPicker escapes < in injected identity (no </script> breakout)', () => {
+  const html = renderBookPicker({ name: '</script><b>x', email: 'e@x.com' }, 'single-session');
+  assert.ok(!html.includes('</script><b>'), 'raw </script> must not appear in the inline script');
+  assert.match(html, /\\u003c/);
+});
