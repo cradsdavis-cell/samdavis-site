@@ -5,6 +5,8 @@
   const root = document.getElementById('slot-picker');
   const sku = window.SKU_SLUG;
   const isPaid = window.IS_PAID;
+  const lockIdentity = !!window.LOCK_IDENTITY && window.BOOK_IDENTITY && window.BOOK_IDENTITY.email;
+  const identity = window.BOOK_IDENTITY || {};
 
   function fmtDay(iso) {
     const d = new Date(iso);
@@ -13,6 +15,9 @@
   function fmtTime(iso) {
     const d = new Date(iso);
     return d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  }
+  function escapeAttr(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
 
   async function loadSlots() {
@@ -94,11 +99,16 @@
   }
 
   function renderForm() {
+    const identityFields = lockIdentity
+      ? `<p class="book-as">Booking as <strong>${escapeAttr(identity.name || identity.email)}</strong> (${escapeAttr(identity.email)}).</p>
+         <input type="hidden" name="name" value="${escapeAttr(identity.name || '')}">
+         <input type="hidden" name="email" value="${escapeAttr(identity.email)}">`
+      : `<div class="field"><label for="bk-name">Your name</label><input id="bk-name" type="text" name="name" autocomplete="name" required></div>
+         <div class="field"><label for="bk-email">Email</label><input id="bk-email" type="email" name="email" autocomplete="email" required></div>`;
     return `
       <form id="slot-form" class="slot-form" style="display:none;">
         <p><strong>Selected:</strong> <span id="selected-label"></span></p>
-        <div class="field"><label for="bk-name">Your name</label><input id="bk-name" type="text" name="name" autocomplete="name" required></div>
-        <div class="field"><label for="bk-email">Email</label><input id="bk-email" type="email" name="email" autocomplete="email" required></div>
+        ${identityFields}
         <input type="hidden" name="slot_iso" id="slot-iso">
         <button class="book-cta" type="submit" id="submit-btn">
           ${isPaid ? 'Book + Pay →' : 'Book →'}
