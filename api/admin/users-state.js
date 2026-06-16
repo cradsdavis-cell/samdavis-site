@@ -3,7 +3,7 @@
 // the second-brain EA's coaching state-reconcile sync (runs headless on a VPS cron,
 // so it can't use the session auth the browser admin UI endpoints in this dir use).
 //
-// Auth: Authorization: Bearer ${CRON_SECRET}  (same secret as api/cron/graduate-check).
+// Auth: Authorization: Bearer <secret>, where <secret> = CRON_SECRET_2 (preferred) || CRON_SECRET.
 // Method: GET only.
 // Returns ONLY non-sensitive lifecycle fields (field-whitelisted) — never auth tokens,
 // passwords, or any secret material, even if present on the record.
@@ -13,7 +13,8 @@ const { defaultKv } = require('../../lib/kv');
 
 module.exports = async function handler(req, res) {
   const authHeader = req.headers.authorization || '';
-  if (!process.env.CRON_SECRET || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  const expected = process.env.CRON_SECRET_2 || process.env.CRON_SECRET;
+  if (!expected || authHeader !== `Bearer ${expected}`) {
     return res.status(401).json({ error: 'unauthorized' });
   }
   if (req.method !== 'GET') {
