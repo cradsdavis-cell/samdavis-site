@@ -29,7 +29,8 @@
     { "source": "/account/onboarding", "destination": "/api/account/onboarding" },
     { "source": "/account/admin", "destination": "/api/account/admin" },
     { "source": "/account/admin/", "destination": "/api/account/admin" },
-    { "source": "/account/admin/client", "destination": "/api/account/admin/client" }
+    { "source": "/account/admin/client", "destination": "/api/account/admin/client" },
+    { "source": "/account/book", "destination": "/api/account/book" }
   ],
   "headers": [
     {
