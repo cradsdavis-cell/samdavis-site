@@ -49,9 +49,10 @@ test('how-it-works page contains the 4 canonical session-arc headings', () => {
 test('how-it-works page names the materials and is discovery-only (no lead-magnet)', () => {
   const html = readHIW();
   assert.match(html, />Everything you get</, 'expected materials section');
+  assert.ok(html.includes('Pack 0'), 'expected Pack 0 named');
+  assert.ok(html.includes('Pack 1'), 'expected Pack 1 named');
   assert.ok(html.includes('Pack 2'), 'expected Pack 2 named');
   assert.ok(html.includes('Pack 3'), 'expected Pack 3 named');
-  assert.ok(html.includes('Pack 4'), 'expected Pack 4 named');
   assert.ok(!html.includes('data-lead-capture'),
     'lead-magnet capture form must be removed (discovery-only)');
   assert.ok(!/free install guide/i.test(html),
