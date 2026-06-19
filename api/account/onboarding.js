@@ -63,7 +63,7 @@ function renderStep2(user) {
   // Pack #1a content loaded from lib/content/pack-1a-prompts.html (created in Task 4.3 — for now placeholder)
   const fs = require('fs');
   const path = require('path');
-  let pack1aHtml = '<p><em>(Pack #1a prompts content loading from lib/content/pack-1a-prompts.html)</em></p>';
+  let pack1aHtml = '<p><em>(Pack 1 — Starter Prompts content loading from lib/content/pack-1a-prompts.html)</em></p>';
   try {
     pack1aHtml = fs.readFileSync(path.join(__dirname, '../../lib/content/pack-1a-prompts.html'), 'utf8');
   } catch (e) { /* file not yet created */ }
@@ -86,7 +86,7 @@ function renderStep2(user) {
       </form>
     </section>
     <section>
-      <h3>Preview Pack #1a</h3>
+      <h3>Preview Pack 1 — Starter Prompts</h3>
       <p><em>In Session 1, Sam will walk you through these prompts and fire them with you in your sandbox. Don't run them solo — they're more useful with Sam at the keyboard alongside you. This preview is just so nothing's a surprise on the day.</em></p>
       ${pack1aHtml}
     </section>
