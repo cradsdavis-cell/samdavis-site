@@ -21,11 +21,14 @@ const PACK_VISIBILITY = {
 // per-client via Overleaf/Drive. When a pack's URL isn't configured we degrade
 // gracefully (a "Sam shares this with you" note) instead of rendering a dead button —
 // the same way the cohort pack already handles a null URL.
+// Display titles use the canonical Pack 0 to 4 scheme (locked 2026-06-18). The MAP KEYS
+// ('1a-preview','1a','1b','2','cohort') are internal state-machine identifiers and are
+// deliberately left unchanged — renaming them would require a KV migration + env re-point.
 const PACK_META = {
-  '1a-preview': { title: 'Pack #1a — preview', desc: 'Karpathy + Nate Herk prompts (preview — Sam walks you through these in S1).', env: 'PACK_1A_URL' },
-  '1a': { title: 'Pack #1a — sandbox prompts', desc: 'Karpathy + Nate Herk prompts to fire in your sandbox between sessions.', env: 'PACK_1A_URL' },
-  '1b': { title: 'Pack #1b — flower exercise + EA build', desc: 'Restructure your stack + Parachute flower exercise.', env: 'PACK_1B_URL' },
-  '2': { title: 'Pack #2 — integration + advanced', desc: 'MCP connections + advanced workflows.', env: 'PACK_2_URL' },
+  '1a-preview': { title: 'Pack 1 — Starter Prompts (preview)', desc: 'Starter prompts — Sam walks you through these and fires them with you in Session 1.', env: 'PACK_1A_URL' },
+  '1a': { title: 'Pack 1 — Starter Prompts', desc: 'Starter prompts to fire in your sandbox between sessions.', env: 'PACK_1A_URL' },
+  '1b': { title: 'Pack 2 — Make it you', desc: 'Restructure your stack into a real EA + the self-mapping (flower) exercise.', env: 'PACK_1B_URL' },
+  '2': { title: 'Pack 3 — Connect it', desc: 'Connect your tools — Capture/Ingest + MCP wiring (email, calendar, Todoist, Slack).', env: 'PACK_2_URL' },
   'cohort': { title: 'Cohort Pack', desc: 'Shared cohort pack.', env: null },
 };
 

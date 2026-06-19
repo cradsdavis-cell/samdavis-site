@@ -36,22 +36,23 @@ test('how-it-works page renders the canonical nav with How it works marked curre
 
 test('how-it-works page contains the 4 canonical session-arc headings', () => {
   const html = readHIW();
-  assert.ok(html.includes('Get Claude Code running, build a sandbox'),
-    'expected Session 1 heading (install + sandbox)');
-  assert.ok(html.includes('Introduce Pack #1, start the flower exercise'),
-    'expected Session 2 heading (Pack #1 + flower)');
-  assert.ok(html.includes('Connect your tools'),
-    'expected Session 3 heading (connect tools)');
-  assert.ok(html.includes('Wrap up, connect more, go solo'),
-    'expected Session 4 heading (wrap-up + go solo)');
+  assert.ok(html.includes('Up and running — and no longer scared of it'),
+    'expected Session 1 heading (up and running)');
+  assert.ok(html.includes('Teach it who you are'),
+    'expected Session 2 heading (teach it who you are)');
+  assert.ok(html.includes('Plug it into your actual day'),
+    'expected Session 3 heading (plug it into your day)');
+  assert.ok(html.includes('Running your week — without me'),
+    'expected Session 4 heading (run it solo)');
 });
 
 test('how-it-works page names the materials and is discovery-only (no lead-magnet)', () => {
   const html = readHIW();
   assert.match(html, />Everything you get</, 'expected materials section');
-  assert.ok(html.includes('Pack #1a'), 'expected Pack #1a named');
-  assert.ok(html.includes('Pack #1b'), 'expected Pack #1b named');
-  assert.ok(html.includes('Pack #2'), 'expected Pack #2 named');
+  assert.ok(html.includes('Pack 0'), 'expected Pack 0 named');
+  assert.ok(html.includes('Pack 1'), 'expected Pack 1 named');
+  assert.ok(html.includes('Pack 2'), 'expected Pack 2 named');
+  assert.ok(html.includes('Pack 3'), 'expected Pack 3 named');
   assert.ok(!html.includes('data-lead-capture'),
     'lead-magnet capture form must be removed (discovery-only)');
   assert.ok(!/free install guide/i.test(html),
