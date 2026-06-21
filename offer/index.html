@@ -8,6 +8,7 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
+<script defer src="/lib/testimonialsRender.js"></script>
 <style>
   .offer-hero {
     display: grid;
@@ -198,35 +199,7 @@
   }
   .rung .cta:hover { background: var(--accent-deep); }
 
-  /* Testimonials strip styling (renders when >=3 testimonials live) */
-  .testimonials-strip {
-    margin-top: var(--space-5);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--rule);
-  }
-  .testimonials-strip h2 {
-    text-align: center;
-    margin-bottom: var(--space-4);
-  }
-  .testimonials-strip .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-3);
-  }
-  .testimonial-card {
-    background: var(--bg-soft);
-    border-radius: 6px;
-    padding: var(--space-3);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-  .testimonial-card .attribution {
-    font-family: var(--sans);
-    font-size: 13.5px;
-    color: var(--ink-soft);
-  }
-  .testimonial-card .attribution strong { color: var(--ink-deep); }
+  /* Testimonials / proof strip styling now lives in lib/site.css (shared). */
 
   .discovery-card {
     background: var(--bg-soft);
@@ -238,6 +211,18 @@
   .discovery-card h2 { margin-bottom: var(--space-2); }
   .discovery-card .meta { display: inline-block; margin-bottom: var(--space-3); }
   .discovery-card p { max-width: 540px; margin: 0 auto var(--space-3); color: var(--ink-soft); }
+
+  .retainer-note {
+    font-family: var(--sans);
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-faint);
+    max-width: var(--read-col);
+    margin: 0 auto var(--space-4);
+    text-align: center;
+  }
+  .retainer-note a { color: var(--accent); font-weight: 600; }
+  .nowrap { white-space: nowrap; }
 
   @media (max-width: 900px) {
     .offer-hero { grid-template-columns: 1fr; }
@@ -269,7 +254,7 @@
     <img src="/lib/img/sam-illustration.png" alt="" class="float-gentle">
     <div>
       <p class="eyebrow">Offer</p>
-      <h1>How we <em>work together.</em></h1>
+      <h1>How we <em class="nowrap">work together.</em></h1>
     </div>
   </section>
 
@@ -277,12 +262,12 @@
 
     <!-- Decision helper -->
     <div class="decision-helper reveal-on-scroll">
-      <h2>Which one's right for you?</h2>
+      <h2>Which one's you?</h2>
       <ul>
-        <li><strong>Single Session —</strong> focused 90 min on one specific pain.</li>
-        <li><strong>Group Block —</strong> build alongside 2 other founders at a lower price.</li>
-        <li><strong>Coaching Block —</strong> 4 sessions of 1:1, deep build, full personalised pack.</li>
-        <li><strong>Continuation Retainer —</strong> already a client, want to keep going.</li>
+        <li><strong>“I just want to fix one thing that's eating my week”</strong> — Single Session.</li>
+        <li><strong>“I want the whole assistant — built with me, and mine to keep”</strong> — Coaching Block. Start here.</li>
+        <li><strong>“I'd rather build it alongside a couple of other founders”</strong> — Group Block.</li>
+        <li><strong>“I'm already a client and I want to keep going”</strong> — Continuation Retainer.</li>
       </ul>
     </div>
 
@@ -296,7 +281,7 @@
       <span class="label-on" id="label-pay4">Pay in 4 (+10%)</span>
     </div>
 
-    <!-- Pricing grid — 4 SKUs -->
+    <!-- Pricing grid — 3 ways in (Continuation Retainer demoted below) -->
     <div class="pricing-grid stagger-grid">
 
       <!-- Single Session — no pay-in-4 -->
@@ -305,8 +290,8 @@
         <p class="rung-meta">90 min · 1:1</p>
         <p class="price" data-upfront="A$300" data-pay4="A$300">A$300</p>
         <p class="price-detail" data-upfront="" data-pay4="(no instalment plan on this one)"></p>
-        <p class="rung-pitch">One focused session on a specific pain. Try-before-the-block.</p>
-        <a class="cta" href="/book/single-session" data-base-href="/book/single-session">Book →</a>
+        <p class="rung-pitch">Fix the one thing that's eating your week, in 90 focused minutes. The try-before-you-commit taste of the full block.</p>
+        <a class="cta" href="/book/single-session" data-base-href="/book/single-session">Book a session →</a>
       </article>
 
       <!-- Group Block — NEW -->
@@ -316,36 +301,32 @@
         <p class="rung-meta">4 × 90 min · cohort of 3 founders</p>
         <p class="price" data-upfront="A$600" data-pay4="A$660"><span data-price-value>A$600</span><span class="price-suffix">/seat</span></p>
         <p class="price-detail" data-upfront="× 3 founders per cohort" data-pay4="4 × A$165 — last session free">× 3 founders per cohort</p>
-        <p class="rung-pitch">Build alongside two other founders. Peer-amplified, lower price, cohort-scheduled.</p>
-        <a class="cta" href="/group" data-base-href="/group">See next cohort →</a>
+        <p class="rung-pitch">Build it alongside two other founders. You'll move faster with people in the same boat: shared momentum, real accountability, and you see how others crack the same problem. (Lower price per seat, too.)</p>
+        <a class="cta" href="/group" data-base-href="/group">Join the next cohort →</a>
       </article>
 
       <!-- Coaching Block — Most popular -->
       <article class="rung featured" data-sku="coaching-block">
-        <span class="rung-badge">★ Most popular</span>
+        <span class="rung-badge">★ The standard way in</span>
         <p class="rung-name">Coaching Block</p>
         <p class="rung-meta">4 × 90 min · 1:1</p>
         <p class="price" data-upfront="A$1,000" data-pay4="A$1,100">A$1,000</p>
         <p class="price-detail" data-upfront="Full personalised pack between sessions" data-pay4="4 × A$275 — last session free">Full personalised pack between sessions</p>
-        <p class="rung-pitch">Four sessions of deep 1:1 build. Full pack between each session. The standard way in.</p>
-        <a class="cta" href="/book/coaching-block" data-base-href="/book/coaching-block">Book + Pay →</a>
-      </article>
-
-      <!-- Continuation Retainer — no pay-in-4 -->
-      <article class="rung" data-sku="continuation-retainer">
-        <p class="rung-name">Continuation Retainer</p>
-        <p class="rung-meta">2 × 90 min/mo + async Slack</p>
-        <p class="price" data-upfront="A$650" data-pay4="A$650"><span data-price-value>A$650</span><span class="price-suffix">/mo</span></p>
-        <p class="price-detail" data-upfront="Monthly · cancel anytime" data-pay4="(monthly subscription — no instalment plan)">Monthly · cancel anytime</p>
-        <p class="rung-pitch">For existing clients who want to keep building. Default post-Block continuation.</p>
-        <a class="cta" href="/book/discovery" data-base-href="/book/discovery">Talk to Sam →</a>
+        <p class="rung-pitch">Walk away with your own AI assistant running your week — and the skill to keep building it. Four 1:1 sessions, a full personalised pack between each.</p>
+        <a class="cta" href="/book/coaching-block" data-base-href="/book/coaching-block">Book the block →</a>
       </article>
 
     </div>
 
-    <!-- Testimonials strip anchor — populated by build step / future SSR.
-         Empty on first ship (testimonials.length < 3 → renders nothing). -->
-    <div id="testimonials-anchor"></div>
+    <!-- Continuation Retainer — demoted off the primary grid: it's where a
+         client goes AFTER a Block, not a way in. (2026-06-21) -->
+    <p class="retainer-note reveal-on-scroll">
+      Already a client and want to keep going? The <a href="/book/continuation-retainer">Continuation Retainer</a> keeps the line open — <strong>A$650/mo</strong>, two 90-minute sessions a month plus async Slack. It's the natural step after a Block, not a way in.
+    </p>
+
+    <!-- Proof strip — client quotes, rendered by /lib/testimonialsRender.js when
+         1+ REAL testimonials exist. Hidden + empty by design until then. -->
+    <section class="testimonials-strip" data-testimonials hidden></section>
 
     <!-- Discovery card -->
     <div class="discovery-card reveal-on-scroll" id="discovery">
