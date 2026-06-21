@@ -9,6 +9,20 @@
   <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
   <link rel="stylesheet" href="/lib/site.css">
   <link rel="stylesheet" href="/book/_styles.css">
+  <style>
+    .discovery-intro {
+      max-width: 560px;
+      margin: 0 auto var(--space-4);
+      font-family: var(--sans);
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+    .discovery-intro p { margin: 0 0 var(--space-2); }
+    .discovery-intro .di-expect { font-weight: 600; color: var(--ink-deep); margin-top: var(--space-3); }
+    .discovery-intro ul { margin: 0 0 var(--space-2); padding-left: var(--space-3); }
+    .discovery-intro li { margin-bottom: 4px; }
+    .discovery-intro .di-note { font-size: 14px; color: var(--ink-faint); margin-top: var(--space-3); }
+  </style>
 </head>
 <body>
   <nav class="site-nav-bar">
@@ -30,6 +44,16 @@
     <div class="book-header">
       <h1>Discovery Call</h1>
       <p>30 min · free · pick a slot below.</p>
+    </div>
+    <div class="discovery-intro">
+      <p>This is just a chat — no pitch, no slides. Tell me what's eating your time and I'll tell you honestly whether building your own AI assistant would help. If it's not a fit, I'll say so.</p>
+      <p class="di-expect">What we'll cover:</p>
+      <ul>
+        <li>What your week actually looks like right now</li>
+        <li>Where an AI assistant would buy you back the most time</li>
+        <li>Whether a full Coaching Block fits, or you start smaller</li>
+      </ul>
+      <p class="di-note">You don't need to prepare anything or know any tech — just bring the parts of your week that drive you mad. Worst case, you leave with a clearer view of what AI could actually do for you.</p>
     </div>
     <div id="slot-picker"></div>
   </div>
