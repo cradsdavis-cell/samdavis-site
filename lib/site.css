@@ -1523,64 +1523,120 @@ a:hover { color: var(--accent-deep); }
   text-align: center;
 }
 
-/* Testimonials strip — rendered by lib/testimonialsStrip.js when length >= 3 */
+/* Testimonials strip — proof cards.
+   Homepage: #proof via lib/testimonialsRender.js (plain quotes, renders from 1).
+   /offer:   via lib/testimonialsStrip.js (LinkedIn embeds, renders from 3). */
 .testimonials-strip {
-  margin: var(--space-5) 0 var(--space-4);
-  padding: var(--space-4) 0;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
+  margin: var(--space-5) auto var(--space-4);
+  padding: var(--space-4) var(--space-4) calc(var(--space-4) + var(--space-1));
+  background: var(--bg-soft);
+  border: 1px solid var(--rule);
+  border-radius: 20px;
 }
 .testimonials-strip h2 {
   font-family: var(--serif);
+  font-size: clamp(26px, 3.6vw, 34px);
+  font-weight: 800;
   color: var(--ink-deep);
   text-align: center;
-  margin-bottom: var(--space-3);
+  margin: 0 0 var(--space-4);
+}
+.testimonials-strip h2::after {
+  content: "";
+  display: block;
+  width: 52px;
+  height: 3px;
+  margin: var(--space-2) auto 0;
+  background: var(--accent);
+  border-radius: 2px;
 }
 .testimonials-strip .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--space-3);
+  max-width: 920px;
+  margin: 0 auto;
 }
 .testimonial-card {
-  background: var(--bg-soft);
-  border-radius: 6px;
-  padding: var(--space-2);
+  position: relative;
+  background: var(--bg-main);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: calc(var(--space-4) + var(--space-1)) var(--space-3) var(--space-3);
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-3);
+  box-shadow: 0 2px 14px rgba(143, 117, 48, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(143, 117, 48, 0.15);
+  border-color: var(--accent);
+}
+/* decorative opening quote-mark watermark */
+.testimonial-card::before {
+  content: "\201C";
+  position: absolute;
+  top: 0.06em;
+  left: 0.22em;
+  font-family: var(--serif);
+  font-size: 84px;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.16;
+  pointer-events: none;
 }
 .testimonial-card iframe {
   display: block;
   max-width: 100%;
 }
 .testimonial-card blockquote {
+  position: relative;
   margin: 0;
   font-family: var(--serif);
-  font-size: 1.05em;
-  line-height: 1.55;
+  font-size: 1.12em;
+  line-height: 1.62;
   color: var(--ink-deep);
 }
 .testimonial-card .attribution {
-  font-family: var(--sans);
-  font-size: 0.9em;
-  color: var(--ink-soft);
-  text-align: left;
-  padding: var(--space-1);
   margin-top: auto;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--rule);
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: var(--space-2);
-}
-.testimonial-card .attribution strong {
-  color: var(--ink-deep);
+  text-align: left;
 }
 .testimonial-photo {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+  box-shadow: 0 0 0 3px var(--bg-main), 0 0 0 4px var(--accent-glow);
+}
+.attribution-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+.attribution-text .t-name {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink-deep);
+}
+.attribution-text .t-role {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+.attribution-text a {
+  text-decoration: none;
+}
+.attribution-text a:hover .t-name {
+  color: var(--accent-deep);
 }
 
 /* Mobile */
@@ -1588,6 +1644,9 @@ a:hover { color: var(--accent-deep); }
   .pricing-grid { grid-template-columns: 1fr; }
   .decision-helper { padding: var(--space-2) var(--space-3); margin: var(--space-3) 0; }
   .payment-toggle { flex-wrap: wrap; }
+  .testimonials-strip { padding: var(--space-3) var(--space-2) var(--space-4); border-radius: 14px; }
+  .testimonials-strip h2 { margin-bottom: var(--space-3); }
+  .testimonial-card { padding: var(--space-4) var(--space-3) var(--space-3); }
 }
 
 /* ============================================================
