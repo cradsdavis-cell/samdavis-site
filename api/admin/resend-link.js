@@ -6,7 +6,7 @@ const { generateMagicLinkToken } = require('../../lib/auth');
 const { AUTH_FROM } = require('../../lib/email');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const TOKEN_TTL_SECONDS = 900;
+const TOKEN_TTL_SECONDS = 7 * 24 * 60 * 60; // 7 days — admin-resent set-up link
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'method_not_allowed' });
@@ -29,7 +29,7 @@ module.exports = async function handler(req, res) {
     from: AUTH_FROM,
     to: email,
     subject: 'Sign in to your crads-ai account (resent by Sam)',
-    html: `<p>Hi,</p><p>Here's a fresh sign-in link: <a href="${baseUrl}/api/auth/verify-token?token=${token}">${baseUrl}/api/auth/verify-token?token=${token}</a></p><p>Expires in 15 minutes.</p><p>— Sam</p>`,
+    html: `<p>Hi,</p><p>Here's a fresh sign-in link: <a href="${baseUrl}/api/auth/verify-token?token=${token}">${baseUrl}/api/auth/verify-token?token=${token}</a></p><p>Valid for 7 days.</p><p>— Sam</p>`,
   });
 
   return res.redirect(302, `/account/admin/client?email=${encodeURIComponent(email)}&resent=1`);
