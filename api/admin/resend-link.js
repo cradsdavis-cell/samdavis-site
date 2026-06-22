@@ -3,6 +3,7 @@ const { Resend } = require('resend');
 const { requireAdmin } = require('../../lib/account');
 const { defaultKv } = require('../../lib/kv');
 const { generateMagicLinkToken } = require('../../lib/auth');
+const { AUTH_FROM } = require('../../lib/email');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const TOKEN_TTL_SECONDS = 900;
@@ -25,7 +26,7 @@ module.exports = async function handler(req, res) {
 
   const baseUrl = process.env.BASE_URL || 'https://crads-ai.com';
   await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL,
+    from: AUTH_FROM,
     to: email,
     subject: 'Sign in to your crads-ai account (resent by Sam)',
     html: `<p>Hi,</p><p>Here's a fresh sign-in link: <a href="${baseUrl}/api/auth/verify-token?token=${token}">${baseUrl}/api/auth/verify-token?token=${token}</a></p><p>Expires in 15 minutes.</p><p>— Sam</p>`,
