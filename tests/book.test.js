@@ -39,6 +39,16 @@ test('books a prepaid session, decrements balance, never calls Stripe', async ()
   assert.strictEqual(calls.setUser.length, 1);
 });
 
+test('booking advances the journey stage forward (pre-s1 -> between-s1-s2)', async () => {
+  const { kv, cal, skus } = fakes();
+  const user = { email: 'p@y.com', name: 'P', state: 'pre-s1',
+    engagements: [{ type: 'coaching-block', sessions_total: 4, sessions_used: 1 }] };
+  const r = await bookSession({ kv, cal, skus, user, slotIso: FUTURE, now: NOW });
+  assert.strictEqual(r.ok, true);
+  assert.strictEqual(user.engagements[0].sessions_used, 2);
+  assert.strictEqual(user.state, 'between-s1-s2'); // self-driving stage
+});
+
 test('refuses when no sessions remain (completed block)', async () => {
   const { kv, cal, skus, calls } = fakes();
   const user = { email: 'x@y.com', state: 'post-s4-decision',

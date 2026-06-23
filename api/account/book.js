@@ -16,6 +16,7 @@ const { defaultKv } = require('../../lib/kv');
 const calLib = require('../../lib/cal');
 const { getSku } = require('../../lib/skus');
 const { computeBalance, engagementBalance } = require('../../lib/sessionBalance');
+const { nextBlockStage } = require('../../lib/autoAdvance');
 const { fetchNextSession } = require('../../lib/calBookings');
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:?\d{2})$/;
@@ -69,6 +70,9 @@ async function bookSession({ kv, cal, skus, user, slotIso, now = Date.now() }) {
     const b = engagementBalance(balance.activeBlock);
     balance.activeBlock.sessions_total = b.total;
     balance.activeBlock.sessions_used = b.used + 1;
+    // Self-driving stage: booking the Nth session implies the (N-1)th is done.
+    const advanced = nextBlockStage(user.state, balance.activeBlock.sessions_used);
+    if (advanced) { user.state = advanced; user.state_updated_at = new Date(now).toISOString(); }
     await kv.setUser(user.email, user);
   }
   return { ok: true, status: 200, booking, sku };

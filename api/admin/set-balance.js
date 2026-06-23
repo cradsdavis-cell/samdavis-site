@@ -6,6 +6,9 @@
 'use strict';
 const { requireAdmin } = require('../../lib/account');
 const { defaultKv } = require('../../lib/kv');
+const { nextBlockStage } = require('../../lib/autoAdvance');
+
+const BLOCK_TYPES = new Set(['coaching-block', 'coaching-block-pay4']);
 
 function toIntOrNull(v) {
   if (v === '' || v == null) return null;
@@ -43,6 +46,11 @@ module.exports = async function handler(req, res) {
     if (used !== null) eng.sessions_used = Math.max(0, used);
     if (typeof eng.sessions_total === 'number' && typeof eng.sessions_used === 'number' && eng.sessions_used > eng.sessions_total) {
       eng.sessions_used = eng.sessions_total;
+    }
+    // Keep the journey stage in step with the count Sam just set (forward-only).
+    if (BLOCK_TYPES.has(eng.type) && !eng.completed && typeof eng.sessions_used === 'number') {
+      const advanced = nextBlockStage(user.state, eng.sessions_used);
+      if (advanced) { user.state = advanced; user.state_updated_at = new Date().toISOString(); }
     }
   }
 
