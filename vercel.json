@@ -21,6 +21,7 @@
     { "source": "/account/set-password", "destination": "/account/set-password.html" },
     { "source": "/account", "destination": "/api/account" },
     { "source": "/account/", "destination": "/api/account" },
+    { "source": "/account/book", "destination": "/api/account/book" },
     { "source": "/account/sessions", "destination": "/api/account/sessions" },
     { "source": "/account/packs", "destination": "/api/account/packs" },
     { "source": "/account/subscription", "destination": "/api/account/subscription" },

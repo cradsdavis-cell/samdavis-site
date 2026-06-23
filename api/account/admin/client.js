@@ -1,6 +1,7 @@
 'use strict';
 const { requireAdmin, renderShell } = require('../../../lib/account');
 const { defaultKv } = require('../../../lib/kv');
+const { computeBalance, engagementBalance } = require('../../../lib/sessionBalance');
 
 const VALID_NEXT_STATES = {
   'onboarding-incomplete': [], // client-driven only
@@ -78,6 +79,32 @@ module.exports = async function handler(req, res) {
     <section class="panel">
       <div class="panel-title">Engagements</div>
       <ul class="panel-content">${engagementsHtml || '<li>None</li>'}</ul>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">Session balance <span class="subtitle">(remaining to book: ${computeBalance(user).remaining})</span></div>
+      <p class="panel-content subtitle">Set what's real — many sessions were booked by direct calendar invite, so the auto-count won't match. Bump <em>total</em> to record a second block bought via a Stripe invoice.</p>
+      ${(user.engagements || []).map((e, i) => {
+        const b = engagementBalance(e);
+        return `
+        <form method="POST" action="/api/admin/set-balance" class="balance-row">
+          <input type="hidden" name="email" value="${escapeAttr(targetEmail)}">
+          <input type="hidden" name="index" value="${i}">
+          <strong>${escapeHTML(e.type)}</strong>${e.completed ? ' (completed)' : ''} —
+          used <input type="number" name="sessions_used" value="${b.used}" min="0" style="width:4rem"> of
+          total <input type="number" name="sessions_total" value="${typeof b.total === 'number' ? b.total : ''}" min="0" style="width:4rem">
+          <button type="submit" class="cta-secondary">Save</button>
+        </form>`;
+      }).join('') || '<p class="panel-content">No engagements.</p>'}
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">Drive folder link (client materials)</div>
+      <form method="POST" action="/api/admin/set-balance">
+        <input type="hidden" name="email" value="${escapeAttr(targetEmail)}">
+        <input type="url" name="drive_folder_url" value="${escapeAttr(user.drive_folder_url || '')}" placeholder="https://drive.google.com/…" style="width:100%">
+        <button type="submit" class="cta-secondary">Save link</button>
+      </form>
     </section>
 
     <section class="panel">

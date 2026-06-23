@@ -37,6 +37,8 @@ test('creates user if not exists with state=onboarding-incomplete', async () => 
   assert.strictEqual(u.state_version, 1);
   assert.strictEqual(u.engagements.length, 1);
   assert.strictEqual(u.engagements[0].type, 'coaching-block');
+  assert.strictEqual(u.engagements[0].sessions_total, 4);
+  assert.strictEqual(u.engagements[0].sessions_used, 1); // S1 booked at checkout
   assert.strictEqual(sentEmails.length, 1);
   assert.match(sentEmails[0].subject, /Welcome/);
 });
@@ -95,6 +97,8 @@ test('retainer subscription sets active=true on engagement', async () => {
   });
   const u = await kv.getUser('r@example.com');
   assert.strictEqual(u.engagements[0].type, 'continuation-retainer');
+  assert.strictEqual(u.engagements[0].sessions_total, null);
+  assert.strictEqual(u.engagements[0].sessions_used, 0);
   assert.strictEqual(u.engagements[0].active, true);
   assert.strictEqual(u.engagements[0].stripe_subscription_id, 'sub_R');
 });
