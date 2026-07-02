@@ -18,7 +18,7 @@
     gap: var(--space-5);
     padding: var(--space-7) var(--space-6);
     margin-top: var(--space-4);
-    background: linear-gradient(104deg, var(--bg-main) 0%, var(--bg-main) 44%, #CBD8C1 60%, #587862 80%, #3C5544 100%);
+    background: linear-gradient(104deg, var(--bg-main) 0%, var(--bg-main) 44%, var(--grad-1) 60%, var(--grad-2) 80%, var(--grad-3) 100%);
     border-radius: 20px;
   }
   .hero-copy { order: 1; }
@@ -32,17 +32,106 @@
 
   .prose-lead { max-width: var(--read-col); margin-bottom: var(--space-3); }
 
+  /* The wave motif (problem section) */
+  .wave-fig { max-width: 820px; margin: var(--space-4) auto 0; }
+  .wave-fig svg { width: 100%; height: auto; display: block; }
+  .wave-fig figcaption {
+    text-align: center;
+    font-size: 14.5px;
+    font-style: italic;
+    color: var(--ink-soft);
+    margin-top: var(--space-2);
+  }
+  .wv-ground { fill: none; stroke: var(--ink-faint); stroke-width: 2; opacity: .6; stroke-linecap: round; }
+  .wv-fig path, .wv-fig circle, .wv-fig line { stroke: var(--ink-deep); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .wv-wave { stroke: var(--good); stroke-linecap: round; }
+  .wv-foam { stroke: var(--good); stroke-linecap: round; }
+  .wv-board { stroke: var(--accent) !important; stroke-width: 5 !important; }
+  .wv-body { fill: var(--bg-card); opacity: .55; }
+  .wv-blob { fill: var(--bg-main); stroke: var(--good); stroke-width: 2.2; }
+  .wv-paper rect { fill: var(--bg-main); stroke: var(--ink-faint); stroke-width: 1.5; }
+  .wv-callout { stroke: var(--ink-faint); stroke-width: 1.5; stroke-dasharray: 3 4; }
+  .wv-case { fill: var(--accent); stroke: var(--accent-deep); stroke-width: 1.5; }
+  .wv-label {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.1em;
+    fill: var(--ink-faint);
+  }
+  @media (max-width: 600px) {
+    .wv-label { font-size: 24px; }
+    .wv-label.wv-callout-t { font-size: 19px; }
+  }
+
   .who-list { list-style: none; padding: 0; display: grid; gap: var(--space-2); margin-top: var(--space-3); }
   .who-list li { max-width: var(--read-col); color: var(--ink-soft); padding-left: var(--space-3); position: relative; }
   .who-list li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
   .who-list li strong { color: var(--ink-deep); }
 
-  .home-diagram { max-width: 900px; margin: var(--space-5) auto var(--space-2); }
-  .home-diagram svg { width: 100%; height: auto; display: block; }
-  .home-diagram figcaption { text-align: center; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--ink-faint); margin-top: var(--space-2); }
+  /* Four-layers teaser strip (full treatment lives on /how-it-works) */
+  .fourc-strip-wrap { max-width: 1000px; margin: var(--space-4) auto var(--space-2); }
+  .fourc-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+  }
+  .fourc-panel svg { width: 100%; height: auto; display: block; }
+  .fourc-panel .p-label {
+    text-align: center;
+    margin-top: 6px;
+  }
+  .fourc-panel .p-label .c {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    font-weight: 600;
+    display: block;
+  }
+  .fourc-panel .p-label .n {
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--ink-deep);
+    font-weight: 700;
+    display: block;
+  }
+  .fourc-panel .p-label .g {
+    font-size: 13px;
+    color: var(--ink-faint);
+    display: block;
+  }
+  .fourc-strip-wrap figcaption { text-align: center; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--ink-faint); margin-top: var(--space-3); }
+
+  .fc-ring  { fill: none; stroke: var(--good); stroke-width: 1.8; }
+  .fc-spoke { stroke: var(--good); stroke-width: 1.8; }
+  .fc-node  { fill: var(--bg-soft); stroke: var(--good); stroke-width: 1.3; }
+  .fc-node-t { font-family: var(--sans); font-size: 11px; fill: var(--ink-deep); }
+  .fc-route { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 5; }
+  .fc-pill  { fill: var(--bg-main); stroke: var(--accent); stroke-width: 1.3; }
+  .fc-pill-t { font-family: var(--mono); font-size: 10.5px; fill: var(--accent-deep); }
+  .fc-pill-t.fc-pill-s { font-size: 9px; letter-spacing: 0; }
+  .fc-core  { fill: var(--accent); }
+  .fc-core-halo { fill: var(--accent); opacity: 0.14; }
+  .fc-core-t { font-family: var(--serif); font-size: 11px; fill: var(--bg-main); }
+  .fc-pulse {
+    fill: none; stroke: var(--accent); stroke-width: 2.2;
+    transform-box: fill-box; transform-origin: center;
+    animation: fcPulse 3.2s ease-out infinite;
+  }
+  .fc-pulse.p2 { animation-delay: 1.6s; }
+  @keyframes fcPulse {
+    0%   { transform: scale(1);   opacity: 0.85; }
+    100% { transform: scale(4.4); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fc-pulse { animation: none; opacity: 0.4; }
+  }
+  @media (max-width: 900px) {
+    .fourc-strip { grid-template-columns: repeat(2, 1fr); }
+  }
 
   @media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; padding: var(--space-5) var(--space-4); gap: var(--space-4); background: linear-gradient(165deg, var(--bg-main) 0%, var(--bg-main) 50%, #CBD8C1 72%, #3C5544 100%); }
+    .hero { grid-template-columns: 1fr; padding: var(--space-5) var(--space-4); gap: var(--space-4); background: linear-gradient(165deg, var(--bg-main) 0%, var(--bg-main) 50%, var(--grad-1) 72%, var(--grad-3) 100%); }
     .hero-copy { order: 1; }
     .hero-illustration { order: 2; max-width: 170px; margin: 0 auto; }
   }
@@ -51,6 +140,42 @@
     .hero-ctas .cta-secondary { text-align: center; }
   }
 </style>
+<!-- SEO: canonical + social cards -->
+<link rel="canonical" href="https://crads-ai.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:url" content="https://crads-ai.com/">
+<meta property="og:title" content="Sam Davis — AI coaching for founders">
+<meta property="og:description" content="I coach founders to build their own AI executive assistant — so the admin handles itself and your best hours go to the work that matters. Four sessions, and you own it.">
+<meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sam Davis — AI coaching for founders">
+<meta name="twitter:description" content="I coach founders to build their own AI executive assistant — so the admin handles itself and your best hours go to the work that matters. Four sessions, and you own it.">
+<meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://crads-ai.com/#sam-davis",
+  "name": "Samuel Caradog Davis",
+  "alternateName": ["Sam Davis", "Crads"],
+  "url": "https://crads-ai.com",
+  "image": "https://crads-ai.com/lib/img/sam-illustration.png",
+  "jobTitle": "AI systems builder, data scientist & coach",
+  "homeLocation": { "@type": "Place", "name": "Coogee, Sydney, NSW, Australia" },
+  "alumniOf": [
+    { "@type": "CollegeOrUniversity", "name": "University of Manchester" },
+    { "@type": "CollegeOrUniversity", "name": "University of Sydney" }
+  ],
+  "knowsAbout": ["Applied AI", "Claude Code", "AI agents", "Bayesian statistics", "Environmental data science", "AI coaching"],
+  "sameAs": [
+    "https://www.linkedin.com/in/samuel-davis4",
+    "https://github.com/cradsdavis-cell"
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -89,49 +214,205 @@
     </div>
   </section>
 
+  <!-- The problem -->
+  <section class="section wrap" id="the-wave">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll">The problem</p>
+      <h2 class="reveal-on-scroll">AI looks like a wave. <em>Most owners are bracing for it.</em></h2>
+      <p class="reveal-on-scroll prose-lead" style="margin-top: var(--space-3);">Most business owners I talk to are doing quiet maths on AI. It can write your emails and plan your week, so what's left for the person who built the business? Some are overwhelmed by the tools. Plenty are just looking away and hoping it passes.</p>
+      <p class="reveal-on-scroll prose-lead">It isn't going to pass. But you can ride it rather than get bowled over by it.</p>
+      <p class="reveal-on-scroll prose-lead"><strong>I teach you to build your own AI assistant, one that knows your business and does your admin. You steer. It paddles.</strong></p>
+    </div>
+    <figure class="wave-fig reveal-on-scroll" aria-label="Hand-drawn scene, two vignettes: on the left a wave crashes over a figure, legs sticking out of the whitewater, briefcase and papers flying — labelled bowled over. On the right the same figure rides the wave on a surfboard, briefcase in hand, the board labelled your AI assistant — labelled riding it.">
+      <svg viewBox="0 0 900 340" role="img" xmlns="http://www.w3.org/2000/svg">
+        <!-- shoreline -->
+        <path class="wv-ground" d="M 40 284 Q 200 280 420 283 T 870 283"/>
+
+        <!-- ============ vignette one: bowled over ============ -->
+        <!-- crashing wave: soft body + face strokes + curling lip -->
+        <path class="wv-body" d="M 55 284 C 78 195 128 108 215 94 C 275 84 332 104 336 148 C 339 172 322 187 305 181 C 291 176 287 158 298 150 C 300 172 306 200 330 222 C 346 236 356 250 359 264 C 361 274 356 281 348 284 Z"/>
+        <path class="wv-wave" d="M 60 284 C 82 196 130 110 215 95 C 274 85 331 105 335 148 C 338 171 322 186 305 180 C 291 175 288 158 298 150" stroke-width="3" fill="none"/>
+        <path class="wv-wave" d="M 95 275 C 135 205 185 145 245 122" stroke-width="2.2" opacity=".4" fill="none"/>
+        <path class="wv-wave" d="M 130 278 C 168 220 215 172 268 150" stroke-width="2" opacity=".22" fill="none"/>
+        <!-- foam spirals on the crest -->
+        <path class="wv-foam" d="M 205 82 q 7 -9 15 -3 M 248 84 q 8 -6 13 2 M 175 96 q 4 -10 13 -8" stroke-width="1.8" opacity=".6" fill="none"/>
+        <!-- droplets off the lip -->
+        <path class="wv-foam" d="M 318 200 l 9 7 M 330 185 l 10 4 M 312 215 l 8 9" stroke-width="1.8" opacity=".5" fill="none"/>
+        <!-- whitewater burst swallowing the figure -->
+        <path class="wv-blob" d="M 312 284 q -4 -18 11 -23 q 3 -13 18 -11 q 8 -11 21 -5 q 14 -5 19 8 q 13 4 9 17 q 7 9 -5 14 q -8 8 -20 4 q -14 6 -24 -1 q -16 3 -22 -8 Z"/>
+        <!-- legs kicking out of the foam -->
+        <g class="wv-fig">
+          <path d="M 344 246 L 334 206 M 358 244 L 370 208" fill="none"/>
+          <path d="M 334 206 l -9 -4 M 370 208 l 9 -3" fill="none" stroke-width="2.2"/>
+        </g>
+        <!-- briefcase + papers flying -->
+        <g transform="rotate(24 400 168)">
+          <rect class="wv-case" x="392" y="162" width="16" height="12" rx="2"/>
+          <path class="wv-fig" d="M 396 162 q 4 -6 8 0" fill="none" stroke-width="1.6"/>
+        </g>
+        <g class="wv-paper">
+          <rect x="366" y="142" width="13" height="9" rx="1" transform="rotate(-16 372 146)"/>
+          <rect x="414" y="132" width="13" height="9" rx="1" transform="rotate(21 420 136)"/>
+          <rect x="436" y="180" width="12" height="9" rx="1" transform="rotate(-28 442 184)"/>
+        </g>
+        <path class="wv-foam" d="M 384 150 q 8 -6 14 -2 M 428 158 q 7 4 5 11" stroke-width="1.4" opacity=".45" fill="none"/>
+        <text class="wv-label" x="250" y="322" text-anchor="middle">bowled over</text>
+
+        <!-- ============ vignette two: riding it ============ -->
+        <path class="wv-body" d="M 520 284 C 598 260 662 216 704 158 C 724 130 754 106 787 102 L 789 126 C 762 138 734 168 706 208 C 668 256 596 280 548 284 Z"/>
+        <path class="wv-wave" d="M 520 282 C 590 255 650 210 695 148 C 715 118 745 90 785 92 C 818 96 826 124 800 132 C 780 138 767 126 772 110" stroke-width="3" fill="none"/>
+        <path class="wv-wave" d="M 552 282 C 618 258 672 220 712 164 C 726 144 748 126 772 121" stroke-width="2.2" opacity=".4" fill="none"/>
+        <path class="wv-wave" d="M 588 282 C 648 262 700 232 736 188" stroke-width="2" opacity=".22" fill="none"/>
+        <path class="wv-foam" d="M 796 80 q 6 -8 13 -3 M 812 98 q 8 -4 12 3 M 776 74 q 3 -9 11 -7" stroke-width="1.8" opacity=".6" fill="none"/>
+        <!-- surfer: crouched side-on stance riding down the face, briefcase trailing -->
+        <g class="wv-fig">
+          <path class="wv-board" d="M 600 236 Q 648 212 694 192" fill="none"/>
+          <!-- crouch: wide stance, knees flexed, hips dropped low over the board -->
+          <g transform="rotate(-8 650 200)">
+            <path d="M 658 185 L 672 187 L 676 200" fill="none"/>
+            <path d="M 658 185 L 633 200 L 627 220" fill="none"/>
+            <!-- torso pitched forward down the line -->
+            <path d="M 658 185 C 652 178 643 172 636 168" fill="none"/>
+            <circle cx="625" cy="159" r="8.5" fill="none"/>
+            <!-- front arm reaching over the nose; back arm out wide, case dangling -->
+            <path d="M 638 169 C 626 172 614 178 605 184" fill="none"/>
+            <path d="M 640 168 C 652 163 662 160 670 159" fill="none"/>
+            <rect class="wv-case" x="663" y="161" width="15" height="11" rx="2"/>
+            <path d="M 667 161 q 4 -6 8 0" fill="none" stroke-width="1.6"/>
+          </g>
+        </g>
+        <!-- spray fan off the tail + wake down the face -->
+        <path class="wv-foam" d="M 696 190 l 12 -10 M 698 196 l 15 -2 M 696 202 l 12 8" stroke-width="1.8" opacity=".6" fill="none"/>
+        <path class="wv-foam" d="M 694 196 q 16 12 24 28" stroke-width="1.6" opacity=".35" fill="none"/>
+        <!-- callout: the board is the assistant -->
+        <path class="wv-callout" d="M 646 224 C 680 234 710 226 738 216" fill="none"/>
+        <text class="wv-label wv-callout-t" x="746" y="211" text-anchor="start"><tspan x="746" dy="0">your AI</tspan><tspan x="746" dy="1.3em">assistant</tspan></text>
+        <text class="wv-label" x="660" y="322" text-anchor="middle">riding it</text>
+      </svg>
+      <figcaption>Same wave. The one on the board still owns the business — he just stopped doing his own admin.</figcaption>
+    </figure>
+  </section>
+
   <!-- What you'll build -->
   <section class="section wrap" id="capabilities">
     <div class="read-col">
       <p class="eyebrow reveal-on-scroll">What you'll build</p>
       <h2 class="reveal-on-scroll">An assistant that <em>actually knows you.</em></h2>
     </div>
-    <figure class="home-diagram reveal-on-scroll" aria-label="Your scattered tools — email, calendar, chats, notes, docs — converge into one AI executive assistant that knows you.">
-      <svg viewBox="0 0 700 250" role="img" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <marker id="hda" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
-            <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/>
-          </marker>
-          <style>
-            .hsrc { fill: var(--bg-soft); stroke: var(--rule); stroke-width: 1.5; }
-            .hsrc-t { font-family: var(--sans); font-size: 13px; fill: var(--ink-soft); }
-            .hcore { fill: var(--ink-deep); }
-            .hcore-t { font-family: var(--serif); font-size: 19px; fill: var(--bg-main); font-weight: 700; }
-            .hcore-s { font-family: var(--mono); font-size: 9.5px; letter-spacing: 1.3px; fill: var(--bg-card); }
-            .hln { stroke: var(--ink-faint); stroke-width: 1.6; fill: none; }
-            .hnd { fill: var(--accent); }
-          </style>
-        </defs>
-        <rect x="36" y="22" width="110" height="34" rx="9" class="hsrc" transform="rotate(-3 91 39)"/>
-        <text x="91" y="44" text-anchor="middle" class="hsrc-t" transform="rotate(-3 91 39)">Email</text>
-        <rect x="70" y="70" width="110" height="34" rx="9" class="hsrc" transform="rotate(2 125 87)"/>
-        <text x="125" y="92" text-anchor="middle" class="hsrc-t" transform="rotate(2 125 87)">Calendar</text>
-        <rect x="28" y="118" width="110" height="34" rx="9" class="hsrc" transform="rotate(-2 83 135)"/>
-        <text x="83" y="140" text-anchor="middle" class="hsrc-t" transform="rotate(-2 83 135)">Chats</text>
-        <rect x="74" y="166" width="110" height="34" rx="9" class="hsrc" transform="rotate(3 129 183)"/>
-        <text x="129" y="188" text-anchor="middle" class="hsrc-t" transform="rotate(3 129 183)">Notes</text>
-        <rect x="40" y="206" width="110" height="34" rx="9" class="hsrc" transform="rotate(-2 95 223)"/>
-        <text x="95" y="228" text-anchor="middle" class="hsrc-t" transform="rotate(-2 95 223)">Docs</text>
-        <path d="M146 39 C 250 39, 300 110, 404 120" class="hln" marker-end="url(#hda)"/>
-        <path d="M180 87 C 270 95, 320 118, 404 124" class="hln" marker-end="url(#hda)"/>
-        <path d="M138 135 C 250 130, 320 126, 404 128" class="hln" marker-end="url(#hda)"/>
-        <path d="M184 183 C 280 168, 320 140, 404 132" class="hln" marker-end="url(#hda)"/>
-        <path d="M150 223 C 260 210, 300 145, 404 136" class="hln" marker-end="url(#hda)"/>
-        <rect x="410" y="80" width="230" height="92" rx="18" class="hcore"/>
-        <circle cx="434" cy="102" r="4.5" class="hnd"/>
-        <text x="525" y="124" text-anchor="middle" class="hcore-t">Your AI EA</text>
-        <text x="525" y="147" text-anchor="middle" class="hcore-s">ONE CONTEXT · KNOWS YOU</text>
-      </svg>
-      <figcaption>Scattered tools become one assistant that actually knows you</figcaption>
+    <figure class="fourc-strip-wrap reveal-on-scroll" aria-label="The four layers of the assistant, building up left to right: context rings, tool connections, workflow blueprints, and a scheduled heartbeat.">
+      <div class="fourc-strip">
+        <div class="fourc-panel">
+          <svg viewBox="0 0 320 280" role="img" aria-label="Concentric rings of context around you." xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <circle class="fc-ring" cx="160" cy="130" r="30"  opacity=".80"/>
+              <circle class="fc-ring" cx="160" cy="130" r="48"  opacity=".62"/>
+              <circle class="fc-ring" cx="160" cy="130" r="66"  opacity=".45"/>
+              <circle class="fc-ring" cx="160" cy="130" r="84"  opacity=".30"/>
+              <circle class="fc-ring" cx="160" cy="130" r="102" opacity=".16"/>
+            </g>
+            <circle class="fc-core-halo" cx="160" cy="130" r="27"/>
+            <circle class="fc-core" cx="160" cy="130" r="17"/>
+            <text class="fc-core-t" x="160" y="134" text-anchor="middle">you</text>
+          </svg>
+          <p class="p-label"><span class="c">C1</span><span class="n">Context</span><span class="g">what it knows about you</span></p>
+        </div>
+        <div class="fourc-panel">
+          <svg viewBox="0 0 320 280" role="img" aria-label="Tools connect to you by spokes." xmlns="http://www.w3.org/2000/svg">
+            <g opacity=".35">
+              <circle class="fc-ring" cx="160" cy="130" r="30"  opacity=".80"/>
+              <circle class="fc-ring" cx="160" cy="130" r="48"  opacity=".62"/>
+              <circle class="fc-ring" cx="160" cy="130" r="66"  opacity=".45"/>
+              <circle class="fc-ring" cx="160" cy="130" r="84"  opacity=".30"/>
+              <circle class="fc-ring" cx="160" cy="130" r="102" opacity=".16"/>
+            </g>
+            <g opacity=".55">
+              <line class="fc-spoke" x1="160" y1="130" x2="160" y2="31"/>
+              <line class="fc-spoke" x1="160" y1="130" x2="274" y2="130"/>
+              <line class="fc-spoke" x1="160" y1="130" x2="160" y2="242"/>
+              <line class="fc-spoke" x1="160" y1="130" x2="46"  y2="130"/>
+            </g>
+            <g>
+              <rect class="fc-node" x="124" y="18"  width="72" height="26" rx="8"/><text class="fc-node-t" x="160" y="35"  text-anchor="middle">Email</text>
+              <rect class="fc-node" x="238" y="117" width="72" height="26" rx="8"/><text class="fc-node-t" x="274" y="134" text-anchor="middle">Calendar</text>
+              <rect class="fc-node" x="124" y="229" width="72" height="26" rx="8"/><text class="fc-node-t" x="160" y="246" text-anchor="middle">Docs</text>
+              <rect class="fc-node" x="10"  y="117" width="72" height="26" rx="8"/><text class="fc-node-t" x="46"  y="134" text-anchor="middle">Tasks</text>
+            </g>
+            <circle class="fc-core-halo" cx="160" cy="130" r="27"/>
+            <circle class="fc-core" cx="160" cy="130" r="17"/>
+            <text class="fc-core-t" x="160" y="134" text-anchor="middle">you</text>
+          </svg>
+          <p class="p-label"><span class="c">C2</span><span class="n">Connections</span><span class="g">what it can reach</span></p>
+        </div>
+        <div class="fourc-panel">
+          <svg viewBox="0 0 320 280" role="img" aria-label="Dashed workflow blueprints route across the connected tools." xmlns="http://www.w3.org/2000/svg">
+            <g opacity=".25">
+              <circle class="fc-ring" cx="160" cy="130" r="30"  opacity=".80"/>
+              <circle class="fc-ring" cx="160" cy="130" r="48"  opacity=".62"/>
+              <circle class="fc-ring" cx="160" cy="130" r="66"  opacity=".45"/>
+              <circle class="fc-ring" cx="160" cy="130" r="84"  opacity=".30"/>
+              <circle class="fc-ring" cx="160" cy="130" r="102" opacity=".16"/>
+            </g>
+            <g opacity=".6">
+              <g opacity=".45">
+                <line class="fc-spoke" x1="160" y1="130" x2="160" y2="31"/>
+                <line class="fc-spoke" x1="160" y1="130" x2="274" y2="130"/>
+                <line class="fc-spoke" x1="160" y1="130" x2="160" y2="242"/>
+                <line class="fc-spoke" x1="160" y1="130" x2="46"  y2="130"/>
+              </g>
+              <rect class="fc-node" x="124" y="18"  width="72" height="26" rx="8"/><text class="fc-node-t" x="160" y="35"  text-anchor="middle">Email</text>
+              <rect class="fc-node" x="238" y="117" width="72" height="26" rx="8"/><text class="fc-node-t" x="274" y="134" text-anchor="middle">Calendar</text>
+              <rect class="fc-node" x="124" y="229" width="72" height="26" rx="8"/><text class="fc-node-t" x="160" y="246" text-anchor="middle">Docs</text>
+              <rect class="fc-node" x="10"  y="117" width="72" height="26" rx="8"/><text class="fc-node-t" x="46"  y="134" text-anchor="middle">Tasks</text>
+            </g>
+            <path class="fc-route" d="M 50 118 Q 160 130 270 118"/>
+            <path class="fc-route" d="M 82 143 Q 160 210 238 143"/>
+            <rect class="fc-pill" x="121" y="77" width="78" height="18" rx="9"/>
+            <text class="fc-pill-t fc-pill-s" x="160" y="89.5" text-anchor="middle">Morning brief</text>
+            <rect class="fc-pill" x="77" y="169" width="70" height="18" rx="9"/>
+            <text class="fc-pill-t fc-pill-s" x="112" y="181.5" text-anchor="middle">Inbox sweep</text>
+            <rect class="fc-pill" x="164" y="169" width="84" height="18" rx="9"/>
+            <text class="fc-pill-t fc-pill-s" x="206" y="181.5" text-anchor="middle">Client debrief</text>
+            <circle class="fc-core-halo" cx="160" cy="130" r="27"/>
+            <circle class="fc-core" cx="160" cy="130" r="17"/>
+            <text class="fc-core-t" x="160" y="134" text-anchor="middle">you</text>
+          </svg>
+          <p class="p-label"><span class="c">C3</span><span class="n">Capabilities</span><span class="g">what it can do</span></p>
+        </div>
+        <div class="fourc-panel">
+          <svg viewBox="0 0 320 280" role="img" aria-label="A heartbeat pulse radiates from the core with an ECG trace beneath." xmlns="http://www.w3.org/2000/svg">
+            <g opacity=".45">
+              <g opacity=".25">
+                <circle class="fc-ring" cx="160" cy="130" r="30"  opacity=".80"/>
+                <circle class="fc-ring" cx="160" cy="130" r="48"  opacity=".62"/>
+                <circle class="fc-ring" cx="160" cy="130" r="66"  opacity=".45"/>
+                <circle class="fc-ring" cx="160" cy="130" r="84"  opacity=".30"/>
+                <circle class="fc-ring" cx="160" cy="130" r="102" opacity=".16"/>
+              </g>
+              <g opacity=".45">
+                <line class="fc-spoke" x1="160" y1="130" x2="160" y2="31"/>
+                <line class="fc-spoke" x1="160" y1="130" x2="274" y2="130"/>
+                <line class="fc-spoke" x1="160" y1="130" x2="160" y2="242"/>
+                <line class="fc-spoke" x1="160" y1="130" x2="46"  y2="130"/>
+              </g>
+              <rect class="fc-node" x="124" y="18"  width="72" height="26" rx="8"/><text class="fc-node-t" x="160" y="35"  text-anchor="middle">Email</text>
+              <rect class="fc-node" x="238" y="117" width="72" height="26" rx="8"/><text class="fc-node-t" x="274" y="134" text-anchor="middle">Calendar</text>
+              <rect class="fc-node" x="124" y="229" width="72" height="26" rx="8"/><text class="fc-node-t" x="160" y="246" text-anchor="middle">Docs</text>
+              <rect class="fc-node" x="10"  y="117" width="72" height="26" rx="8"/><text class="fc-node-t" x="46"  y="134" text-anchor="middle">Tasks</text>
+              <path class="fc-route" d="M 50 118 Q 160 130 270 118"/>
+              <path class="fc-route" d="M 82 143 Q 160 210 238 143"/>
+            </g>
+            <circle class="fc-pulse"    cx="160" cy="130" r="22"/>
+            <circle class="fc-pulse p2" cx="160" cy="130" r="22"/>
+            <circle class="fc-core-halo" cx="160" cy="130" r="27"/>
+            <circle class="fc-core" cx="160" cy="130" r="17"/>
+            <text class="fc-core-t" x="160" y="134" text-anchor="middle">you</text>
+            <polyline points="20,264 120,264 132,264 142,251 152,275 160,264 300,264"
+                      fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+          </svg>
+          <p class="p-label"><span class="c">C4</span><span class="n">Cadence</span><span class="g">when it acts, unasked</span></p>
+        </div>
+      </div>
+      <figcaption>Four layers, built up in four sessions · <a href="/how-it-works#the-four-layers">see how each layer works →</a></figcaption>
     </figure>
     <div class="interlude callout-grid stagger-grid">
       <div class="callout">
@@ -158,6 +439,7 @@
         <li><strong>Solo founders and small-business owners</strong> drowning in admin, who want their best hours back.</li>
         <li><strong>Coaches, consultants and service providers</strong> whose business runs on relationships and follow-through.</li>
         <li><strong>People who are curious about AI but not technical</strong> — you don't need to code. That's the whole point of coaching it.</li>
+        <li><strong>Owners who've been putting AI off</strong> — overwhelmed by the tools, quietly wondering if it's coming for them. This is the on-ramp.</li>
       </ul>
       <p class="reveal-on-scroll prose-lead" style="margin-top: var(--space-3);">It started with eight business owners I coached through Impact Collab's Expert Pod in late 2025. They didn't want another tool — they wanted to learn to build their own. That's still the offer.</p>
     </div>
