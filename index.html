@@ -109,6 +109,7 @@
   .fc-route { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 5; }
   .fc-pill  { fill: var(--bg-main); stroke: var(--accent); stroke-width: 1.3; }
   .fc-pill-t { font-family: var(--mono); font-size: 10.5px; fill: var(--accent-deep); }
+  .fc-pill-t.fc-pill-s { font-size: 9px; letter-spacing: 0; }
   .fc-core  { fill: var(--accent); }
   .fc-core-halo { fill: var(--accent); opacity: 0.14; }
   .fc-core-t { font-family: var(--serif); font-size: 11px; fill: var(--bg-main); }
@@ -365,8 +366,12 @@
             </g>
             <path class="fc-route" d="M 50 118 Q 160 130 270 118"/>
             <path class="fc-route" d="M 82 143 Q 160 210 238 143"/>
-            <rect class="fc-pill" x="112" y="76" width="96" height="22" rx="11"/>
-            <text class="fc-pill-t" x="160" y="91" text-anchor="middle">Morning brief</text>
+            <rect class="fc-pill" x="121" y="77" width="78" height="18" rx="9"/>
+            <text class="fc-pill-t fc-pill-s" x="160" y="89.5" text-anchor="middle">Morning brief</text>
+            <rect class="fc-pill" x="77" y="169" width="70" height="18" rx="9"/>
+            <text class="fc-pill-t fc-pill-s" x="112" y="181.5" text-anchor="middle">Inbox sweep</text>
+            <rect class="fc-pill" x="164" y="169" width="84" height="18" rx="9"/>
+            <text class="fc-pill-t fc-pill-s" x="206" y="181.5" text-anchor="middle">Client debrief</text>
             <circle class="fc-core-halo" cx="160" cy="130" r="27"/>
             <circle class="fc-core" cx="160" cy="130" r="17"/>
             <text class="fc-core-t" x="160" y="134" text-anchor="middle">you</text>
