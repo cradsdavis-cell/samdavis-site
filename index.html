@@ -263,21 +263,28 @@
         <path class="wv-wave" d="M 552 282 C 618 258 672 220 712 164 C 726 144 748 126 772 121" stroke-width="2.2" opacity=".4" fill="none"/>
         <path class="wv-wave" d="M 588 282 C 648 262 700 232 736 188" stroke-width="2" opacity=".22" fill="none"/>
         <path class="wv-foam" d="M 796 80 q 6 -8 13 -3 M 812 98 q 8 -4 12 3 M 776 74 q 3 -9 11 -7" stroke-width="1.8" opacity=".6" fill="none"/>
-        <!-- surfer, briefcase in hand -->
-        <g class="wv-fig" transform="rotate(-7 610 180)">
-          <line class="wv-board" x1="552" y1="212" x2="668" y2="188"/>
-          <path d="M 592 205 L 600 174 L 618 170 L 626 196" fill="none"/>
-          <path d="M 600 174 Q 607 148 613 141" fill="none"/>
-          <circle cx="616" cy="130" r="10" fill="none"/>
-          <path d="M 607 152 Q 589 158 578 151 M 612 150 Q 630 154 641 147" fill="none"/>
-          <rect class="wv-case" x="637" y="149" width="16" height="12" rx="2"/>
-          <path d="M 641 149 q 4 -6 8 0" fill="none" stroke-width="1.6"/>
-          <path d="M 534 222 h 15 M 525 232 h 22 M 536 242 h 13" stroke-width="1.6" opacity=".5" fill="none"/>
+        <!-- surfer: crouched side-on stance riding down the face, briefcase trailing -->
+        <g class="wv-fig">
+          <path class="wv-board" d="M 600 236 Q 648 212 694 192" fill="none"/>
+          <!-- crouch: wide stance, knees flexed, hips dropped low over the board -->
+          <g transform="rotate(-8 650 200)">
+            <path d="M 658 185 L 672 187 L 676 200" fill="none"/>
+            <path d="M 658 185 L 633 200 L 627 220" fill="none"/>
+            <!-- torso pitched forward down the line -->
+            <path d="M 658 185 C 652 178 643 172 636 168" fill="none"/>
+            <circle cx="625" cy="159" r="8.5" fill="none"/>
+            <!-- front arm reaching over the nose; back arm out wide, case dangling -->
+            <path d="M 638 169 C 626 172 614 178 605 184" fill="none"/>
+            <path d="M 640 168 C 652 163 662 160 670 159" fill="none"/>
+            <rect class="wv-case" x="663" y="161" width="15" height="11" rx="2"/>
+            <path d="M 667 161 q 4 -6 8 0" fill="none" stroke-width="1.6"/>
+          </g>
         </g>
-        <!-- spray off the tail -->
-        <path class="wv-foam" d="M 548 208 q -8 -8 -16 -6 M 552 218 q -10 -4 -16 2" stroke-width="1.6" opacity=".5" fill="none"/>
+        <!-- spray fan off the tail + wake down the face -->
+        <path class="wv-foam" d="M 696 190 l 12 -10 M 698 196 l 15 -2 M 696 202 l 12 8" stroke-width="1.8" opacity=".6" fill="none"/>
+        <path class="wv-foam" d="M 694 196 q 16 12 24 28" stroke-width="1.6" opacity=".35" fill="none"/>
         <!-- callout: the board is the assistant -->
-        <path class="wv-callout" d="M 664 196 C 690 210 714 214 738 214" fill="none"/>
+        <path class="wv-callout" d="M 646 224 C 680 234 710 226 738 216" fill="none"/>
         <text class="wv-label wv-callout-t" x="746" y="211" text-anchor="start"><tspan x="746" dy="0">your AI</tspan><tspan x="746" dy="1.3em">assistant</tspan></text>
         <text class="wv-label" x="660" y="322" text-anchor="middle">riding it</text>
       </svg>
