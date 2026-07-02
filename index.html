@@ -47,7 +47,10 @@
   .wv-wave { stroke: var(--good); stroke-linecap: round; }
   .wv-foam { stroke: var(--good); stroke-linecap: round; }
   .wv-board { stroke: var(--accent) !important; stroke-width: 5 !important; }
-  .wv-mound { fill: var(--bg-card); stroke-width: 2.2 !important; }
+  .wv-body { fill: var(--bg-card); opacity: .55; }
+  .wv-blob { fill: var(--bg-main); stroke: var(--good); stroke-width: 2.2; }
+  .wv-paper rect { fill: var(--bg-main); stroke: var(--ink-faint); stroke-width: 1.5; }
+  .wv-callout { stroke: var(--ink-faint); stroke-width: 1.5; stroke-dasharray: 3 4; }
   .wv-case { fill: var(--accent); stroke: var(--accent-deep); stroke-width: 1.5; }
   .wv-label {
     font-family: var(--mono);
@@ -57,6 +60,7 @@
   }
   @media (max-width: 600px) {
     .wv-label { font-size: 24px; }
+    .wv-label.wv-callout-t { font-size: 19px; }
   }
 
   .who-list { list-style: none; padding: 0; display: grid; gap: var(--space-2); margin-top: var(--space-3); }
@@ -218,41 +222,66 @@
       <p class="reveal-on-scroll prose-lead">It isn't going to pass. But you can ride it rather than get bowled over by it.</p>
       <p class="reveal-on-scroll prose-lead"><strong>I teach you to build your own AI assistant, one that knows your business and does your admin. You steer. It paddles.</strong></p>
     </div>
-    <figure class="wave-fig reveal-on-scroll" aria-label="Hand-drawn scene: one figure with their head buried in the sand while a wave builds; another figure riding the wave on a surfboard, briefcase in hand.">
-      <svg viewBox="0 0 900 320" role="img" xmlns="http://www.w3.org/2000/svg">
-        <!-- beach + water line -->
-        <path class="wv-ground" d="M 30 262 Q 150 254 300 260 T 470 263 T 870 261"/>
-        <!-- head-in-sand figure -->
-        <g class="wv-fig" transform="rotate(-2 230 240)">
-          <path d="M 256 210 L 247 261 M 256 210 L 269 258" fill="none"/>
-          <path d="M 247 261 h 9 M 269 258 h 9" fill="none" stroke-width="2"/>
-          <path d="M 256 208 C 238 192 210 204 201 230 Q 197 242 196 252" fill="none"/>
-          <path d="M 223 204 Q 217 226 220 246" fill="none" stroke-width="2.2"/>
-          <path class="wv-mound" d="M 176 262 Q 199 236 224 262"/>
-          <path d="M 170 246 l -7 -5 M 179 234 l -4 -8" fill="none" stroke-width="1.6" opacity=".55"/>
+    <figure class="wave-fig reveal-on-scroll" aria-label="Hand-drawn scene, two vignettes: on the left a wave crashes over a figure, legs sticking out of the whitewater, briefcase and papers flying — labelled bowled over. On the right the same figure rides the wave on a surfboard, briefcase in hand, the board labelled your AI assistant — labelled riding it.">
+      <svg viewBox="0 0 900 340" role="img" xmlns="http://www.w3.org/2000/svg">
+        <!-- shoreline -->
+        <path class="wv-ground" d="M 40 284 Q 200 280 420 283 T 870 283"/>
+
+        <!-- ============ vignette one: bowled over ============ -->
+        <!-- crashing wave: soft body + face strokes + curling lip -->
+        <path class="wv-body" d="M 55 284 C 78 195 128 108 215 94 C 275 84 332 104 336 148 C 339 172 322 187 305 181 C 291 176 287 158 298 150 C 300 172 306 200 330 222 C 346 236 356 250 359 264 C 361 274 356 281 348 284 Z"/>
+        <path class="wv-wave" d="M 60 284 C 82 196 130 110 215 95 C 274 85 331 105 335 148 C 338 171 322 186 305 180 C 291 175 288 158 298 150" stroke-width="3" fill="none"/>
+        <path class="wv-wave" d="M 95 275 C 135 205 185 145 245 122" stroke-width="2.2" opacity=".4" fill="none"/>
+        <path class="wv-wave" d="M 130 278 C 168 220 215 172 268 150" stroke-width="2" opacity=".22" fill="none"/>
+        <!-- foam spirals on the crest -->
+        <path class="wv-foam" d="M 205 82 q 7 -9 15 -3 M 248 84 q 8 -6 13 2 M 175 96 q 4 -10 13 -8" stroke-width="1.8" opacity=".6" fill="none"/>
+        <!-- droplets off the lip -->
+        <path class="wv-foam" d="M 318 200 l 9 7 M 330 185 l 10 4 M 312 215 l 8 9" stroke-width="1.8" opacity=".5" fill="none"/>
+        <!-- whitewater burst swallowing the figure -->
+        <path class="wv-blob" d="M 312 284 q -4 -18 11 -23 q 3 -13 18 -11 q 8 -11 21 -5 q 14 -5 19 8 q 13 4 9 17 q 7 9 -5 14 q -8 8 -20 4 q -14 6 -24 -1 q -16 3 -22 -8 Z"/>
+        <!-- legs kicking out of the foam -->
+        <g class="wv-fig">
+          <path d="M 344 246 L 334 206 M 358 244 L 370 208" fill="none"/>
+          <path d="M 334 206 l -9 -4 M 370 208 l 9 -3" fill="none" stroke-width="2.2"/>
         </g>
-        <text class="wv-label" x="230" y="298" text-anchor="middle">option one</text>
-        <!-- the wave -->
-        <g fill="none">
-          <path class="wv-wave" d="M 470 262 C 560 248 630 205 680 138 C 700 110 735 84 778 88 C 812 92 820 122 794 130 C 774 136 760 124 766 108" stroke-width="3"/>
-          <path class="wv-wave" d="M 500 262 C 580 252 645 216 692 156 C 708 136 730 118 756 114" stroke-width="2.4" opacity=".5"/>
-          <path class="wv-wave" d="M 535 262 C 605 255 665 228 706 176" stroke-width="2" opacity=".28"/>
-          <path class="wv-foam" d="M 790 78 q 6 -8 13 -3 M 806 96 q 8 -4 12 3 M 770 72 q 3 -9 11 -7" stroke-width="1.8" opacity=".6"/>
+        <!-- briefcase + papers flying -->
+        <g transform="rotate(24 400 168)">
+          <rect class="wv-case" x="392" y="162" width="16" height="12" rx="2"/>
+          <path class="wv-fig" d="M 396 162 q 4 -6 8 0" fill="none" stroke-width="1.6"/>
         </g>
+        <g class="wv-paper">
+          <rect x="366" y="142" width="13" height="9" rx="1" transform="rotate(-16 372 146)"/>
+          <rect x="414" y="132" width="13" height="9" rx="1" transform="rotate(21 420 136)"/>
+          <rect x="436" y="180" width="12" height="9" rx="1" transform="rotate(-28 442 184)"/>
+        </g>
+        <path class="wv-foam" d="M 384 150 q 8 -6 14 -2 M 428 158 q 7 4 5 11" stroke-width="1.4" opacity=".45" fill="none"/>
+        <text class="wv-label" x="250" y="322" text-anchor="middle">bowled over</text>
+
+        <!-- ============ vignette two: riding it ============ -->
+        <path class="wv-body" d="M 520 284 C 598 260 662 216 704 158 C 724 130 754 106 787 102 L 789 126 C 762 138 734 168 706 208 C 668 256 596 280 548 284 Z"/>
+        <path class="wv-wave" d="M 520 282 C 590 255 650 210 695 148 C 715 118 745 90 785 92 C 818 96 826 124 800 132 C 780 138 767 126 772 110" stroke-width="3" fill="none"/>
+        <path class="wv-wave" d="M 552 282 C 618 258 672 220 712 164 C 726 144 748 126 772 121" stroke-width="2.2" opacity=".4" fill="none"/>
+        <path class="wv-wave" d="M 588 282 C 648 262 700 232 736 188" stroke-width="2" opacity=".22" fill="none"/>
+        <path class="wv-foam" d="M 796 80 q 6 -8 13 -3 M 812 98 q 8 -4 12 3 M 776 74 q 3 -9 11 -7" stroke-width="1.8" opacity=".6" fill="none"/>
         <!-- surfer, briefcase in hand -->
-        <g class="wv-fig" transform="rotate(-6 600 150)">
-          <line class="wv-board" x1="548" y1="186" x2="652" y2="164"/>
-          <path d="M 583 180 L 590 152 L 606 148 L 612 172" fill="none"/>
-          <path d="M 590 152 Q 596 128 601 122" fill="none"/>
-          <circle cx="603" cy="112" r="9" fill="none"/>
-          <path d="M 596 132 Q 580 138 570 132 M 600 130 Q 616 134 626 128" fill="none"/>
-          <rect class="wv-case" x="622" y="130" width="15" height="11" rx="2"/>
-          <path d="M 626 130 q 3 -5 7 0" fill="none" stroke-width="1.6"/>
-          <path d="M 530 196 h 14 M 522 206 h 20 M 532 216 h 12" stroke-width="1.6" opacity=".5" fill="none"/>
+        <g class="wv-fig" transform="rotate(-7 610 180)">
+          <line class="wv-board" x1="552" y1="212" x2="668" y2="188"/>
+          <path d="M 592 205 L 600 174 L 618 170 L 626 196" fill="none"/>
+          <path d="M 600 174 Q 607 148 613 141" fill="none"/>
+          <circle cx="616" cy="130" r="10" fill="none"/>
+          <path d="M 607 152 Q 589 158 578 151 M 612 150 Q 630 154 641 147" fill="none"/>
+          <rect class="wv-case" x="637" y="149" width="16" height="12" rx="2"/>
+          <path d="M 641 149 q 4 -6 8 0" fill="none" stroke-width="1.6"/>
+          <path d="M 534 222 h 15 M 525 232 h 22 M 536 242 h 13" stroke-width="1.6" opacity=".5" fill="none"/>
         </g>
-        <text class="wv-label" x="608" y="298" text-anchor="middle">option two</text>
+        <!-- spray off the tail -->
+        <path class="wv-foam" d="M 548 208 q -8 -8 -16 -6 M 552 218 q -10 -4 -16 2" stroke-width="1.6" opacity=".5" fill="none"/>
+        <!-- callout: the board is the assistant -->
+        <path class="wv-callout" d="M 664 196 C 690 210 714 214 738 214" fill="none"/>
+        <text class="wv-label wv-callout-t" x="746" y="211" text-anchor="start"><tspan x="746" dy="0">your AI</tspan><tspan x="746" dy="1.3em">assistant</tspan></text>
+        <text class="wv-label" x="660" y="322" text-anchor="middle">riding it</text>
       </svg>
-      <figcaption>The one on the board still owns the business. He just stopped doing his own admin.</figcaption>
+      <figcaption>Same wave. The one on the board still owns the business — he just stopped doing his own admin.</figcaption>
     </figure>
   </section>
 
