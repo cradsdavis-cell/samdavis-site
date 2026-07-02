@@ -20,6 +20,10 @@
   --accent-glow: rgba(194, 112, 61, 0.20);
   --rule:        #CDD5C2;
   --good:        #5E7A55;
+  /* hero-gradient stops (home) — tokenized so pages carry no raw hex */
+  --grad-1:      #CBD8C1;
+  --grad-2:      #587862;
+  --grad-3:      #3C5544;
 
   /* Type families */
   --serif: "Palatino Linotype", Palatino, "Book Antiqua", "URW Palladio L", Georgia, serif;
