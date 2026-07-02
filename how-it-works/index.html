@@ -6,7 +6,7 @@
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How it works — Sam Davis</title>
-<meta name="description" content="What a Coaching Block actually looks like — the real 4-session arc, the packs that unlock between sessions, and how you leave able to run your AI executive assistant yourself.">
+<meta name="description" content="The four layers of an AI executive assistant — Context, Connections, Capabilities, Cadence — and the 4-session coaching arc that builds them with you.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 <style>
@@ -149,11 +149,137 @@
     flex-wrap: wrap;
   }
 
+  /* ============ The four layers (4 Cs) ============ */
+  .fourc-intro { max-width: var(--read-col); color: var(--ink-soft); margin-bottom: var(--space-4); }
+
+  .fourc-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    align-items: center;
+    margin-bottom: var(--space-5);
+  }
+  .fourc-row .fc-txt .cnum {
+    font-family: var(--serif);
+    font-size: 20px;
+    color: var(--accent);
+    opacity: 0.55;
+    margin-bottom: 4px;
+  }
+  .fourc-row .fc-txt h3 {
+    font-family: var(--serif);
+    font-size: clamp(26px, 3vw, 34px);
+    color: var(--ink-deep);
+    margin-bottom: 6px;
+  }
+  .fourc-row .fc-txt .fc-gloss {
+    font-family: var(--serif);
+    font-size: clamp(19px, 2.2vw, 23px);
+    color: var(--accent-deep);
+    font-style: italic;
+    margin-bottom: var(--space-2);
+  }
+  .fourc-row .fc-txt p { color: var(--ink-soft); margin-bottom: var(--space-2); }
+  .fourc-row .fc-txt p:last-child { margin-bottom: 0; }
+  .fourc-row .fc-img svg { width: 100%; height: auto; display: block; max-width: 480px; margin: 0 auto; }
+
+  .fc-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: var(--space-2) 0; }
+  .fc-chips .chip {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink-deep);
+    background: var(--bg-soft);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 4px 13px;
+  }
+  .fc-chips .chip.alt {
+    color: var(--accent-deep);
+    background: var(--bg-main);
+    border-color: var(--accent);
+  }
+
+  .fc-layers-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px var(--space-3);
+    margin: var(--space-2) 0;
+    font-size: 15px;
+    color: var(--ink-deep);
+  }
+  .fc-layers-grid .num { font-family: var(--serif); color: var(--accent); margin-right: 0.5em; }
+  .fc-layers-grid .gloss { color: var(--ink-faint); }
+
+  /* SVG classes — one visual grammar for all four stages */
+  .fc-ring  { fill: none; stroke: var(--good); stroke-width: 2; }
+  .fc-spoke { stroke: var(--good); stroke-width: 2; }
+  .fc-node  { fill: var(--bg-soft); stroke: var(--good); stroke-width: 1.5; }
+  .fc-node-t { font-family: var(--sans); font-size: 14px; fill: var(--ink-deep); }
+  .fc-route { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: 7 7; }
+  .fc-pill  { fill: var(--bg-main); stroke: var(--accent); stroke-width: 1.5; }
+  .fc-pill-t { font-family: var(--mono); font-size: 12.5px; fill: var(--accent-deep); }
+  .fc-core  { fill: var(--accent); }
+  .fc-core-halo { fill: var(--accent); opacity: 0.14; }
+  .fc-core-t { font-family: var(--serif); font-size: 15px; fill: var(--bg-main); }
+  .fc-pulse {
+    fill: none; stroke: var(--accent); stroke-width: 3;
+    transform-box: fill-box; transform-origin: center;
+    animation: fcPulse 3.2s ease-out infinite;
+  }
+  .fc-pulse.p2 { animation-delay: 1.6s; }
+  @keyframes fcPulse {
+    0%   { transform: scale(1);   opacity: 0.85; }
+    100% { transform: scale(5.6); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fc-pulse { animation: none; opacity: 0.4; }
+  }
+
+  .fc-bridge {
+    max-width: var(--read-col);
+    color: var(--ink-soft);
+    font-style: italic;
+    border-left: 4px solid var(--accent);
+    padding-left: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+
+  .how-it-works .session-block .layer-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--good);
+    background: var(--bg-card);
+    border-radius: 999px;
+    padding: 2px 10px;
+    margin-left: 8px;
+    vertical-align: 1px;
+  }
+
   @media (max-width: 900px) {
     .how-hero { grid-template-columns: 1fr; }
     .how-hero img { margin: 0 auto; }
+    .fourc-row { grid-template-columns: 1fr; gap: var(--space-3); }
+    .fourc-row .fc-img { order: 2; }
+    .fc-layers-grid { grid-template-columns: 1fr; }
   }
 </style>
+<!-- SEO: canonical + social cards -->
+<link rel="canonical" href="https://crads-ai.com/how-it-works">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:url" content="https://crads-ai.com/how-it-works">
+<meta property="og:title" content="How it works — Sam Davis">
+<meta property="og:description" content="The four layers of an AI executive assistant — Context, Connections, Capabilities, Cadence — and the 4-session coaching arc that builds them with you.">
+<meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How it works — Sam Davis">
+<meta name="twitter:description" content="The four layers of an AI executive assistant — Context, Connections, Capabilities, Cadence — and the 4-session coaching arc that builds them with you.">
+<meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body>
 
@@ -180,8 +306,219 @@
     <div>
       <p class="eyebrow">How it works</p>
       <h1>We don't build it for you. <em>We teach you to build it.</em></h1>
-      <p class="lead">No deck, no theatre. Here's the real shape of a Coaching Block — four sessions where you stand up your own AI executive assistant, and the work you do between them that makes it stick.</p>
+      <p class="lead">Here's what an AI executive assistant is actually made of — four layers — and the real shape of the Coaching Block that builds them with you.</p>
     </div>
+  </section>
+
+  <!-- The four layers -->
+  <section class="section section-tight wrap how-it-works" id="the-four-layers">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll">What we build</p>
+      <h2 class="reveal-on-scroll">A chatbot forgets you. <em>An assistant accumulates you.</em></h2>
+      <p class="fourc-intro reveal-on-scroll" style="margin-top: var(--space-2);">The difference is a folder of plain files it reads every time it wakes up. That folder is what we build together — four layers, each one making the assistant more yours.</p>
+    </div>
+
+    <!-- C1 · Context -->
+    <div class="fourc-row reveal-on-scroll">
+      <div class="fc-txt">
+        <p class="cnum">C1</p>
+        <h3>Context</h3>
+        <p class="fc-gloss">What it knows about you.</p>
+        <p>Plain files, organised in layers. Mine has eight:</p>
+        <div class="fc-layers-grid">
+          <div><span class="num">1</span>North Star <span class="gloss">— why</span></div>
+          <div><span class="num">2</span>Philosophy <span class="gloss">— how you think</span></div>
+          <div><span class="num">3</span>Self <span class="gloss">— who you are</span></div>
+          <div><span class="num">4</span>Network <span class="gloss">— your people</span></div>
+          <div><span class="num">5</span>Past <span class="gloss">— where you've been</span></div>
+          <div><span class="num">6</span>Goals <span class="gloss">— where you're going</span></div>
+          <div><span class="num">7</span>Tasks <span class="gloss">— what's on now</span></div>
+          <div><span class="num">8</span>Workflow <span class="gloss">— how your week runs</span></div>
+        </div>
+        <p>Written down once — never explained twice.</p>
+      </div>
+      <div class="fc-img">
+        <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Eight concentric rings of context around you at the core.">
+          <g>
+            <circle class="fc-ring" cx="320" cy="260" r="52"  opacity=".80"/>
+            <circle class="fc-ring" cx="320" cy="260" r="76"  opacity=".66"/>
+            <circle class="fc-ring" cx="320" cy="260" r="100" opacity=".54"/>
+            <circle class="fc-ring" cx="320" cy="260" r="124" opacity=".43"/>
+            <circle class="fc-ring" cx="320" cy="260" r="148" opacity=".33"/>
+            <circle class="fc-ring" cx="320" cy="260" r="172" opacity=".24"/>
+            <circle class="fc-ring" cx="320" cy="260" r="196" opacity=".16"/>
+            <circle class="fc-ring" cx="320" cy="260" r="220" opacity=".10"/>
+          </g>
+          <circle class="fc-core-halo" cx="320" cy="260" r="44"/>
+          <circle class="fc-core" cx="320" cy="260" r="28"/>
+          <text class="fc-core-t" x="320" y="265" text-anchor="middle">you</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- C2 · Connections -->
+    <div class="fourc-row reveal-on-scroll">
+      <div class="fc-txt">
+        <p class="cnum">C2</p>
+        <h3>Connections</h3>
+        <p class="fc-gloss">What it can reach.</p>
+        <p>Context tells it who you are. Connections let it work where the work already lives:</p>
+        <div class="fc-chips">
+          <span class="chip">Email</span><span class="chip">Calendar</span><span class="chip">Tasks</span>
+          <span class="chip">WhatsApp</span><span class="chip">Docs &amp; Drive</span><span class="chip">CRM / books</span>
+        </div>
+        <p>Each one is a doorway you open once.</p>
+      </div>
+      <div class="fc-img">
+        <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The context rings recede as six tools — email, calendar, tasks, WhatsApp, docs and CRM — connect to you by spokes.">
+          <g opacity=".38">
+            <circle class="fc-ring" cx="320" cy="260" r="52"  opacity=".80"/>
+            <circle class="fc-ring" cx="320" cy="260" r="76"  opacity=".66"/>
+            <circle class="fc-ring" cx="320" cy="260" r="100" opacity=".54"/>
+            <circle class="fc-ring" cx="320" cy="260" r="124" opacity=".43"/>
+            <circle class="fc-ring" cx="320" cy="260" r="148" opacity=".33"/>
+            <circle class="fc-ring" cx="320" cy="260" r="172" opacity=".24"/>
+            <circle class="fc-ring" cx="320" cy="260" r="196" opacity=".16"/>
+            <circle class="fc-ring" cx="320" cy="260" r="220" opacity=".10"/>
+          </g>
+          <g opacity=".55">
+            <line class="fc-spoke" x1="320" y1="260" x2="320" y2="55"/>
+            <line class="fc-spoke" x1="320" y1="260" x2="545" y2="150"/>
+            <line class="fc-spoke" x1="320" y1="260" x2="545" y2="370"/>
+            <line class="fc-spoke" x1="320" y1="260" x2="320" y2="465"/>
+            <line class="fc-spoke" x1="320" y1="260" x2="95"  y2="370"/>
+            <line class="fc-spoke" x1="320" y1="260" x2="95"  y2="150"/>
+          </g>
+          <g>
+            <rect class="fc-node" x="265" y="35"  width="110" height="40" rx="10"/><text class="fc-node-t" x="320" y="60"  text-anchor="middle">Tasks</text>
+            <rect class="fc-node" x="490" y="130" width="110" height="40" rx="10"/><text class="fc-node-t" x="545" y="155" text-anchor="middle">Calendar</text>
+            <rect class="fc-node" x="490" y="350" width="110" height="40" rx="10"/><text class="fc-node-t" x="545" y="375" text-anchor="middle">WhatsApp</text>
+            <rect class="fc-node" x="265" y="445" width="110" height="40" rx="10"/><text class="fc-node-t" x="320" y="470" text-anchor="middle">Docs &amp; Drive</text>
+            <rect class="fc-node" x="40"  y="350" width="110" height="40" rx="10"/><text class="fc-node-t" x="95"  y="375" text-anchor="middle">CRM / books</text>
+            <rect class="fc-node" x="40"  y="130" width="110" height="40" rx="10"/><text class="fc-node-t" x="95"  y="155" text-anchor="middle">Email</text>
+          </g>
+          <circle class="fc-core-halo" cx="320" cy="260" r="44"/>
+          <circle class="fc-core" cx="320" cy="260" r="28"/>
+          <text class="fc-core-t" x="320" y="265" text-anchor="middle">you</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- C3 · Capabilities -->
+    <div class="fourc-row reveal-on-scroll">
+      <div class="fc-txt">
+        <p class="cnum">C3</p>
+        <h3>Capabilities</h3>
+        <p class="fc-gloss">Blueprints for your workflows.</p>
+        <p>A capability is a written recipe — the steps you'd give a new hire, saved so it runs the same way every time:</p>
+        <div class="fc-chips">
+          <span class="chip alt">Morning brief</span><span class="chip alt">Inbox sweep</span>
+          <span class="chip alt">Client debrief</span><span class="chip alt">Weekly review</span>
+        </div>
+        <p>Describe the workflow once. Now it's a button.</p>
+      </div>
+      <div class="fc-img">
+        <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Dashed blueprint routes appear across the connected tools — morning brief, inbox sweep, client debrief.">
+          <g opacity=".25">
+            <circle class="fc-ring" cx="320" cy="260" r="52"  opacity=".80"/>
+            <circle class="fc-ring" cx="320" cy="260" r="76"  opacity=".66"/>
+            <circle class="fc-ring" cx="320" cy="260" r="100" opacity=".54"/>
+            <circle class="fc-ring" cx="320" cy="260" r="124" opacity=".43"/>
+            <circle class="fc-ring" cx="320" cy="260" r="148" opacity=".33"/>
+            <circle class="fc-ring" cx="320" cy="260" r="172" opacity=".24"/>
+            <circle class="fc-ring" cx="320" cy="260" r="196" opacity=".16"/>
+            <circle class="fc-ring" cx="320" cy="260" r="220" opacity=".10"/>
+          </g>
+          <g opacity=".7">
+            <g opacity=".45">
+              <line class="fc-spoke" x1="320" y1="260" x2="320" y2="55"/>
+              <line class="fc-spoke" x1="320" y1="260" x2="545" y2="150"/>
+              <line class="fc-spoke" x1="320" y1="260" x2="545" y2="370"/>
+              <line class="fc-spoke" x1="320" y1="260" x2="320" y2="465"/>
+              <line class="fc-spoke" x1="320" y1="260" x2="95"  y2="370"/>
+              <line class="fc-spoke" x1="320" y1="260" x2="95"  y2="150"/>
+            </g>
+            <rect class="fc-node" x="265" y="35"  width="110" height="40" rx="10"/><text class="fc-node-t" x="320" y="60"  text-anchor="middle">Tasks</text>
+            <rect class="fc-node" x="490" y="130" width="110" height="40" rx="10"/><text class="fc-node-t" x="545" y="155" text-anchor="middle">Calendar</text>
+            <rect class="fc-node" x="490" y="350" width="110" height="40" rx="10"/><text class="fc-node-t" x="545" y="375" text-anchor="middle">WhatsApp</text>
+            <rect class="fc-node" x="265" y="445" width="110" height="40" rx="10"/><text class="fc-node-t" x="320" y="470" text-anchor="middle">Docs &amp; Drive</text>
+            <rect class="fc-node" x="40"  y="350" width="110" height="40" rx="10"/><text class="fc-node-t" x="95"  y="375" text-anchor="middle">CRM / books</text>
+            <rect class="fc-node" x="40"  y="130" width="110" height="40" rx="10"/><text class="fc-node-t" x="95"  y="155" text-anchor="middle">Email</text>
+          </g>
+          <g>
+            <path class="fc-route" d="M 150 160 Q 320 260 490 160"/>
+            <path class="fc-route" d="M 150 360 Q 320 260 490 360"/>
+            <path class="fc-route" d="M 130 150 Q 200 70 265 60"/>
+          </g>
+          <g>
+            <rect class="fc-pill" x="180" y="188" width="128" height="30" rx="15"/>
+            <text class="fc-pill-t" x="244" y="208" text-anchor="middle">Morning brief</text>
+            <rect class="fc-pill" x="336" y="302" width="128" height="30" rx="15"/>
+            <text class="fc-pill-t" x="400" y="322" text-anchor="middle">Client debrief</text>
+            <rect class="fc-pill" x="128" y="70" width="118" height="30" rx="15"/>
+            <text class="fc-pill-t" x="187" y="90" text-anchor="middle">Inbox sweep</text>
+          </g>
+          <circle class="fc-core-halo" cx="320" cy="260" r="44"/>
+          <circle class="fc-core" cx="320" cy="260" r="28"/>
+          <text class="fc-core-t" x="320" y="265" text-anchor="middle">you</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- C4 · Cadence -->
+    <div class="fourc-row reveal-on-scroll">
+      <div class="fc-txt">
+        <p class="cnum">C4</p>
+        <h3>Cadence</h3>
+        <p class="fc-gloss">The heartbeat.</p>
+        <p>Jobs that run on a schedule without being asked — the morning brief is waiting before you sit down.</p>
+        <p>You've hired an executive assistant. Give it feedback, and let go of the reins a little more each week.</p>
+      </div>
+      <div class="fc-img">
+        <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The whole system recedes behind a heartbeat pulse radiating from the core, with an ECG trace running underneath.">
+          <g opacity=".55">
+            <g opacity=".25">
+              <circle class="fc-ring" cx="320" cy="260" r="52"  opacity=".80"/>
+              <circle class="fc-ring" cx="320" cy="260" r="76"  opacity=".66"/>
+              <circle class="fc-ring" cx="320" cy="260" r="100" opacity=".54"/>
+              <circle class="fc-ring" cx="320" cy="260" r="124" opacity=".43"/>
+              <circle class="fc-ring" cx="320" cy="260" r="148" opacity=".33"/>
+              <circle class="fc-ring" cx="320" cy="260" r="172" opacity=".24"/>
+              <circle class="fc-ring" cx="320" cy="260" r="196" opacity=".16"/>
+              <circle class="fc-ring" cx="320" cy="260" r="220" opacity=".10"/>
+            </g>
+            <g opacity=".45">
+              <line class="fc-spoke" x1="320" y1="260" x2="320" y2="55"/>
+              <line class="fc-spoke" x1="320" y1="260" x2="545" y2="150"/>
+              <line class="fc-spoke" x1="320" y1="260" x2="545" y2="370"/>
+              <line class="fc-spoke" x1="320" y1="260" x2="320" y2="465"/>
+              <line class="fc-spoke" x1="320" y1="260" x2="95"  y2="370"/>
+              <line class="fc-spoke" x1="320" y1="260" x2="95"  y2="150"/>
+            </g>
+            <rect class="fc-node" x="265" y="35"  width="110" height="40" rx="10"/><text class="fc-node-t" x="320" y="60"  text-anchor="middle">Tasks</text>
+            <rect class="fc-node" x="490" y="130" width="110" height="40" rx="10"/><text class="fc-node-t" x="545" y="155" text-anchor="middle">Calendar</text>
+            <rect class="fc-node" x="490" y="350" width="110" height="40" rx="10"/><text class="fc-node-t" x="545" y="375" text-anchor="middle">WhatsApp</text>
+            <rect class="fc-node" x="265" y="445" width="110" height="40" rx="10"/><text class="fc-node-t" x="320" y="470" text-anchor="middle">Docs &amp; Drive</text>
+            <rect class="fc-node" x="40"  y="350" width="110" height="40" rx="10"/><text class="fc-node-t" x="95"  y="375" text-anchor="middle">CRM / books</text>
+            <rect class="fc-node" x="40"  y="130" width="110" height="40" rx="10"/><text class="fc-node-t" x="95"  y="155" text-anchor="middle">Email</text>
+            <g>
+              <path class="fc-route" d="M 150 160 Q 320 260 490 160"/>
+              <path class="fc-route" d="M 150 360 Q 320 260 490 360"/>
+              <path class="fc-route" d="M 130 150 Q 200 70 265 60"/>
+            </g>
+          </g>
+          <circle class="fc-pulse"    cx="320" cy="260" r="34"/>
+          <circle class="fc-pulse p2" cx="320" cy="260" r="34"/>
+          <circle class="fc-core-halo" cx="320" cy="260" r="44"/>
+          <circle class="fc-core" cx="320" cy="260" r="28"/>
+          <text class="fc-core-t" x="320" y="265" text-anchor="middle">you</text>
+          <polyline points="40,505 220,505 245,505 260,483 278,517 292,505 600,505"
+                    fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <p class="fc-bridge reveal-on-scroll">The four sessions below climb this ladder — Context first, then the doorways, then the blueprints, then the heartbeat.</p>
   </section>
 
   <section class="section section-tight wrap how-it-works">
@@ -271,7 +608,7 @@
       <p class="arc-intro">You set the pace — all four inside a fortnight, or spread across the four weeks to let it settle. Either way the block runs over about four weeks, with Slack support throughout. If you want me on call after that, the Continuation Retainer keeps the line open.</p>
 
       <div class="session-block reveal-on-scroll">
-        <span class="s-tag">Session 1 · with Sam</span>
+        <span class="s-tag">Session 1 · with Sam<span class="layer-tag">foundations</span></span>
         <h3>Up and running — and no longer scared of it</h3>
         <p>By the end of the first session you've got a working assistant on your own machine, and the nerves are gone. We get Claude Code installed, fire off your first prompts together, and set up a safe space — your sandbox — where you can poke around without breaking anything.</p>
         <p>You leave with something that works, and somewhere to play.</p>
@@ -279,21 +616,21 @@
       <p class="between"><strong>Between 1 and 2 —</strong> you play in the sandbox. Have ten real conversations with it. The goal isn't to get anything right — it's to stop being nervous about the tool.<span class="pack-tag">Pack 1</span></p>
 
       <div class="session-block reveal-on-scroll">
-        <span class="s-tag">Session 2 · with Sam</span>
+        <span class="s-tag">Session 2 · with Sam<span class="layer-tag">C1 · context</span></span>
         <h3>Teach it who you are</h3>
         <p>Now you're comfortable, we turn the setup into a real executive assistant — one that actually knows you. We start by mapping who you are, what you do and what matters most, so it has a real model of you to work from. You walk me through your world too, so I understand the business we're building this around.</p>
       </div>
       <p class="between"><strong>Between 2 and 3 —</strong> you finish mapping yourself out and work through the rest of Pack 2 at your own pace. Slack's open for questions.<span class="pack-tag">Pack 2</span></p>
 
       <div class="session-block reveal-on-scroll">
-        <span class="s-tag">Session 3 · with Sam</span>
+        <span class="s-tag">Session 3 · with Sam<span class="layer-tag">C2 · connections</span><span class="layer-tag">C3 · capabilities</span></span>
         <h3>Plug it into your actual day</h3>
         <p>We connect the assistant to the tools you already live in — your email, your calendar, your docs. Now it can do things for you, not just talk: read your inbox, pull up a client's history, draft the reply. Then I push you to keep experimenting on your own — this is where most people find the one workflow that changes their week.</p>
       </div>
       <p class="between"><strong>Between 3 and 4 —</strong> you work through Pack 3: deeper connections, your people layer, and the moves that make it feel like it really knows you.<span class="pack-tag">Pack 3</span></p>
 
       <div class="session-block reveal-on-scroll">
-        <span class="s-tag">Session 4 · with Sam</span>
+        <span class="s-tag">Session 4 · with Sam<span class="layer-tag">C4 · cadence</span></span>
         <h3>Running your week — without me</h3>
         <p>We review what's running, connect anything else you want, and map what you'd build next. The point of this session is confidence: you leave knowing how to keep growing it yourself, without me.</p>
         <p>If you'd rather keep a hand on your shoulder after the four weeks, the <strong>Continuation Retainer</strong> keeps the line open — but most people don't need it. That's the goal.</p>

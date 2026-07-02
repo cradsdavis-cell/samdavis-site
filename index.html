@@ -18,7 +18,7 @@
     gap: var(--space-5);
     padding: var(--space-7) var(--space-6);
     margin-top: var(--space-4);
-    background: linear-gradient(104deg, var(--bg-main) 0%, var(--bg-main) 44%, #CBD8C1 60%, #587862 80%, #3C5544 100%);
+    background: linear-gradient(104deg, var(--bg-main) 0%, var(--bg-main) 44%, var(--grad-1) 60%, var(--grad-2) 80%, var(--grad-3) 100%);
     border-radius: 20px;
   }
   .hero-copy { order: 1; }
@@ -37,12 +37,69 @@
   .who-list li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
   .who-list li strong { color: var(--ink-deep); }
 
-  .home-diagram { max-width: 900px; margin: var(--space-5) auto var(--space-2); }
-  .home-diagram svg { width: 100%; height: auto; display: block; }
-  .home-diagram figcaption { text-align: center; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--ink-faint); margin-top: var(--space-2); }
+  /* Four-layers teaser strip (full treatment lives on /how-it-works) */
+  .fourc-strip-wrap { max-width: 1000px; margin: var(--space-4) auto var(--space-2); }
+  .fourc-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+  }
+  .fourc-panel svg { width: 100%; height: auto; display: block; }
+  .fourc-panel .p-label {
+    text-align: center;
+    margin-top: 6px;
+  }
+  .fourc-panel .p-label .c {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    font-weight: 600;
+    display: block;
+  }
+  .fourc-panel .p-label .n {
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--ink-deep);
+    font-weight: 700;
+    display: block;
+  }
+  .fourc-panel .p-label .g {
+    font-size: 13px;
+    color: var(--ink-faint);
+    display: block;
+  }
+  .fourc-strip-wrap figcaption { text-align: center; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--ink-faint); margin-top: var(--space-3); }
+
+  .fc-ring  { fill: none; stroke: var(--good); stroke-width: 1.8; }
+  .fc-spoke { stroke: var(--good); stroke-width: 1.8; }
+  .fc-node  { fill: var(--bg-soft); stroke: var(--good); stroke-width: 1.3; }
+  .fc-node-t { font-family: var(--sans); font-size: 11px; fill: var(--ink-deep); }
+  .fc-route { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 5; }
+  .fc-pill  { fill: var(--bg-main); stroke: var(--accent); stroke-width: 1.3; }
+  .fc-pill-t { font-family: var(--mono); font-size: 10.5px; fill: var(--accent-deep); }
+  .fc-core  { fill: var(--accent); }
+  .fc-core-halo { fill: var(--accent); opacity: 0.14; }
+  .fc-core-t { font-family: var(--serif); font-size: 11px; fill: var(--bg-main); }
+  .fc-pulse {
+    fill: none; stroke: var(--accent); stroke-width: 2.2;
+    transform-box: fill-box; transform-origin: center;
+    animation: fcPulse 3.2s ease-out infinite;
+  }
+  .fc-pulse.p2 { animation-delay: 1.6s; }
+  @keyframes fcPulse {
+    0%   { transform: scale(1);   opacity: 0.85; }
+    100% { transform: scale(4.4); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fc-pulse { animation: none; opacity: 0.4; }
+  }
+  @media (max-width: 900px) {
+    .fourc-strip { grid-template-columns: repeat(2, 1fr); }
+  }
 
   @media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; padding: var(--space-5) var(--space-4); gap: var(--space-4); background: linear-gradient(165deg, var(--bg-main) 0%, var(--bg-main) 50%, #CBD8C1 72%, #3C5544 100%); }
+    .hero { grid-template-columns: 1fr; padding: var(--space-5) var(--space-4); gap: var(--space-4); background: linear-gradient(165deg, var(--bg-main) 0%, var(--bg-main) 50%, var(--grad-1) 72%, var(--grad-3) 100%); }
     .hero-copy { order: 1; }
     .hero-illustration { order: 2; max-width: 170px; margin: 0 auto; }
   }
@@ -51,6 +108,42 @@
     .hero-ctas .cta-secondary { text-align: center; }
   }
 </style>
+<!-- SEO: canonical + social cards -->
+<link rel="canonical" href="https://crads-ai.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:url" content="https://crads-ai.com/">
+<meta property="og:title" content="Sam Davis — AI coaching for founders">
+<meta property="og:description" content="I coach founders to build their own AI executive assistant — so the admin handles itself and your best hours go to the work that matters. Four sessions, and you own it.">
+<meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sam Davis — AI coaching for founders">
+<meta name="twitter:description" content="I coach founders to build their own AI executive assistant — so the admin handles itself and your best hours go to the work that matters. Four sessions, and you own it.">
+<meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://crads-ai.com/#sam-davis",
+  "name": "Samuel Caradog Davis",
+  "alternateName": ["Sam Davis", "Crads"],
+  "url": "https://crads-ai.com",
+  "image": "https://crads-ai.com/lib/img/sam-illustration.png",
+  "jobTitle": "AI systems builder, data scientist & coach",
+  "homeLocation": { "@type": "Place", "name": "Coogee, Sydney, NSW, Australia" },
+  "alumniOf": [
+    { "@type": "CollegeOrUniversity", "name": "University of Manchester" },
+    { "@type": "CollegeOrUniversity", "name": "University of Sydney" }
+  ],
+  "knowsAbout": ["Applied AI", "Claude Code", "AI agents", "Bayesian statistics", "Environmental data science", "AI coaching"],
+  "sameAs": [
+    "https://www.linkedin.com/in/samuel-davis4",
+    "https://github.com/cradsdavis-cell"
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -95,43 +188,116 @@
       <p class="eyebrow reveal-on-scroll">What you'll build</p>
       <h2 class="reveal-on-scroll">An assistant that <em>actually knows you.</em></h2>
     </div>
-    <figure class="home-diagram reveal-on-scroll" aria-label="Your scattered tools — email, calendar, chats, notes, docs — converge into one AI executive assistant that knows you.">
-      <svg viewBox="0 0 700 250" role="img" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <marker id="hda" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
-            <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/>
-          </marker>
-          <style>
-            .hsrc { fill: var(--bg-soft); stroke: var(--rule); stroke-width: 1.5; }
-            .hsrc-t { font-family: var(--sans); font-size: 13px; fill: var(--ink-soft); }
-            .hcore { fill: var(--ink-deep); }
-            .hcore-t { font-family: var(--serif); font-size: 19px; fill: var(--bg-main); font-weight: 700; }
-            .hcore-s { font-family: var(--mono); font-size: 9.5px; letter-spacing: 1.3px; fill: var(--bg-card); }
-            .hln { stroke: var(--ink-faint); stroke-width: 1.6; fill: none; }
-            .hnd { fill: var(--accent); }
-          </style>
-        </defs>
-        <rect x="36" y="22" width="110" height="34" rx="9" class="hsrc" transform="rotate(-3 91 39)"/>
-        <text x="91" y="44" text-anchor="middle" class="hsrc-t" transform="rotate(-3 91 39)">Email</text>
-        <rect x="70" y="70" width="110" height="34" rx="9" class="hsrc" transform="rotate(2 125 87)"/>
-        <text x="125" y="92" text-anchor="middle" class="hsrc-t" transform="rotate(2 125 87)">Calendar</text>
-        <rect x="28" y="118" width="110" height="34" rx="9" class="hsrc" transform="rotate(-2 83 135)"/>
-        <text x="83" y="140" text-anchor="middle" class="hsrc-t" transform="rotate(-2 83 135)">Chats</text>
-        <rect x="74" y="166" width="110" height="34" rx="9" class="hsrc" transform="rotate(3 129 183)"/>
-        <text x="129" y="188" text-anchor="middle" class="hsrc-t" transform="rotate(3 129 183)">Notes</text>
-        <rect x="40" y="206" width="110" height="34" rx="9" class="hsrc" transform="rotate(-2 95 223)"/>
-        <text x="95" y="228" text-anchor="middle" class="hsrc-t" transform="rotate(-2 95 223)">Docs</text>
-        <path d="M146 39 C 250 39, 300 110, 404 120" class="hln" marker-end="url(#hda)"/>
-        <path d="M180 87 C 270 95, 320 118, 404 124" class="hln" marker-end="url(#hda)"/>
-        <path d="M138 135 C 250 130, 320 126, 404 128" class="hln" marker-end="url(#hda)"/>
-        <path d="M184 183 C 280 168, 320 140, 404 132" class="hln" marker-end="url(#hda)"/>
-        <path d="M150 223 C 260 210, 300 145, 404 136" class="hln" marker-end="url(#hda)"/>
-        <rect x="410" y="80" width="230" height="92" rx="18" class="hcore"/>
-        <circle cx="434" cy="102" r="4.5" class="hnd"/>
-        <text x="525" y="124" text-anchor="middle" class="hcore-t">Your AI EA</text>
-        <text x="525" y="147" text-anchor="middle" class="hcore-s">ONE CONTEXT · KNOWS YOU</text>
-      </svg>
-      <figcaption>Scattered tools become one assistant that actually knows you</figcaption>
+    <figure class="fourc-strip-wrap reveal-on-scroll" aria-label="The four layers of the assistant, building up left to right: context rings, tool connections, workflow blueprints, and a scheduled heartbeat.">
+      <div class="fourc-strip">
+        <div class="fourc-panel">
+          <svg viewBox="0 0 320 280" role="img" aria-label="Concentric rings of context around you." xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <circle class="fc-ring" cx="160" cy="130" r="30"  opacity=".80"/>
+              <circle class="fc-ring" cx="160" cy="130" r="48"  opacity=".62"/>
+              <circle class="fc-ring" cx="160" cy="130" r="66"  opacity=".45"/>
+              <circle class="fc-ring" cx="160" cy="130" r="84"  opacity=".30"/>
+              <circle class="fc-ring" cx="160" cy="130" r="102" opacity=".16"/>
+            </g>
+            <circle class="fc-core-halo" cx="160" cy="130" r="27"/>
+            <circle class="fc-core" cx="160" cy="130" r="17"/>
+            <text class="fc-core-t" x="160" y="134" text-anchor="middle">you</text>
+          </svg>
+          <p class="p-label"><span class="c">C1</span><span class="n">Context</span><span class="g">what it knows about you</span></p>
+        </div>
+        <div class="fourc-panel">
+          <svg viewBox="0 0 320 280" role="img" aria-label="Tools connect to you by spokes." xmlns="http://www.w3.org/2000/svg">
+            <g opacity=".35">
+              <circle class="fc-ring" cx="160" cy="130" r="30"  opacity=".80"/>
+              <circle class="fc-ring" cx="160" cy="130" r="48"  opacity=".62"/>
+              <circle class="fc-ring" cx="160" cy="130" r="66"  opacity=".45"/>
+              <circle class="fc-ring" cx="160" cy="130" r="84"  opacity=".30"/>
+              <circle class="fc-ring" cx="160" cy="130" r="102" opacity=".16"/>
+            </g>
+            <g opacity=".55">
+              <line class="fc-spoke" x1="160" y1="130" x2="160" y2="31"/>
+              <line class="fc-spoke" x1="160" y1="130" x2="274" y2="130"/>
+              <line class="fc-spoke" x1="160" y1="130" x2="160" y2="242"/>
+              <line class="fc-spoke" x1="160" y1="130" x2="46"  y2="130"/>
+            </g>
+            <g>
+              <rect class="fc-node" x="124" y="18"  width="72" height="26" rx="8"/><text class="fc-node-t" x="160" y="35"  text-anchor="middle">Email</text>
+              <rect class="fc-node" x="238" y="117" width="72" height="26" rx="8"/><text class="fc-node-t" x="274" y="134" text-anchor="middle">Calendar</text>
+              <rect class="fc-node" x="124" y="229" width="72" height="26" rx="8"/><text class="fc-node-t" x="160" y="246" text-anchor="middle">Docs</text>
+              <rect class="fc-node" x="10"  y="117" width="72" height="26" rx="8"/><text class="fc-node-t" x="46"  y="134" text-anchor="middle">Tasks</text>
+            </g>
+            <circle class="fc-core-halo" cx="160" cy="130" r="27"/>
+            <circle class="fc-core" cx="160" cy="130" r="17"/>
+            <text class="fc-core-t" x="160" y="134" text-anchor="middle">you</text>
+          </svg>
+          <p class="p-label"><span class="c">C2</span><span class="n">Connections</span><span class="g">what it can reach</span></p>
+        </div>
+        <div class="fourc-panel">
+          <svg viewBox="0 0 320 280" role="img" aria-label="Dashed workflow blueprints route across the connected tools." xmlns="http://www.w3.org/2000/svg">
+            <g opacity=".25">
+              <circle class="fc-ring" cx="160" cy="130" r="30"  opacity=".80"/>
+              <circle class="fc-ring" cx="160" cy="130" r="48"  opacity=".62"/>
+              <circle class="fc-ring" cx="160" cy="130" r="66"  opacity=".45"/>
+              <circle class="fc-ring" cx="160" cy="130" r="84"  opacity=".30"/>
+              <circle class="fc-ring" cx="160" cy="130" r="102" opacity=".16"/>
+            </g>
+            <g opacity=".6">
+              <g opacity=".45">
+                <line class="fc-spoke" x1="160" y1="130" x2="160" y2="31"/>
+                <line class="fc-spoke" x1="160" y1="130" x2="274" y2="130"/>
+                <line class="fc-spoke" x1="160" y1="130" x2="160" y2="242"/>
+                <line class="fc-spoke" x1="160" y1="130" x2="46"  y2="130"/>
+              </g>
+              <rect class="fc-node" x="124" y="18"  width="72" height="26" rx="8"/><text class="fc-node-t" x="160" y="35"  text-anchor="middle">Email</text>
+              <rect class="fc-node" x="238" y="117" width="72" height="26" rx="8"/><text class="fc-node-t" x="274" y="134" text-anchor="middle">Calendar</text>
+              <rect class="fc-node" x="124" y="229" width="72" height="26" rx="8"/><text class="fc-node-t" x="160" y="246" text-anchor="middle">Docs</text>
+              <rect class="fc-node" x="10"  y="117" width="72" height="26" rx="8"/><text class="fc-node-t" x="46"  y="134" text-anchor="middle">Tasks</text>
+            </g>
+            <path class="fc-route" d="M 50 118 Q 160 130 270 118"/>
+            <path class="fc-route" d="M 82 143 Q 160 210 238 143"/>
+            <rect class="fc-pill" x="112" y="76" width="96" height="22" rx="11"/>
+            <text class="fc-pill-t" x="160" y="91" text-anchor="middle">Morning brief</text>
+            <circle class="fc-core-halo" cx="160" cy="130" r="27"/>
+            <circle class="fc-core" cx="160" cy="130" r="17"/>
+            <text class="fc-core-t" x="160" y="134" text-anchor="middle">you</text>
+          </svg>
+          <p class="p-label"><span class="c">C3</span><span class="n">Capabilities</span><span class="g">what it can do</span></p>
+        </div>
+        <div class="fourc-panel">
+          <svg viewBox="0 0 320 280" role="img" aria-label="A heartbeat pulse radiates from the core with an ECG trace beneath." xmlns="http://www.w3.org/2000/svg">
+            <g opacity=".45">
+              <g opacity=".25">
+                <circle class="fc-ring" cx="160" cy="130" r="30"  opacity=".80"/>
+                <circle class="fc-ring" cx="160" cy="130" r="48"  opacity=".62"/>
+                <circle class="fc-ring" cx="160" cy="130" r="66"  opacity=".45"/>
+                <circle class="fc-ring" cx="160" cy="130" r="84"  opacity=".30"/>
+                <circle class="fc-ring" cx="160" cy="130" r="102" opacity=".16"/>
+              </g>
+              <g opacity=".45">
+                <line class="fc-spoke" x1="160" y1="130" x2="160" y2="31"/>
+                <line class="fc-spoke" x1="160" y1="130" x2="274" y2="130"/>
+                <line class="fc-spoke" x1="160" y1="130" x2="160" y2="242"/>
+                <line class="fc-spoke" x1="160" y1="130" x2="46"  y2="130"/>
+              </g>
+              <rect class="fc-node" x="124" y="18"  width="72" height="26" rx="8"/><text class="fc-node-t" x="160" y="35"  text-anchor="middle">Email</text>
+              <rect class="fc-node" x="238" y="117" width="72" height="26" rx="8"/><text class="fc-node-t" x="274" y="134" text-anchor="middle">Calendar</text>
+              <rect class="fc-node" x="124" y="229" width="72" height="26" rx="8"/><text class="fc-node-t" x="160" y="246" text-anchor="middle">Docs</text>
+              <rect class="fc-node" x="10"  y="117" width="72" height="26" rx="8"/><text class="fc-node-t" x="46"  y="134" text-anchor="middle">Tasks</text>
+              <path class="fc-route" d="M 50 118 Q 160 130 270 118"/>
+              <path class="fc-route" d="M 82 143 Q 160 210 238 143"/>
+            </g>
+            <circle class="fc-pulse"    cx="160" cy="130" r="22"/>
+            <circle class="fc-pulse p2" cx="160" cy="130" r="22"/>
+            <circle class="fc-core-halo" cx="160" cy="130" r="27"/>
+            <circle class="fc-core" cx="160" cy="130" r="17"/>
+            <text class="fc-core-t" x="160" y="134" text-anchor="middle">you</text>
+            <polyline points="20,264 120,264 132,264 142,251 152,275 160,264 300,264"
+                      fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+          </svg>
+          <p class="p-label"><span class="c">C4</span><span class="n">Cadence</span><span class="g">when it acts, unasked</span></p>
+        </div>
+      </div>
+      <figcaption>Four layers, built up in four sessions · <a href="/how-it-works#the-four-layers">see how each layer works →</a></figcaption>
     </figure>
     <div class="interlude callout-grid stagger-grid">
       <div class="callout">
