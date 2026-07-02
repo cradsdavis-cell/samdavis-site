@@ -40,6 +40,13 @@
     }
     .overview-hero img { margin: 0 auto; }
   }
+
+  @media (max-width: 600px) {
+    /* Wide hand-drawn diagrams: scroll horizontally instead of shrinking the
+       labels to unreadable (~4px) on phones. Keeps the whole diagram legible. */
+    .diagram { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .diagram svg { min-width: 560px; }
+  }
 </style>
 <!-- SEO: canonical + social cards -->
 <link rel="canonical" href="https://crads-ai.com/overview">
