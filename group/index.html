@@ -6,7 +6,7 @@
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Group Block — Sam Davis</title>
-<meta name="description" content="Build your AI executive assistant alongside other founders. 4 × 90-min sessions, small cohort, A$600 per seat. Register your interest — next cohort forming.">
+<meta name="description" content="Build your AI executive assistant alongside other founders. 4 × 90-min sessions, small cohort, A$600 per seat. No cohort scheduled right now — join the waitlist for the next one.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 <!-- SEO: canonical + social cards -->
@@ -15,13 +15,13 @@
 <meta property="og:site_name" content="Sam Davis — Crads AI">
 <meta property="og:url" content="https://crads-ai.com/group">
 <meta property="og:title" content="Group Block — Sam Davis">
-<meta property="og:description" content="Build your AI executive assistant alongside other founders. 4 × 90-min sessions, small cohort, A$600 per seat. Register your interest — next cohort forming.">
+<meta property="og:description" content="Build your AI executive assistant alongside other founders. 4 × 90-min sessions, small cohort, A$600 per seat. No cohort scheduled right now — join the waitlist for the next one.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Group Block — Sam Davis">
-<meta name="twitter:description" content="Build your AI executive assistant alongside other founders. 4 × 90-min sessions, small cohort, A$600 per seat. Register your interest — next cohort forming.">
+<meta name="twitter:description" content="Build your AI executive assistant alongside other founders. 4 × 90-min sessions, small cohort, A$600 per seat. No cohort scheduled right now — join the waitlist for the next one.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body class="group-page">
@@ -60,78 +60,57 @@
     </div>
   </section>
 
-  <!-- Active cohort — Sam manually edits this section in tandem with lib/cohorts.js -->
-  <!-- ACTIVE COHORT BLOCK START (register-interest mode) -->
-  <section class="wrap active-cohort">
-    <h2>Next cohort forming — June 2026.</h2>
-    <p class="cohort-meta">Four 90-minute sessions over four weeks, on Wednesday afternoons. I lock the exact times with the group once a few of you are in.</p>
-    <div class="cohort-cta">
-      <a class="cta-primary" href="/book/discovery">Register your interest — book a discovery call</a>
-    </div>
-    <p class="cohort-fineprint">No payment yet — we have a quick chat to check it's a fit, then I hold your seat as the cohort fills.</p>
+  <!-- Waitlist mode — no cohort scheduled (in sync with lib/cohorts.js activeCohort = null) -->
+  <section class="wrap no-cohort">
+    <h2>No cohort scheduled right now.</h2>
+    <p>Most founders start 1:1 with the <a href="/offer">Coaching Block</a> — same four sessions, at your own pace. Prefer to build alongside other founders? Drop your email and I'll let you know when the next Group Block opens. Usually one cohort every 4–6 weeks.</p>
+    <form class="group-interest-form" id="group-interest-form">
+      <label for="gi-email" class="sr-only">Email</label>
+      <input type="email" id="gi-email" name="email" placeholder="you@example.com" required>
+      <button type="submit">Join the waitlist</button>
+      <p class="status" data-kind="info" hidden></p>
+    </form>
+    <p class="cohort-fineprint">One email per cohort opening. No spam, no drip sequence.</p>
   </section>
-  <!-- ACTIVE COHORT BLOCK END -->
 
-  <!--
-    NO COHORT FALLBACK — when the active cohort fills or between cohorts,
-    flip lib/cohorts.js activeCohort to null AND replace the ACTIVE COHORT
-    BLOCK above with the NO COHORT BLOCK below (uncomment).
-
-    NO COHORT BLOCK START
-    <section class="wrap no-cohort">
-      <h2>No cohort scheduled right now.</h2>
-      <p>Drop your email and I'll let you know when the next Group Block opens for booking. Usually one cohort every 4–6 weeks.</p>
-      <form class="group-interest-form" id="group-interest-form">
-        <label for="gi-email" class="sr-only">Email</label>
-        <input type="email" id="gi-email" name="email" placeholder="you@example.com" required>
-        <button type="submit">Notify me</button>
-        <p class="status" data-kind="info" hidden></p>
-      </form>
-      <p class="cohort-fineprint">One email per cohort opening. No spam, no drip sequence.</p>
-    </section>
-    NO COHORT BLOCK END
-
-    Browser submission script (also uncomment when flipping to no-cohort mode):
-
-    <script>
-      (function () {
-        var form = document.getElementById('group-interest-form');
-        if (!form) return;
-        var input = form.querySelector('input[type=email]');
-        var btn = form.querySelector('button[type=submit]');
-        var status = form.querySelector('.status');
-        form.addEventListener('submit', function (e) {
-          e.preventDefault();
-          var email = input.value.trim().toLowerCase();
-          btn.disabled = true;
-          status.hidden = false;
-          status.textContent = 'Submitting…';
-          status.setAttribute('data-kind', 'info');
-          fetch('/api/group-interest', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email })
-          }).then(function (res) {
-            return res.json().then(function (body) { return { ok: res.ok, body: body }; });
-          }).then(function (r) {
-            if (r.ok) {
-              status.textContent = "You're on the list. I'll email when the next cohort opens.";
-              status.setAttribute('data-kind', 'info');
-              input.disabled = true;
-            } else {
-              status.textContent = "Couldn't save that — try again or email cradsdavis@gmail.com.";
-              status.setAttribute('data-kind', 'error');
-              btn.disabled = false;
-            }
-          }).catch(function () {
-            status.textContent = "Network error. Try again or email cradsdavis@gmail.com.";
+  <script>
+    (function () {
+      var form = document.getElementById('group-interest-form');
+      if (!form) return;
+      var input = form.querySelector('input[type=email]');
+      var btn = form.querySelector('button[type=submit]');
+      var status = form.querySelector('.status');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var email = input.value.trim().toLowerCase();
+        btn.disabled = true;
+        status.hidden = false;
+        status.textContent = 'Submitting…';
+        status.setAttribute('data-kind', 'info');
+        fetch('/api/group-interest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email })
+        }).then(function (res) {
+          return res.json().then(function (body) { return { ok: res.ok, body: body }; });
+        }).then(function (r) {
+          if (r.ok) {
+            status.textContent = "You're on the list. I'll email when the next cohort opens.";
+            status.setAttribute('data-kind', 'info');
+            input.disabled = true;
+          } else {
+            status.textContent = "Couldn't save that — try again or email cradsdavis@gmail.com.";
             status.setAttribute('data-kind', 'error');
             btn.disabled = false;
-          });
+          }
+        }).catch(function () {
+          status.textContent = "Network error. Try again or email cradsdavis@gmail.com.";
+          status.setAttribute('data-kind', 'error');
+          btn.disabled = false;
         });
-      })();
-    </script>
-  -->
+      });
+    })();
+  </script>
 
   <!-- Who it's for -->
   <section class="wrap who-its-for">

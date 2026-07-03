@@ -172,7 +172,7 @@ test('POST normalises email to lowercase + trims whitespace', async () => {
   assert.match(sends[0].subject, /alex@example\.com/);
 });
 
-test('POST returns 500 if Sheet append fails (no email sent)', async () => {
+test('POST still returns 200 if Sheet append fails — email notify is the primary capture', async () => {
   const { google } = makeMockGoogle({ throwOnAppend: true });
   const { resend, sends } = makeMockResend();
   const handler = makeHandler({ google, resend });
@@ -183,9 +183,24 @@ test('POST returns 500 if Sheet append fails (no email sent)', async () => {
   } finally {
     console.error = origErr;
   }
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(res.body.ok, true);
+  assert.strictEqual(sends.length, 1, 'email notify should still fire when the sheet is unavailable');
+});
+
+test('POST returns 500 only if BOTH sheet and email fail', async () => {
+  const { google } = makeMockGoogle({ throwOnAppend: true });
+  const { resend } = makeMockResend({ throwOnSend: true });
+  const handler = makeHandler({ google, resend });
+  const res = mockRes();
+  const origErr = console.error; console.error = () => {};
+  try {
+    await handler(mockReq({ email: 'alex@example.com' }), res);
+  } finally {
+    console.error = origErr;
+  }
   assert.strictEqual(res.statusCode, 500);
-  assert.strictEqual(res.body.error, 'sheet_append_failed');
-  assert.strictEqual(sends.length, 0, 'should not notify if sheet write fails');
+  assert.strictEqual(res.body.error, 'capture_failed');
 });
 
 test('POST still returns 200 if Resend fails (sheet row already saved)', async () => {
