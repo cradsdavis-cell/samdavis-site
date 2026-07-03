@@ -567,7 +567,7 @@ a:hover { color: var(--accent-deep); }
   gap: var(--space-4);
 }
 
-.self-portrait .column h4 {
+.self-portrait .column h3 {
   font-family: var(--serif);
   font-size: 22px;
   font-weight: 700;
@@ -640,7 +640,7 @@ a:hover { color: var(--accent-deep); }
   margin-bottom: var(--space-2);
 }
 
-.reflex-cards .reflex h5 {
+.reflex-cards .reflex h3 {
   font-family: var(--serif);
   font-size: 18px;
   font-weight: 700;
@@ -752,7 +752,7 @@ a:hover { color: var(--accent-deep); }
   border-top: 2px solid var(--accent);
 }
 
-.tool-grid .tool h5 {
+.tool-grid .tool h3 {
   font-family: var(--sans);
   font-size: 15px;
   font-weight: 700;
