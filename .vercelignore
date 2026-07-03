@@ -2,3 +2,9 @@ tests/
 node_modules/
 .git/
 README.md
+
+# UI audit loop internals — never serve publicly (ledger notes internal strategy)
+docs/audit/
+UI-AUDIT.md
+scratchpad/
+scripts/audit-shots.mjs
