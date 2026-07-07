@@ -32,6 +32,15 @@
 
   .prose-lead { max-width: var(--read-col); margin-bottom: var(--space-3); }
 
+  /* Promo film (60s) */
+  .promo-film { padding-top: 0; }
+  .promo-film video {
+    display: block; width: 100%; max-width: 820px; margin: 0 auto;
+    border-radius: 14px; box-shadow: 0 10px 40px rgba(30, 41, 30, .14);
+    background: #F4EFE3;
+  }
+  .promo-film .eyebrow { text-align: center; margin-bottom: var(--space-3); }
+
   /* The wave motif (problem section) */
   .wave-fig { max-width: 820px; margin: var(--space-4) auto 0; }
   .wave-fig svg { width: 100%; height: auto; display: block; }
@@ -211,6 +220,17 @@
       </div>
       <p class="hero-proof"><em>You don't need to code. That's the whole point of coaching it. Coaching means you build it with me and keep it: you leave owning the system and the skill, and most people never need me again.</em></p>
     </div>
+  </section>
+
+
+  <!-- Promo film -->
+  <section class="section wrap promo-film" id="film">
+    <p class="eyebrow reveal-on-scroll">THE WHOLE IDEA · 60 SECONDS</p>
+    <video controls playsinline preload="metadata"
+           poster="/lib/img/promo-poster.jpg"
+           aria-label="60-second film: build your own AI assistant. A person buried in admin learns to ride the AI wave, plants a seed, and grows an assistant that hands their day back.">
+      <source src="/lib/video/crads-ai-promo.mp4" type="video/mp4">
+    </video>
   </section>
 
   <!-- The problem -->
