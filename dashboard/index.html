@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The dashboard a second brain draws — Sam Davis</title>
+<meta name="description" content="A live replica of the cockpit my second-brain system renders every morning: money, clients, open loops, network radar, and the cron fleet behind it. Demo data only.">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+<style>
+  /* ============================================================
+     /dashboard — cockpit replica on demo data
+     ============================================================ */
+
+  .dash-hero {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-4);
+  }
+  .dash-hero h1 { margin: var(--space-2) 0 var(--space-3); }
+
+  .demo-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    background: var(--bg-soft);
+    border: 1px dashed var(--accent);
+    border-radius: 6px;
+    padding: 8px 14px;
+    margin-top: var(--space-2);
+  }
+  .demo-note .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* --- The cockpit panel --- */
+  .dash-panel {
+    background: var(--bg-soft);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: var(--space-3);
+    margin: var(--space-4) 0;
+  }
+
+  .dash-panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    padding: 0 var(--space-1) var(--space-2);
+  }
+  .dash-panel-head .panel-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .dash-panel-head .panel-stamp {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-faint);
+  }
+  .dash-panel-head .demo-chip {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--bg-main);
+    background: var(--accent);
+    border-radius: 4px;
+    padding: 3px 9px;
+  }
+
+  .dash-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+  .dash-grid .span-all { grid-column: 1 / -1; }
+  @media (max-width: 760px) {
+    .dash-grid { grid-template-columns: 1fr; }
+  }
+
+  /* --- Cards --- */
+  .dcard {
+    background: var(--bg-main);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: var(--space-2) var(--space-2) var(--space-2);
+    min-width: 0;
+  }
+  .dcard-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-1);
+    margin-bottom: var(--space-2);
+  }
+  .dcard-head h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .dcard-head .asof {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-faint);
+  }
+
+  /* Brief card */
+  .brief-summary {
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.45;
+    color: var(--ink-deep);
+    margin-bottom: var(--space-2);
+  }
+  .top3 { list-style: none; padding: 0; margin: 0 0 var(--space-2); }
+  .top3 li {
+    display: flex;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--rule);
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--ink-deep);
+  }
+  .top3 li:last-child { border-bottom: none; }
+  .top3 .n {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 700;
+    padding-top: 2px;
+  }
+  .next-pill {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-deep);
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 5px 12px;
+  }
+  .next-pill strong { color: var(--accent-deep); font-weight: 700; }
+
+  .sched { list-style: none; padding: 0; margin: var(--space-2) 0 0; }
+  .sched li {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 10px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    padding: 3px 0;
+  }
+  .sched .t { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); padding-top: 1px; }
+
+  /* Money card */
+  .money-hero { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .money-hero .val {
+    font-family: var(--sans);
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink-deep);
+    line-height: 1;
+  }
+  .money-hero .delta {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--good);
+  }
+  .money-hero-label {
+    font-size: 13px;
+    color: var(--ink-faint);
+    margin: 4px 0 var(--space-2);
+  }
+  .money-tiles {
+    display: flex;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+  .money-tiles .tile .lab {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .money-tiles .tile .v {
+    font-family: var(--sans);
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--ink-deep);
+    white-space: nowrap;
+  }
+
+  .chart-wrap { position: relative; }
+  .chart-wrap svg { width: 100%; height: auto; display: block; }
+  .chart-title {
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+  .chart-tip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--ink-deep);
+    color: var(--bg-main);
+    font-family: var(--sans);
+    font-size: 12.5px;
+    line-height: 1.4;
+    border-radius: 5px;
+    padding: 6px 10px;
+    transform: translate(-50%, calc(-100% - 10px));
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.12s ease;
+    z-index: 2;
+  }
+  .chart-tip.show { opacity: 1; }
+  .chart-tip .v { font-weight: 700; }
+  .chart-tip .l { opacity: 0.75; }
+
+  .chart-table { margin-top: var(--space-1); }
+  .chart-table summary {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    cursor: pointer;
+  }
+  .chart-table summary:hover { color: var(--accent); }
+  .chart-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--space-1);
+    font-size: 12.5px;
+  }
+  .chart-table th, .chart-table td {
+    text-align: left;
+    padding: 3px 8px 3px 0;
+    border-bottom: 1px dashed var(--rule);
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+  }
+  .chart-table th { color: var(--ink-faint); font-weight: 500; }
+
+  /* Clients card */
+  .client-rows { list-style: none; padding: 0; margin: 0; }
+  .client-rows li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    gap: 4px 12px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .client-rows li:last-child { border-bottom: none; padding-bottom: 2px; }
+  .client-rows .who {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--ink-deep);
+    white-space: nowrap;
+  }
+  .client-rows .band {
+    justify-self: end;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 2px 9px;
+  }
+  .band.deliver  { background: var(--bg-card);  color: var(--ink-deep); }
+  .band.sales    { background: var(--accent-glow); color: var(--accent-deep); }
+  .band.prospect { background: var(--bg-soft); color: var(--ink-faint); border: 1px dashed var(--rule); }
+  .client-rows .next {
+    grid-column: 1 / -1;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .flag-overdue {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #A3401C;
+  }
+
+  /* Radar card */
+  .radar-group { margin-bottom: var(--space-2); }
+  .radar-group:last-child { margin-bottom: 0; }
+  .radar-group .rg-lab {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+  }
+  .radar-group ul { list-style: none; padding: 0; margin: 0; }
+  .radar-group li {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-2);
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    padding: 4px 0;
+  }
+  .radar-group li .who { color: var(--ink-deep); font-weight: 600; }
+  .radar-group li .age {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    white-space: nowrap;
+  }
+  .radar-group li .age.hot { color: #A3401C; font-weight: 700; }
+
+  /* Owed card */
+  .owed-rows { list-style: none; padding: 0; margin: 0; }
+  .owed-rows li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--rule);
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+  .owed-rows li:last-child { border-bottom: none; }
+  .owed-rows .ch {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1px 6px;
+    white-space: nowrap;
+  }
+  .owed-rows .who { color: var(--ink-deep); font-weight: 600; white-space: nowrap; }
+  .owed-rows .what { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .owed-rows .age { font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); }
+
+  /* Jobs card */
+  .job-rows { list-style: none; padding: 0; margin: 0; }
+  .job-rows li {
+    display: grid;
+    grid-template-columns: 14px 1fr auto auto;
+    align-items: baseline;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--rule);
+    font-size: 13px;
+  }
+  .job-rows li:last-child { border-bottom: none; }
+  .job-rows .st {
+    width: 8px; height: 8px; border-radius: 50%;
+    align-self: center;
+  }
+  .st.ok        { background: var(--good); }
+  .st.throttled { background: var(--accent); }
+  .job-rows .name { font-family: var(--mono); color: var(--ink-deep); }
+  .job-rows .word {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .job-rows .word.warn { color: var(--accent-deep); font-weight: 700; }
+  .job-rows .when { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); }
+
+  /* Gates strip */
+  .gate-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+  .gate-chips .gate {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-deep);
+    background: var(--bg-soft);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    padding: 6px 14px;
+  }
+  .gate-chips .gate strong { color: var(--accent-deep); font-weight: 700; }
+
+  /* Week-in-numbers strip */
+  .num-tiles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-2);
+  }
+  @media (max-width: 760px) {
+    .num-tiles { grid-template-columns: repeat(2, 1fr); }
+  }
+  .num-tiles .ntile .lab {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 2px;
+  }
+  .num-tiles .ntile .v {
+    font-family: var(--sans);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink-deep);
+    line-height: 1.1;
+  }
+  .num-tiles .ntile svg { display: block; margin-top: 6px; width: 100%; height: 26px; }
+
+  /* Below-panel prose */
+  .prose-lead { max-width: var(--read-col); margin-bottom: var(--space-3); }
+</style>
+<!-- SEO: canonical + social cards -->
+<link rel="canonical" href="https://crads-ai.com/dashboard">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:url" content="https://crads-ai.com/dashboard">
+<meta property="og:title" content="The dashboard a second brain draws — Sam Davis">
+<meta property="og:description" content="A live replica of the cockpit my second-brain system renders every morning: money, clients, open loops, network radar, and the cron fleet behind it. Demo data only.">
+<meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The dashboard a second brain draws — Sam Davis">
+<meta name="twitter:description" content="A live replica of the cockpit my second-brain system renders every morning. Demo data only.">
+<meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
+</head>
+<body>
+
+<nav class="site-nav-bar">
+  <a href="/" class="brand">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/overview">Overview</a>
+    <a href="/dashboard" class="current">Dashboard</a>
+    <a href="/about">About</a>
+    <a href="/how-it-works">How it works</a>
+    <a href="/offer">Offer</a>
+    <a href="/book">Book →</a>
+    <a href="/account/login" class="nav-account">Sign in</a>
+  </div>
+</nav>
+
+<main>
+  <!-- Hero -->
+  <section class="dash-hero wrap">
+    <p class="eyebrow">Live demo</p>
+    <h1>The whole week, <em>on one screen.</em></h1>
+    <p class="lede">Every morning my second brain redraws a cockpit: money, clients, open loops, the people going quiet, and the automations that fed it overnight. This page is a faithful replica of that screen.</p>
+    <p class="demo-note"><span class="dot"></span>Demo data. Every name, number, and thread on this page is invented.</p>
+  </section>
+
+  <!-- The cockpit -->
+  <section class="section-tight wrap">
+    <div class="dash-panel reveal-on-scroll">
+      <div class="dash-panel-head">
+        <span class="panel-title">Second brain · cockpit</span>
+        <span class="demo-chip">Demo data</span>
+        <span class="panel-stamp">rendered Tue 07:04 · refreshes through the day</span>
+      </div>
+
+      <div class="dash-grid stagger-grid">
+
+        <!-- Top of the day -->
+        <div class="dcard">
+          <div class="dcard-head"><h3>Top of the day</h3><span class="asof">07:00</span></div>
+          <p class="brief-summary">Light calendar, one proposal to land. Protect the morning block.</p>
+          <ol class="top3">
+            <li><span class="n">1</span>Close the Whitfield proposal before the Wednesday call.</li>
+            <li><span class="n">2</span>Clear both replies owed before lunch.</li>
+            <li><span class="n">3</span>Prep the Kessler session: pack three, review last debrief.</li>
+          </ol>
+          <span class="next-pill">Next up · <strong>11:30</strong> discovery call, Tom Ellery</span>
+          <ul class="sched">
+            <li><span class="t">08:30</span>Deep work block (held free)</li>
+            <li><span class="t">11:30</span>Discovery call · Tom Ellery</li>
+            <li><span class="t">14:00</span>Client session · Mara Kessler</li>
+          </ul>
+        </div>
+
+        <!-- Money -->
+        <div class="dcard">
+          <div class="dcard-head"><h3>Money</h3><span class="asof">stripe · 06:33</span></div>
+          <div class="money-hero">
+            <span class="val">$3,800</span>
+            <span class="delta">▲ $1,200 vs prior 30 days</span>
+          </div>
+          <p class="money-hero-label">booked, last 30 days</p>
+          <div class="money-tiles">
+            <div class="tile"><div class="lab">MRR</div><div class="v">$1,300</div></div>
+            <div class="tile"><div class="lab">Runway</div><div class="v">8.2 mo</div></div>
+            <div class="tile"><div class="lab">Invoices out</div><div class="v">2</div></div>
+          </div>
+          <div class="chart-title">Booked per week · last 12 weeks</div>
+          <div class="chart-wrap" id="money-chart"></div>
+          <details class="chart-table">
+            <summary>View as table</summary>
+            <table id="money-table">
+              <thead><tr><th scope="col">Week of</th><th scope="col">Booked</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </details>
+        </div>
+
+        <!-- Clients -->
+        <div class="dcard">
+          <div class="dcard-head"><h3>Clients</h3><span class="asof">tracker · 06:35</span></div>
+          <ul class="client-rows">
+            <li>
+              <span class="who">Mara Kessler</span><span class="band deliver">deliver</span>
+              <span class="next">Session 3 today 14:00 · pack sent Monday</span>
+            </li>
+            <li>
+              <span class="who">Priya Nair</span><span class="band deliver">deliver</span>
+              <span class="next">Debrief owed since Sunday · <span class="flag-overdue">overdue 2d</span></span>
+            </li>
+            <li>
+              <span class="who">Jonas Whitfield</span><span class="band sales">sales</span>
+              <span class="next">Proposal v2 due before Wed call</span>
+            </li>
+            <li>
+              <span class="who">Georgia Lam</span><span class="band sales">sales</span>
+              <span class="next">Waiting on budget sign-off · nudge Friday if quiet</span>
+            </li>
+            <li>
+              <span class="who">Tom Ellery</span><span class="band prospect">prospect</span>
+              <span class="next">Discovery today 11:30 · came via the March workshop</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Network radar -->
+        <div class="dcard">
+          <div class="dcard-head"><h3>Network radar</h3><span class="asof">synced 06:20</span></div>
+          <div class="radar-group">
+            <div class="rg-lab">Your ball</div>
+            <ul>
+              <li><span><span class="who">Dan Rowe</span> · promised the intro to the design agency</span><span class="age hot">26h</span></li>
+              <li><span><span class="who">Robyn Carter</span> · podcast invite, needs a yes or no</span><span class="age">14h</span></li>
+            </ul>
+          </div>
+          <div class="radar-group">
+            <div class="rg-lab">Waiting on them</div>
+            <ul>
+              <li><span><span class="who">Lena Fischer</span> · proposal with her since Thursday</span><span class="age">3d</span></li>
+              <li><span><span class="who">Elliot Shaw</span> · asked his team about the pilot</span><span class="age">2d</span></li>
+            </ul>
+          </div>
+          <div class="radar-group">
+            <div class="rg-lab">Going cold</div>
+            <ul>
+              <li><span><span class="who">Marcus Bell</span> · partnership thread, warm in May</span><span class="age">19d</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Replies owed -->
+        <div class="dcard">
+          <div class="dcard-head"><h3>Replies owed</h3><span class="asof">swept 06:10</span></div>
+          <ul class="owed-rows">
+            <li><span class="ch">email</span><span class="who">Dan Rowe</span><span class="what">re: workshop scope for the agency team</span><span class="age">26h</span></li>
+            <li><span class="ch">slack</span><span class="who">Robyn Carter</span><span class="what">episode dates, two options</span><span class="age">14h</span></li>
+            <li><span class="ch">whatsapp</span><span class="who">Elliot Shaw</span><span class="what">voice note about the pilot shape</span><span class="age">4h</span></li>
+          </ul>
+        </div>
+
+        <!-- Cadence jobs -->
+        <div class="dcard">
+          <div class="dcard-head"><h3>Cadence jobs</h3><span class="asof">fleet · live</span></div>
+          <ul class="job-rows">
+            <li><span class="st ok"></span><span class="name">morning-brief</span><span class="word">ok</span><span class="when">07:00</span></li>
+            <li><span class="st ok"></span><span class="name">inbox-sweep</span><span class="word">ok</span><span class="when">06:10</span></li>
+            <li><span class="st ok"></span><span class="name">network-sync</span><span class="word">ok</span><span class="when">06:20</span></li>
+            <li><span class="st ok"></span><span class="name">money-reconcile</span><span class="word">ok</span><span class="when">06:33</span></li>
+            <li><span class="st throttled"></span><span class="name">wiki-lint</span><span class="word warn">throttled</span><span class="when">retries 08:00</span></li>
+            <li><span class="st ok"></span><span class="name">evening-check</span><span class="word">ok</span><span class="when">yesterday 18:00</span></li>
+          </ul>
+        </div>
+
+        <!-- Gates -->
+        <div class="dcard span-all">
+          <div class="dcard-head"><h3>Gates &amp; deadlines</h3><span class="asof">from the wiki</span></div>
+          <div class="gate-chips">
+            <span class="gate">Workshop early-bird closes · <strong>12 days</strong></span>
+            <span class="gate">Conference talk submission · <strong>21 days</strong></span>
+            <span class="gate">Quarterly BAS lodgement · <strong>26 days</strong></span>
+            <span class="gate">Studio lease decision · <strong>41 days</strong></span>
+          </div>
+        </div>
+
+        <!-- Week in numbers -->
+        <div class="dcard span-all">
+          <div class="dcard-head"><h3>This week, in numbers</h3><span class="asof">rolling 7 days</span></div>
+          <div class="num-tiles">
+            <div class="ntile">
+              <div class="lab">Emails triaged</div>
+              <div class="v">142</div>
+              <svg data-spark="12,18,15,22,19,25,20,23,18,21,26,24" role="img" aria-label="Sparkline: emails triaged per day, trending gently up over twelve days"></svg>
+            </div>
+            <div class="ntile">
+              <div class="lab">Drafts written</div>
+              <div class="v">9</div>
+              <svg data-spark="1,0,2,1,1,0,1,2,0,1,2,1" role="img" aria-label="Sparkline: drafts written per day over twelve days"></svg>
+            </div>
+            <div class="ntile">
+              <div class="lab">Wiki pages updated</div>
+              <div class="v">31</div>
+              <svg data-spark="3,5,2,6,4,3,5,7,4,6,5,8" role="img" aria-label="Sparkline: wiki pages updated per day, trending up over twelve days"></svg>
+            </div>
+            <div class="ntile">
+              <div class="lab">Open loops closed</div>
+              <div class="v">12</div>
+              <svg data-spark="1,2,0,3,1,2,1,2,3,1,2,3" role="img" aria-label="Sparkline: open loops closed per day over twelve days"></svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- § What you're looking at -->
+  <section class="section wrap">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll">§ What you're looking at</p>
+      <h2 class="reveal-on-scroll">Nothing on that screen was <em>typed in by hand.</em></h2>
+      <p class="reveal-on-scroll prose-lead">Each card is fed by the system described on the <a href="/overview">overview page</a>. Small scheduled jobs sweep the channels; deterministic readers write the state; the dashboard just draws it. My real one runs on my own machine with my real clients, money, and threads in it, which is exactly why this replica runs on invented data instead.</p>
+    </div>
+    <div class="interlude-bare tier-stack stagger-grid">
+      <div class="tier">
+        <span class="label">Overnight sweeps</span>
+        <p>A small fleet of <strong>scheduled jobs</strong> reads inbox, calendar, Slack, WhatsApp, the client tracker, and Stripe while I sleep. Each writes what it found as plain structured state.</p>
+      </div>
+      <div class="tier">
+        <span class="label">One honest state</span>
+        <p>Every card renders from <strong>the same files the AI reads and writes all day</strong>: the wiki that holds people, decisions, deadlines, and money. No second copy to drift out of date.</p>
+      </div>
+      <div class="tier">
+        <span class="label">Human on the sends</span>
+        <p>The system drafts, flags, and reconciles on its own. <strong>Nothing outbound leaves without a yes from me.</strong> The dashboard shows the state; I stay the one who acts on it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing CTA -->
+  <section class="section section-tight wrap">
+    <div class="read-col">
+      <h2 class="reveal-on-scroll">Want one of these for your business?</h2>
+      <p class="lede reveal-on-scroll">Book a free 30-minute call. I'll show you the real cockpit running live, and we'll sketch what yours would track.</p>
+      <a class="cta-primary reveal-on-scroll" href="/book/discovery">Book a 30-minute call</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">crads-<span class="accent">ai</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div><a href="/account/login">Sign in</a></div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ----------------------------------------------------------
+     Money chart — 12 weekly bars, hover/focus tooltip, table twin.
+     Demo data only; values are invented.
+     ---------------------------------------------------------- */
+  var WEEKS = [
+    { label: '13 Apr', v: 450 },
+    { label: '20 Apr', v: 0 },
+    { label: '27 Apr', v: 900 },
+    { label: '4 May',  v: 1400 },
+    { label: '11 May', v: 650 },
+    { label: '18 May', v: 0 },
+    { label: '25 May', v: 1150 },
+    { label: '1 Jun',  v: 800 },
+    { label: '8 Jun',  v: 800 },
+    { label: '15 Jun', v: 1700 },
+    { label: '22 Jun', v: 150 },
+    { label: '29 Jun', v: 1150 }
+  ];
+  var MONTH_STARTS = { 0: 'Apr', 3: 'May', 7: 'Jun' };
+
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(name, attrs, parent) {
+    var node = document.createElementNS(NS, name);
+    for (var k in attrs) node.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(node);
+    return node;
+  }
+  function money(v) { return '$' + v.toLocaleString('en-AU'); }
+
+  function renderMoneyChart() {
+    var wrap = document.getElementById('money-chart');
+    if (!wrap) return;
+
+    var W = 400, H = 170;
+    var padL = 34, padR = 4, padT = 14, padB = 24;
+    var plotW = W - padL - padR, plotH = H - padT - padB;
+    var yMax = 2000;
+    var css = getComputedStyle(document.documentElement);
+    var cAccent = css.getPropertyValue('--accent').trim() || '#C2703D';
+    var cRule = css.getPropertyValue('--rule').trim() || '#CDD5C2';
+    var cFaint = css.getPropertyValue('--ink-faint').trim() || '#6E7C6F';
+    var cInk = css.getPropertyValue('--ink-deep').trim() || '#173D2A';
+
+    var svg = el('svg', {
+      viewBox: '0 0 ' + W + ' ' + H,
+      role: 'img',
+      'aria-label': 'Bar chart of revenue booked per week over the last twelve weeks, demo data. Values range from zero to 1,700 dollars; the current week is 1,150 dollars. The same values are in the table below.'
+    }, wrap);
+
+    var y = function (v) { return padT + plotH - (v / yMax) * plotH; };
+
+    // gridlines + y ticks (0 / 1k / 2k)
+    [0, 1000, 2000].forEach(function (tick) {
+      var gy = y(tick);
+      el('line', {
+        x1: padL, x2: W - padR, y1: gy, y2: gy,
+        stroke: tick === 0 ? cFaint : cRule, 'stroke-width': 1
+      }, svg);
+      var t = el('text', {
+        x: padL - 6, y: gy + 3.5, 'text-anchor': 'end',
+        'font-family': 'ui-monospace, Menlo, monospace', 'font-size': '9.5',
+        fill: cFaint
+      }, svg);
+      t.textContent = tick === 0 ? '0' : (tick / 1000) + 'k';
+    });
+
+    var slot = plotW / WEEKS.length;
+    var barW = Math.min(20, slot - 8);
+
+    var tip = document.createElement('div');
+    tip.className = 'chart-tip';
+    wrap.appendChild(tip);
+
+    function showTip(i, cx) {
+      var d = WEEKS[i];
+      tip.textContent = '';
+      var v = document.createElement('span'); v.className = 'v'; v.textContent = money(d.v);
+      var l = document.createElement('span'); l.className = 'l'; l.textContent = ' · week of ' + d.label;
+      tip.appendChild(v); tip.appendChild(l);
+      var rect = wrap.getBoundingClientRect();
+      var sx = rect.width / W;
+      tip.classList.add('show');
+      // clamp inside the chart so the tip never spills past the card edge
+      var half = tip.offsetWidth / 2 + 4;
+      var left = Math.max(half, Math.min(rect.width - half, cx * sx));
+      tip.style.left = left + 'px';
+      tip.style.top = ((y(d.v)) * sx) + 'px';
+    }
+    function hideTip() { tip.classList.remove('show'); }
+
+    WEEKS.forEach(function (d, i) {
+      var cx = padL + slot * i + slot / 2;
+      var x0 = cx - barW / 2;
+      var y0 = y(d.v), y1 = y(0);
+      var r = Math.min(4, (y1 - y0) / 2);
+
+      if (d.v > 0) {
+        // rounded top, square baseline
+        el('path', {
+          d: 'M' + x0 + ' ' + y1 +
+             ' V' + (y0 + r) +
+             ' Q' + x0 + ' ' + y0 + ' ' + (x0 + r) + ' ' + y0 +
+             ' H' + (x0 + barW - r) +
+             ' Q' + (x0 + barW) + ' ' + y0 + ' ' + (x0 + barW) + ' ' + (y0 + r) +
+             ' V' + y1 + ' Z',
+          fill: cAccent
+        }, svg);
+      }
+
+      // current week: direct label at the tip
+      if (i === WEEKS.length - 1) {
+        var lab = el('text', {
+          x: cx, y: y0 - 5, 'text-anchor': 'middle',
+          'font-family': 'Inter, system-ui, sans-serif', 'font-size': '10',
+          'font-weight': '700', fill: cInk
+        }, svg);
+        lab.textContent = money(d.v);
+      }
+
+      // month marker under the axis
+      if (MONTH_STARTS[i]) {
+        var m = el('text', {
+          x: cx, y: H - 8, 'text-anchor': 'middle',
+          'font-family': 'ui-monospace, Menlo, monospace', 'font-size': '9.5',
+          fill: cFaint
+        }, svg);
+        m.textContent = MONTH_STARTS[i];
+      }
+
+      // hit target: full slot, full plot height, keyboard-focusable
+      var hit = el('rect', {
+        x: padL + slot * i, y: padT, width: slot, height: plotH + padB - 6,
+        fill: 'transparent', tabindex: '0', role: 'img',
+        'aria-label': 'Week of ' + d.label + ': ' + money(d.v)
+      }, svg);
+      hit.addEventListener('pointermove', function () { showTip(i, cx); });
+      hit.addEventListener('pointerleave', hideTip);
+      hit.addEventListener('focus', function () { showTip(i, cx); });
+      hit.addEventListener('blur', hideTip);
+    });
+
+    // table twin
+    var tbody = document.querySelector('#money-table tbody');
+    if (tbody) {
+      WEEKS.forEach(function (d) {
+        var tr = document.createElement('tr');
+        var td1 = document.createElement('td'); td1.textContent = d.label;
+        var td2 = document.createElement('td'); td2.textContent = money(d.v);
+        tr.appendChild(td1); tr.appendChild(td2);
+        tbody.appendChild(tr);
+      });
+    }
+  }
+
+  /* ----------------------------------------------------------
+     Sparklines — history in the muted ink, current point in the
+     accent with a surface ring.
+     ---------------------------------------------------------- */
+  function renderSparks() {
+    var css = getComputedStyle(document.documentElement);
+    var cAccent = css.getPropertyValue('--accent').trim() || '#C2703D';
+    var cFaint = css.getPropertyValue('--ink-faint').trim() || '#6E7C6F';
+    var cSurface = css.getPropertyValue('--bg-main').trim() || '#FAF7EE';
+
+    document.querySelectorAll('svg[data-spark]').forEach(function (svg) {
+      var vals = svg.getAttribute('data-spark').split(',').map(Number);
+      var W = 120, H = 26, pad = 4;
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      var max = Math.max.apply(null, vals), min = Math.min.apply(null, vals);
+      var range = (max - min) || 1;
+      var pts = vals.map(function (v, i) {
+        var x = pad + (i / (vals.length - 1)) * (W - pad * 2);
+        var y = H - pad - ((v - min) / range) * (H - pad * 2);
+        return [x, y];
+      });
+      el('polyline', {
+        points: pts.map(function (p) { return p.join(','); }).join(' '),
+        fill: 'none', stroke: cFaint, 'stroke-width': 1.6,
+        'stroke-linecap': 'round', 'stroke-linejoin': 'round'
+      }, svg);
+      var last = pts[pts.length - 1];
+      el('circle', { cx: last[0], cy: last[1], r: 3, fill: cAccent, stroke: cSurface, 'stroke-width': 2 }, svg);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { renderMoneyChart(); renderSparks(); });
+  } else {
+    renderMoneyChart();
+    renderSparks();
+  }
+})();
+</script>
+
+</body>
+</html>
