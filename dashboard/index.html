@@ -435,6 +435,172 @@
 
   /* Below-panel prose */
   .prose-lead { max-width: var(--read-col); margin-bottom: var(--space-3); }
+
+  /* ============================================================
+     Brain graph — dark tool-window panel, synthetic wiki
+     ============================================================ */
+  .graph-panel {
+    position: relative;
+    background: #16161b;
+    border: 1px solid #2a2a33;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: var(--space-4);
+  }
+  .graph-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    border-bottom: 1px solid #2a2a33;
+  }
+  .graph-head .g-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #d99a5b;
+    font-weight: 600;
+  }
+  .graph-head .g-stat {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #827a6c;
+  }
+  .graph-head .g-spacer { flex: 1; }
+  .graph-head .g-btn {
+    background: #1e1e25;
+    border: 1px solid #2a2a33;
+    color: #9b9384;
+    border-radius: 7px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: 12px;
+    line-height: 1;
+  }
+  .graph-head .g-btn:hover { color: #ece6dd; border-color: #d99a5b; }
+  .graph-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 12px;
+    padding: 8px 16px;
+    border-bottom: 1px solid #2a2a33;
+  }
+  .graph-legend .gl {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: #9b9384;
+  }
+  .graph-legend .gl .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .graph-stage { position: relative; height: 540px; }
+  @media (max-width: 760px) { .graph-stage { height: 420px; } }
+  #brain-cv { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; touch-action: pan-y; }
+  #brain-cv.grabbing { cursor: grabbing; }
+
+  .graph-info {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 280px;
+    max-width: calc(100% - 24px);
+    max-height: calc(100% - 24px);
+    overflow-y: auto;
+    background: rgba(24, 24, 30, 0.95);
+    border: 1px solid #2a2a33;
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: #ece6dd;
+    display: none;
+    z-index: 3;
+  }
+  .graph-info.open { display: block; }
+  .graph-info .gi-close {
+    position: absolute;
+    top: 8px; right: 12px;
+    cursor: pointer;
+    color: #9b9384;
+    font-size: 18px;
+    line-height: 1;
+    background: none;
+    border: none;
+    font-family: var(--sans);
+  }
+  .graph-info .gi-close:hover { color: #ece6dd; }
+  .graph-info .gi-type {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #101014;
+    border-radius: 12px;
+    padding: 2px 8px;
+  }
+  .graph-info h4 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 700;
+    color: #ece6dd;
+    margin: 8px 0 6px;
+    line-height: 1.25;
+  }
+  .graph-info .gi-desc {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #b6afa2;
+    margin-bottom: 10px;
+  }
+  .graph-info .gi-links-lab {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #827a6c;
+    margin-bottom: 6px;
+  }
+  .graph-info .gi-link {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 6px;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: 12.5px;
+    color: #ece6dd;
+  }
+  .graph-info .gi-link:hover { background: #1e1e25; }
+  .graph-info .gi-link .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .graph-info .gi-link .t { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .graph-info .gi-link .rel {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #d99a5b;
+    flex: none;
+  }
+  .graph-hint {
+    position: absolute;
+    left: 14px;
+    bottom: 10px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: #827a6c;
+    pointer-events: none;
+    z-index: 2;
+  }
 </style>
 <!-- SEO: canonical + social cards -->
 <link rel="canonical" href="https://crads-ai.com/dashboard">
@@ -671,6 +837,33 @@
     </div>
   </section>
 
+  <!-- § The memory — brain graph demo -->
+  <section class="section wrap" id="brain-graph">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll">§ The memory</p>
+      <h2 class="reveal-on-scroll">Underneath, a wiki. <em>Drawn as a graph.</em></h2>
+      <p class="reveal-on-scroll prose-lead">Every person, project, decision, and meeting is a plain-text page, and pages link to each other the way thoughts do. Below is the demo brain that feeds the cards above: 49 pages you can explore. The real one runs to roughly 700 pages and 3,000 links. Hover a page to light up its neighbourhood, click it to read it, drag things around.</p>
+    </div>
+    <div class="graph-panel reveal-on-scroll">
+      <div class="graph-head">
+        <span class="g-title">Demo brain · graph</span>
+        <span class="g-stat" id="graph-stat">loading…</span>
+        <span class="g-spacer"></span>
+        <button class="g-btn" id="graph-fit" type="button" title="Fit the graph to the panel">⤢ fit</button>
+        <button class="g-btn" id="graph-shuffle" type="button" title="Re-arrange the layout">↻ shuffle</button>
+      </div>
+      <div class="graph-legend" id="graph-legend"></div>
+      <div class="graph-stage">
+        <canvas id="brain-cv" role="img" aria-label="Interactive network graph of a demo second brain: 51 invented pages (people, projects, concepts, decisions, meetings and hub pages) connected by typed links. Click a node to read the page details in a panel beside the graph."></canvas>
+        <div class="graph-info" id="graph-info" role="dialog" aria-label="Page details">
+          <button class="gi-close" id="graph-close" type="button" aria-label="Close">×</button>
+          <div id="graph-info-body"></div>
+        </div>
+        <div class="graph-hint" id="graph-hint">hover · click · drag</div>
+      </div>
+    </div>
+  </section>
+
   <!-- Closing CTA -->
   <section class="section section-tight wrap">
     <div class="read-col">
@@ -884,6 +1077,407 @@
   } else {
     renderMoneyChart();
     renderSparks();
+  }
+})();
+</script>
+
+<script>
+/* ============================================================
+   Brain graph — self-contained canvas force layout on a
+   synthetic wiki. Every page, link, and name below is invented.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var TYPES = {
+    person:   { color: '#3987e5', label: 'People' },
+    project:  { color: '#199e70', label: 'Projects' },
+    concept:  { color: '#9085e9', label: 'Concepts' },
+    decision: { color: '#d95926', label: 'Decisions' },
+    meeting:  { color: '#c98500', label: 'Meetings' },
+    hub:      { color: '#d55181', label: 'Hubs' }
+  };
+
+  // --- Synthetic pages (demo data only) ---
+  var NODES = [
+    { id: 'idx', t: 'Index', ty: 'hub', d: 'The home page of the demo brain. Everything links back here.' },
+    { id: 'ppl', t: 'People', ty: 'hub', d: 'Hub for every person the system tracks: clients, prospects, and network.' },
+    { id: 'prj', t: 'Projects', ty: 'hub', d: 'Hub for the live projects the system is holding open at once.' },
+
+    { id: 'kessler', t: 'Mara Kessler', ty: 'person', d: 'Coaching client, delivery in progress. Session 3 this week.' },
+    { id: 'whitfield', t: 'Jonas Whitfield', ty: 'person', d: 'Prospect. Proposal v2 out; deciding on a block of sessions.' },
+    { id: 'nair', t: 'Priya Nair', ty: 'person', d: 'Client. Kicked off last month; debrief currently owed.' },
+    { id: 'lam', t: 'Georgia Lam', ty: 'person', d: 'Workshop lead at a scale-up, waiting on budget sign-off.' },
+    { id: 'ellery', t: 'Tom Ellery', ty: 'person', d: 'Prospect from the March workshop. Discovery call booked.' },
+    { id: 'rowe', t: 'Dan Rowe', ty: 'person', d: 'Runs a design agency. Owed an intro and a scope reply.' },
+    { id: 'carter', t: 'Robyn Carter', ty: 'person', d: 'Podcast host. Invited a guest slot; picking dates.' },
+    { id: 'fischer', t: 'Lena Fischer', ty: 'person', d: 'Holds an open proposal since Thursday.' },
+    { id: 'shaw', t: 'Elliot Shaw', ty: 'person', d: 'Asked his team about a pilot; reply pending.' },
+    { id: 'bell', t: 'Marcus Bell', ty: 'person', d: 'Partnership thread, warm earlier in the year, going quiet.' },
+    { id: 'osei', t: 'Nadia Osei', ty: 'person', d: 'Client on the delivery system. Steady, low-touch.' },
+    { id: 'halloran', t: 'Ben Halloran', ty: 'person', d: 'Landlord contact for the studio move.' },
+    { id: 'reyes', t: 'Sofia Reyes', ty: 'person', d: 'Referred two leads last quarter. Worth nurturing.' },
+    { id: 'okonkwo', t: 'Amara Okonkwo', ty: 'person', d: 'Ran a team through the workshop series.' },
+    { id: 'fenwick', t: 'Isla Fenwick', ty: 'person', d: 'Prospect weighing the pricing revamp options.' },
+
+    { id: 'delivery', t: 'Client delivery system', ty: 'project', d: 'The repeatable way clients are taken from kickoff to graduation.' },
+    { id: 'workshops', t: 'Workshop series', ty: 'project', d: 'Group sessions that seed the 1:1 pipeline.' },
+    { id: 'book', t: 'Book — first draft', ty: 'project', d: 'Long-form write-up of the method. Draft in progress.' },
+    { id: 'studio', t: 'Studio move', ty: 'project', d: 'Deciding whether to take a dedicated space.' },
+    { id: 'referral', t: 'Referral engine', ty: 'project', d: 'Turning happy clients into a steady lead source.' },
+    { id: 'pricing', t: 'Pricing revamp', ty: 'project', d: 'Reworking the ladder toward value-based pricing.' },
+    { id: 'website', t: 'Website refresh', ty: 'project', d: 'Rebuilding the public site around the new positioning.' },
+
+    { id: 'positioning', t: 'Positioning', ty: 'concept', d: 'Who the work is for and the one thing it promises.' },
+    { id: 'voice', t: 'Voice & tone', ty: 'concept', d: 'How drafts should sound so they read as written by hand.' },
+    { id: 'discovery', t: 'Discovery framework', ty: 'concept', d: 'The question set that opens every first call.' },
+    { id: 'packs', t: 'Pack curriculum', ty: 'concept', d: 'The staged materials a client works through.' },
+    { id: 'retention', t: 'Retention loop', ty: 'concept', d: 'What keeps a finished client coming back.' },
+    { id: 'trustladder', t: 'Trust ladder', ty: 'concept', d: 'Earning autonomy one proven step at a time.' },
+    { id: 'asyncfirst', t: 'Async-first delivery', ty: 'concept', d: 'Default to written; save live time for the hard parts.' },
+    { id: 'valueprice', t: 'Value pricing', ty: 'concept', d: 'Price the outcome, not the hours.' },
+    { id: 'onboarding', t: 'Onboarding flow', ty: 'concept', d: 'The first-week experience for a new client.' },
+    { id: 'casestudies', t: 'Case studies', ty: 'concept', d: 'Proof, written up as short before-and-after stories.' },
+
+    { id: 'd-rates', t: 'Raise rates in Q3', ty: 'decision', d: 'Lift the block price; grandfather existing clients.' },
+    { id: 'd-group', t: 'Drop group coaching', ty: 'decision', d: 'Group paces to the slowest; refocus on 1:1.' },
+    { id: 'd-va', t: 'Hire a VA', ty: 'decision', d: 'Hand off scheduling and invoicing admin.' },
+    { id: 'd-lease', t: 'Sign the studio lease', ty: 'decision', d: 'Commit to the space or stay mobile another quarter.' },
+    { id: 'd-niche', t: 'Niche down to founders', ty: 'decision', d: 'Aim the whole offer at early-stage founders.' },
+    { id: 'd-publish', t: 'Publish weekly', ty: 'decision', d: 'Ship one written piece a week to feed the top of funnel.' },
+
+    { id: 'm-kessler3', t: 'Kessler — session 3', ty: 'meeting', d: 'Working session. Reviewed last week and set the next pack.' },
+    { id: 'm-whitfield', t: 'Whitfield — discovery', ty: 'meeting', d: 'First call. Surfaced the budget and the real problem.' },
+    { id: 'm-nair', t: 'Nair — kickoff', ty: 'meeting', d: 'Onboarding call; agreed scope and cadence.' },
+    { id: 'm-rowe', t: 'Rowe — agency scope', ty: 'meeting', d: 'Scoping a workshop for the agency team.' },
+    { id: 'm-carter', t: 'Carter — podcast plan', ty: 'meeting', d: 'Planned the guest episode and its angle.' },
+    { id: 'm-sync', t: 'Weekly team sync', ty: 'meeting', d: 'Internal review of pipeline and open decisions.' },
+    { id: 'm-lam', t: 'Lam — budget review', ty: 'meeting', d: 'Walked the workshop budget with the sponsor.' },
+    { id: 'm-fenwick', t: 'Fenwick — proposal walk', ty: 'meeting', d: 'Talked through the pricing options live.' }
+  ];
+
+  var LINKS = [
+    ['idx', 'ppl', 'contains'], ['idx', 'prj', 'contains'],
+    ['idx', 'positioning', 'references'], ['idx', 'd-niche', 'references'],
+    ['ppl', 'kessler', ''], ['ppl', 'whitfield', ''], ['ppl', 'nair', ''], ['ppl', 'lam', ''],
+    ['ppl', 'ellery', ''], ['ppl', 'rowe', ''], ['ppl', 'carter', ''], ['ppl', 'fischer', ''],
+    ['ppl', 'shaw', ''], ['ppl', 'bell', ''], ['ppl', 'osei', ''], ['ppl', 'halloran', ''],
+    ['ppl', 'reyes', ''], ['ppl', 'okonkwo', ''], ['ppl', 'fenwick', ''],
+    ['prj', 'delivery', ''], ['prj', 'workshops', ''], ['prj', 'book', ''], ['prj', 'studio', ''],
+    ['prj', 'referral', ''], ['prj', 'pricing', ''], ['prj', 'website', ''],
+
+    ['kessler', 'm-kessler3', 'attended'], ['whitfield', 'm-whitfield', 'attended'],
+    ['nair', 'm-nair', 'attended'], ['rowe', 'm-rowe', 'attended'], ['carter', 'm-carter', 'attended'],
+    ['lam', 'm-lam', 'attended'], ['fenwick', 'm-fenwick', 'attended'],
+    ['osei', 'm-sync', 'attended'], ['halloran', 'm-sync', 'attended'],
+
+    ['kessler', 'delivery', 'client-of'], ['nair', 'delivery', 'client-of'],
+    ['osei', 'delivery', 'client-of'], ['shaw', 'delivery', 'client-of'],
+    ['whitfield', 'pricing', 'prospect'], ['fischer', 'pricing', 'prospect'], ['fenwick', 'pricing', 'prospect'],
+    ['lam', 'workshops', 'client-of'], ['ellery', 'workshops', 'prospect'], ['okonkwo', 'workshops', 'client-of'],
+    ['rowe', 'referral', 'source'], ['reyes', 'referral', 'source'], ['bell', 'referral', 'partner'],
+    ['carter', 'book', 'supports'], ['halloran', 'studio', 'contact'],
+
+    ['delivery', 'packs', 'uses'], ['delivery', 'asyncfirst', 'uses'], ['delivery', 'onboarding', 'uses'],
+    ['workshops', 'discovery', 'uses'], ['workshops', 'packs', 'uses'],
+    ['book', 'voice', 'uses'], ['book', 'casestudies', 'uses'],
+    ['pricing', 'valueprice', 'uses'], ['pricing', 'positioning', 'uses'],
+    ['referral', 'trustladder', 'uses'], ['website', 'positioning', 'uses'], ['website', 'voice', 'uses'],
+
+    ['positioning', 'voice', 'references'], ['positioning', 'valueprice', 'references'],
+    ['discovery', 'trustladder', 'references'], ['packs', 'onboarding', 'references'],
+    ['retention', 'trustladder', 'references'], ['retention', 'packs', 'references'],
+    ['asyncfirst', 'discovery', 'references'],
+
+    ['d-rates', 'm-whitfield', 'raised-in'], ['d-rates', 'valueprice', 'uses'], ['d-rates', 'pricing', 'affects'],
+    ['d-group', 'workshops', 'affects'], ['d-group', 'm-sync', 'decided-in'],
+    ['d-va', 'm-sync', 'decided-in'], ['d-va', 'delivery', 'affects'],
+    ['d-lease', 'studio', 'affects'], ['d-lease', 'm-sync', 'raised-in'],
+    ['d-niche', 'positioning', 'uses'], ['d-niche', 'discovery', 'affects'],
+    ['d-publish', 'book', 'affects'], ['d-publish', 'casestudies', 'uses'],
+
+    ['m-carter', 'casestudies', 'surfaced'], ['m-lam', 'valueprice', 'surfaced'],
+    ['fischer', 'valueprice', 'discussed'], ['reyes', 'trustladder', 'discussed'],
+
+    ['kessler', 'nair', 'knows'], ['rowe', 'carter', 'knows'], ['whitfield', 'bell', 'knows'],
+    ['osei', 'halloran', 'knows'], ['ellery', 'lam', 'knows'], ['okonkwo', 'm-sync', 'attended']
+  ];
+
+  var cv = document.getElementById('brain-cv');
+  if (!cv) return;
+  var ctx = cv.getContext('2d');
+  var stage = cv.parentElement;
+  var infoEl = document.getElementById('graph-info');
+  var infoBody = document.getElementById('graph-info-body');
+  var hintEl = document.getElementById('graph-hint');
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var byId = {}, adj = {};
+  NODES.forEach(function (n) { n.deg = 0; byId[n.id] = n; adj[n.id] = []; });
+  LINKS.forEach(function (l) {
+    var s = l[0], t = l[1];
+    if (!byId[s] || !byId[t]) return;
+    byId[s].deg++; byId[t].deg++;
+    adj[s].push({ id: t, rel: l[2] }); adj[t].push({ id: s, rel: l[2] });
+  });
+  var maxDeg = Math.max.apply(null, NODES.map(function (n) { return n.deg; }));
+
+  // --- layout state ---
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var W = 0, H = 0, cx = 0, cy = 0, scale = 1;
+  var alpha = 1, raf = null, needFit = true;
+  var hover = null, focus = null, dragging = null, panning = false, last = null, moved = false;
+
+  // phyllotaxis seed
+  var GA = Math.PI * (3 - Math.sqrt(5));
+  NODES.forEach(function (n, i) {
+    var rr = 26 * Math.sqrt(i + 1), a = i * GA;
+    n.x = rr * Math.cos(a); n.y = rr * Math.sin(a); n.vx = 0; n.vy = 0; n.fx = null; n.fy = null;
+  });
+
+  function radius(n) { return 5 + 13 * Math.sqrt(n.deg / maxDeg) + (n === focus ? 3 : 0); }
+
+  function resize() {
+    var r = stage.getBoundingClientRect();
+    W = r.width; H = r.height; cx = W / 2; cy = H / 2;
+    cv.width = W * DPR; cv.height = H * DPR;
+    draw();
+  }
+
+  // --- force sim ---
+  var CHARGE = -220, LINK_DIST = 58, CENTER = 0.045, MAXV = 22;
+  function step() {
+    alpha += (0 - alpha) * 0.05;
+    var N = NODES.length, i, j;
+    for (i = 0; i < N; i++) for (j = i + 1; j < N; j++) {
+      var a = NODES[i], b = NODES[j];
+      var dx = b.x - a.x, dy = b.y - a.y, d2 = dx * dx + dy * dy;
+      if (d2 > 360000) continue; if (d2 < 25) d2 = 25;
+      var w = CHARGE * alpha / d2;
+      a.vx += dx * w; a.vy += dy * w; b.vx -= dx * w; b.vy -= dy * w;
+    }
+    LINKS.forEach(function (l) {
+      var s = byId[l[0]], t = byId[l[1]]; if (!s || !t) return;
+      var dx = t.x - s.x, dy = t.y - s.y, d = Math.hypot(dx, dy) || 1;
+      var str = Math.max(0.2, Math.min(1, 1 / Math.min(s.deg, t.deg)));
+      var lf = (d - LINK_DIST) / d * alpha * str, bi = s.deg / (s.deg + t.deg);
+      t.vx -= dx * lf * bi; t.vy -= dy * lf * bi; s.vx += dx * lf * (1 - bi); s.vy += dy * lf * (1 - bi);
+    });
+    // collision
+    for (i = 0; i < N; i++) for (j = i + 1; j < N; j++) {
+      var p = NODES[i], q = NODES[j], rr = radius(p) + radius(q) + 4;
+      var dx2 = q.x - p.x, dy2 = q.y - p.y, l2 = dx2 * dx2 + dy2 * dy2;
+      if (l2 < rr * rr && l2 > 0) {
+        var dd = Math.sqrt(l2), diff = (rr - dd) / dd * 0.5;
+        p.vx -= dx2 * diff; p.vy -= dy2 * diff; q.vx += dx2 * diff; q.vy += dy2 * diff;
+      }
+    }
+    for (i = 0; i < N; i++) {
+      var n = NODES[i];
+      n.vx += (-n.x) * CENTER * alpha; n.vy += (-n.y) * CENTER * alpha;
+      if (n.fx != null) { n.x = n.fx; n.vx = 0; }
+      else { n.vx *= 0.5; n.vx = Math.max(-MAXV, Math.min(MAXV, n.vx)); n.x += n.vx; }
+      if (n.fy != null) { n.y = n.fy; n.vy = 0; }
+      else { n.vy *= 0.5; n.vy = Math.max(-MAXV, Math.min(MAXV, n.vy)); n.y += n.vy; }
+    }
+  }
+
+  function fit() {
+    var a = Infinity, b = -Infinity, c = Infinity, d = -Infinity;
+    NODES.forEach(function (n) { var r = radius(n); a = Math.min(a, n.x - r); b = Math.max(b, n.x + r); c = Math.min(c, n.y - r); d = Math.max(d, n.y + r); });
+    var gw = Math.max(b - a, 1), gh = Math.max(d - c, 1), pad = 40;
+    scale = Math.min(2, Math.max(0.3, Math.min((W - pad * 2) / gw, (H - pad * 2) / gh)));
+    // recentre world so bbox centre maps to canvas centre
+    var mx = (a + b) / 2, my = (c + d) / 2;
+    NODES.forEach(function (n) { n.x -= mx; n.y -= my; });
+  }
+
+  function hlSet() {
+    var f = hover || focus; if (!f) return null;
+    var s = {}; s[f.id] = 1; adj[f.id].forEach(function (a) { s[a.id] = 1; });
+    return s;
+  }
+
+  function draw() {
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    var hl = hover ? hlSet() : null;
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(scale, scale);
+    // links
+    LINKS.forEach(function (l) {
+      var s = byId[l[0]], t = byId[l[1]]; if (!s || !t) return;
+      var on = hl && hl[s.id] && hl[t.id];
+      ctx.strokeStyle = hl ? (on ? 'rgba(217,154,91,0.65)' : 'rgba(150,143,129,0.05)') : 'rgba(150,143,129,0.20)';
+      ctx.lineWidth = (on ? 1.6 : 0.9) / scale;
+      ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(t.x, t.y); ctx.stroke();
+    });
+    // nodes
+    NODES.forEach(function (n) {
+      var r = radius(n), isF = n === focus, isH = n === hover, dim = hl && !hl[n.id];
+      ctx.globalAlpha = dim ? 0.14 : 1;
+      if (isF || isH) { ctx.shadowColor = TYPES[n.ty].color; ctx.shadowBlur = isF ? 18 : 11; }
+      ctx.fillStyle = TYPES[n.ty].color;
+      ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, 6.2832); ctx.fill(); ctx.shadowBlur = 0;
+      if (isF) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5 / scale; ctx.stroke(); }
+      else if (isH) { ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 1.5 / scale; ctx.stroke(); }
+    });
+    ctx.globalAlpha = 1; ctx.restore();
+    // labels — screen space, collision-skip
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    var boxes = [];
+    var cand = NODES.slice().sort(function (p, q) {
+      return ((q === focus || q === hover) - (p === focus || p === hover)) || (q.deg - p.deg);
+    });
+    cand.forEach(function (n) {
+      var big = n === focus || n === hover, prom = big || (hl && hl[n.id]);
+      if (!prom && !(n.deg >= 6) && scale < 1.05) return;
+      var sx = n.x * scale + cx, sy = n.y * scale + cy;
+      if (sx < -30 || sx > W + 30 || sy < 6 || sy > H - 4) return;
+      ctx.font = (big ? '600 13px' : '11.5px') + ' "IBM Plex Sans", Inter, system-ui, sans-serif';
+      var r = radius(n) * scale, tw = ctx.measureText(n.t).width, bx = sx + r + 5, by = sy - 7;
+      var hit = false;
+      for (var k = 0; k < boxes.length; k++) {
+        var bb = boxes[k];
+        if (bx < bb.x + bb.w && bx + tw > bb.x && by < bb.y + bb.h && by + 14 > bb.y) { hit = true; break; }
+      }
+      if (hit && !big) return;
+      boxes.push({ x: bx, y: by, w: tw, h: 14 });
+      ctx.globalAlpha = prom ? 1 : 0.82;
+      ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillText(n.t, bx + 0.6, sy + 0.7);
+      ctx.fillStyle = big ? '#fff' : 'rgba(236,230,221,0.85)'; ctx.fillText(n.t, bx, sy);
+      ctx.globalAlpha = 1;
+    });
+  }
+
+  function loop() {
+    if (alpha > 0.02) { step(); draw(); raf = requestAnimationFrame(loop); }
+    else { if (needFit) { needFit = false; fit(); } draw(); raf = null; }
+  }
+  function kick(a) { alpha = Math.max(alpha, a || 0.7); if (!raf) loop(); }
+
+  function pick(sx, sy) {
+    var best = null, bd = Infinity;
+    NODES.forEach(function (n) {
+      var r = (radius(n) + 6 / scale) * scale;
+      var dx = (n.x * scale + cx) - sx, dy = (n.y * scale + cy) - sy, d = dx * dx + dy * dy;
+      if (d < r * r && d < bd) { bd = d; best = n; }
+    });
+    return best;
+  }
+
+  function esc(s) { return String(s); }
+  function openPanel(n) {
+    focus = n;
+    var c = TYPES[n.ty].color;
+    var nbs = adj[n.id].map(function (a) { return { n: byId[a.id], rel: a.rel }; })
+      .filter(function (x) { return x.n; })
+      .sort(function (a, b) { return b.n.deg - a.n.deg; });
+    infoBody.textContent = '';
+    var typeSpan = document.createElement('span');
+    typeSpan.className = 'gi-type'; typeSpan.style.background = c;
+    typeSpan.textContent = n.ty === 'hub' ? 'hub' : n.ty;
+    infoBody.appendChild(typeSpan);
+    var h = document.createElement('h4'); h.textContent = n.t; infoBody.appendChild(h);
+    var desc = document.createElement('div'); desc.className = 'gi-desc'; desc.textContent = n.d; infoBody.appendChild(desc);
+    var lab = document.createElement('div'); lab.className = 'gi-links-lab';
+    lab.textContent = nbs.length + (nbs.length === 1 ? ' link — click to travel' : ' links — click to travel');
+    infoBody.appendChild(lab);
+    nbs.forEach(function (x) {
+      var btn = document.createElement('button'); btn.className = 'gi-link'; btn.type = 'button';
+      var dot = document.createElement('span'); dot.className = 'dot'; dot.style.background = TYPES[x.n.ty].color;
+      var t = document.createElement('span'); t.className = 't'; t.textContent = x.n.t;
+      btn.appendChild(dot); btn.appendChild(t);
+      if (x.rel) { var rel = document.createElement('span'); rel.className = 'rel'; rel.textContent = x.rel; btn.appendChild(rel); }
+      btn.addEventListener('click', function () { openPanel(x.n); draw(); });
+      infoBody.appendChild(btn);
+    });
+    infoEl.classList.add('open');
+    if (hintEl) hintEl.style.display = 'none';
+    draw();
+  }
+
+  document.getElementById('graph-close').addEventListener('click', function () {
+    infoEl.classList.remove('open'); focus = null; draw();
+  });
+  document.getElementById('graph-fit').addEventListener('click', function () { fit(); draw(); });
+  document.getElementById('graph-shuffle').addEventListener('click', function () {
+    NODES.forEach(function (n, i) {
+      if (n.fx != null && n !== dragging) { n.fx = null; n.fy = null; }
+      var rr = 26 * Math.sqrt(i + 1), a = i * GA;
+      n.x = rr * Math.cos(a); n.y = rr * Math.sin(a); n.vx = 0; n.vy = 0;
+    });
+    needFit = true; kick(1);
+  });
+
+  // pointer interaction
+  cv.addEventListener('pointerdown', function (e) {
+    cv.setPointerCapture(e.pointerId);
+    last = [e.offsetX, e.offsetY]; moved = false;
+    var n = pick(e.offsetX, e.offsetY);
+    if (n) { dragging = n; } else { panning = true; cv.classList.add('grabbing'); }
+  });
+  cv.addEventListener('pointermove', function (e) {
+    if (dragging) {
+      moved = true;
+      dragging.fx = (e.offsetX - cx) / scale; dragging.fy = (e.offsetY - cy) / scale;
+      dragging.x = dragging.fx; dragging.y = dragging.fy; kick(0.4); return;
+    }
+    if (panning) {
+      cx += e.offsetX - last[0]; cy += e.offsetY - last[1]; last = [e.offsetX, e.offsetY]; moved = true; draw(); return;
+    }
+    var n = pick(e.offsetX, e.offsetY);
+    if (n !== hover) { hover = n; cv.style.cursor = n ? 'pointer' : 'grab'; if (!raf) draw(); }
+  });
+  function endPtr(e) {
+    if (dragging) {
+      if (dragging !== focus) { dragging.fx = null; dragging.fy = null; }
+      if (!moved) openPanel(dragging);
+    }
+    dragging = null; panning = false; cv.classList.remove('grabbing'); kick(0.15);
+  }
+  cv.addEventListener('pointerup', endPtr);
+  cv.addEventListener('pointercancel', function () { if (dragging && dragging !== focus) { dragging.fx = null; dragging.fy = null; } dragging = null; panning = false; cv.classList.remove('grabbing'); });
+  cv.addEventListener('pointerleave', function () { if (hover) { hover = null; if (!raf) draw(); } });
+
+  // legend
+  (function () {
+    var wrap = document.getElementById('graph-legend');
+    var counts = {};
+    NODES.forEach(function (n) { counts[n.ty] = (counts[n.ty] || 0) + 1; });
+    Object.keys(TYPES).forEach(function (ty) {
+      if (!counts[ty]) return;
+      var gl = document.createElement('span'); gl.className = 'gl';
+      var dot = document.createElement('span'); dot.className = 'dot'; dot.style.background = TYPES[ty].color;
+      var lab = document.createElement('span'); lab.textContent = TYPES[ty].label + ' · ' + counts[ty];
+      gl.appendChild(dot); gl.appendChild(lab); wrap.appendChild(gl);
+    });
+    var stat = document.getElementById('graph-stat');
+    if (stat) stat.textContent = NODES.length + ' pages · ' + LINKS.length + ' links · demo';
+  })();
+
+  var started = false;
+  function startGraph() {
+    if (started) return; started = true;
+    resize();
+    if (reduced) {
+      // settle synchronously, no motion
+      for (var s = 0; s < 320; s++) step();
+      fit(); needFit = false; draw();
+    } else {
+      needFit = true; kick(1);
+    }
+  }
+
+  window.addEventListener('resize', function () { DPR = Math.min(window.devicePixelRatio || 1, 2); resize(); });
+
+  // start when the panel scrolls into view (cheaper first paint)
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { startGraph(); io.disconnect(); } });
+    }, { rootMargin: '120px' });
+    io.observe(stage);
+  } else {
+    startGraph();
   }
 })();
 </script>
