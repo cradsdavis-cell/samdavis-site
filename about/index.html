@@ -65,19 +65,37 @@
 </head>
 <body>
 
-<nav class="site-nav-bar">
-  <a href="/" class="brand">
+<nav class="site-nav-bar" aria-label="Primary">
+  <a href="/" class="brand" aria-label="crads-ai home">
     <img src="/lib/img/sam-illustration-sm.png" alt="">
     <span class="wordmark">crads-<span class="accent">ai</span></span>
   </a>
-  <div class="nav-links">
-    <a href="/">Home</a>
-    <a href="/overview">Overview</a>
-    <a href="/dashboard">Dashboard</a>
-    <a href="/about" class="current">About</a>
-    <a href="/how-it-works">How it works</a>
-    <a href="/offer">Offer</a>
-    <a href="/book">Book →</a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav-links" aria-label="Open menu">
+    <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+  </button>
+  <div class="nav-links" id="site-nav-links">
+    <div class="nav-group" data-open="false" data-group="system">
+      <a href="/system" class="nav-trigger">The System</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The System pages">▾</button>
+      <div class="nav-menu">
+        <a href="/system" class="nav-menu-hub">The system, in one place →</a>
+        <a href="/overview">What it does</a>
+        <a href="/anatomy">Anatomy of an AI-OS</a>
+        <a href="/dashboard">See it live</a>
+      </div>
+    </div>
+    <div class="nav-group" data-open="false" data-group="coaching">
+      <a href="/coaching" class="nav-trigger">Coaching</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Coaching pages">▾</button>
+      <div class="nav-menu">
+        <a href="/coaching" class="nav-menu-hub">How we work together →</a>
+        <a href="/how-it-works">How it works</a>
+        <a href="/offer">Pricing</a>
+        <a href="/group">Group Block</a>
+      </div>
+    </div>
+    <a href="/about" class="nav-simple current">About</a>
+    <a href="/book" class="nav-simple nav-book">Book →</a>
     <a href="/account/login" class="nav-account">Sign in</a>
   </div>
 </nav>

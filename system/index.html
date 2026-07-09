@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The System — an AI operating system, three ways in — Sam Davis</title>
+<meta name="description" content="Three ways to get to know the personal AI operating system that runs this site: what it does, how it is built, and a live demo you can poke at.">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+<style>
+  .hub-hero { padding-top: var(--space-6); padding-bottom: var(--space-4); max-width: var(--read-col); }
+  .hub-hero h1 { margin: var(--space-1) 0 var(--space-3); }
+  .hub-cards a.work {
+    display: block;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .hub-cards a.work:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(23, 61, 42, 0.12);
+    border-color: var(--accent);
+  }
+  .hub-cards a.work .go {
+    display: inline-block;
+    margin-top: var(--space-2);
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--accent);
+    border-bottom: 1px dashed var(--accent);
+    padding-bottom: 1px;
+  }
+  .hub-foot { max-width: var(--read-col); }
+</style>
+<link rel="canonical" href="https://crads-ai.com/system">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:url" content="https://crads-ai.com/system">
+<meta property="og:title" content="The System — an AI operating system, three ways in — Sam Davis">
+<meta property="og:description" content="What it does, how it is built, and a live demo of the personal AI operating system that runs this site.">
+<meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The System — an AI operating system, three ways in — Sam Davis">
+<meta name="twitter:description" content="What it does, how it is built, and a live demo of the personal AI operating system that runs this site.">
+<meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
+</head>
+<body>
+
+<nav class="site-nav-bar" aria-label="Primary">
+  <a href="/" class="brand" aria-label="crads-ai home">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
+  </a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav-links" aria-label="Open menu">
+    <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+  </button>
+  <div class="nav-links" id="site-nav-links">
+    <div class="nav-group" data-open="false" data-group="system">
+      <a href="/system" class="nav-trigger current">The System</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The System pages">▾</button>
+      <div class="nav-menu">
+        <a href="/system" class="nav-menu-hub current">The system, in one place →</a>
+        <a href="/overview">What it does</a>
+        <a href="/anatomy">Anatomy of an AI-OS</a>
+        <a href="/dashboard">See it live</a>
+      </div>
+    </div>
+    <div class="nav-group" data-open="false" data-group="coaching">
+      <a href="/coaching" class="nav-trigger">Coaching</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Coaching pages">▾</button>
+      <div class="nav-menu">
+        <a href="/coaching" class="nav-menu-hub">How we work together →</a>
+        <a href="/how-it-works">How it works</a>
+        <a href="/offer">Pricing</a>
+        <a href="/group">Group Block</a>
+      </div>
+    </div>
+    <a href="/about" class="nav-simple">About</a>
+    <a href="/book" class="nav-simple nav-book">Book →</a>
+    <a href="/account/login" class="nav-account">Sign in</a>
+  </div>
+</nav>
+
+<main>
+  <section class="hub-hero wrap">
+    <p class="eyebrow">The System</p>
+    <h1>The system that <em>runs this site.</em></h1>
+    <p class="lede">Everything here rests on one idea: a personal AI operating system that knows your work and runs alongside it, instead of a chat box you brief from scratch every time. There are three ways to get to know it, depending on how deep you want to go.</p>
+  </section>
+
+  <section class="section-tight wrap">
+    <div class="interlude-bare hub-cards work-cards stagger-grid">
+      <a class="work" href="/overview">
+        <span class="glyph">◎</span>
+        <h3>What it does</h3>
+        <p class="stat">The walk-through</p>
+        <p>A plain-language tour of what an AI that actually knows you can do: recall in seconds, drafts in your voice, and drift it catches before you do.</p>
+        <span class="go">Take the tour →</span>
+      </a>
+      <a class="work" href="/anatomy">
+        <span class="glyph">⌗</span>
+        <h3>Anatomy of an AI-OS</h3>
+        <p class="stat">The architecture</p>
+        <p>The six parts every one of these is built from, and how they wire into a single loop. For when you want to see how the machine actually works.</p>
+        <span class="go">See the build →</span>
+      </a>
+      <a class="work" href="/dashboard">
+        <span class="glyph">▤</span>
+        <h3>See it live</h3>
+        <p class="stat">The demo</p>
+        <p>A working replica of the cockpit the system redraws every morning: money, clients, open loops and the overnight jobs. Running on invented data.</p>
+        <span class="go">Open the demo →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="section section-tight wrap">
+    <div class="hub-foot">
+      <h2 class="reveal-on-scroll">Want one for your business?</h2>
+      <p class="lede reveal-on-scroll">I coach founders to build their own. See <a href="/coaching">how we work together</a>, or book a free call and we will map yours.</p>
+      <a class="cta-primary reveal-on-scroll" href="/book/discovery">Book a 30-minute call</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">crads-<span class="accent">ai</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div><a href="/account/login">Sign in</a></div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+
+</body>
+</html>
