@@ -23,7 +23,7 @@ module.exports = async function handler(req, res) {
     </tr>
   `).join('');
 
-  const states = ['onboarding-incomplete','pre-s1','between-s1-s2','between-s2-s3','between-s3-s4','post-s4-decision','retainer-active','graduated','cohort-active'];
+  const states = ['onboarding-incomplete','pre-s1','between-s1-s2','between-s2-s3','between-s3-s4','post-s4-decision','retainer-active','graduated'];
   const filterOptions = states.map(s => `<option value="${s}" ${stateFilter === s ? 'selected' : ''}>${s}</option>`).join('');
 
   const mainContent = `

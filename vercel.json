@@ -10,6 +10,8 @@
       "destination": "/book/discovery",
       "permanent": true
     },
+    { "source": "/book/group-block", "destination": "/book/discovery", "permanent": true },
+    { "source": "/group", "destination": "/offer", "permanent": true },
     { "source": "/onepager", "destination": "/offer", "permanent": true },
     { "source": "/build", "destination": "/offer", "permanent": true },
     { "source": "/build-onepager", "destination": "/offer", "permanent": true },

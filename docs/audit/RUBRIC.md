@@ -48,7 +48,7 @@ Bands: **18–20** all five, effortless to follow · **14–17** one link weak (
 
 - **Pricing identical** everywhere a SKU appears (amount, currency prefix, cadence, badges, order).
 - **Claims identical & true** — build count, credentials, session counts trace to `CVs/master-profile.yaml` / Sam.
-- **No stale dates** — nothing past-dated as upcoming; no "forming June 2026" after June.
+- **No stale dates** — nothing past-dated as upcoming; no event still described as "upcoming" once its date has passed.
 - **Names/labels stable** — the 4 Cs, Pack names, SKU names spelled and ordered the same site-wide.
 - **Strategy-aligned** — the site sells the *current* offer, not a shelved one, and doesn't oversell a deprioritised lever.
 

@@ -8,7 +8,6 @@ const VALID_NEXT_STATES = {
   'between-s2-s3': ['between-s3-s4'],
   'between-s3-s4': ['post-s4-decision'],
   'post-s4-decision': ['retainer-active', 'graduated'],
-  'cohort-active': ['post-s4-decision'],
 };
 
 module.exports = async function handler(req, res) {
@@ -33,7 +32,7 @@ module.exports = async function handler(req, res) {
 
   // Mark relevant engagement completed if transitioning to post-s4-decision
   if (new_state === 'post-s4-decision') {
-    const block = (user.engagements || []).find(e => (e.type === 'coaching-block' || e.type === 'coaching-block-pay4' || e.type === 'group-block') && !e.completed);
+    const block = (user.engagements || []).find(e => (e.type === 'coaching-block' || e.type === 'coaching-block-pay4') && !e.completed);
     if (block) block.completed = true;
   }
 

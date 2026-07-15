@@ -55,9 +55,3 @@ test('graduated hero offers Single Session CTA', () => {
   assert.match(html, /Single Session/);
 });
 
-test('cohort-active hero shows cohort frame', () => {
-  const user = { state: 'cohort-active', email: 'a@b.com', cohort_id: 'jun-10-2026' };
-  const nextSession = { date: '2026-06-17T14:00:00+10:00', label: 'cohort S2' };
-  const html = renderHeroCard({ user, nextSession });
-  assert.match(html, /cohort|Cohort/);
-});

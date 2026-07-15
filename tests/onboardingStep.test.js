@@ -122,22 +122,6 @@ test('rejects unknown action with 400', async () => {
   assert.strictEqual(result.status, 400);
 });
 
-test('group-block buyer completing onboarding lands in cohort-active, not pre-s1', async () => {
-  const kv = makeKv(fakeKvClient());
-  const user = makeUser({
-    engagements: [{ type: 'group-block' }],
-    onboarding: Object.assign(makeUser().onboarding, { step: 4 }),
-  });
-  await kv.setUser(user.email, user);
-  const result = await handleOnboardingStep({
-    kv, user, body: { step: '4', action: 'complete_onboarding' },
-  });
-  assert.strictEqual(result.redirectTo, '/account/');
-  const updated = await kv.getUser(user.email);
-  assert.strictEqual(updated.state, 'cohort-active');
-  assert.strictEqual(updated.onboarding.completed, true);
-});
-
 test('step-skip: brand-new user cannot POST step=4 complete past the server cursor', async () => {
   const kv = makeKv(fakeKvClient());
   const user = makeUser(); // onboarding.step === 1

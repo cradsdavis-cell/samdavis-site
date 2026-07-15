@@ -6,7 +6,7 @@
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How we work together — Sam Davis</title>
-<meta name="description" content="Four ways in: Single Session, Group Block, Coaching Block, Continuation Retainer. Plus a free Discovery call to scope.">
+<meta name="description" content="Three ways in: Single Session, Coaching Block, Continuation Retainer. Plus a free Discovery call to scope.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 <script defer src="/lib/testimonialsRender.js"></script>
@@ -236,13 +236,13 @@
 <meta property="og:site_name" content="Sam Davis — Crads AI">
 <meta property="og:url" content="https://crads-ai.com/offer">
 <meta property="og:title" content="How we work together — Sam Davis">
-<meta property="og:description" content="Four ways in: Single Session, Group Block, Coaching Block, Continuation Retainer. Plus a free Discovery call to scope.">
+<meta property="og:description" content="Three ways in: Single Session, Coaching Block, Continuation Retainer. Plus a free Discovery call to scope.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="How we work together — Sam Davis">
-<meta name="twitter:description" content="Four ways in: Single Session, Group Block, Coaching Block, Continuation Retainer. Plus a free Discovery call to scope.">
+<meta name="twitter:description" content="Three ways in: Single Session, Coaching Block, Continuation Retainer. Plus a free Discovery call to scope.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body>
@@ -273,7 +273,6 @@
         <a href="/coaching" class="nav-menu-hub">How we work together →</a>
         <a href="/how-it-works">How it works</a>
         <a href="/offer" class="current">Pricing</a>
-        <a href="/group">Group Block</a>
       </div>
     </div>
     <a href="/about" class="nav-simple">About</a>
@@ -300,7 +299,6 @@
       <ul>
         <li><strong>“I just want to fix one thing that's eating my week”</strong> — Single Session.</li>
         <li><strong>“I want the whole assistant — built with me, and mine to keep”</strong> — Coaching Block. Start here.</li>
-        <li><strong>“I'd rather build it alongside a couple of other founders”</strong> — Group Block.</li>
         <li><strong>“I'm already a client and I want to keep going”</strong> — Continuation Retainer.</li>
       </ul>
     </div>
@@ -315,7 +313,7 @@
       <span class="label-on" id="label-pay4">Pay in 4 (+10%)</span>
     </div>
 
-    <!-- Pricing grid — 3 ways in (Continuation Retainer demoted below) -->
+    <!-- Pricing grid — 2 ways in (Continuation Retainer demoted below) -->
     <div class="pricing-grid stagger-grid">
 
       <!-- Single Session — no pay-in-4 -->
@@ -337,16 +335,6 @@
         <p class="price-detail" data-upfront="Full personalised pack between sessions" data-pay4="4 × A$275 — one payment per session">Full personalised pack between sessions</p>
         <p class="rung-pitch">Walk away with your own AI assistant running your week — and the skill to keep building it. Four 1:1 sessions, a full personalised pack between each.</p>
         <a class="cta" href="/book/coaching-block" data-base-href="/book/coaching-block">Book the block →</a>
-      </article>
-
-      <!-- Group Block — run occasionally by request; waitlist -->
-      <article class="rung" data-sku="group-block">
-        <h3 class="rung-name">Group Block</h3>
-        <p class="rung-meta">4 × 90 min · cohort of 3 founders</p>
-        <p class="price" data-upfront="A$600" data-pay4="A$660"><span data-price-value>A$600</span><span class="price-suffix">/seat</span></p>
-        <p class="price-detail" data-upfront="× 3 founders per cohort" data-pay4="4 × A$165 — one payment per session">× 3 founders per cohort</p>
-        <p class="rung-pitch">Build it alongside two other founders. You'll move faster with people in the same boat: shared momentum, real accountability, and you see how others crack the same problem. (Lower price per seat, too.)</p>
-        <a class="cta" href="/group" data-base-href="/group">Join the waitlist →</a>
       </article>
 
     </div>
@@ -390,7 +378,7 @@
 
       rungs.forEach(function (rung) {
         var sku = rung.getAttribute('data-sku');
-        var supportsPay4 = (sku === 'coaching-block' || sku === 'group-block');
+        var supportsPay4 = (sku === 'coaching-block');
 
         var priceEl = rung.querySelector('.price');
         var detailEl = rung.querySelector('.price-detail');

@@ -22,14 +22,13 @@ const OUT = process.env.OUT || join(ROOT, 'scratchpad', 'shots');
 const PORT = 8199;
 let BASE = process.env.BASE || `http://localhost:${PORT}`;
 
-// The six public marketing pages. cleanUrls in prod → serve the /index.html here.
+// The five public marketing pages. cleanUrls in prod → serve the /index.html here.
 const PAGES = [
   ['home', '/index.html'],
   ['about', '/about/index.html'],
   ['how-it-works', '/how-it-works/index.html'],
   ['offer', '/offer/index.html'],
   ['overview', '/overview/index.html'],
-  ['group', '/group/index.html'],
 ];
 const VIEWPORTS = [['desktop', 1440, 900], ['mobile', 390, 844]];
 

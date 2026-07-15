@@ -33,7 +33,6 @@ async function safeAlert(subject, body) {
 // Stripe must still 200 even if KV write or welcome-email send fails (Sam can recover manually).
 async function safeCreateOrUpdateUser({ session, sku, customerEmail }) {
   try {
-    const cohortId = (session.metadata && session.metadata.cohort) || null;
     await createOrUpdateUser({
       kv: defaultKv(),
       resend: getResendClient(),
@@ -43,7 +42,6 @@ async function safeCreateOrUpdateUser({ session, sku, customerEmail }) {
       sku,
       stripeSessionId: session.id,
       stripeSubscriptionId: session.subscription || null,
-      cohortId,
     });
   } catch (userErr) {
     console.error('createOrUpdateUser failed:', userErr && userErr.message);
@@ -84,9 +82,9 @@ module.exports = async (req, res) => {
 
   // H4: required metadata defensive — bad metadata won't succeed on Stripe retries either,
   // so acknowledge (200) to stop retry storm + alert Sam for manual recovery.
-  // SKIP-CAL SKUs (group-block + retainer): cal_event_type_id is the sentinel 0;
+  // SKIP-CAL SKU (retainer): cal_event_type_id is the sentinel 0;
   // slot_iso is allowed empty. Short-circuit before Cal logic — Sam manages
-  // cohort sessions / retainer ad-hoc out of band.
+  // the retainer ad-hoc out of band.
   const eventTypeIdInt = parseInt(cal_event_type_id, 10);
   const skipCal = eventTypeIdInt === 0;
   const requiresSlot = !skipCal;
@@ -99,11 +97,11 @@ module.exports = async (req, res) => {
     return;
   }
   if (skipCal) {
-    // No Cal booking; payment captured, downstream (cohort onboarding /
-    // retainer kickoff) handled by Sam manually for now. Alert as audit trail.
+    // No Cal booking; payment captured, downstream (retainer kickoff)
+    // handled by Sam manually for now. Alert as audit trail.
     await safeAlert(
       `Stripe payment landed (no-Cal SKU) — ${sku}`,
-      `Customer ${customerEmail} (${name}) paid for ${sku}. Stripe session: ${stripeSessionId}. No Cal booking created (cohort/retainer flow). Confirm onboarding manually.`,
+      `Customer ${customerEmail} (${name}) paid for ${sku}. Stripe session: ${stripeSessionId}. No Cal booking created (retainer flow). Confirm onboarding manually.`,
     );
     await safeCreateOrUpdateUser({ session, sku, customerEmail });
     res.status(200).json({ received: true, skipped_cal: true });
