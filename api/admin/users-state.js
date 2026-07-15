@@ -31,12 +31,11 @@ module.exports = async function handler(req, res) {
       name: u.name || null,
       state: u.state || null,                       // onboarding-incomplete | onboarding-complete | post-s4-decision | retainer-active | graduated | ...
       state_updated_at: u.state_updated_at || null,
-      cohort: u.cohort || u.cohortId || null,
       stripe_customer_id: u.stripe_customer_id || null,
       stripe_subscription_id: u.stripe_subscription_id || null,
       engagements: Array.isArray(u.engagements)
         ? u.engagements.map((e) => ({
-            type: e.type || null,                   // single-session | coaching-block | group-block | continuation-retainer
+            type: e.type || null,                   // single-session | coaching-block | continuation-retainer
             active: !!e.active,
             completed: !!e.completed,
             purchased_at: e.purchased_at || e.started_at || null,

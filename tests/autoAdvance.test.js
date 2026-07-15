@@ -33,6 +33,5 @@ test('leaves non-block states untouched', () => {
   assert.strictEqual(nextBlockStage('onboarding-incomplete', 3), null);
   assert.strictEqual(nextBlockStage('retainer-active', 3), null);
   assert.strictEqual(nextBlockStage('graduated', 3), null);
-  assert.strictEqual(nextBlockStage('cohort-active', 3), null);
   assert.strictEqual(nextBlockStage('post-s4-decision', 3), null);
 });

@@ -10,7 +10,6 @@ test('sessionsForSku + initialSessionsUsed per SKU', () => {
   assert.strictEqual(sessionsForSku('unknown'), null);
   assert.strictEqual(initialSessionsUsed('coaching-block'), 1); // S1 booked at checkout
   assert.strictEqual(initialSessionsUsed('single-session'), 1);
-  assert.strictEqual(initialSessionsUsed('group-block'), 0);
 });
 
 test('fresh block: 1 of 4 used, 3 left, bookable', () => {
@@ -72,10 +71,8 @@ test('retainer state with no block → bookable via retainer, hasBlock false', (
   assert.strictEqual(b.activeBlock, null);
 });
 
-test('single-session + group-block are not portal-bookable blocks', () => {
+test('single-session is not a portal-bookable block', () => {
   const single = computeBalance({ state: 'pre-s1', engagements: [{ type: 'single-session', sessions_total: 1, sessions_used: 1 }] });
   assert.strictEqual(single.hasBlock, false);
   assert.strictEqual(single.bookable, false);
-  const group = computeBalance({ state: 'cohort-active', engagements: [{ type: 'group-block', sessions_total: 4, sessions_used: 0 }] });
-  assert.strictEqual(group.hasBlock, false);
 });

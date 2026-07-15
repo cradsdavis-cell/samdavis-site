@@ -29,7 +29,7 @@ async function main() {
   const SKIP_WELCOME_EMAIL = true;
 
   for (const row of rows) {
-    const { email, name, stripe_customer_id, initial_state, cohort_id } = row;
+    const { email, name, stripe_customer_id, initial_state } = row;
     if (!email) continue;
     console.log(`Seeding: ${email}`);
     const { created, user } = await createOrUpdateUser({
@@ -38,7 +38,6 @@ async function main() {
       email, name, stripeCustomerId: stripe_customer_id || null,
       sku: 'coaching-block',
       stripeSessionId: null,
-      cohortId: cohort_id || null,
     });
     if (initial_state && initial_state !== 'onboarding-incomplete') {
       user.state = initial_state;

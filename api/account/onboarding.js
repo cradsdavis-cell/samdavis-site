@@ -80,7 +80,7 @@ function renderStep2(user) {
         ${item('vs_code', 'VS Code')}
         ${item('obsidian', 'Obsidian')}
         ${item('cal_app', 'Cal.com app (optional)')}
-        ${item('slack', 'Slack invite (if cohort or retainer)')}
+        ${item('slack', 'Slack invite (if retainer)')}
         <p><a href="mailto:cradsdavis@gmail.com?subject=Stuck%20on%20installation">Stuck on installation? Email Sam.</a></p>
         <button type="submit" class="cta-secondary">Save progress</button>
       </form>
@@ -140,19 +140,6 @@ function renderStep3(user) {
 function renderStep4(user) {
   const lastEngagement = (user.engagements || []).slice(-1)[0];
   const sku = lastEngagement && lastEngagement.type;
-
-  if (sku === 'group-block' || sku === 'group-block-pay4') {
-    return `
-      <h2 class="serif">Your cohort starts soon</h2>
-      <p>You're in the Group Block cohort. Sessions are already scheduled — no separate booking needed.</p>
-      <p>Cohort dates land on your calendar; Sam will email confirmation + cohort details before Session 1.</p>
-      <form method="POST" action="/api/account/onboarding-step">
-        <input type="hidden" name="step" value="4">
-        <input type="hidden" name="action" value="complete_onboarding">
-        <button type="submit" class="cta">Finish onboarding →</button>
-      </form>
-    `;
-  }
 
   return `
     <h2 class="serif">Book your first session</h2>

@@ -58,30 +58,14 @@ test('appends engagement if user exists; preserves state', async () => {
     email: 'alex@example.com',
     name: 'Alex',
     stripeCustomerId: 'cus_X',
-    sku: 'group-block',
+    sku: 'single-session',
     stripeSessionId: 'cs_new',
   });
   const u = await kv.getUser('alex@example.com');
   assert.strictEqual(u.state, 'retainer-active');
   assert.strictEqual(u.engagements.length, 2);
-  assert.strictEqual(u.engagements[1].type, 'group-block');
+  assert.strictEqual(u.engagements[1].type, 'single-session');
   assert.strictEqual(sentEmails.length, 0);
-});
-
-test('group-block purchase sets cohort_id', async () => {
-  const kv = makeKv(fakeKvClient());
-  await createOrUpdateUser({
-    kv,
-    resend: { emails: { send: async () => ({ id: 'em' }) } },
-    email: 'cohort@example.com',
-    name: 'Cohort Member',
-    stripeCustomerId: 'cus_C',
-    sku: 'group-block',
-    stripeSessionId: 'cs_C',
-    cohortId: 'jun-10-2026',
-  });
-  const u = await kv.getUser('cohort@example.com');
-  assert.strictEqual(u.cohort_id, 'jun-10-2026');
 });
 
 test('retainer subscription sets active=true on engagement', async () => {

@@ -10,7 +10,7 @@
 
 **Each iteration**
 
-1. **Render.** `node scripts/audit-shots.mjs` → full-page desktop + mobile screenshots of all six marketing pages (home, about, how-it-works, offer, overview, group) in `scratchpad/shots/`. Open every screenshot.
+1. **Render.** `node scripts/audit-shots.mjs` → full-page desktop + mobile screenshots of all five marketing pages (home, about, how-it-works, offer, overview) in `scratchpad/shots/`. Open every screenshot.
 2. **Score.** Grade each page against `docs/audit/RUBRIC.md` — six categories, to /100 per page and a site score. Read the last line of `docs/audit/ledger.jsonl`; that's the baseline you must beat.
 3. **Target.** Take the lowest-scoring page-category cell, then any open **S1**, then **S2**. Fix highest-ROI first. One cell per iteration is fine — small steps that stick beat big steps that regress.
 4. **Fix.** Edit the HTML / `lib/site.css` / presentational JS on the current branch. Match the existing tokens in `lib/site.css` — no new colours, fonts, or spacing values; reuse the components already defined.
@@ -27,7 +27,6 @@
 **Never** *(hard rails — these override "fix the weakest thing")*
 - Never push to `main` or deploy. Work on a branch, commit once per iteration (`audit(ui): iteration N — <one line>`).
 - Never touch `/api/**`, `/account/**`, or any `lib/*.js` that handles auth, booking, Stripe, KV, or email. Presentational HTML/CSS/JS only.
-- Never delete or hide the **Group Block** SKU — it stays on-site by decision. If it reads stale, make it *honest* (waitlist / "by request", kill dead dates), don't remove it.
 - Never invent a testimonial, metric, credential, date, or claim. Every claim traces to `CVs/master-profile.yaml` or Sam. If you can't verify it, cut it — don't fabricate.
 - Never silently change a **price** to resolve an inconsistency. Pricing is Sam's call: report the mismatch, propose the fix, and park it under `deferred` — don't pick a number.
 - Never let a fix in one place open a gap in another (change a price/name/badge → grep the other pages and reconcile in the same iteration, or park the whole thing).
@@ -44,7 +43,6 @@
 
 ## What only Sam can decide (the loop parks these under `deferred`)
 - **Pricing** numbers and which badge/order is canonical across the ladder.
-- **Group Block strategy** — how live to keep a deprioritised SKU.
 - **New assets** the loop can't fabricate — a real photo of Sam, a new testimonial, a screen recording of the EA.
 - Anything that changes **what the site claims**, vs how clearly it says it.
 

@@ -12,7 +12,6 @@ const VALID_NEXT_STATES = {
   'post-s4-decision': ['retainer-active', 'graduated'],
   'retainer-active': [],
   'graduated': [],
-  'cohort-active': ['post-s4-decision'],
 };
 
 module.exports = async function handler(req, res) {

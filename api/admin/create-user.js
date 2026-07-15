@@ -11,7 +11,7 @@ module.exports = async function handler(req, res) {
   const admin = await requireAdmin({ kv: defaultKv(), req, res });
   if (!admin) return;
 
-  const { email, name, stripe_customer_id, sku, initial_state, cohort_id } = req.body || {};
+  const { email, name, stripe_customer_id, sku, initial_state } = req.body || {};
   if (!email) return res.status(400).json({ error: 'missing_email' });
 
   const kv = defaultKv();
@@ -20,7 +20,6 @@ module.exports = async function handler(req, res) {
     stripeCustomerId: stripe_customer_id || null,
     sku: sku || 'coaching-block',
     stripeSessionId: null,
-    cohortId: cohort_id || null,
   });
 
   if (initial_state) {
