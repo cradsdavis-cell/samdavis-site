@@ -8,7 +8,7 @@
 // Cache: 30s edge cache to respect Trello rate limits
 
 const BOARDS = [
-  { id: '6a11187937ac4eaa28525387', name: 'Crossing', label: '🏔️ Crossing', cls: 'crossing', retreatDate: '2026-08-28', pl: 'Sam' },
+  { id: '6a11187937ac4eaa28525387', name: 'Crossing', label: '🏔️ Crossing', cls: 'crossing', retreatDate: '2026-09-03', pl: 'Sam' },
   { id: '6a111942c5c07cfdf419ec3b', name: 'Oct',      label: '🍂 Oct',      cls: 'oct',      retreatDate: '2026-10-02', pl: 'Lockie' },
   { id: '6a11196b97b532308482e32e', name: 'Nov',      label: '🌧️ Nov',     cls: 'nov',      retreatDate: '2026-10-30', pl: 'Kieran' },
 ];
