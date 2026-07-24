@@ -6,8 +6,8 @@
 <meta name="robots" content="noindex">
 <title>Join your organisation — Crads-AI</title>
 <style>
-  :root{--bg:#0f1216;--card:#171c23;--ink:#e8ecf1;--dim:#9aa7b4;--line:#242c36;--act:#3b82f6;--ok:#22c55e;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
-  @media (prefers-color-scheme: light){:root{--bg:#f5f7fa;--card:#ffffff;--ink:#1a222c;--dim:#5a6a7a;--line:#e3e9f0}}
+  :root{--bg:#0f1216;--card:#171c23;--ink:#e8ecf1;--dim:#9aa7b4;--line:#242c36;--act:#3b82f6;--ok:#22c55e;--err:#f87171;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+  @media (prefers-color-scheme: light){:root{--bg:#f5f7fa;--card:#ffffff;--ink:#1a222c;--dim:#5a6a7a;--line:#e3e9f0;--err:#b91c1c}}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}
   .wrap{max-width:520px;width:100%}
@@ -18,7 +18,7 @@
   .btn{display:inline-block;background:var(--act);color:#fff;border:0;border-radius:9px;padding:12px 18px;font-size:16px;font-weight:600;text-decoration:none;cursor:pointer;margin:6px 8px 0 0}
   .btn.ghost{background:transparent;color:var(--act);border:1px solid var(--act)}
   .hint{font-size:13px;color:var(--dim);margin-top:10px}
-  .err{color:#f87171}
+  .err{color:var(--err)}
   #opening,#fallback,#badlink{display:none}
   .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--dim);border-top-color:var(--act);border-radius:50%;animation:r .8s linear infinite;vertical-align:-2px;margin-right:7px}
   @keyframes r{to{transform:rotate(360deg)}}
@@ -67,8 +67,9 @@
   }
   function downloadFor(ua){
     var releases = 'https://github.com/cradsdavis-cell/crads-ai-app/releases/latest';
+    if (/iPhone|iPad|Android|Mobile/i.test(ua)) return { mobile: true, label: 'Download the app', url: releases };
     if (/Windows/i.test(ua)) return { label: 'Download for Windows', url: releases };
-    if (/Mac|iPhone|iPad/i.test(ua)) return { label: 'Download for Mac', url: releases };
+    if (/Mac/i.test(ua)) return { label: 'Download for Mac', url: releases };
     return { label: 'Download the app', url: releases };
   }
 
@@ -80,21 +81,37 @@
     var orgTxt = ' for <span class="org">' + inv.org.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }) + '</span>';
     $('orgline').innerHTML = orgTxt; $('orgline2').innerHTML = orgTxt;
     var dl = downloadFor(navigator.userAgent);
-    $('dlBtn').textContent = dl.label; $('dlBtn').href = dl.url;
+    if (dl.mobile) {
+      // Phones cannot run the desktop app: dead-ending on a .exe/.dmg page helps nobody.
+      $('dlBtn').style.display = 'none';
+      var mob = document.createElement('p'); mob.className = 'hint';
+      mob.innerHTML = '<b>On your phone?</b> The Crads-AI app runs on computers (Windows and Mac). Open this same link on your computer, or copy your invite below and send it to yourself.';
+      $('fallback').insertBefore(mob, $('fallback').firstChild);
+    } else {
+      $('dlBtn').textContent = dl.label; $('dlBtn').href = dl.url;
+    }
 
-    var opened = false;
+    function showFallback(){ $('opening').style.display = 'none'; $('fallback').style.display = 'block'; }
     function tryApp(){
       $('fallback').style.display = 'none';
       $('opening').style.display = 'block';
+      if (document.hidden) {
+        // Background tab (middle-click / opened behind): attempting now would misread the
+        // hidden state as "app took focus". Wait until the tab is actually looked at.
+        var onVis = function(){ if (!document.hidden) { document.removeEventListener('visibilitychange', onVis); tryApp(); } };
+        document.addEventListener('visibilitychange', onVis);
+        return;
+      }
       // If the app is installed, this hands the whole invite over and the page's job is done.
       location.href = inv.appUrl;
+      var appTookFocus = false;
+      var onHide = function(){ if (document.hidden) appTookFocus = true; };
+      document.addEventListener('visibilitychange', onHide);
       setTimeout(function(){
-        if (document.hidden || opened) { opened = true; return; }   // app took focus: done
-        $('opening').style.display = 'none';
-        $('fallback').style.display = 'block';
+        document.removeEventListener('visibilitychange', onHide);
+        if (!appTookFocus) showFallback();   // nothing answered the scheme: offer the download
       }, 2000);
     }
-    document.addEventListener('visibilitychange', function(){ if (document.hidden) opened = true; });
     $('retry').onclick = function(e){ e.preventDefault(); tryApp(); };
 
     $('copyBtn').onclick = function(){
