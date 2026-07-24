@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Join your organisation — Crads-AI</title>
+<style>
+  :root{--bg:#0f1216;--card:#171c23;--ink:#e8ecf1;--dim:#9aa7b4;--line:#242c36;--act:#3b82f6;--ok:#22c55e;--mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+  @media (prefers-color-scheme: light){:root{--bg:#f5f7fa;--card:#ffffff;--ink:#1a222c;--dim:#5a6a7a;--line:#e3e9f0}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}
+  .wrap{max-width:520px;width:100%}
+  h1{font-size:22px;margin:0 0 6px}
+  p{margin:8px 0;color:var(--dim)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;margin-top:14px}
+  .org{font-weight:600;color:var(--ink)}
+  .btn{display:inline-block;background:var(--act);color:#fff;border:0;border-radius:9px;padding:12px 18px;font-size:16px;font-weight:600;text-decoration:none;cursor:pointer;margin:6px 8px 0 0}
+  .btn.ghost{background:transparent;color:var(--act);border:1px solid var(--act)}
+  .hint{font-size:13px;color:var(--dim);margin-top:10px}
+  .err{color:#f87171}
+  #opening,#fallback,#badlink{display:none}
+  .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--dim);border-top-color:var(--act);border-radius:50%;animation:r .8s linear infinite;vertical-align:-2px;margin-right:7px}
+  @keyframes r{to{transform:rotate(360deg)}}
+  code{font-family:var(--mono);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Join your organisation</h1>
+
+  <div class="card" id="opening">
+    <p><span class="spin"></span>Opening the Crads-AI app<span id="orgline"></span>…</p>
+    <p class="hint">If nothing happens in a couple of seconds, the app probably isn't installed yet; the download button will appear here.</p>
+  </div>
+
+  <div class="card" id="fallback">
+    <p>You'll need the Crads-AI app<span id="orgline2"></span>. It takes about a minute:</p>
+    <p><a class="btn" id="dlBtn" href="#" rel="noopener">Download the app</a>
+       <button class="btn ghost" id="copyBtn">Copy my invite</button></p>
+    <p class="hint">1. Install and open the app · 2. It finds your invite by itself (or choose <b>Join</b> and paste it) · 3. Sign in with the email address this invite was sent to. That's it: your invite only works for that address, and it expires after 14 days.</p>
+    <p class="hint">Already installed? <a href="#" id="retry">Try opening the app again</a>.</p>
+  </div>
+
+  <div class="card" id="badlink">
+    <p class="err" id="badwhy">This link doesn't look like a complete invite.</p>
+    <p class="hint">Links sometimes get cut in half when forwarded. Ask whoever sent it to copy the whole link again (it starts with <code>https://crads-ai.com/join#v1.</code>).</p>
+  </div>
+
+  <p class="hint">Your assistant is private to you. Your organisation can send things to it; nobody can see inside it. This page runs entirely in your browser: the invite in the link never leaves it.</p>
+</div>
+<script>
+  // KEEP IN LOCKSTEP with join-parse.mjs (the unit-tested twin of this logic).
+  function parseJoinFragment(fragment){
+    var raw = String(fragment || '').replace(/^#/, '');
+    if (!raw) return { ok: false, reason: 'no invite in the link' };
+    var parts = raw.split('.');
+    if (parts[0] !== 'v1' || parts.length < 4) return { ok: false, reason: 'not a v1 invite fragment' };
+    var org = parts[1], slug = parts[2], b64 = parts.slice(3).join('.');
+    if (!/^[A-Za-z0-9][A-Za-z0-9 _-]{0,62}$/.test(org) || !/^[a-z0-9][a-z0-9-]{0,30}[a-z0-9]$/.test(slug)) return { ok: false, reason: 'invalid org or member name' };
+    var decoded;
+    try { decoded = atob(b64.replace(/-/g, '+').replace(/_/g, '/')); }
+    catch (e) { return { ok: false, reason: 'invite payload is not decodable' }; }
+    var f = decoded.split('|');
+    if (f.length < 4 || !f[0] || !f[3]) return { ok: false, reason: 'invite payload is incomplete' };
+    return { ok: true, org: org, slug: slug, appUrl: 'crads-ai://join/' + raw };
+  }
+  function downloadFor(ua){
+    var releases = 'https://github.com/cradsdavis-cell/crads-ai-app/releases/latest';
+    if (/Windows/i.test(ua)) return { label: 'Download for Windows', url: releases };
+    if (/Mac|iPhone|iPad/i.test(ua)) return { label: 'Download for Mac', url: releases };
+    return { label: 'Download the app', url: releases };
+  }
+
+  var $ = function(id){ return document.getElementById(id); };
+  var inv = parseJoinFragment(location.hash);
+  if (!inv.ok) {
+    $('badlink').style.display = 'block';
+  } else {
+    var orgTxt = ' for <span class="org">' + inv.org.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }) + '</span>';
+    $('orgline').innerHTML = orgTxt; $('orgline2').innerHTML = orgTxt;
+    var dl = downloadFor(navigator.userAgent);
+    $('dlBtn').textContent = dl.label; $('dlBtn').href = dl.url;
+
+    var opened = false;
+    function tryApp(){
+      $('fallback').style.display = 'none';
+      $('opening').style.display = 'block';
+      // If the app is installed, this hands the whole invite over and the page's job is done.
+      location.href = inv.appUrl;
+      setTimeout(function(){
+        if (document.hidden || opened) { opened = true; return; }   // app took focus: done
+        $('opening').style.display = 'none';
+        $('fallback').style.display = 'block';
+      }, 2000);
+    }
+    document.addEventListener('visibilitychange', function(){ if (document.hidden) opened = true; });
+    $('retry').onclick = function(e){ e.preventDefault(); tryApp(); };
+
+    $('copyBtn').onclick = function(){
+      var text = location.href, btn = $('copyBtn');
+      function done(okTxt){ btn.textContent = okTxt; setTimeout(function(){ btn.textContent = 'Copy my invite'; }, 2000); }
+      function legacy(){
+        try {
+          var t = document.createElement('textarea'); t.value = text;
+          t.style.position = 'fixed'; t.style.top = '-1000px'; document.body.appendChild(t);
+          t.focus(); t.select();
+          var ok = document.execCommand('copy'); document.body.removeChild(t);
+          done(ok ? 'Copied' : 'Press Ctrl-C');
+        } catch (e) { done('Press Ctrl-C'); }
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function(){ done('Copied'); }, legacy);
+      else legacy();
+    };
+
+    tryApp();
+  }
+</script>
+</body>
+</html>
