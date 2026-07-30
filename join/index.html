@@ -145,11 +145,11 @@
     <ol class="stepslist">
       <li><span><b>Install and open the app.</b> The download button below picks the right version for this computer.</span></li>
       <li><span><b>It finds your invite by itself.</b> Nothing to type or paste. (If it ever asks, choose <b>Join</b> and paste this page's link.)</span></li>
-      <li><span><b>Sign in with the email address this invite was sent to.</b> The invite only works for that address.</span></li>
+      <li id="step3"><span><b>Sign in with the email address this invite was sent to.</b> The invite only works for that address.</span></li>
     </ol>
     <p class="btnrow"><a class="btn" id="dlBtn" href="#" rel="noopener">Download the app</a>
        <button class="btn ghost" id="copyBtn">Copy my invite</button></p>
-    <p class="fine">Your invite expires 14 days after it was sent.</p>
+    <p class="fine" id="expiry">This invite works until you use it.</p>
     <p class="hint">Already installed? <a href="#" id="retry">Try opening the app again</a>.</p>
   </div>
 
@@ -220,8 +220,25 @@
       location.href = 'crads-ai://join/' + String(location.hash || '').replace(/^#/, '');
     };
   } else {
-    var orgTxt = ' for <span class="org">' + inv.org.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }) + '</span>';
+    // A STANDALONE pebble stages its redeem under the internal route handle
+    // `crads-solo`. That is plumbing, not an organisation the reader belongs to, so
+    // naming it read as "for crads-solo" on a box that has no organisation at all.
+    // The sign-in step is wrong for them too, and now doubly so: since 2026-07-30 a
+    // solo claim skips the Google handshake entirely, because there is no org parent
+    // for a signed token to prove anything to. The invite token IS the proof, and it
+    // works from whichever computer they open it on.
+    var solo = inv.org === 'crads-solo';
+    var orgTxt = solo ? '' : ' for <span class="org">' + inv.org.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }) + '</span>';
     $('orgline').innerHTML = orgTxt; $('orgline2').innerHTML = orgTxt;
+    if (solo) {
+      var s3 = $('step3');
+      if (s3) s3.innerHTML = '<span><b>That is it: no password, no sign-in.</b> The app makes a key on this computer and the private half never leaves it.</span>';
+    } else {
+      // an organisation can revoke a member's invite; a standalone box's cannot be
+      // revoked by anyone but Sam, so only the org line carries that caveat
+      var ex = $('expiry');
+      if (ex) ex.textContent = 'This invite works until you use it, unless your organisation revokes it first.';
+    }
     var dl = downloadFor(navigator.userAgent);
     if (dl.mobile) {
       // Phones cannot run the desktop app: dead-ending on a .exe/.dmg page helps nobody.
