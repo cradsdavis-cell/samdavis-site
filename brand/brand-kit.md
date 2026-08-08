@@ -198,21 +198,31 @@ Four things that are easy to get wrong and matter to Sam.
 
 ---
 
-## 7. Logo and marks
+## 7. The logo
 
-**Primary mark:** a dark green profile silhouette holding out an open palm, with a circuit-tree
-motif of gold nodes and green leaves rising above it. A person, offering, technology growing
-rather than technology imposed.
+**The mark is the circuit-leaf.** A leaf drawn in deep green whose veins are circuit traces,
+each ending in a via-ring, with one node filled terracotta. It is the whole positioning in one
+shape: something growing, something engineered, the same object.
 
-| File | Size | Use |
+It is drawn from geometry rather than stored as artwork, so it is genuinely resolution-free and
+every size is exact rather than scaled. Vector is supplied.
+
+| File | Format | Use |
 |---|---|---|
-| `assets/mark-primary.png` | 1200 x 1200 | Master. Any print or large digital use. |
-| `assets/mark-primary-transparent.png` | 1200 x 1200 | Master on transparent, for placing on colour. |
-| `assets/mark-portrait.png` | 520 x 864 | Portrait crop as used on the site. |
-| `assets/favicon.png` | 64 x 64 | Favicon and tiny placements. |
+| `assets/leaf-mark.svg` | Vector | **Default.** Badged: leaf on a cream rounded square. Any size, any medium. |
+| `assets/leaf-mark-1024.png` | 1024 x 1024 | Raster master of the badged mark. |
+| `assets/leaf-mark-512.png` | 512 x 512 | Raster, common web and profile size. |
+| `assets/leaf-mark-64.png` | 64 x 64 | Favicon and tiny placements. |
+| `assets/leaf-mark-on-light.svg` / `.png` | Vector + 1024 | Badge removed, green leaf, transparent. **Light backgrounds only.** |
+| `assets/leaf-mark-reversed.svg` / `.png` | Vector + 1024 | Cream leaf, transparent. **For dark backgrounds.** |
+
+**Pick the right one:** badged by default. On a light surface where the badge would look boxy,
+use `on-light`. On anything dark, use `reversed`. The green leaf disappears against a dark
+background, so never use `on-light` there.
 
 **Clear space:** at least 10% of the mark's width on every side.
-**Do not:** recolour, stretch, add effects, or place on a busy photograph.
+**Do not:** recolour beyond the two supplied variants, stretch, add effects, or place on a busy
+photograph.
 
 ---
 
@@ -248,13 +258,19 @@ Inter is the only webfont.
 
 ---
 
-## 10. Photography
+## 10. Photography and illustration
 
 | File | Size | Status |
 |---|---|---|
 | `assets/sam-photo-web.jpg` | 280 x 280 | Web only. **Not print-safe.** |
 | `assets/promo-poster.jpg` | 1280 x 720 | Promotional still, landscape. |
 | `assets/og-card.png` | 1200 x 630 | Social sharing card. |
+| `assets/illustration-square.png` | 1200 x 1200 | Editorial illustration: a green silhouette holding out a palm with a circuit-tree above it. Hero art on the site. |
+| `assets/illustration-square-transparent.png` | 1200 x 1200 | Same, transparent background. |
+| `assets/illustration-portrait.png` | 520 x 864 | Same, portrait crop. |
+
+**The three illustration files are not the logo.** They are editorial artwork and work well as
+article or show-notes art. Where a logo is wanted, use the circuit-leaf in § 7.
 
 **No press headshot exists yet.** The photo above is a 280 x 280 crop from a stage shot under
 magenta lighting. Print media and awards bodies will want 300dpi, at least 1500px on the short
@@ -279,7 +295,6 @@ edge, neutral lighting, landscape and portrait crops. Being commissioned.
 |---|---|---|
 | **Press headshot** | Blocks print and most awards | Being commissioned |
 | **No recorded speaking or podcast audio** | Hosts book people they have heard. Nothing exists yet, which is circular for a first booking | Open. One video asset under review |
-| **Vector logo (SVG/EPS)** | Some print publications require it | Open |
 | **Prior press** | Nothing yet. This campaign is the fix | n/a |
 | **Wordmark** | No typeset lockup, only the illustration mark | Open |
 
