@@ -296,7 +296,7 @@ edge, neutral lighting, landscape and portrait crops. Being commissioned.
 | **Press headshot** | Blocks print and most awards | Being commissioned |
 | **No recorded speaking or podcast audio** | Hosts book people they have heard. Nothing exists yet, which is circular for a first booking | Open. One video asset under review |
 | **Prior press** | Nothing yet. This campaign is the fix | n/a |
-| **Wordmark** | No typeset lockup, only the illustration mark | Open |
+| **Wordmark** | No typeset "Crads-AI" lockup exists, only the leaf mark | Open |
 
 ---
 
