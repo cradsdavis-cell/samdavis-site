@@ -86,8 +86,9 @@ The angle a good host can get at: **men's mental health handled without the usua
 No performative masculinity, no corporate wellness, no bro-ey stuff. Those are explicit
 exclusions in Wildly Calm's own mission statement. What is left is harder and more interesting.
 
-**Time-sensitive.** Sam is Project Lead for the Snowies retreat on 3 to 6 September and steps
-back from Wildly Calm afterwards. Conversations on this land best before then.
+**A live hook, not a deadline.** Sam is Project Lead for the Snowies retreat on 3 to 6
+September, so there is a real thing happening on a date, which is useful for a pitch. He
+remains a co-founder afterwards; Lockie and Kieran lead the October and November retreats.
 
 ### 2.3 AI, ethics, and what actually happens next
 
@@ -239,7 +240,7 @@ Ranked. The combination leads; the individual threads are what a given show or d
 4. **Pam ddim y ddau.** Why the trade-offs you think you are facing mostly are not real, argued
    by someone who has tested it against a fairly extreme life. See § 2.1.
 5. **Men's mental health, outdoors, without the usual register.** Wildly Calm. See § 2.2.
-   **Time-sensitive, before September.**
+   The 3 to 6 September Snowies retreat is a datable hook for anyone who wants one.
 6. **Fax machine to mobile phone.** The pace argument, for small-business and founder press.
 7. **First ascent of a virgin peak.** Kyrgyzstan 2021, Pik Perseverance, 4,788m, as part of a
    five-climber British Alpine Club team.
@@ -395,7 +396,8 @@ show-notes art. Where a logo is wanted, use the circuit-leaf in § 8.
 - **Awards second.**
 - **Print** is parked until the headshot exists. **Speaking** is parked until there is a
   recorded talk to point at.
-- **Adventure and Wildly Calm angles are time-boxed to September**, per § 2.2.
+- No angle here has an expiry. The 3 to 6 September retreat is a hook if a pitch wants a date,
+  not a deadline on the Wildly Calm material.
 
 ---
 
