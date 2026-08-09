@@ -25,3 +25,4 @@ scratchpad/
 
 # Sam-curated seed CSV with real customer emails — never commit
 scripts/seed-clients.csv
+.appauth-key.pem
