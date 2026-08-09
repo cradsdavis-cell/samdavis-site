@@ -262,15 +262,15 @@ Inter is the only webfont.
 
 | File | Size | Status |
 |---|---|---|
-| `assets/sam-photo-web.jpg` | 280 x 280 | Web only. **Not print-safe.** |
-| `assets/promo-poster.jpg` | 1280 x 720 | Promotional still, landscape. |
-| `assets/og-card.png` | 1200 x 630 | Social sharing card. |
+| `assets/sam-photo-web.jpg` | 280 x 280 | The only photograph of Sam here. Web only, **not print-safe.** |
+| `assets/og-card.png` | 1200 x 630 | Social sharing card. On palette, carries the leaf. |
 | `assets/illustration-square.png` | 1200 x 1200 | Editorial illustration: a green silhouette holding out a palm with a circuit-tree above it. Hero art on the site. |
 | `assets/illustration-square-transparent.png` | 1200 x 1200 | Same, transparent background. |
-| `assets/illustration-portrait.png` | 520 x 864 | Same, portrait crop. |
+| `assets/leaf-watermark.png` | 520 x 864 | The leaf drawn large and pale, for use as a background wash behind text. Not a logo placement. |
+| `assets/promo-poster.jpg` | 1280 x 720 | A frame from Sam's explainer video: a hand-drawn tree with a circuit canopy, roots plugged into email, calendar, tasks and web. **Off palette** (warm yellow and gold) and a different illustration style from everything else here. Use it as video artwork, not as brand art. |
 
-**The three illustration files are not the logo.** They are editorial artwork and work well as
-article or show-notes art. Where a logo is wanted, use the circuit-leaf in § 7.
+**None of these are the logo.** They are editorial artwork and work well as article or
+show-notes art. Where a logo is wanted, use the circuit-leaf in § 7.
 
 **No press headshot exists yet.** The photo above is a 280 x 280 crop from a stage shot under
 magenta lighting. Print media and awards bodies will want 300dpi, at least 1500px on the short
