@@ -18,6 +18,8 @@
     { "source": "/favicon.ico", "destination": "/lib/img/favicon.ico", "permanent": true }
   ],
   "rewrites": [
+    { "source": "/account/app-login", "destination": "/api/account/app-login" },
+    { "source": "/.well-known/crads-app-jwks.json", "destination": "/api/auth/app-jwks" },
     { "source": "/account/login", "destination": "/account/login.html" },
     { "source": "/account/verify", "destination": "/account/verify.html" },
     { "source": "/account/set-password", "destination": "/account/set-password.html" },
