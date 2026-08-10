@@ -2,7 +2,10 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "crons": [
-    { "path": "/api/cron/graduate-check", "schedule": "0 23 * * *" }
+    {
+      "path": "/api/cron/graduate-check",
+      "schedule": "0 23 * * *"
+    }
   ],
   "redirects": [
     {
@@ -10,46 +13,165 @@
       "destination": "/book/discovery",
       "permanent": true
     },
-    { "source": "/book/group-block", "destination": "/book/discovery", "permanent": true },
-    { "source": "/group", "destination": "/offer", "permanent": true },
-    { "source": "/onepager", "destination": "/offer", "permanent": true },
-    { "source": "/build", "destination": "/offer", "permanent": true },
-    { "source": "/build-onepager", "destination": "/offer", "permanent": true },
-    { "source": "/favicon.ico", "destination": "/lib/img/favicon.ico", "permanent": true }
+    {
+      "source": "/book/group-block",
+      "destination": "/book/discovery",
+      "permanent": true
+    },
+    {
+      "source": "/group",
+      "destination": "/offer",
+      "permanent": true
+    },
+    {
+      "source": "/onepager",
+      "destination": "/offer",
+      "permanent": true
+    },
+    {
+      "source": "/build",
+      "destination": "/offer",
+      "permanent": true
+    },
+    {
+      "source": "/build-onepager",
+      "destination": "/offer",
+      "permanent": true
+    },
+    {
+      "source": "/favicon.ico",
+      "destination": "/lib/img/favicon.ico",
+      "permanent": true
+    }
   ],
   "rewrites": [
-    { "source": "/account/app-login", "destination": "/api/account/app-login" },
-    { "source": "/.well-known/crads-app-jwks.json", "destination": "/api/auth/app-jwks" },
-    { "source": "/account/login", "destination": "/account/login.html" },
-    { "source": "/account/verify", "destination": "/account/verify.html" },
-    { "source": "/account/set-password", "destination": "/account/set-password.html" },
-    { "source": "/account", "destination": "/api/account" },
-    { "source": "/account/", "destination": "/api/account" },
-    { "source": "/account/book", "destination": "/api/account/book" },
-    { "source": "/account/sessions", "destination": "/api/account/sessions" },
-    { "source": "/account/packs", "destination": "/api/account/packs" },
-    { "source": "/account/subscription", "destination": "/api/account/subscription" },
-    { "source": "/account/profile", "destination": "/api/account/profile" },
-    { "source": "/account/profile/edit", "destination": "/api/account/profile-edit" },
-    { "source": "/account/onboarding", "destination": "/api/account/onboarding" },
-    { "source": "/account/admin", "destination": "/api/account/admin" },
-    { "source": "/account/admin/", "destination": "/api/account/admin" },
-    { "source": "/account/admin/client", "destination": "/api/account/admin/client" }
+    {
+      "source": "/app",
+      "destination": "/api/app"
+    },
+    {
+      "source": "/app/",
+      "destination": "/api/app"
+    },
+    {
+      "source": "/app/minerals",
+      "destination": "/api/app/minerals"
+    },
+    {
+      "source": "/app/devices",
+      "destination": "/api/app/devices"
+    },
+    {
+      "source": "/app/billing",
+      "destination": "/api/app/billing"
+    },
+    {
+      "source": "/app/account",
+      "destination": "/api/app/account"
+    },
+    {
+      "source": "/account/app-login",
+      "destination": "/api/account/app-login"
+    },
+    {
+      "source": "/.well-known/crads-app-jwks.json",
+      "destination": "/api/auth/app-jwks"
+    },
+    {
+      "source": "/account/login",
+      "destination": "/account/login.html"
+    },
+    {
+      "source": "/account/verify",
+      "destination": "/account/verify.html"
+    },
+    {
+      "source": "/account/set-password",
+      "destination": "/account/set-password.html"
+    },
+    {
+      "source": "/account",
+      "destination": "/api/account"
+    },
+    {
+      "source": "/account/",
+      "destination": "/api/account"
+    },
+    {
+      "source": "/account/book",
+      "destination": "/api/account/book"
+    },
+    {
+      "source": "/account/sessions",
+      "destination": "/api/account/sessions"
+    },
+    {
+      "source": "/account/packs",
+      "destination": "/api/account/packs"
+    },
+    {
+      "source": "/account/subscription",
+      "destination": "/api/account/subscription"
+    },
+    {
+      "source": "/account/profile",
+      "destination": "/api/account/profile"
+    },
+    {
+      "source": "/account/profile/edit",
+      "destination": "/api/account/profile-edit"
+    },
+    {
+      "source": "/account/onboarding",
+      "destination": "/api/account/onboarding"
+    },
+    {
+      "source": "/account/admin",
+      "destination": "/api/account/admin"
+    },
+    {
+      "source": "/account/admin/",
+      "destination": "/api/account/admin"
+    },
+    {
+      "source": "/account/admin/client",
+      "destination": "/api/account/admin/client"
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" }
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "geolocation=(), microphone=(), camera=()"
+        }
       ]
     },
     {
       "source": "/api/stripe/webhook",
-      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
     }
   ]
 }

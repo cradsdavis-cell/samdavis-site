@@ -1,0 +1,116 @@
+'use strict';
+// tests/appMinerals.test.js — the account's read path into the directory
+// (arc A, A2). The contract: the site mints its own app token and calls the
+// worker server-side, the two views merge into one row per mineral, and a
+// failed read is NEVER rendered as "you have none".
+process.env.SESSION_SECRET = 'test-secret-do-not-use-in-prod-32-chars-min';
+const crypto = require('crypto');
+const { privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 });
+process.env.APP_TOKEN_PRIVATE_KEY = privateKey.export({ type: 'pkcs8', format: 'pem' });
+process.env.APP_TOKEN_KID = 'test-kid-1';
+
+const test = require('node:test');
+const assert = require('node:assert');
+const jwt = require('jsonwebtoken');
+const { directoryFor, mergeMinerals, emailHash } = require('../lib/directory');
+
+const USER = { email: 'Sam@X.com', state_version: 3 };
+const EH = emailHash('sam@x.com');
+
+function fakeFetcher(routes) {
+  const calls = [];
+  const f = async (url, init = {}) => {
+    const u = new URL(url);
+    calls.push({ path: u.pathname, search: u.search, auth: (init.headers || {}).authorization || '' });
+    const r = routes[u.pathname];
+    if (!r) return { ok: false, status: 404, json: async () => ({}) };
+    if (typeof r === 'function') return r();
+    return { ok: (r.status || 200) < 400, status: r.status || 200, json: async () => r.body || {} };
+  };
+  f.calls = calls;
+  return f;
+}
+
+test('the reader mints a real app token and asks for its OWN hash', async () => {
+  const fetcher = fakeFetcher({ '/edges': { body: { edges: [] } } });
+  const dir = directoryFor(USER, { fetcher, baseUrl: 'https://dir.test' });
+  await dir.edges();
+  const call = fetcher.calls[0];
+  assert.equal(call.search, `?e=${EH}`, 'the email hash is lowercased before hashing');
+  const token = call.auth.replace('Bearer ', '');
+  const claims = jwt.decode(token);
+  assert.equal(claims.iss, 'https://crads-ai.com', 'minted by this site');
+  assert.equal(claims.aud, 'crads-directory', 'for the directory');
+  assert.equal(claims.email, 'sam@x.com');
+  assert.equal(claims.sv, 3, 'the live state_version rides, so a password change cuts it');
+  assert.ok(!claims.scope, 'a plain read token, never enrol-scoped');
+});
+
+test('one token serves the whole page, and each route is asked once', async () => {
+  const fetcher = fakeFetcher({
+    '/edges': { body: { edges: [] } },
+    '/my-boxes': { body: { boxes: [] } },
+  });
+  const dir = directoryFor(USER, { fetcher, baseUrl: 'https://dir.test' });
+  await Promise.all([dir.edges(), dir.boxes()]);
+  await dir.edges();   // second read of the same view
+  assert.equal(fetcher.calls.length, 2, 'the repeat read was cached');
+  assert.equal(fetcher.calls[0].auth, fetcher.calls[1].auth, 'one token per reader');
+});
+
+test('failure is shaped, never thrown: unreachable, refused, and unreadable each say so', async () => {
+  const dead = directoryFor(USER, { fetcher: async () => { throw new Error('ENOTFOUND'); }, baseUrl: 'https://dir.test' });
+  const r1 = await dead.edges();
+  assert.equal(r1.ok, false);
+  assert.match(r1.reason, /could not be reached/);
+
+  const refused = directoryFor(USER, { fetcher: fakeFetcher({ '/edges': { status: 401 } }), baseUrl: 'https://dir.test' });
+  const r2 = await refused.edges();
+  assert.equal(r2.ok, false);
+  assert.match(r2.reason, /did not accept/);
+
+  const junk = directoryFor(USER, { fetcher: fakeFetcher({ '/edges': () => ({ ok: true, status: 200, json: async () => { throw new Error('bad json'); } }) }), baseUrl: 'https://dir.test' });
+  const r3 = await junk.edges();
+  assert.equal(r3.ok, false);
+  assert.match(r3.reason, /unreadable/);
+});
+
+test('the merge: one row per mineral, ties and registrations joined on the handle', () => {
+  const rows = mergeMinerals({
+    edges: [
+      { org: 'test-org-4', org_display: 'Test Org 4', role: 'member', status: 'active', slug: 'keith', rel: 'anchored', box: 'keith-box', tier: 'pebble' },
+      { org: 'club', role: 'member', status: 'active', slug: 'keith', rel: 'joined' },
+      { org: 'test-org-4', role: 'admin', status: 'active', slug: 'sam' },
+    ],
+    boxes: [
+      { host: 'keith-box', label: 'Keith', ssh: { hostname: '1.2.3.4', user: 'aios', port: 22 } },
+      { host: 'solo-pebble', label: 'My own', ssh: {} },
+    ],
+  });
+  const byName = Object.fromEntries(rows.map((r) => [r.key, r]));
+  assert.ok(byName.keith, 'the tie and the registration are ONE row, not two');
+  assert.equal(byName.keith.tie, 'joined', 'later edge wins the row, both are the same mineral');
+  assert.equal(byName.keith.registered, true, 'and it carries the registration');
+  assert.equal(byName.keith.ssh.user, 'aios');
+  assert.ok(byName['solo-pebble'], 'a registered mineral with no tie still appears');
+  assert.equal(byName['solo-pebble'].tie, '', 'and claims no relationship it does not have');
+  assert.ok(!rows.some((r) => r.key === 'sam'), 'an ADMIN edge is not a mineral');
+});
+
+test('org_display falls back to the handle: the worker omits it when empty', () => {
+  const [row] = mergeMinerals({ edges: [{ org: 'acme', role: 'member', slug: 'x', rel: 'anchored' }] });
+  assert.equal(row.orgDisplay, 'acme', 'never a blank where a name should be');
+});
+
+test('the page tells empty apart from unreadable', () => {
+  // Read the source rather than booting the handler: requiring it constructs a
+  // real Redis client (defaultKv) whose reconnect loop keeps the test runner
+  // alive forever. The branch ORDER is the guarantee worth pinning anyway.
+  const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'api', 'app', 'minerals.js'), 'utf8');
+  assert.match(src, /requireAuth/, 'gated before anything renders');
+  assert.match(src, /Could not read your minerals just now/, 'unreadable says so');
+  assert.match(src, /Nothing yet/, 'empty says so');
+  assert.ok(src.indexOf('Could not read your minerals') < src.indexOf('Nothing yet'),
+    'the failure branch is checked BEFORE the empty branch, so a dead read can never render as none');
+  assert.match(src, /registered itself/, 'a registration is a claim, not proof of ownership');
+});
