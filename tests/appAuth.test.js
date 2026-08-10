@@ -171,3 +171,10 @@ test('a dashboard-mangled PEM still parses: literal \\n, CRLF, flattened-to-spac
     process.env.APP_TOKEN_PRIVATE_KEY = orig;
   }
 });
+
+test('the account id rides the app token as aid, and only when the account has one', () => {
+  const withId = jwt.decode(mintAppToken({ email: 'sam@x.com', stateVersion: 1, accountId: 'acc_' + 'a'.repeat(24) }));
+  assert.strictEqual(withId.aid, 'acc_' + 'a'.repeat(24), 'ownership keys on the id, never the email hash');
+  const without = jwt.decode(mintAppToken({ email: 'sam@x.com', stateVersion: 1 }));
+  assert.ok(!('aid' in without), 'an account loaded before the id shipped mints a token without it, and consumers tolerate that');
+});
