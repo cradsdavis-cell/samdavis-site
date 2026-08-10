@@ -73,8 +73,11 @@ test('requireAuth redirects on state_version mismatch', async () => {
 });
 
 test('renderSidebar marks active route', () => {
-  const html = renderSidebar({ activeRoute: 'sessions', isAdmin: false });
-  assert.match(html, /<a [^>]*href="\/account\/sessions"[^>]*class="[^"]*active/);
+  // arc A6: the coaching pages left the nav (unlisted, not deleted — see
+  // tests/coachingUnlisted.test.js), so the active-route pin moved to one that
+  // is still listed.
+  const html = renderSidebar({ activeRoute: 'profile', isAdmin: false });
+  assert.match(html, /<a [^>]*href="\/account\/profile"[^>]*class="[^"]*active/);
   assert.doesNotMatch(html, /href="\/account\/admin"/);
 });
 
