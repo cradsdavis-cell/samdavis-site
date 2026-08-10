@@ -151,6 +151,7 @@ test('a dashboard-mangled PEM still parses: literal \\n, CRLF, flattened-to-spac
     'literal backslash-n': goodPem.replace(/\n/g, '\\n'),
     'CRLF': goodPem.replace(/\n/g, '\r\n'),
     'newlines flattened to spaces': goodPem.replace(/\n/g, ' '),
+    'whole PEM base64-encoded to one line': Buffer.from(goodPem).toString('base64'),
     'single line, no separators': goodPem.replace(/-----\n/g, '-----').replace(/\n-----/g, '-----')
       .replace(/^(-----BEGIN PRIVATE KEY-----)/, '$1').replace(/\n/g, ''),
   };
