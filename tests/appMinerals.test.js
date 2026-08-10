@@ -110,9 +110,46 @@ test('the page tells empty apart from unreadable', () => {
   assert.match(src, /requireAuth/, 'gated before anything renders');
   assert.match(src, /Could not read your minerals just now/, 'unreadable says so');
   assert.match(src, /Nothing to show for this account yet/, 'empty says so');
+  assert.match(src, /can REACH|can reach/, 'and the page filters on access, not ownership');
   assert.ok(src.indexOf('Could not read your minerals') < src.indexOf('Nothing to show for this account yet'),
     'the failure branch is checked BEFORE the empty branch, so a dead read can never render as none');
   assert.match(src, /incomplete rather than wrong/,
     'and empty explains what the account cannot see, rather than implying the user has nothing');
   assert.match(src, /registered itself/, 'a registration is a claim, not proof of ownership');
+});
+
+// ---- the list filters on ACCESS, ownership is an attribute (ruling 9) --------
+test('the mirror is the authority; ties enrich it; a legacy self-registration is marked as a claim', () => {
+  const { assemble } = require('../api/app/minerals.js');
+  const rows = assemble({
+    minerals: [
+      { mineral_id: 'min_' + 'a'.repeat(24), label: 'keith', host: 'keith.crads-ai.com', tier: 'pebble', role: 'owner', held_by: 'you' },
+      { mineral_id: 'min_' + 'b'.repeat(24), label: 'shared-one', host: 'shared.example', tier: 'pebble', role: 'user', held_by: 'Acme' },
+    ],
+    edges: [{ org: 'test-org-4', org_display: 'Test Org 4', role: 'member', status: 'active', slug: 'keith', rel: 'anchored', box: 'keith-box' }],
+    boxes: [{ host: 'old-thing', label: 'Old Thing' }],
+  });
+  const by = Object.fromEntries(rows.map((r) => [r.key, r]));
+  assert.equal(by.keith.role, 'owner');
+  assert.equal(by.keith.held_by, 'you');
+  assert.equal(by.keith.tie, 'anchored', 'the tie layer enriched the same row rather than making a second');
+  assert.equal(by.keith.orgDisplay, 'Test Org 4');
+  assert.ok(!by.keith.legacy, 'a mineral in the mirror is not a mere claim');
+  assert.equal(by['shared-one'].role, 'user', 'THE COMPANY CASE: held by Acme, reachable by this account, and it appears');
+  assert.equal(by['old-thing'].legacy, true, 'a self-registration with no mirror row is flagged as a claim');
+});
+
+test('a mineral held by a company still appears — that is the whole point of filtering on access', () => {
+  const { assemble } = require('../api/app/minerals.js');
+  const rows = assemble({ minerals: [{ mineral_id: 'min_' + 'c'.repeat(24), label: 'work-pebble', tier: 'pebble', role: 'user', held_by: 'Acme Ltd' }] });
+  assert.equal(rows.length, 1, 'ownership is not the filter');
+  assert.equal(rows[0].held_by, 'Acme Ltd');
+});
+
+test('the page renders held-by in words, and never as a bare id', () => {
+  const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'api', 'app', 'minerals.js'), 'utf8');
+  assert.match(src, /held by you/, 'yours');
+  assert.match(src, /shared with you/, 'and someone else\'s');
+  assert.ok(!/held_by\}\)/.test(src.replace(/escapeHtml\(m\.held_by[^)]*\)/g, '')), 'the raw value is never printed unescaped');
+  assert.match(src, /can reach/, 'the lead says access, not ownership');
 });

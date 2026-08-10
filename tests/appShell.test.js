@@ -91,5 +91,5 @@ test('the account never states something it cannot know', () => {
   assert.match(billing, /not listed here yet/, 'the limitation is stated instead');
   const minerals = readFileSync(join(ROOT, 'api', 'app', 'minerals.js'), 'utf8');
   assert.match(minerals, /incomplete rather than wrong/, 'an empty list explains what it cannot see');
-  assert.match(minerals, /Rocks you operate yourself are not listed here yet/, 'including the rock gap');
+  assert.match(minerals, /need claiming once/, 'and names why a pre-ownership mineral is missing');
 });
