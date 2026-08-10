@@ -8,6 +8,9 @@ const { appJwks } = require('../../lib/appAuth');
 module.exports = function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'method_not_allowed' });
   if (!process.env.APP_TOKEN_PRIVATE_KEY) return res.status(503).json({ error: 'not_configured' });
+  let body;
+  try { body = appJwks(); }
+  catch { return res.status(503).json({ error: 'not_configured', detail: 'key present but unparseable: re-paste the PEM' }); }
   res.setHeader('Cache-Control', 'public, max-age=3600');
-  return res.status(200).json(appJwks());
+  return res.status(200).json(body);
 };

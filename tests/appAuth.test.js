@@ -143,3 +143,30 @@ test('token refresh: live state_version enforced, nonce + scope ride, junk scope
   await tokenH({ method: 'POST', headers: auth, body: { scope: 'admin' } }, res);
   assert.equal(res.statusCode, 400);
 });
+
+test('a dashboard-mangled PEM still parses: literal \\n, CRLF, flattened-to-spaces, single line', () => {
+  const goodPem = privateKey.export({ type: 'pkcs8', format: 'pem' }).trim();
+  const orig = process.env.APP_TOKEN_PRIVATE_KEY;
+  const manglings = {
+    'literal backslash-n': goodPem.replace(/\n/g, '\\n'),
+    'CRLF': goodPem.replace(/\n/g, '\r\n'),
+    'newlines flattened to spaces': goodPem.replace(/\n/g, ' '),
+    'single line, no separators': goodPem.replace(/-----\n/g, '-----').replace(/\n-----/g, '-----')
+      .replace(/^(-----BEGIN PRIVATE KEY-----)/, '$1').replace(/\n/g, ''),
+  };
+  try {
+    for (const [name, mangled] of Object.entries(manglings)) {
+      process.env.APP_TOKEN_PRIVATE_KEY = mangled;
+      const jwks = appJwks();
+      assert.ok(jwks.keys[0].n, `JWKS derives through the mangling: ${name}`);
+      const tok = mintAppToken({ email: 'sam@x.com', stateVersion: 1 });
+      const pub = crypto.createPublicKey({ key: jwks.keys[0], format: 'jwk' }).export({ type: 'spki', format: 'pem' });
+      assert.equal(jwt.verify(tok, pub, { algorithms: ['RS256'] }).email, 'sam@x.com', `mint+verify through: ${name}`);
+    }
+    // genuinely broken key: the same named error as a missing one, never a crash type
+    process.env.APP_TOKEN_PRIVATE_KEY = '-----BEGIN PRIVATE KEY-----\ngarbage\n-----END PRIVATE KEY-----';
+    assert.throws(() => appJwks(), /APP_TOKEN_PRIVATE_KEY not set/);
+  } finally {
+    process.env.APP_TOKEN_PRIVATE_KEY = orig;
+  }
+});
