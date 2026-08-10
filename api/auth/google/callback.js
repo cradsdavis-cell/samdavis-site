@@ -57,7 +57,9 @@ module.exports = async function handler(req, res) {
     user.email_verified = true;
     if (!user.google_sub) user.google_sub = sub;
     await kv.setUser(email, user);
-    const session = formatSessionCookie(signSession({ email, state_version: user.state_version || 1 }));
+    const { issueSession } = require('../../../lib/sessions');
+    const { cookie: session } = await issueSession({ kv, email,
+      stateVersion: user.state_version || 1, userAgent: req.headers['user-agent'] });
     res.setHeader('Set-Cookie', [clearState, session]);
     res.writeHead(302, { Location: '/account/' });
     res.end();

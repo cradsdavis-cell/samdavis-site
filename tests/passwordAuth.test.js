@@ -15,6 +15,12 @@ function fakeKv(seed = {}) {
     async setAuthToken(t, d) { tokens[t] = d; },
     async deleteAuthToken(t) { delete tokens[t]; },
     async incrementThrottle(e) { throttle[e] = (throttle[e] || 0) + 1; return throttle[e]; },
+    // arc A3: sign-ins register a session; the fake speaks the real interface
+    _sessions: {},
+    async setSession(e, sid, d) { this._sessions[`${e}:${sid}`] = d; },
+    async getSession(e, sid) { return this._sessions[`${e}:${sid}`] || null; },
+    async listSessions(e) { return Object.entries(this._sessions).filter(([k]) => k.startsWith(`${e}:`)).map(([, v]) => v); },
+    async deleteSession(e, sid) { delete this._sessions[`${e}:${sid}`]; },
   };
 }
 function res() {
