@@ -1,53 +1,30 @@
 'use strict';
-// tests/appBilling.test.js — arc A4. Personal billing is real; rock billing is
-// STATED, never invented. The line this pins: no number appears on this page
-// that the platform cannot actually answer for.
-process.env.SESSION_SECRET = 'test-secret-do-not-use-in-prod-32-chars-min';
+// /app/billing — product only (Sam's ruling, 2026-08-10 app audit): coaching
+// engagements and the coaching Stripe portal left the product app. The page
+// states the one headline fact (nothing charged, pricing unarmed) and lists
+// what WILL be billed, per held mineral, at $0 today.
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('fs');
+const path = require('path');
 
-const test = require('node:test');
-const assert = require('node:assert');
-const { readFileSync } = require('node:fs');
-const { join } = require('node:path');
-const { billingView } = require('../lib/appBilling');
+const src = fs.readFileSync(path.join(__dirname, '..', 'api', 'app', 'billing.js'), 'utf8');
 
-const SRC = readFileSync(join(__dirname, '..', 'api', 'app', 'billing.js'), 'utf8');
-
-test('a linked customer gets a portal session that returns to /app/billing', async () => {
-  const calls = [];
-  const stripe = { billingPortal: { sessions: { create: async (a) => { calls.push(a); return { url: 'https://billing.stripe.com/x' }; } } } };
-  const v = await billingView({ user: { email: 'a@b.c', stripe_customer_id: 'cus_1' }, stripe, baseUrl: 'https://crads-ai.com' });
-  assert.equal(v.portalUrl, 'https://billing.stripe.com/x');
-  assert.equal(calls[0].customer, 'cus_1');
-  assert.equal(calls[0].return_url, 'https://crads-ai.com/app/billing', 'returns into the app, not the coaching page');
+test('coaching is gone from the product app\'s billing', () => {
+  assert.ok(!/engagement/i.test(src), 'coaching packs no longer render here');
+  assert.ok(!/require\('stripe'\)/.test(src), 'no coaching Stripe portal on the product page');
+  assert.ok(!/billingPortal/.test(src), 'no portal session minted');
 });
 
-test('no linked customer is a calm fact, not an error; a Stripe failure is reported, not swallowed', async () => {
-  const none = await billingView({ user: { email: 'a@b.c' }, stripe: {}, baseUrl: 'https://x.test' });
-  assert.equal(none.portalUrl, null);
-  assert.equal(none.portalError, null);
-  assert.equal(none.linked, false);
-
-  const angry = { billingPortal: { sessions: { create: async () => { throw new Error('no such customer'); } } } };
-  const failed = await billingView({ user: { email: 'a@b.c', stripe_customer_id: 'cus_x' }, stripe: angry, baseUrl: 'https://x.test' });
-  assert.equal(failed.portalUrl, null);
-  assert.match(failed.portalError, /no such customer/);
+test('the page states the headline fact and never invents a figure', () => {
+  assert.match(src, /Nothing is being charged today/);
+  assert.match(src, /pricing is not switched on yet/i);
+  assert.match(src, /\$0 today/, 'held minerals are listed as future lines at zero');
+  assert.match(src, /Nothing is being charged either way/, 'an unreadable mineral list still cannot cost money');
 });
 
-test('rock billing is stated, never faked: no invented figures on the page', () => {
-  assert.match(SRC, /Rocks you operate/, 'the card exists (ruling 10)');
-  assert.match(SRC, /not itemised here yet/, 'and says plainly that it is not itemised');
-  assert.match(SRC, /Nothing is being charged for these seats today/, 'and what that means for money');
-  // the giveaway of a faked pane would be currency or per-seat arithmetic
-  assert.ok(!/[$£€]\s?\d/.test(SRC), 'no money figure is printed');
-  // strip HTML entities first: &#8217; is digits that mean an apostrophe
-  const prose = SRC.replace(/&#\d+;/g, "'");
-  assert.ok(!/\d+\s*(seats?|×|x)\s*[$£€]?\d/i.test(prose), 'no seat arithmetic');
-  assert.ok(!/\btotal\b/i.test(prose), 'no total is claimed');
-});
-
-test('an unreadable rock list says so rather than claiming you operate none', () => {
-  assert.match(SRC, /rocks === null/, 'the failure case is distinguished');
-  assert.match(SRC, /Could not read which rocks/, 'and named');
-  assert.ok(SRC.indexOf('Could not read which rocks') < SRC.indexOf('not listed here yet'),
-    'unreadable is checked before the cannot-know case, so a dead read never reads as settled');
+test('coaching URLs still answer for existing clients (the handlers survive unrouted from /app)', () => {
+  for (const f of ['subscription.js', 'packs.js', 'sessions.js', 'book.js']) {
+    assert.ok(fs.existsSync(path.join(__dirname, '..', 'api', 'account', f)), `${f} still exists at its old URL`);
+  }
 });

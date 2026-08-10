@@ -62,6 +62,10 @@
       "destination": "/api/app/devices"
     },
     {
+      "source": "/app/activity",
+      "destination": "/api/app/activity"
+    },
+    {
       "source": "/app/billing",
       "destination": "/api/app/billing"
     },

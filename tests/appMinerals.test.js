@@ -173,8 +173,10 @@ test('a container id is never shown as a name', () => {
   assert.ok(src.indexOf('String(m.host) !== title') > -1, 'the address is never printed as both heading and subtitle');
 });
 
-test('an ended tie reads as English, and a placeholder reason is not printed', () => {
-  const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'api', 'app', 'minerals.js'), 'utf8');
-  assert.match(src, /'anchor' : \(n\.tie/, '"your anchored here ended" was not a sentence');
-  assert.match(src, /no reason\$\/i/, 'and "No Reason" is a placeholder, not a reason worth printing');
+test('tie history lives on the ACTIVITY page, in English, with placeholder reasons unprinted', () => {
+  const minerals = require('fs').readFileSync(require('path').join(__dirname, '..', 'api', 'app', 'minerals.js'), 'utf8');
+  assert.ok(!/Recently ended/.test(minerals), 'the minerals page never shows history (2026-08-10 ruling)');
+  const activity = require('fs').readFileSync(require('path').join(__dirname, '..', 'api', 'app', 'activity.js'), 'utf8');
+  assert.match(activity, /'anchor' : 'membership'/, 'an ended tie is a sentence');
+  assert.match(activity, /no reason\$\/i/, '"No Reason" is a placeholder, not a reason worth printing');
 });

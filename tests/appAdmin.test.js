@@ -90,6 +90,7 @@ test('a dead directory read never hides the accounts, and says which half is mis
 test('the admin reader mints an ADMIN-scoped token; the ordinary reader never does', () => {
   const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'lib', 'directory.js'), 'utf8');
   assert.match(src, /scope: 'admin'/, 'adminAll carries the scope');
-  const ordinary = src.slice(0, src.indexOf('adminAll'));
+  const ordinary = src.slice(0, src.indexOf('revokeDevice'));
   assert.ok(!/scope:/.test(ordinary), 'the per-reader token stays unscoped, so a normal page never holds world-reading credentials');
+  assert.match(src, /scope: 'manage'/, 'custody acts mint their own manage-scoped token per call');
 });

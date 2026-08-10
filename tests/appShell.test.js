@@ -24,8 +24,8 @@ test('the shell carries the app language, never the site stylesheet', () => {
   assert.ok(html.includes('<p>hi</p>'), 'main content renders');
 });
 
-test('the nav is the four things an account holds, and marks where you are', () => {
-  assert.deepEqual(NAV.map((n) => n.label), ['Minerals', 'Devices', 'Billing', 'Account']);
+test('the nav is what an account holds plus its history, and marks where you are', () => {
+  assert.deepEqual(NAV.map((n) => n.label), ['Minerals', 'Devices', 'Activity', 'Billing', 'Account']);
   const nav = renderAppNav('devices');
   assert.ok(/href="\/app\/devices" class="on"/.test(nav), 'the active item is marked');
   assert.ok(/href="\/app\/minerals" class=""/.test(nav), 'the others are not');
@@ -87,8 +87,8 @@ test('times localise for the reader; the server text is never an unlabelled UTC 
 test('the account never states something it cannot know', () => {
   const billing = readFileSync(join(ROOT, 'api', 'app', 'billing.js'), 'utf8');
   assert.ok(!/does not operate a rock/.test(billing),
-    'claiming "no rock" is false for every rock owner: a rock records no owner, so this is unknowable');
-  assert.match(billing, /not listed here yet/, 'the limitation is stated instead');
+    'claiming "no rock" is false for every rock owner: only the mirror can say what an account holds');
+  assert.match(billing, /Nothing is being charged either way/, 'an unreadable mineral list still cannot cost money');
   const minerals = readFileSync(join(ROOT, 'api', 'app', 'minerals.js'), 'utf8');
   assert.match(minerals, /incomplete rather than wrong/, 'an empty list explains what it cannot see');
   assert.match(minerals, /need claiming once/, 'and names why a pre-ownership mineral is missing');

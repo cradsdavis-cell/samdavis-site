@@ -1,64 +1,57 @@
 'use strict';
-// /app/billing — what this account pays for (arc A4).
-const Stripe = require('stripe');
+// /app/billing — the PRODUCT's billing, and only the product's (Sam's ruling,
+// 2026-08-10 app audit). The old page stitched three orphans together: a
+// Stripe portal wired to the coaching customer base, coaching pack history,
+// and a rocks card that admitted it couldn't know anything.
+// Coaching stays fully reachable at its own /account URLs for existing
+// clients; it does not appear in the product app.
+//
+// What this page says now is the truth and nothing else: what the account
+// holds, that nothing is charged today, and where the numbers will appear
+// when pricing arms.
 const { requireAuth } = require('../../lib/account');
 const { isAdmin } = require('../../lib/auth');
 const { defaultKv } = require('../../lib/kv');
 const { renderAppShell, escapeHtml } = require('../../lib/appShell');
-const { billingView } = require('../../lib/appBilling');
 const { directoryFor } = require('../../lib/directory');
-
-const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 
 module.exports = async function handler(req, res) {
   const user = await requireAuth({ kv: defaultKv(), req, res });
   if (!user) return;
 
-  const view = await billingView({ user, stripe, baseUrl: process.env.BASE_URL });
+  const dir = directoryFor(user);
+  const minR = typeof dir.minerals === 'function'
+    ? await dir.minerals().catch((e) => ({ ok: false, reason: String(e && e.message || e) }))
+    : { ok: false, reason: 'unreadable' };
 
-  // Rocks this account operates, so the rock-billing card can name them rather
-  // than talk about them in the abstract. Read-only, fail-soft.
-  const edges = await directoryFor(user).edges();
-  const rocks = edges.ok
-    ? edges.edges.filter((e) => e.tier === 'rock' || e.role === 'admin').map((e) => e.org_display || e.org)
-    : null;
+  let main = `<h1>Billing</h1>
+<p class="lead">What this account pays for its minerals. One account, one bill, whatever it holds.</p>`;
 
-  const rows = (view.engagements || []).map((e) => `<div class="card">
-  <h2>${escapeHtml(e.type || 'engagement')}</h2>
-  <div class="sub">${e.active ? 'active' : (e.completed ? 'completed' : 'purchased')}${
-    (e.purchased_at || e.started_at) ? ` &middot; ${escapeHtml(String(e.purchased_at || e.started_at).split('T')[0])}` : ''}</div>
-</div>`).join('');
-
-  const portalCard = view.portalUrl
-    ? `<a class="act" href="${escapeHtml(view.portalUrl)}" target="_blank" rel="noopener">Manage billing in Stripe</a>
-       <p class="note">Payment methods, invoices and cancellations all live there.</p>`
-    : view.portalError
-      ? `<p class="note">Stripe could not open the portal just now: ${escapeHtml(view.portalError)}</p>`
-      : '<p class="note">No payment method is linked to this account yet. Nothing is being charged.</p>';
-
-  // A rock you OPERATE is not knowable from here yet: a rock registers itself
-  // at the directory under route:<org>, which records no owner, and an
-  // operator holds no member edge to their own rock. So the honest answer to
-  // "which rocks does this account operate" is "this page cannot tell yet" —
-  // never "none", which was a false statement for every rock owner alive
-  // (found walking the account, 2026-08-10).
-  const rockCard = rocks === null
-    ? '<div class="sub">Could not read which rocks this account operates just now.</div>'
-    : rocks.length
-      ? `<div class="sub">You operate ${rocks.map((r) => `<b>${escapeHtml(r)}</b>`).join(', ')}. Per-seat billing for a rock&#8217;s members is not itemised here yet: the platform ledger cannot yet be read per owner, and pricing is not armed. Nothing is being charged for these seats today.</div>`
-      : `<div class="sub">Rocks you operate are not listed here yet: a rock does not record which account owns it, so this page cannot ask. If you run one, nothing is being charged for its seats today, and pricing is not armed.</div>`;
-
-  const main = `<h1>Billing</h1>
-<p class="lead">What this account pays for. One account, one card, whatever it holds.</p>
-<div class="card">
-  <h2>Payment</h2>
-  ${portalCard}
-</div>
-${rows ? `<h1 style="margin-top:1.6em;font-size:1.15em">Your engagements</h1>${rows}` : ''}
-<div class="card">
-  <h2>Rocks you operate</h2>
-  ${rockCard}
+  // the headline fact, stated once and plainly
+  main += `<div class="card">
+  <h2>Nothing is being charged today</h2>
+  <div class="sub">Crads-AI pricing is not switched on yet. When it is, each mineral you hold becomes a line
+  here with its price, and nothing starts billing without you seeing it first.</div>
 </div>`;
+
+  if (minR.ok) {
+    const held = minR.minerals.filter((m) => m.held_by === 'you');
+    if (held.length) {
+      const rows = held.map((m) => `<div class="card">
+  <h2>${escapeHtml(m.label || m.host || 'a mineral')}</h2>
+  <div class="sub">${escapeHtml(m.tier === 'rock' ? 'rock' : 'pebble')} &middot; billed to this account when pricing arms &middot; <b>$0 today</b></div>
+</div>`).join('');
+      main += `<h1 style="margin-top:1.6em;font-size:1.15em">What this account holds</h1>${rows}`;
+      if (held.some((m) => m.tier === 'rock')) {
+        main += `<p class="note">A rock&#8217;s member seats will be itemised on the rock&#8217;s own line when per-seat pricing arms.</p>`;
+      }
+    } else {
+      main += `<p class="note" style="margin-top:1.2em">This account holds no minerals yet, so there is nothing that could be billed.</p>`;
+    }
+  } else {
+    main += `<div class="problem" style="margin-top:1.2em"><b>Could not read what this account holds just now.</b>
+      <div class="note">${escapeHtml(minR.reason)}. Nothing is being charged either way.</div></div>`;
+  }
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   return res.status(200).send(renderAppShell({ title: 'Billing', active: 'billing', email: user.email, isAdmin: isAdmin(user.email), main }));

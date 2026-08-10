@@ -65,12 +65,21 @@ function renderRow(m) {
   const title = displayName(m);
   // never print the address twice: as the heading and again beneath it
   const addr = m.host && String(m.host) !== title ? `<div class="sub">${escapeHtml(m.host)}</div>` : '';
+  // the card's one action: the desktop app registers crads-ai:// (protocol.mjs),
+  // and crads-ai://box/<slug> lands straight in this mineral. A card that goes
+  // nowhere is a dead end, which is exactly what the audit called this page.
+  const slug = String(m.host || m.key || '').split('.')[0].replace(/-box$/, '');
+  const open = /^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]$/.test(slug)
+    ? `<div style="margin-top:.75em"><a class="act" href="crads-ai://box/${escapeHtml(slug)}">Open in the app</a>
+       <span class="note" style="margin-left:.6em">needs the Crads-AI app on this machine</span></div>`
+    : '';
   return `<div class="card">
   <h2>${escapeHtml(title)}</h2>
   ${addr}
   ${lines ? `<div class="sub">${lines}</div>` : ''}
   ${members}
   <div class="chips">${chips.join('')}</div>
+  ${open}
 </div>`;
 }
 
@@ -130,14 +139,14 @@ module.exports = async function handler(req, res) {
   const ask = (name) => (typeof dir[name] === 'function'
     ? dir[name]().catch((e) => ({ ok: false, reason: String(e && e.message || e) }))
     : Promise.resolve({ ok: false, reason: `this page cannot read ${name} yet` }));
-  const [minR, edgesR, boxesR, noticesR] = await Promise.all([
-    ask('minerals'), ask('edges'), ask('boxes'), ask('notices'),
-  ]);
+  // legacy self-registrations no longer render here (Sam's ruling, 2026-08-10
+  // audit): they are claims by machines, not minerals, and they live in Admin
+  const [minR, edgesR] = await Promise.all([ask('minerals'), ask('edges')]);
 
   let main = `<h1>Your minerals</h1>
 <p class="lead">Everything this account can reach. Open one from the Crads-AI app on a machine whose keys it knows.</p>`;
 
-  const reads = [minR, edgesR, boxesR];
+  const reads = [minR, edgesR];
   const failed = reads.filter((r) => !r.ok);
   if (failed.length === reads.length) {
     main += `<div class="problem"><b>Could not read your minerals just now.</b>
@@ -150,7 +159,6 @@ module.exports = async function handler(req, res) {
     const rows = assemble({
       minerals: minR.ok ? minR.minerals : [],
       edges: edgesR.ok ? edgesR.edges : [],
-      boxes: boxesR.ok ? boxesR.boxes : [],
     });
     main += rows.length
       ? rows.map(renderRow).join('\n')
@@ -159,17 +167,6 @@ module.exports = async function handler(req, res) {
          Minerals created before that record existed need claiming once, from the mineral itself.</p>
          <p class="note">So if you know you have one, this list is incomplete rather than wrong:
          check you signed in with the email your minerals know, and open it from the Crads-AI app in the meantime.</p></div>`;
-  }
-
-  if (noticesR.ok && noticesR.notices.length) {
-    main += '<h1 style="margin-top:1.6em;font-size:1.15em">Recently ended</h1>';
-    for (const n of noticesR.notices) {
-      main += `<div class="card">
-        <h2>${escapeHtml(n.org_display || n.org)}</h2>
-        <div class="sub">your ${escapeHtml(n.tie === 'anchored' ? 'anchor' : (n.tie || 'tie'))} here ended${
-          n.reason && !/^no reason$/i.test(String(n.reason).trim()) ? `: ${escapeHtml(n.reason)}` : ''}</div>
-      </div>`;
-    }
   }
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
