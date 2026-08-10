@@ -61,7 +61,7 @@ module.exports = async function handler(req, res) {
     const { cookie: session } = await issueSession({ kv, email,
       stateVersion: user.state_version || 1, userAgent: req.headers['user-agent'] });
     res.setHeader('Set-Cookie', [clearState, session]);
-    res.writeHead(302, { Location: '/account/' });
+    res.writeHead(302, { Location: '/app' });
     res.end();
   } catch (e) {
     const reason = classify(e);

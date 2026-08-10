@@ -96,7 +96,7 @@ test('Valid token redirects to /account/ + sets session cookie', async () => {
   const res = mockRes();
   await handler(mockReq({ query: { token: 'good-tok' } }), res);
   assert.strictEqual(res.statusCode, 302);
-  assert.strictEqual(res.redirectLocation, '/account/');
+  assert.strictEqual(res.redirectLocation, '/app');   // arc A5: auth lands in the product app
   const cookie = res.headers['set-cookie'];
   assert.ok(cookie, 'Set-Cookie header should be present');
   assert.ok(cookie.startsWith('session_jwt='), 'cookie should be session_jwt');
@@ -122,7 +122,7 @@ test('Valid token is single-use (deleted after use)', async () => {
   const res1 = mockRes();
   await handler(mockReq({ query: { token: 'one-shot-tok' } }), res1);
   assert.strictEqual(res1.statusCode, 302);
-  assert.strictEqual(res1.redirectLocation, '/account/');
+  assert.strictEqual(res1.redirectLocation, '/app');
   // Token should be gone
   const after = await kv.getAuthToken('one-shot-tok');
   assert.strictEqual(after, null);

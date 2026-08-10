@@ -5,67 +5,89 @@
   <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
   <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sign in · crads-ai</title>
-  <link rel="stylesheet" href="/lib/site.css">
+  <title>Sign in · Crads-AI</title>
   <meta name="robots" content="noindex">
+  <!-- Arc A5 (2026-08-10): the sign-in card is a PRODUCT surface and speaks
+       the app's design language, standalone, like /account/app-login and the
+       join/open doors. It carries the same three methods it always did
+       (Google, email + password, magic link) against the same endpoints; only
+       the clothes and the destination changed: signing in now lands in /app. -->
   <style>
-    .auth-google {
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      width: 100%; padding: 12px 18px; margin-bottom: var(--space-3);
-      background: var(--bg-main); color: var(--ink-deep);
-      border: 1px solid var(--rule); border-radius: 4px;
-      font-family: var(--sans); font-size: 1em; font-weight: 600;
-      text-decoration: none; transition: border-color 0.15s ease, background 0.15s ease;
+    :root{
+      --paper:#F7F5EF; --card:#FFFFFF; --card-2:#F1EFE7; --line:#E3E1D6;
+      --ink:#1F2D24; --soft:#5C6B60; --faint:#8A968C;
+      --accent:#A4582C; --accent-hi:#C2703D; --on-accent:#FFFFFF; --bad:#8C3A2E;
     }
-    .auth-google:hover { border-color: var(--accent); background: var(--bg-soft); }
-    .auth-google svg { width: 18px; height: 18px; flex: 0 0 auto; }
-    .auth-divider {
-      display: flex; align-items: center; gap: 12px;
-      color: var(--ink-faint); font-size: 0.85em; margin: var(--space-3) 0;
+    @media (prefers-color-scheme: dark){
+      :root{
+        --paper:#161A16; --card:#1D231E; --card-2:#232A24; --line:#2E362F;
+        --ink:#E8EAE4; --soft:#9AA79C; --faint:#6B776D;
+        --accent:#C2703D; --accent-hi:#D98A55; --on-accent:#161A16; --bad:#D08A7D;
+      }
     }
-    .auth-divider::before, .auth-divider::after {
-      content: ""; flex: 1; height: 1px; background: var(--rule);
-    }
-    .auth-actions { display: flex; gap: 10px; margin-top: var(--space-2); }
-    .auth-actions button { flex: 1; }
-    .auth-actions .secondary {
-      background: var(--bg-main); color: var(--accent); border: 1px solid var(--rule);
-    }
-    .auth-actions .secondary:hover { background: var(--bg-soft); border-color: var(--accent); }
-    .auth-forgot {
-      display: block; margin-top: var(--space-2); font-size: 0.85em; color: var(--ink-faint);
-      background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0;
-    }
-    .auth-forgot:hover { color: var(--accent); }
-    /* input styling now comes from the unified .account-page form rules in lib/site.css */
+    *{box-sizing:border-box;margin:0}
+    body{background:var(--paper);color:var(--ink);
+      font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;
+      min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5em}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+      max-width:25em;width:100%;padding:2em 2.1em 1.9em}
+    .mark{font-weight:700;font-size:1.05em}
+    .mark i{font-style:normal;color:var(--accent)}
+    .tag{font:600 .68em/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+      letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-top:.45em}
+    h1{font-size:1.3em;line-height:1.25;margin:1.15em 0 .35em}
+    .sub{color:var(--soft);margin-bottom:1.3em}
+    .google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+      padding:.72em 1em;border:1px solid var(--line);border-radius:10px;background:var(--card-2);
+      color:var(--ink);font:600 .97em system-ui,sans-serif;text-decoration:none}
+    .google:hover{border-color:var(--accent)}
+    .google svg{width:17px;height:17px}
+    .or{display:flex;align-items:center;gap:.8em;color:var(--faint);
+      font-size:.82em;margin:1.15em 0}
+    .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+    input{width:100%;padding:.7em .85em;margin-bottom:.6em;border:1px solid var(--line);
+      border-radius:9px;background:var(--paper);color:var(--ink);font:1em system-ui,sans-serif}
+    input:focus{outline:2px solid var(--accent);outline-offset:1px}
+    .row{display:flex;gap:.5em;margin-top:.3em}
+    .act{flex:1;padding:.72em 1em;border-radius:10px;border:1px solid var(--accent);
+      background:var(--accent);color:var(--on-accent);font:600 .97em system-ui,sans-serif;cursor:pointer}
+    .act:hover{background:var(--accent-hi);border-color:var(--accent-hi)}
+    .act.second{background:none;color:var(--accent)}
+    .link{display:block;width:100%;margin-top:1em;background:none;border:none;padding:0;
+      color:var(--faint);font:inherit;font-size:.88em;text-decoration:underline;cursor:pointer;text-align:center}
+    .status{margin-top:1em;font-size:.92em;color:var(--soft)}
+    .status[data-kind="error"]{color:var(--bad)}
+    .back{display:block;text-align:center;margin-top:1.4em;font-size:.85em;color:var(--faint)}
   </style>
 </head>
-<body class="account-page">
-  <main class="login-wrap">
-    <div class="site-return"><a href="/" class="wordmark">crads-<span class="accent">ai</span></a></div>
-    <h1 class="serif">Sign in to your account</h1>
-    <p class="subtitle" id="auth-subtitle">Use Google, or an email and password.</p>
+<body>
+  <div class="card">
+    <div class="mark">crads<i>-ai</i></div>
+    <div class="tag">Your private assistant</div>
 
-    <a class="auth-google" href="/api/auth/google/start">
+    <h1>Sign in</h1>
+    <p class="sub" id="auth-subtitle">Your account holds your minerals, your devices and your billing.</p>
+
+    <a class="google" href="/api/auth/google/start">
       <svg viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.71-1.57 2.68-3.89 2.68-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>
       Continue with Google
     </a>
 
-    <div class="auth-divider">or</div>
+    <div class="or">or</div>
 
-    <form id="pw-form" class="lead-capture-card" autocomplete="on">
+    <form id="pw-form" autocomplete="on">
       <input type="email" name="email" id="auth-email" required placeholder="your@email.com" autocomplete="email">
       <input type="password" name="password" id="auth-password" required minlength="10" placeholder="password (10+ characters)" autocomplete="current-password">
-      <div class="auth-actions">
-        <button type="submit" class="cta" data-mode="login">Sign in</button>
-        <button type="button" class="cta secondary" id="auth-register" data-mode="register">Create account</button>
+      <div class="row">
+        <button type="submit" class="act" data-mode="login">Sign in</button>
+        <button type="button" class="act second" id="auth-register" data-mode="register">Create account</button>
       </div>
       <p class="status" id="auth-status" hidden></p>
     </form>
-    <button type="button" class="auth-forgot" id="auth-forgot">Forgot password?</button>
+    <button type="button" class="link" id="auth-forgot">Email me a sign-in link instead</button>
 
-    <a href="/" class="login-back">← Back to crads-ai.com</a>
-  </main>
+    <a href="/" class="back">← crads-ai.com</a>
+  </div>
 
   <script>
     (function () {
@@ -103,13 +125,13 @@
         var path = mode === 'register' ? '/api/auth/register' : '/api/auth/login';
         var res = await post(path, { email: email, password: password });
         if (res.ok) {
-          window.location.assign((res.data && res.data.redirect) || '/account/');
+          window.location.assign((res.data && res.data.redirect) || '/app');
         } else if (res.status === 409) {
-          show('That email already has an account — try “Sign in”, or “Forgot password?”.', true);
+          show('That email already has an account — try “Sign in”, or the sign-in link below.', true);
         } else if (res.status === 429) {
           show('Too many attempts. Wait 15 minutes and try again.', true);
         } else if (mode === 'login') {
-          show('That email and password didn’t match. Check them, or set a password via “Forgot password?”.', true);
+          show('That email and password didn’t match. Check them, or use the sign-in link below.', true);
         } else {
           show((res.data && res.data.message) || 'Something went wrong. Try again.', true);
         }
@@ -120,11 +142,11 @@
 
       forgotBtn.addEventListener('click', async function () {
         var email = emailEl.value.trim().toLowerCase();
-        if (!email) { show('Enter your email above first, then tap “Forgot password?”.', true); return; }
+        if (!email) { show('Enter your email above first, then tap the link button.', true); return; }
         show('Sending…', false);
         var res = await post('/api/auth/request-link', { email: email });
         if (res.ok) {
-          show('If that email has an account, we’ve sent a link to set your password. Check your inbox.', false);
+          show('If that email has an account, a sign-in link is on its way. Check your inbox.', false);
         } else if (res.status === 429) {
           show('Too many requests. Wait 15 minutes and try again.', true);
         } else {
