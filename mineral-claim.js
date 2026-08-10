@@ -56,11 +56,18 @@ try {
     crypto.createHash('sha256').update(email).digest('hex') + '\n', { mode: 0o600 });
 } catch { /* not fatal */ }
 
-// 5. mirror it upward
-const label = (() => { try { return fs.readFileSync(`${STATE}/box-name`, 'utf8').trim(); } catch { return ''; } })();
-const host = (() => {
-  try { return fs.readFileSync(`${STATE}/org-inbox.conf`, 'utf8').match(/^SLUG=(.*)$/m)[1].trim(); } catch { return require('os').hostname(); }
-})();
+// 5. mirror it upward — with the mineral's REAL names. A rock is named by its
+// org-policy (display_name, falling back to the org slug); a pebble by its
+// box-name + inbox slug; the container hostname is only the last resort,
+// because inside a box it is a docker id and nobody wants "1c8db1bea6a3"
+// listed as a mineral.
+const rd = (f) => { try { return fs.readFileSync(`${STATE}/${f}`, 'utf8'); } catch { return ''; } };
+const policy = rd('brain/org-policy.yaml') || rd('org-policy.yaml');
+const yf = (t, f) => { const m = t.match(new RegExp(`^\\s*${f}:\\s*"?([^"\\n#]*)"?`, 'm')); return m ? m[1].trim() : ''; };
+const orgSlug = yf(policy, 'name');
+const label = rd('box-name').trim() || yf(policy, 'display_name') || orgSlug;
+const slugM = rd('org-inbox.conf').match(/^SLUG=(.*)$/m);
+const host = (slugM ? slugM[1].trim() : '') || orgSlug || require('os').hostname();
 
 (async () => {
   const body = {

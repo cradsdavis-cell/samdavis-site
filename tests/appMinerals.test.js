@@ -129,13 +129,15 @@ test('the mirror is the authority; ties enrich it; a legacy self-registration is
     edges: [{ org: 'test-org-4', org_display: 'Test Org 4', role: 'member', status: 'active', slug: 'keith', rel: 'anchored', box: 'keith-box' }],
     boxes: [{ host: 'old-thing', label: 'Old Thing' }],
   });
+  // every source's handle for the same machine reduces to one key
   const by = Object.fromEntries(rows.map((r) => [r.key, r]));
+  assert.equal(rows.length, 3, 'two mirrored minerals + one legacy claim; the tie made no fourth row');
   assert.equal(by.keith.role, 'owner');
   assert.equal(by.keith.held_by, 'you');
   assert.equal(by.keith.tie, 'anchored', 'the tie layer enriched the same row rather than making a second');
   assert.equal(by.keith.orgDisplay, 'Test Org 4');
   assert.ok(!by.keith.legacy, 'a mineral in the mirror is not a mere claim');
-  assert.equal(by['shared-one'].role, 'user', 'THE COMPANY CASE: held by Acme, reachable by this account, and it appears');
+  assert.equal(by.shared.role, 'user', 'THE COMPANY CASE: held by Acme, reachable by this account, and it appears');
   assert.equal(by['old-thing'].legacy, true, 'a self-registration with no mirror row is flagged as a claim');
 });
 
@@ -152,4 +154,27 @@ test('the page renders held-by in words, and never as a bare id', () => {
   assert.match(src, /shared with you/, 'and someone else\'s');
   assert.ok(!/held_by\}\)/.test(src.replace(/escapeHtml\(m\.held_by[^)]*\)/g, '')), 'the raw value is never printed unescaped');
   assert.match(src, /can reach/, 'the lead says access, not ownership');
+});
+
+test('one mineral is ONE row, whichever sources describe it', () => {
+  const { assemble } = require('../api/app/minerals.js');
+  const rows = assemble({
+    minerals: [{ mineral_id: 'min_' + 'f'.repeat(24), label: 'Janet', host: 'b8e8f5d2d097', tier: 'pebble', role: 'owner', held_by: 'you' }],
+    boxes: [{ host: 'b8e8f5d2d097', label: 'Janet' }],
+  });
+  assert.equal(rows.length, 1, 'the mirror and the legacy registration are the same mineral, not two');
+  assert.ok(!rows[0].legacy, 'and it is described by the authority, not flagged as a mere claim');
+});
+
+test('a container id is never shown as a name', () => {
+  const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'api', 'app', 'minerals.js'), 'utf8');
+  assert.match(src, /CONTAINER_ID/, 'the shape is recognised');
+  assert.match(src, /an unnamed rock/, 'and an unnamed mineral says so plainly rather than showing a docker id');
+  assert.ok(src.indexOf('String(m.host) !== title') > -1, 'the address is never printed as both heading and subtitle');
+});
+
+test('an ended tie reads as English, and a placeholder reason is not printed', () => {
+  const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'api', 'app', 'minerals.js'), 'utf8');
+  assert.match(src, /'anchor' : \(n\.tie/, '"your anchored here ended" was not a sentence');
+  assert.match(src, /no reason\$\/i/, 'and "No Reason" is a placeholder, not a reason worth printing');
 });

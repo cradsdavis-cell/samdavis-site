@@ -27,6 +27,19 @@ const TIE_CHIP = {
   joined: '<span class="chip">joined</span>',
 };
 
+// A container id (12 hex chars) is what os.hostname() returns inside a box. It
+// is not a name, and showing it as one is how "Your minerals" ended up listing
+// "1c8db1bea6a3". Treat it as an address with no name attached.
+const CONTAINER_ID = /^[0-9a-f]{12}$/;
+const displayName = (m) => {
+  const label = String(m.label || '').trim();
+  if (label) return label;
+  const host = String(m.host || m.name || '').trim();
+  if (host && !CONTAINER_ID.test(host)) return host.split('.')[0];
+  if (m.tier === 'rock' && m.anchor && m.anchor !== 'crads-ai') return m.anchor;
+  return m.tier === 'rock' ? 'an unnamed rock' : 'an unnamed pebble';
+};
+
 function renderRow(m) {
   const chips = [];
   if (m.tier) chips.push(`<span class="chip">${escapeHtml(m.tier)}</span>`);
@@ -48,9 +61,12 @@ function renderRow(m) {
   const members = m.tier === 'rock' && typeof m.members === 'number'
     ? `<div class="sub">${m.members} member${m.members === 1 ? '' : 's'}</div>` : '';
 
+  const title = displayName(m);
+  // never print the address twice: as the heading and again beneath it
+  const addr = m.host && String(m.host) !== title ? `<div class="sub">${escapeHtml(m.host)}</div>` : '';
   return `<div class="card">
-  <h2>${escapeHtml(m.name || m.label || m.mineral_id || 'a mineral')}</h2>
-  ${m.host ? `<div class="sub">${escapeHtml(m.host)}</div>` : ''}
+  <h2>${escapeHtml(title)}</h2>
+  ${addr}
   ${lines ? `<div class="sub">${lines}</div>` : ''}
   ${members}
   <div class="chips">${chips.join('')}</div>
@@ -60,12 +76,19 @@ function renderRow(m) {
 /** One row per mineral: the mirror is the authority, ties and legacy rows enrich it. */
 function assemble({ minerals = [], edges = [], boxes = [] }) {
   const rows = new Map();
-  const keyOf = (s) => String(s || '').replace(/-box$/, '').toLowerCase();
+  // One mineral is described three ways: the mirror knows its HOST
+  // (keith.crads-ai.com), a tie knows its SLUG (keith), and a legacy
+  // registration knows its ALIAS (keith-box). Reduce all three to the same
+  // handle or the page lists the same machine two or three times.
+  const keyOf = (s) => String(s || '').toLowerCase().split('.')[0].replace(/-box$/, '');
 
   for (const m of minerals) {
-    const key = keyOf(m.label || m.host || m.mineral_id);
+    // Key on HOST first, the one handle every source shares. Keying the mirror
+    // on its label while box rows keyed on host is what made the same mineral
+    // appear twice, once as itself and once as "registered itself".
+    const key = keyOf(m.host || m.label || m.mineral_id);
     rows.set(key, {
-      key, mineral_id: m.mineral_id, name: m.label || m.host || m.mineral_id,
+      key, mineral_id: m.mineral_id, name: m.label || m.host || m.mineral_id, label: m.label || '',
       host: m.host || '', tier: m.tier || '', role: m.role || '', held_by: m.held_by || '',
       anchor: m.anchor || '', status: 'active', authoritative: true,
     });
@@ -142,7 +165,8 @@ module.exports = async function handler(req, res) {
     for (const n of noticesR.notices) {
       main += `<div class="card">
         <h2>${escapeHtml(n.org_display || n.org)}</h2>
-        <div class="sub">your ${escapeHtml(n.tie || 'tie')} here ended${n.reason ? `: ${escapeHtml(n.reason)}` : ''}</div>
+        <div class="sub">your ${escapeHtml(n.tie === 'anchored' ? 'anchor' : (n.tie || 'tie'))} here ended${
+          n.reason && !/^no reason$/i.test(String(n.reason).trim()) ? `: ${escapeHtml(n.reason)}` : ''}</div>
       </div>`;
     }
   }
