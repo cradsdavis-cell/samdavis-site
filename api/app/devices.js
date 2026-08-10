@@ -7,6 +7,7 @@
 // layer). Ruling 9 wants one unified view with two EXPLICIT actions; this
 // ships the sessions half honestly rather than faking the other.
 const { requireAuth } = require('../../lib/account');
+const { isAdmin } = require('../../lib/auth');
 const { defaultKv } = require('../../lib/kv');
 const { parseSessionFromRequest, verifySession } = require('../../lib/auth');
 const { renderAppShell, renderTime, escapeHtml } = require('../../lib/appShell');
@@ -54,5 +55,5 @@ ${rows || (payload.sid ? '' : '<div class="empty"><b>No listed devices yet.</b><
 </div>`;
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  return res.status(200).send(renderAppShell({ title: 'Devices', active: 'devices', email: user.email, main }));
+  return res.status(200).send(renderAppShell({ title: 'Devices', active: 'devices', email: user.email, isAdmin: isAdmin(user.email), main }));
 };

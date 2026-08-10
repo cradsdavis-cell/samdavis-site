@@ -70,6 +70,10 @@
       "destination": "/api/app/account"
     },
     {
+      "source": "/app/admin",
+      "destination": "/api/app/admin"
+    },
+    {
       "source": "/account/app-login",
       "destination": "/api/account/app-login"
     },

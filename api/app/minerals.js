@@ -18,6 +18,7 @@
 // Honesty rules, both learned the hard way: a failed read is never rendered as
 // "you have none", and a page never states something it cannot know.
 const { requireAuth } = require('../../lib/account');
+const { isAdmin } = require('../../lib/auth');
 const { defaultKv } = require('../../lib/kv');
 const { renderAppShell, escapeHtml } = require('../../lib/appShell');
 const { directoryFor, mergeMinerals } = require('../../lib/directory');
@@ -172,6 +173,6 @@ module.exports = async function handler(req, res) {
   }
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  return res.status(200).send(renderAppShell({ title: 'Your minerals', active: 'minerals', email: user.email, main }));
+  return res.status(200).send(renderAppShell({ title: 'Your minerals', active: 'minerals', email: user.email, isAdmin: isAdmin(user.email), main }));
 };
 module.exports.assemble = assemble;

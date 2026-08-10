@@ -2,6 +2,7 @@
 // /app/billing — what this account pays for (arc A4).
 const Stripe = require('stripe');
 const { requireAuth } = require('../../lib/account');
+const { isAdmin } = require('../../lib/auth');
 const { defaultKv } = require('../../lib/kv');
 const { renderAppShell, escapeHtml } = require('../../lib/appShell');
 const { billingView } = require('../../lib/appBilling');
@@ -60,5 +61,5 @@ ${rows ? `<h1 style="margin-top:1.6em;font-size:1.15em">Your engagements</h1>${r
 </div>`;
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  return res.status(200).send(renderAppShell({ title: 'Billing', active: 'billing', email: user.email, main }));
+  return res.status(200).send(renderAppShell({ title: 'Billing', active: 'billing', email: user.email, isAdmin: isAdmin(user.email), main }));
 };

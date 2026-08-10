@@ -4,6 +4,7 @@
 // and the desktop app's connection), rather than inventing settings that do not
 // exist yet.
 const { requireAuth } = require('../../lib/account');
+const { isAdmin } = require('../../lib/auth');
 const { defaultKv } = require('../../lib/kv');
 const { renderAppShell, escapeHtml } = require('../../lib/appShell');
 
@@ -36,5 +37,5 @@ module.exports = async function handler(req, res) {
 </div>`;
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  return res.status(200).send(renderAppShell({ title: 'Account', active: 'account', email: user.email, main }));
+  return res.status(200).send(renderAppShell({ title: 'Account', active: 'account', email: user.email, isAdmin: isAdmin(user.email), main }));
 };
