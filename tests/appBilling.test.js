@@ -48,6 +48,6 @@ test('rock billing is stated, never faked: no invented figures on the page', () 
 test('an unreadable rock list says so rather than claiming you operate none', () => {
   assert.match(SRC, /rocks === null/, 'the failure case is distinguished');
   assert.match(SRC, /Could not read which rocks/, 'and named');
-  assert.ok(SRC.indexOf('Could not read which rocks') < SRC.indexOf('does not operate a rock'),
-    'unreadable is checked before the empty case, so a dead read never reads as none');
+  assert.ok(SRC.indexOf('Could not read which rocks') < SRC.indexOf('not listed here yet'),
+    'unreadable is checked before the cannot-know case, so a dead read never reads as settled');
 });

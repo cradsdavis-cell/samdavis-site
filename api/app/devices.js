@@ -9,9 +9,9 @@
 const { requireAuth } = require('../../lib/account');
 const { defaultKv } = require('../../lib/kv');
 const { parseSessionFromRequest, verifySession } = require('../../lib/auth');
-const { renderAppShell, escapeHtml } = require('../../lib/appShell');
+const { renderAppShell, renderTime, escapeHtml } = require('../../lib/appShell');
 
-const when = (iso) => (iso ? String(iso).replace('T', ' ').slice(0, 16) : 'unknown');
+// times localise in the reader's browser (renderTime), never raw UTC
 
 module.exports = async function handler(req, res) {
   const kv = defaultKv();
@@ -26,7 +26,7 @@ module.exports = async function handler(req, res) {
     const current = s.sid === payload.sid;
     rows += `<div class="card">
   <h2>${escapeHtml(s.label || 'Unknown device')}${current ? ' <span class="chip good">this device</span>' : ''}</h2>
-  <div class="sub">signed in ${escapeHtml(when(s.created_at))} &middot; last seen ${escapeHtml(when(s.last_seen))}</div>
+  <div class="sub">signed in ${renderTime(s.created_at)} &middot; last seen ${renderTime(s.last_seen)}</div>
   ${current ? '' : `<form method="POST" action="/api/app/device-revoke" style="margin-top:.7em">
     <input type="hidden" name="sid" value="${escapeHtml(s.sid)}">
     <button class="act quiet" type="submit">Sign this device out</button>

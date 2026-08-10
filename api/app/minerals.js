@@ -64,9 +64,12 @@ module.exports = async function handler(req, res) {
     });
     main += rows.length
       ? rows.map(renderRow).join('\n')
-      : `<div class="empty"><b>Nothing yet.</b><br>
-         When you create a pebble or anchor one to a rock, it appears here.
-         If you already have one, make sure you signed in with the same email it knows.</div>`;
+      : `<div class="empty"><b>Nothing to show for this account yet.</b>
+         <p class="note">A mineral appears here once it is tied to a rock under this email, or once it
+         registers itself with the directory (which needs the newest mineral software).
+         Rocks you operate yourself are not listed here yet.</p>
+         <p class="note">So if you know you have one, this list is incomplete rather than wrong:
+         check you signed in with the email your minerals know, and open it from the Crads-AI app in the meantime.</p></div>`;
   }
 
   if (noticesR.ok && noticesR.notices.length) {

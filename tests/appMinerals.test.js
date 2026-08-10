@@ -109,8 +109,10 @@ test('the page tells empty apart from unreadable', () => {
   const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'api', 'app', 'minerals.js'), 'utf8');
   assert.match(src, /requireAuth/, 'gated before anything renders');
   assert.match(src, /Could not read your minerals just now/, 'unreadable says so');
-  assert.match(src, /Nothing yet/, 'empty says so');
-  assert.ok(src.indexOf('Could not read your minerals') < src.indexOf('Nothing yet'),
+  assert.match(src, /Nothing to show for this account yet/, 'empty says so');
+  assert.ok(src.indexOf('Could not read your minerals') < src.indexOf('Nothing to show for this account yet'),
     'the failure branch is checked BEFORE the empty branch, so a dead read can never render as none');
+  assert.match(src, /incomplete rather than wrong/,
+    'and empty explains what the account cannot see, rather than implying the user has nothing');
   assert.match(src, /registered itself/, 'a registration is a claim, not proof of ownership');
 });

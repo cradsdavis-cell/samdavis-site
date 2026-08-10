@@ -72,3 +72,24 @@ test('the /app routes are actually reachable: vercel.json rewrites them', () => 
     assert.equal(map.get(n.href), `/api/app/${n.route}`, `${n.href} is rewritten`);
   }
 });
+
+test('times localise for the reader; the server text is never an unlabelled UTC clock', () => {
+  const { renderTime } = require('../lib/appShell');
+  const html = renderTime('2026-08-10T08:39:00.000Z');
+  assert.ok(html.includes('data-iso="2026-08-10T08:39:00.000Z"'), 'the browser is given the real instant');
+  assert.ok(html.includes('08:39 UTC'), 'and the no-JS fallback names its zone');
+  assert.equal(renderTime(''), 'unknown', 'a missing time says so');
+  // the shell carries the rewriter
+  const shell = renderAppShell({ title: 'x', active: 'devices', email: 'a@b.c', main: renderTime('2026-08-10T08:39:00.000Z') });
+  assert.ok(shell.includes('time[data-iso]'), 'and the page knows how to localise it');
+});
+
+test('the account never states something it cannot know', () => {
+  const billing = readFileSync(join(ROOT, 'api', 'app', 'billing.js'), 'utf8');
+  assert.ok(!/does not operate a rock/.test(billing),
+    'claiming "no rock" is false for every rock owner: a rock records no owner, so this is unknowable');
+  assert.match(billing, /not listed here yet/, 'the limitation is stated instead');
+  const minerals = readFileSync(join(ROOT, 'api', 'app', 'minerals.js'), 'utf8');
+  assert.match(minerals, /incomplete rather than wrong/, 'an empty list explains what it cannot see');
+  assert.match(minerals, /Rocks you operate yourself are not listed here yet/, 'including the rock gap');
+});

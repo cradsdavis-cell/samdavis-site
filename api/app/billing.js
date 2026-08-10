@@ -35,11 +35,17 @@ module.exports = async function handler(req, res) {
       ? `<p class="note">Stripe could not open the portal just now: ${escapeHtml(view.portalError)}</p>`
       : '<p class="note">No payment method is linked to this account yet. Nothing is being charged.</p>';
 
+  // A rock you OPERATE is not knowable from here yet: a rock registers itself
+  // at the directory under route:<org>, which records no owner, and an
+  // operator holds no member edge to their own rock. So the honest answer to
+  // "which rocks does this account operate" is "this page cannot tell yet" —
+  // never "none", which was a false statement for every rock owner alive
+  // (found walking the account, 2026-08-10).
   const rockCard = rocks === null
     ? '<div class="sub">Could not read which rocks this account operates just now.</div>'
     : rocks.length
       ? `<div class="sub">You operate ${rocks.map((r) => `<b>${escapeHtml(r)}</b>`).join(', ')}. Per-seat billing for a rock&#8217;s members is not itemised here yet: the platform ledger cannot yet be read per owner, and pricing is not armed. Nothing is being charged for these seats today.</div>`
-      : '<div class="sub">This account does not operate a rock. If you start one, its seats are billed here.</div>';
+      : `<div class="sub">Rocks you operate are not listed here yet: a rock does not record which account owns it, so this page cannot ask. If you run one, nothing is being charged for its seats today, and pricing is not armed.</div>`;
 
   const main = `<h1>Billing</h1>
 <p class="lead">What this account pays for. One account, one card, whatever it holds.</p>
