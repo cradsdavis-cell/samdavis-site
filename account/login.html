@@ -84,7 +84,8 @@
       </div>
       <p class="status" id="auth-status" hidden></p>
     </form>
-    <button type="button" class="link" id="auth-forgot">Email me a sign-in link instead</button>
+    <button type="button" class="link" id="auth-signin-link">Email me a sign-in link instead</button>
+    <button type="button" class="link" id="auth-forgot">Forgot your password?</button>
 
     <a href="/" class="back">← crads-ai.com</a>
   </div>
@@ -97,6 +98,7 @@
       var status = document.getElementById('auth-status');
       var registerBtn = document.getElementById('auth-register');
       var forgotBtn = document.getElementById('auth-forgot');
+      var signinLinkBtn = document.getElementById('auth-signin-link');
 
       function show(msg, isError) {
         status.hidden = false;
@@ -140,19 +142,42 @@
       form.addEventListener('submit', function (e) { e.preventDefault(); submit('login'); });
       registerBtn.addEventListener('click', function () { submit('register'); });
 
-      forgotBtn.addEventListener('click', async function () {
-        var email = emailEl.value.trim().toLowerCase();
-        if (!email) { show('Enter your email above first, then tap the link button.', true); return; }
-        show('Sending…', false);
-        var res = await post('/api/auth/request-link', { email: email });
-        if (res.ok) {
-          show('If that email has an account, a sign-in link is on its way. Check your inbox.', false);
-        } else if (res.status === 429) {
-          show('Too many requests. Wait 15 minutes and try again.', true);
-        } else {
-          show('Couldn’t send that. Try again or email cradsdavis@gmail.com.', true);
-        }
-      });
+      // TWO BUTTONS, TWO FLOWS, AND THEY ARE NOT THE SAME THING.
+      //
+      // This was one button labelled "Email me a sign-in link instead" that
+      // posted to /api/auth/request-link — the password RESET. Following it set a
+      // new password and bumped state_version, which signs the account out of
+      // every other machine, the desktop app included. Somebody who only wanted
+      // to log in lost every session they had, and the page told them a sign-in
+      // link was on its way while the server's own reply said the opposite.
+      //
+      // The success text is now the SERVER's message rather than a hardcoded
+      // string here. That mismatch is what made the bug invisible: the API
+      // answered "a link to set your password was sent" and this page threw it
+      // away and printed "a sign-in link is on its way" over the top.
+      function sendLink(url, fallback) {
+        return async function () {
+          var email = emailEl.value.trim().toLowerCase();
+          if (!email) { show('Enter your email above first, then tap the button.', true); return; }
+          show('Sending…', false);
+          var res = await post(url, { email: email });
+          if (res.ok) {
+            show((res.data && res.data.message) || fallback, false);
+          } else if (res.status === 429) {
+            show('Too many requests. Wait 15 minutes and try again.', true);
+          } else {
+            show('Couldn’t send that. Try again or email cradsdavis@gmail.com.', true);
+          }
+        };
+      }
+
+      // Signs you in on this device and changes nothing else.
+      signinLinkBtn.addEventListener('click',
+        sendLink('/api/auth/request-signin', 'If that email has an account, a sign-in link is on its way.'));
+
+      // Sets a NEW password, and therefore signs your other machines out.
+      forgotBtn.addEventListener('click',
+        sendLink('/api/auth/request-link', 'If that email has an account, a link to set your password was sent.'));
 
       // Surface Google callback errors (?error=google).
       if (/[?&]error=google/.test(location.search)) {
