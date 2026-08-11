@@ -132,3 +132,51 @@ test('Valid token is single-use (deleted after use)', async () => {
   assert.strictEqual(res2.statusCode, 302);
   assert.strictEqual(res2.redirectLocation, '/account/verify?error=invalid');
 });
+
+// --- token-purpose separation (2026-08-11) -----------------------------------
+//
+// This endpoint mints a session, so which purposes it will spend is a security
+// boundary, not a detail. 'signin' was added when the magic link became real
+// (authRequestSignin.js). 'set-password' is takeover-grade and must stay out:
+// spending one here would turn a reset link into a silent session.
+
+test('a signin token is spendable: that is the magic link working', async () => {
+  const kvClient = fakeKvClient();
+  const kv = makeKv(kvClient);
+  await kv.setUser('sam@example.com', { email: 'sam@example.com', state_version: 1 });
+  await kv.setAuthToken('tok-signin', {
+    email: 'sam@example.com', purpose: 'signin',
+    expires_at: new Date(Date.now() + 6e5).toISOString(),
+  }, 600);
+  const res = mockRes();
+  await makeHandler({ kv })({ method: 'GET', query: { token: 'tok-signin' }, headers: {} }, res);
+  assert.strictEqual(res.redirectLocation, '/app');
+  assert.ok(String(res.headers['set-cookie'] || ''), 'a session cookie is the point');
+});
+
+test('a set-password token is NOT spendable here, and is burned on the attempt', async () => {
+  const kvClient = fakeKvClient();
+  const kv = makeKv(kvClient);
+  await kv.setUser('sam@example.com', { email: 'sam@example.com', state_version: 1 });
+  await kv.setAuthToken('tok-reset', {
+    email: 'sam@example.com', purpose: 'set-password',
+    expires_at: new Date(Date.now() + 6e5).toISOString(),
+  }, 600);
+  const res = mockRes();
+  await makeHandler({ kv })({ method: 'GET', query: { token: 'tok-reset' }, headers: {} }, res);
+  assert.match(String(res.redirectLocation), /error=invalid/);
+  assert.strictEqual(await kv.getAuthToken('tok-reset'), null, 'a refused token must not survive to be retried');
+});
+
+test('an unknown purpose is refused: the list is an allow-list', async () => {
+  const kvClient = fakeKvClient();
+  const kv = makeKv(kvClient);
+  await kv.setUser('sam@example.com', { email: 'sam@example.com', state_version: 1 });
+  await kv.setAuthToken('tok-future', {
+    email: 'sam@example.com', purpose: 'some-purpose-added-later',
+    expires_at: new Date(Date.now() + 6e5).toISOString(),
+  }, 600);
+  const res = mockRes();
+  await makeHandler({ kv })({ method: 'GET', query: { token: 'tok-future' }, headers: {} }, res);
+  assert.match(String(res.redirectLocation), /error=invalid/);
+});
