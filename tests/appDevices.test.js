@@ -74,6 +74,25 @@ test('a device from a mineral that sends no machine_id stays its own row, never 
   assert.equal(machines.length, 2, 'identical names on two minerals prove nothing');
 });
 
+// NOT LIVE COVERAGE, and saying so is the point (2026-08-12).
+//
+// No session carries a machine_id today, so the folding half of this test
+// describes a shape production does not currently emit. That is exactly the
+// defect this whole change set started from: the previous version of this file
+// seeded a session labelled "Sam's MacBook", a label lib/sessions.js cannot
+// produce, and the dead join underneath it read as covered for weeks.
+//
+// It is kept rather than deleted because the branch is correct and cheap, and
+// because the honest reason it is unreachable is worth recording: a browser
+// holds a cookie, not a key, so it can never prove its machine; and the APP,
+// which can prove it to a mineral over ssh, cannot prove it to this site
+// without either shipping a raw fingerprint here — which would hand the
+// platform the exact cross-account correlator the salted machine_id exists to
+// prevent — or fetching the account salt from the box first. Neither is worth
+// it, because the machine row already carries last_seen straight from sshd,
+// which is stronger evidence than a cookie's claim about where it is running.
+//
+// If a session ever does carry one, this is the behaviour it must have.
 test('a session only folds onto a machine when it can prove which one it is', () => {
   const rows = assembleMachines({
     minerals: [{ mineral_id: 'min_a', label: 'Keith', devices: [
