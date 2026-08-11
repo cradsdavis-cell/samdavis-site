@@ -46,6 +46,10 @@
   ],
   "rewrites": [
     {
+      "source": "/access",
+      "destination": "/api/app/access"
+    },
+    {
       "source": "/app",
       "destination": "/api/app"
     },
