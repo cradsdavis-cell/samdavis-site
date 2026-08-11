@@ -30,17 +30,32 @@ test('all three ruled methods survive, against the same endpoints', () => {
   assert.ok(/error=google/.test(LOGIN), 'the Google failure path still surfaces');
 });
 
-test('EVERY auth entry point lands in /app', () => {
-  // the JSON-redirect flows (register / login / set-password)
+test('EVERY auth entry point lands in /app by default', () => {
+  // Was a hardcoded '/app' at each site. QA finding 46 made the destination
+  // caller-supplied (an invitation must survive the sign-in it forces), so what
+  // this pins now is that /app is still the FALLBACK everywhere, and that the
+  // failure it was written for — landing a member in the coaching dashboard —
+  // is still impossible. The behavioural half lives in authNextRedirect.test.js.
   const pw = read('lib/passwordAuth.js');
-  assert.equal((pw.match(/redirect: '\/app'/g) || []).length, 3, 'register, login and set-password');
+  assert.equal((pw.match(/redirect: landing\(req\)/g) || []).length, 3, 'register, login and set-password');
+  assert.match(pw, /safeNext\(req && req\.body && req\.body\.next\) \|\| '\/app'/, 'and landing() falls back to /app');
   assert.ok(!/redirect: '\/account\/'/.test(pw), 'none of them still points at the coaching dashboard');
   // the magic-link consumer
-  assert.match(read('lib/authVerifyToken.js'), /res\.redirect\(302, '\/app'\)/);
+  assert.match(read('lib/authVerifyToken.js'), /safeNext\(req\.query && req\.query\.next\) \|\| '\/app'/);
   // Google
-  assert.match(read('api/auth/google/callback.js'), /Location: '\/app'/);
+  assert.match(read('api/auth/google/callback.js'), /nextFrom\(req\) \|\| '\/app'/);
   // and the page's own fallback if a response ever arrives without one
   assert.match(LOGIN, /\|\| '\/app'\)/, 'the client fallback agrees');
+});
+
+test('no auth entry point can be pointed off-origin', () => {
+  // The cost of a caller-supplied destination is an open redirect unless
+  // exactly one guard decides. Five call sites, one decider.
+  for (const f of ['lib/account.js', 'lib/passwordAuth.js', 'lib/authVerifyToken.js',
+                   'api/auth/google/start.js', 'api/auth/google/callback.js',
+                   'lib/authRequestSignin.js']) {
+    assert.match(read(f), /require\(.*safeNext.*\)/, `${f} routes its destination through the guard`);
+  }
 });
 
 test('sign-out still returns to this card, and the card still offers a way back to the site', () => {

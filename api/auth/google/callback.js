@@ -3,6 +3,7 @@ const { makeVerifier } = require('../../../lib/googleAuth');
 const { signSession, formatSessionCookie } = require('../../../lib/auth');
 const { defaultKv } = require('../../../lib/kv');
 const { blankUser } = require('../../../lib/passwordAuth');
+const { safeNext } = require('../../../lib/safeNext');
 
 function readCookie(req, name) {
   const h = req.headers && req.headers.cookie;
@@ -12,6 +13,18 @@ function readCookie(req, name) {
 }
 
 const clearState = 'oauth_state=; HttpOnly; Secure; SameSite=Lax; Max-Age=0; Path=/';
+const clearNext = 'oauth_next=; HttpOnly; Secure; SameSite=Lax; Max-Age=0; Path=/';
+
+// Where start.js was told to send them afterwards. Re-validated here rather
+// than trusted: the cookie was ours when we set it, and a cookie is still an
+// attacker-influenceable channel by the time it comes back.
+function nextFrom(req) {
+  const raw = readCookie(req, 'oauth_next');
+  if (!raw) return '';
+  let decoded = '';
+  try { decoded = decodeURIComponent(raw); } catch { return ''; }
+  return safeNext(decoded);
+}
 
 function bounce(res, reason) {
   res.setHeader('Set-Cookie', clearState);
@@ -60,8 +73,8 @@ module.exports = async function handler(req, res) {
     const { issueSession } = require('../../../lib/sessions');
     const { cookie: session } = await issueSession({ kv, email,
       stateVersion: user.state_version || 1, userAgent: req.headers['user-agent'] });
-    res.setHeader('Set-Cookie', [clearState, session]);
-    res.writeHead(302, { Location: '/app' });
+    res.setHeader('Set-Cookie', [clearState, clearNext, session]);
+    res.writeHead(302, { Location: nextFrom(req) || '/app' });
     res.end();
   } catch (e) {
     const reason = classify(e);

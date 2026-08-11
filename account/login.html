@@ -100,6 +100,25 @@
       var forgotBtn = document.getElementById('auth-forgot');
       var signinLinkBtn = document.getElementById('auth-signin-link');
 
+      // WHERE WE CAME FROM (QA finding 46). requireAuth now bounces here with
+      // ?next=<path>, so an emailed invitation survives the sign-in it forces.
+      // Every use below hands the value to the SERVER, which re-validates it
+      // (lib/safeNext.js) before acting on it. Nothing here trusts it: the only
+      // thing this page does with `next` unvalidated is put it back in a query
+      // string, and the Google link is same-origin.
+      var NEXT = (function () {
+        var m = /[?&]next=([^&]*)/.exec(location.search);
+        if (!m) return '';
+        try { return decodeURIComponent(m[1]); } catch (e) { return ''; }
+      })();
+
+      // Google leaves and comes back, so its destination rides a cookie set by
+      // /api/auth/google/start rather than surviving the round trip in the URL.
+      if (NEXT) {
+        var g = document.querySelector('a.google');
+        if (g) g.setAttribute('href', '/api/auth/google/start?next=' + encodeURIComponent(NEXT));
+      }
+
       function show(msg, isError) {
         status.hidden = false;
         status.textContent = msg;
@@ -125,7 +144,7 @@
         }
         show(mode === 'register' ? 'Creating your account…' : 'Signing you in…', false);
         var path = mode === 'register' ? '/api/auth/register' : '/api/auth/login';
-        var res = await post(path, { email: email, password: password });
+        var res = await post(path, { email: email, password: password, next: NEXT });
         if (res.ok) {
           window.location.assign((res.data && res.data.redirect) || '/app');
         } else if (res.status === 409) {
@@ -160,7 +179,7 @@
           var email = emailEl.value.trim().toLowerCase();
           if (!email) { show('Enter your email above first, then tap the button.', true); return; }
           show('Sending…', false);
-          var res = await post(url, { email: email });
+          var res = await post(url, { email: email, next: NEXT });
           if (res.ok) {
             show((res.data && res.data.message) || fallback, false);
           } else if (res.status === 429) {
