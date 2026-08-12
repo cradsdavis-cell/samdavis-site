@@ -88,10 +88,30 @@ function renderRow(m) {
   // and crads-ai://box/<slug> lands straight in this mineral. A card that goes
   // nowhere is a dead end, which is exactly what the audit called this page.
   const slug = String(m.host || m.key || '').split('.')[0].replace(/-box$/, '');
-  const open = /^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]$/.test(slug)
-    ? `<div style="margin-top:.75em"><a class="act" href="crads-ai://box/${escapeHtml(slug)}">Open in the app</a>
+  const addressable = /^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]$/.test(slug);
+
+  // A ROW WITH NO MIRROR RECORD IS NOT OPENABLE (finding 76, 2026-08-12).
+  //
+  // `assemble` builds rows from the mirror AND from ties, and a tie is allowed to
+  // stand alone because a mineral may not have registered YET. Nothing separated
+  // that from "no longer exists", so a destroyed pebble kept a full card with a
+  // working-looking open link: local-pebble-test-2 rendered here with a tier
+  // badge and a deep link while it reconciled 6/6 FAIL across metal, edge and
+  // directory. /app/admin, which reads mirror records only, correctly showed it
+  // gone. Two surfaces of one product, same account, different answers.
+  //
+  // Both states are now said out loud instead of guessed at, and neither offers
+  // an action that cannot work. The honest version is also the useful one for the
+  // invited case: a rock-stamped pebble sits at status `invited` until its member
+  // claims it (finding 83), so its owner gets an email saying it is ready and,
+  // before this, a page that mentioned nothing at all.
+  const open = !addressable ? ''
+    : m.authoritative
+      ? `<div style="margin-top:.75em"><a class="act" href="crads-ai://box/${escapeHtml(slug)}">Open in the app</a>
        <span class="note" style="margin-left:.6em">needs the Crads-AI app on this machine</span></div>`
-    : '';
+      : `<div style="margin-top:.75em"><span class="note">Not ready to open yet. This mineral has not reported in,
+       so it is either still being set up or waiting for whoever it was invited for to claim it.</span></div>`;
+  if (!m.authoritative) chips.push('<span class="chip warn">not reported in</span>');
   return `<div class="card">
   <h2>${escapeHtml(title)}</h2>
   ${addr}
@@ -192,3 +212,4 @@ module.exports = async function handler(req, res) {
   return res.status(200).send(renderAppShell({ title: 'Your minerals', active: 'minerals', email: user.email, isAdmin: isAdmin(user.email), main }));
 };
 module.exports.assemble = assemble;
+module.exports.renderRow = renderRow;   // exported for the finding-76 regression tests
