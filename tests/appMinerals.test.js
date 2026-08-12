@@ -180,3 +180,32 @@ test('tie history lives on the ACTIVITY page, in English, with placeholder reaso
   assert.match(activity, /'anchor' : 'membership'/, 'an ended tie is a sentence');
   assert.match(activity, /no reason\$\/i/, '"No Reason" is a placeholder, not a reason worth printing');
 });
+
+// ---- 2026-08-12: yours and shared, answered once ----
+//
+// Sam: "there should be distinctions in the app between a mineral that is yours
+// and one that's shared with you." There were two, and they disagreed. The chip
+// came from `role` (what you may DO) and the line from `held_by` (whose it IS),
+// so an owner-ROLE grant on somebody else's mineral rendered a green "yours"
+// chip directly above "held by someone else" — finding 33, both halves accurate
+// and the pair nonsense.
+const MIN_SRC = require('fs').readFileSync(require('path').join(__dirname, '..', 'api/app/minerals.js'), 'utf8');
+
+test('the ownership chip is driven by ownership, not by what you may do', () => {
+  assert.match(MIN_SRC, /const isYours = m\.held_by === 'you'/,
+    'one fact, read once');
+  assert.doesNotMatch(MIN_SRC, /m\.role === 'owner'\) chips\.push\('<span class="chip good">yours/,
+    'an owner-ROLE grant on someone else\'s mineral is not "yours"');
+});
+
+test('a role only speaks when it adds something', () => {
+  assert.match(MIN_SRC, /!isYours && m\.role === 'owner'/,
+    '"you can manage it" is noise on your own mineral and news on somebody else\'s');
+});
+
+test('the card does not say "shared with you" twice', () => {
+  // the chip says it; the held line used to say it again in the same breath
+  assert.doesNotMatch(MIN_SRC, /held by someone else, shared with you/,
+    'the chip has already stated the relationship; this line states whose it is');
+  assert.match(MIN_SRC, /held = 'held by someone else'/, 'and stops there');
+});

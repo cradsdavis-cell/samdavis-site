@@ -41,20 +41,39 @@ const displayName = (m) => {
   return m.tier === 'rock' ? 'an unnamed rock' : 'an unnamed pebble';
 };
 
+// YOURS AND SHARED ARE THE SAME QUESTION ASKED ONCE (2026-08-12, Sam: "there
+// should be distinctions in the app between a mineral that is yours and one
+// that's shared with you").
+//
+// The chip used to come from `role` and the line from `held_by`, which are two
+// different facts: role is what you may DO, held_by is whose it IS. So an
+// owner-ROLE grant on somebody else's mineral rendered a green "yours" chip
+// directly above "held by someone else" (finding 33). Both were accurate and
+// together they were nonsense.
+//
+// Ownership now answers ownership, and the role becomes a separate, quieter
+// statement of what you can do — shown only when it adds something, which is
+// when you have admin-level access to a mineral that is NOT yours. On your own
+// mineral "you can manage it" is noise.
 function renderRow(m) {
+  const isYours = m.held_by === 'you';
   const chips = [];
   if (m.tier) chips.push(`<span class="chip">${escapeHtml(m.tier)}</span>`);
-  if (m.role === 'owner') chips.push('<span class="chip good">yours</span>');
-  else if (m.role === 'user') chips.push('<span class="chip">shared with you</span>');
+  chips.push(isYours
+    ? '<span class="chip good">yours</span>'
+    : '<span class="chip">shared with you</span>');
+  if (!isYours && m.role === 'owner') chips.push('<span class="chip">you can manage it</span>');
   if (m.tie && TIE_CHIP[m.tie]) chips.push(TIE_CHIP[m.tie]);
   if (m.status && m.status !== 'active') chips.push(`<span class="chip warn">${escapeHtml(m.status)}</span>`);
   if (m.legacy) chips.push('<span class="chip">registered itself</span>');
 
-  // who holds it, in words the reader can act on
+  // Who holds it. The chip has already said what your relationship to it is, so
+  // this says WHOSE it is and stops: repeating "shared with you" here is what
+  // made the old card read like an argument with itself.
   let held = '';
-  if (m.held_by === 'you') held = 'held by you';
+  if (isYours) held = 'held by you';
   else if (m.held_by && m.held_by !== 'someone else') held = `held by <b>${escapeHtml(m.held_by)}</b>`;
-  else if (m.held_by === 'someone else') held = 'held by someone else, shared with you';
+  else if (m.held_by === 'someone else') held = 'held by someone else';
   else if (m.ownedByOrg) held = `held by <b>${escapeHtml(m.orgDisplay || 'the rock')}</b>`;
 
   const where = m.org ? `${m.tie === 'joined' ? 'a member of' : 'anchored to'} <b>${escapeHtml(m.orgDisplay || m.org)}</b>` : '';
