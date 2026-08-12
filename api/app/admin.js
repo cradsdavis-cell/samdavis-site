@@ -16,25 +16,50 @@ const { defaultKv } = require('../../lib/kv');
 const { isAdmin } = require('../../lib/auth');
 const { renderAppShell, escapeHtml } = require('../../lib/appShell');
 const { directoryFor } = require('../../lib/directory');
+const { createHash } = require('node:crypto');
 
 const fmtDate = (v) => {
   const n = typeof v === 'number' ? v : Date.parse(v || '');
   return Number.isFinite(n) ? `<time data-iso="${new Date(n).toISOString()}">${new Date(n).toISOString().slice(0, 10)}</time>` : '';
 };
 
-function holderWords(h) {
-  if (!h) return 'unclaimed';
-  if (h.kind === 'org') return `the rock <b>${escapeHtml(h.org || '?')}</b>`;
-  return `an account (${escapeHtml(h.account_id ? h.account_id.slice(0, 12) + '…' : 'by email hash')})`;
+// The directory stores holders as a sha256 of the lowercased email, which is
+// right: it is a public-ish mirror and it should not carry addresses. This page
+// is not that. It is operator-only, and it renders every account's email in
+// plain text in the table directly above this one, so refusing to name the
+// holder here protects nobody and costs the operator the one fact they came for
+// (QA finding 56: "Held by: an account (by email hash)" printed inches above the
+// very hash, with the matching email inches above that).
+//
+// The hash is deterministic and the candidate set is the accounts already
+// loaded, so this is a lookup, not a crack.
+function holderIndex(users) {
+  const byHash = new Map();
+  for (const u of users) {
+    const e = String(u.email || '').toLowerCase();
+    if (e) byHash.set(createHash('sha256').update(e).digest('hex'), u.email);
+  }
+  return byHash;
 }
 
-function mineralsTable(minerals) {
+function holderWords(h, byHash) {
+  if (!h) return 'unclaimed';
+  if (h.kind === 'org') return `the rock <b>${escapeHtml(h.org || '?')}</b>`;
+  const named = h.e && byHash && byHash.get(String(h.e).toLowerCase());
+  if (named) return `<b>${escapeHtml(named)}</b>`;
+  // Still unresolved: say WHICH hash, so the operator can go and look rather
+  // than being told only that an answer exists somewhere.
+  if (h.e) return `an account not on this site <span class="sub">${escapeHtml(String(h.e).slice(0, 12))}…</span>`;
+  return `an account (${escapeHtml(h.account_id ? h.account_id.slice(0, 12) + '…' : 'no identifier recorded')})`;
+}
+
+function mineralsTable(minerals, byHash) {
   if (!minerals.length) return '<p class="note">The directory mirrors no minerals yet.</p>';
   const rows = minerals.map((m) => `<tr>
     <td><b>${escapeHtml(m.label || m.host || '(unnamed)')}</b><div class="sub">${escapeHtml(m.host || '')}</div></td>
     <td>${escapeHtml(m.tier || '')}</td>
     <td>${escapeHtml(m.anchor || '')}</td>
-    <td>${holderWords(m.holder)}</td>
+    <td>${holderWords(m.holder, byHash)}</td>
     <td>${(m.access || []).length} grant${(m.access || []).length === 1 ? '' : 's'}</td>
     <td class="sub">${escapeHtml((m.mineral_id || '').slice(0, 16))}…</td>
     <td>${fmtDate(m.updated)}</td>
@@ -44,17 +69,19 @@ function mineralsTable(minerals) {
     <tbody>${rows}</tbody></table></div>`;
 }
 
-function boxesTable(boxes) {
+function boxesTable(boxes, byHash) {
   if (!boxes.length) return '';
   const rows = boxes.map((b) => `<tr>
     <td><b>${escapeHtml(b.label || b.host || '')}</b><div class="sub">${escapeHtml(b.host || '')}</div></td>
-    <td class="sub">${escapeHtml((b.owner_e || '').slice(0, 12))}…</td>
+    <td>${(byHash && byHash.get(String(b.owner_e || '').toLowerCase()))
+      ? `<b>${escapeHtml(byHash.get(String(b.owner_e).toLowerCase()))}</b>`
+      : `<span class="sub">${escapeHtml((b.owner_e || '').slice(0, 12))}…</span>`}</td>
     <td>${fmtDate(b.updated)}</td>
   </tr>`).join('');
   return `<h2 class="sect">Legacy self-registrations</h2>
   <p class="note">Claims by machines holding a box token, kept until every mineral carries a serial. Not proof of ownership.</p>
   <div class="tablewrap"><table>
-    <thead><tr><th>Box</th><th>Owner hash</th><th>Updated</th></tr></thead>
+    <thead><tr><th>Box</th><th>Owner</th><th>Updated</th></tr></thead>
     <tbody>${rows}</tbody></table></div>`;
 }
 
@@ -90,6 +117,10 @@ module.exports = async function handler(req, res) {
     kv.listUsers().catch(() => []),
   ]);
 
+  // Built once from the accounts just loaded, and handed to both tables that
+  // hold a hash. Neither of them should be doing crypto inline.
+  const byHash = holderIndex(users);
+
   let main = `<h1>Admin</h1>
 <p class="lead">Every account on this site, and every mineral the directory mirrors. Operator only.</p>
 <style>
@@ -105,8 +136,8 @@ ${accountsTable(users)}`;
 
   if (dirR.ok) {
     main += `<h2 class="sect">Minerals (${dirR.minerals.length})</h2>
-${mineralsTable(dirR.minerals)}
-${boxesTable(dirR.boxes)}
+${mineralsTable(dirR.minerals, byHash)}
+${boxesTable(dirR.boxes, byHash)}
 <h2 class="sect">Org routes (${dirR.orgs.length})</h2>
 <p class="note">${dirR.orgs.length ? dirR.orgs.map((o) => escapeHtml(o)).join(' &middot; ') : 'none'}</p>`;
   } else {

@@ -99,7 +99,13 @@ test('the app session is labelled as the app; ua families read like humans wrote
   const [row] = await kv.listSessions('sam@x.com');
   assert.equal(row.label, 'Crads-AI app');
   assert.equal(uaFamily('Mozilla/5.0 Windows Firefox/128.0'), 'Firefox');
-  assert.equal(uaFamily(''), 'Unknown device');
+  // Reworded 2026-08-12 (QA finding 57). "Unknown device" and the old bare
+  // "Browser" were the same mistake: on a page whose job is deciding which
+  // sessions to kill, the unrecognised row must say something the reader can
+  // act on. What matters is that it is not a bare noun pretending to be a
+  // browser, so pin the property rather than the sentence.
+  assert.match(uaFamily(''), /no browser name/i);
+  assert.notStrictEqual(uaFamily('').trim(), 'Browser');
 });
 
 test('every login flow issues a REGISTERED session (no sign-in the Devices page cannot see)', () => {
