@@ -189,3 +189,41 @@ test('an unresolvable pending row with no hint still says so honestly', () => {
   const rows = buildRows({ minerals: [m], byHash: BY_HASH, me: SELF, invites: new Map() });
   assert.equal(rows.find((r) => r.status === 'pending').who.resolved, false, 'a missing hint is not a licence to guess');
 });
+
+// ---- defects found by walking the LIVE fleet's records --------------------
+
+test('the holder is not also listed as one of their own grantees', () => {
+  // claimOwner writes the holder into `access` at birth with role owner, so the
+  // roster genuinely contains a row for them. Rendering it produced Sam's own
+  // rock listing him twice, inches apart: "you · holds it" and "you · can manage
+  // it". Found on real KV records, invisible to every fixture written by hand.
+  const m = heldByMe({
+    holder_e: ME_HASH,
+    access: [{ e: ME_HASH, role: 'owner', status: 'active' }, { e: HER_HASH, role: 'user', status: 'active' }],
+  });
+  const rows = buildRows({ minerals: [m], byHash: BY_HASH, me: SELF });
+  assert.equal(rows.filter((r) => r.who.isMe).length, 1, 'exactly one row is you');
+  assert.equal(rows.length, 2, 'the holder row and the one real grant');
+  assert.equal(rows[0].isHolder, true);
+  assert.equal(rows[1].who.label, HER);
+});
+
+test('a pre-2026-08-13 mirror sends no holder identity, and the reader still dedupes their own row', () => {
+  // Every mineral on the fleet is on an older image today. Falling back to the
+  // reader's own identity is what stops the fix waiting on an image rollout.
+  const m = heldByMe({ access: [{ e: ME_HASH, role: 'owner', status: 'active' }] });
+  delete m.holder_e;
+  const rows = buildRows({ minerals: [m], byHash: BY_HASH, me: SELF });
+  assert.equal(rows.length, 1, 'just the holder');
+  assert.equal(rows[0].isHolder, true);
+});
+
+test('the fallback does NOT fire on a mineral somebody else holds', () => {
+  // The narrow case the fallback must not swallow: an owner-role grant of mine
+  // on another person's mineral is a real row and must survive.
+  const m = heldByMe({ held_by: 'Acme Ltd', role: 'owner', access: [{ e: ME_HASH, role: 'owner', status: 'active' }] });
+  delete m.holder_e;
+  const rows = buildRows({ minerals: [m], byHash: BY_HASH, me: SELF });
+  assert.equal(rows.length, 2, 'the holder row plus my own real grant');
+  assert.ok(rows.some((r) => !r.isHolder && r.who.isMe), 'my grant is still listed');
+});

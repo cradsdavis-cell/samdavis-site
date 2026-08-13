@@ -221,7 +221,11 @@ async function sendInvite({ user, email, mineralId, dir }) {
   const { AUTH_FROM } = require('../../lib/email');
   const r = await dir.minerals();
   const m = r.ok ? (r.minerals || []).find((x) => x.mineral_id === mineralId) : null;
-  const org = String((m && m.host) || '').split('.')[0].toLowerCase();
+  // The HANDLE it registered, which the worker now resolves for us. Chopping
+  // the host was wrong: the two are independent and already differ on the live
+  // fleet, and an invitation link built on the wrong one lands on a page that
+  // says the community does not exist.
+  const org = String((m && m.org) || (m && m.host) || '').split('.')[0].toLowerCase();
   const link = accessLink(org);
   if (!org) return { sent: false, why: 'this mineral has no address yet', link };
   if (!process.env.RESEND_API_KEY) return { sent: false, why: 'the mail sender is not configured', link };

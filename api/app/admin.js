@@ -54,6 +54,19 @@ function holderWords(h, byHash) {
   return `an account (${escapeHtml(h.account_id ? h.account_id.slice(0, 12) + '…' : 'no identifier recorded')})`;
 }
 
+/**
+ * Grants that are actually grants. claimOwner writes the holder into `access` at
+ * birth with role owner, so every mineral ships with one row that is not a grant
+ * to anybody: the live fleet showed "1 grant" on two rocks that had never been
+ * shared with a soul. Counting it makes the operator's first question ("who has
+ * this been given to?") answer wrong on every single mineral.
+ */
+function realGrants(m) {
+  const hE = (m.holder && m.holder.e) || '';
+  const hId = (m.holder && m.holder.account_id) || '';
+  return (m.access || []).filter((g) => !((hE && g.e === hE) || (hId && g.account_id === hId)));
+}
+
 function mineralsTable(minerals, byHash) {
   if (!minerals.length) return '<p class="note">The directory mirrors no minerals yet.</p>';
   const rows = minerals.map((m) => `<tr>
@@ -61,7 +74,7 @@ function mineralsTable(minerals, byHash) {
     <td>${escapeHtml(m.tier || '')}</td>
     <td>${escapeHtml(m.anchor || '')}</td>
     <td>${holderWords(m.holder, byHash)}</td>
-    <td>${(m.access || []).length} grant${(m.access || []).length === 1 ? '' : 's'}</td>
+    <td>${realGrants(m).length} grant${realGrants(m).length === 1 ? '' : 's'}</td>
     <td class="sub">${escapeHtml((m.mineral_id || '').slice(0, 16))}…</td>
     <td>${fmtDate(m.updated)}</td>
   </tr>`).join('');
@@ -127,7 +140,19 @@ function triage(minerals, byHash, now = Date.now()) {
     else if (m.holder.kind === 'account' && m.holder.e && !byHash.get(String(m.holder.e))) {
       items.push({ sev: 'warn', what: `${name} is held by an account not on this site`, why: 'they cannot sign in here, so they cannot manage it' });
     }
-    const pending = (m.access || []).filter((g) => g && g.status === 'pending');
+    // A ROCK WHOSE HANDLE IS NOT ITS HOST LABEL (2026-08-13). Legal, and a
+    // trap: four separate code paths used to derive the handle by chopping the
+    // host, so on a mismatched rock invitations could not activate, the SSH
+    // host went missing from the app, and its events matched nothing. All four
+    // are fixed, but the shape is worth seeing because anything written against
+    // the old assumption is still out there, and because a rock with no handle
+    // at all cannot be invited to.
+    const hostLabel = String(m.host || '').split('.')[0].toLowerCase();
+    if (m.tier === 'rock') {
+      if (!m.org) items.push({ sev: 'warn', what: `${name} has not reported an org handle`, why: 'it is on an image older than 2026-08-13, or its org-policy.yaml has no name' });
+      else if (m.org.toLowerCase() !== hostLabel) items.push({ sev: 'info', what: `${name} answers to "${m.org}" but lives at "${hostLabel}"`, why: 'legal, and the reason anything that guesses a handle from a host gets this rock wrong' });
+    }
+    const pending = realGrants(m).filter((g) => g && g.status === 'pending');
     if (pending.length) items.push({ sev: 'info', what: `${name} has ${pending.length} invitation${pending.length === 1 ? '' : 's'} outstanding`, why: 'sent, not yet accepted' });
   }
   const order = { bad: 0, warn: 1, info: 2 };
@@ -197,7 +222,7 @@ function searchBlock(hit, byHash) {
     // the grants themselves, spelled out: the minerals table only counts them,
     // and "3 grants" is not an answer to "can this person get in"
     for (const m of hit.minerals) {
-      const gs = (m.access || []);
+      const gs = realGrants(m);
       if (!gs.length) continue;
       const rows = gs.map((g) => {
         const who = (g.account_id && byHash.get(String(g.account_id))) || (g.e && byHash.get(String(g.e)));
@@ -215,8 +240,8 @@ function searchBlock(hit, byHash) {
 function totalsBlock(minerals, users, orgs) {
   const rocks = minerals.filter((m) => m.tier === 'rock').length;
   const pebbles = minerals.length - rocks;
-  const grants = minerals.reduce((n, m) => n + (m.access || []).length, 0);
-  const pending = minerals.reduce((n, m) => n + (m.access || []).filter((g) => g && g.status === 'pending').length, 0);
+  const grants = minerals.reduce((n, m) => n + realGrants(m).length, 0);
+  const pending = minerals.reduce((n, m) => n + realGrants(m).filter((g) => g && g.status === 'pending').length, 0);
   const machines = minerals.reduce((n, m) => n + (m.devices || []).filter((d) => d && d.status !== 'revoked').length, 0);
   const cells = [
     ['Accounts', users.length], ['Rocks', rocks], ['Pebbles', pebbles],
