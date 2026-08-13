@@ -42,6 +42,11 @@
       "source": "/favicon.ico",
       "destination": "/lib/img/favicon.ico",
       "permanent": true
+    },
+    {
+      "source": "/app/devices",
+      "destination": "/app/access",
+      "permanent": false
     }
   ],
   "rewrites": [
@@ -64,10 +69,6 @@
     {
       "source": "/app/access",
       "destination": "/api/app/access"
-    },
-    {
-      "source": "/app/devices",
-      "destination": "/api/app/devices"
     },
     {
       "source": "/app/activity",

@@ -44,8 +44,11 @@ const STYLE = `
   .unresolved{color:var(--faint);font-style:italic}
   details.machines{font-size:.9em;color:var(--soft)}
   details.machines summary{cursor:pointer}
-  details.machines ul{margin:.45em 0 0 1.1em;padding:0}
-  details.machines li{margin:.15em 0}
+  details.machines ul{margin:.45em 0 0;padding:0;list-style:none}
+  details.machines li{margin:.15em 0;display:flex;gap:.6em;align-items:center;flex-wrap:wrap}
+  details.machines li .mach{flex:1 1 14em}
+  .door{padding:.7em 1.1em;border-top:1px solid var(--line);color:var(--soft);font-size:.9em}
+  .door b{color:var(--ink)}
   form.inline{display:inline}
   form.inline button{background:none;border:1px solid var(--line);border-radius:8px;padding:.35em .7em;
     color:var(--soft);font:inherit;font-size:.85em;cursor:pointer}
@@ -80,22 +83,39 @@ function renderGrantRow(row) {
       ? '<div class="sub">No machines yet, because the invitation is still open.</div>'
       : '<div class="sub">No machines enrolled.</div>';
   } else {
+    // WRITABLE NOW (Sam's ruling, 2026-08-13: fold Devices into Access and
+    // delete the page). It was read-only on the reasoning that per-machine
+    // removal belonged on the machine-shaped page. There is no longer a
+    // machine-shaped page, so this is where a machine's key gets removed, one
+    // mineral at a time — which is the shape Sam kept, because it is the only
+    // one that expresses "this laptop keeps my rock but loses the client's
+    // pebble".
     const items = row.devices.map((d) => {
-      const seen = d.last_seen ? ` &middot; last seen ${renderTime(d.last_seen)}` : ' &middot; never seen';
-      return `<li>${escapeHtml(d.label || d.slug)}${seen}</li>`;
+      // A MACHINE THAT HAS NEVER REPORTED SAYS NOTHING (2026-08-13). This used
+      // to read "never seen" on every row on every account, forever, because
+      // last_seen had no writer at all. It has one now, but only on newly
+      // provisioned boxes, so absence stays common and stays honest: no line
+      // beats a false one.
+      const seen = d.last_seen ? `<span class="sub"> &middot; last opened ${renderTime(d.last_seen)}</span>` : '';
+      const vault = d.vault ? '<span class="chip">can open sealed secrets</span>' : '';
+      const removing = row.pendingRemovals.has(d.slug);
+      const act = removing
+        ? '<span class="sub">removing&#8230;</span>'
+        : `<form class="inline" method="POST" action="/api/app/device-remove"
+             onsubmit="return confirm('Remove ${escapeHtml(d.label || d.slug)} from ${escapeHtml(row.mineral.name)}? The mineral applies this itself, usually within a couple of minutes.')">
+             <input type="hidden" name="mineral_id" value="${escapeHtml(row.mineral.mineral_id)}">
+             <input type="hidden" name="slug" value="${escapeHtml(d.slug)}">
+             <button type="submit">Remove</button>
+           </form>`;
+      return `<li><span class="mach">${escapeHtml(d.label || d.slug)}${seen} ${vault}</span>${row.canRemoveMachines ? act : ''}</li>`;
     }).join('');
-    // Read-only on purpose. Removing ONE machine is a different act from
-    // removing the account, it belongs to the machine-shaped page, and putting
-    // both buttons in one row is how somebody cuts the wrong thing. The pointer
-    // saying so lives ONCE on the page, not once per row: repeated on every
-    // expanded row it stopped being guidance and became wallpaper.
     machines = `<details class="machines"><summary>${row.devices.length} machine${row.devices.length === 1 ? '' : 's'}</summary><ul>${items}</ul></details>`;
   }
 
   // Revoke is the holder's act alone. An owner-role grant can read every row
   // here and change none of them, which is what /grant-request enforces, so the
   // button is absent rather than present-and-doomed.
-  const action = row.canRevoke && row.grantEmail
+  const action = row.canRemoveAccess && row.grantEmail
     ? `<form class="inline" method="POST" action="/app/access">
          <input type="hidden" name="do" value="revoke">
          <input type="hidden" name="mineral_id" value="${escapeHtml(row.mineral.mineral_id)}">
@@ -109,6 +129,35 @@ function renderGrantRow(row) {
     <div class="grantwho">${machines}</div>
     <div>${action}</div>
   </div>`;
+}
+
+/**
+ * The two things that open a box and are neither a machine nor a person: the key
+ * seeded at its birth, and a time-boxed Crads support grant.
+ *
+ * These had a whole section and a card each on the Devices page, which meant
+ * three minerals produced three cards saying "Crads support: off". They are one
+ * line per mineral now, on the mineral they belong to. Support still renders
+ * when it is OFF, because an explicit off is a fact and an absent row is a
+ * question — that ruling stands, it just does not need a card to say it.
+ */
+function renderDoor(mineral) {
+  const door = mineral.door;
+  if (!door) return '';
+  const bits = [];
+  for (const f of door.founders || []) {
+    if (f && f.name) bits.push(`<b>${escapeHtml(f.name)}</b>, made when this was born`);
+  }
+  const s = door.support;
+  if (s && s.active) bits.push(`<b>Crads support</b>, until ${renderTime(s.expires_at)}`);
+  if (!bits.length && !s) return '';
+  // Support OFF is stated separately and quietly. It is a fact worth having (an
+  // absent row is a question), but it is the permanent default, and giving the
+  // permanent default the same weight as a live key is how a page fills up with
+  // things that never change. One clause, not a card per mineral.
+  const off = s && !s.active ? '<span class="sub"> Crads support is off, and cannot be turned on except by you.</span>' : '';
+  if (!bits.length) return `<div class="door">${off}</div>`;
+  return `<div class="door">Also opens it: ${bits.join(' &middot; ')}. <span class="sub">Keys like these are removed on the mineral itself, not here.</span>${off}</div>`;
 }
 
 function renderMatrix(rows, { canInviteTo }) {
@@ -140,6 +189,7 @@ function renderMatrix(rows, { canInviteTo }) {
         ${stale ? `<span class="chips">${stale}</span>` : ''}
       </div>
       ${rs.map(renderGrantRow).join('')}
+      ${renderDoor(mineral)}
       ${invite}
     </div>`;
   }
@@ -267,7 +317,7 @@ module.exports = async function handler(req, res) {
   let main = `<style>${STYLE}</style>
 <h1>Access</h1>
 <p class="lead">Who and what can reach your minerals, and the place you change it. Shown from the last report each mineral sent; removing or giving access asks the mineral itself.</p>
-<p class="note">Removing access here cuts an <b>account</b> off, and every machine they enrolled with it. To remove a single machine and leave their access alone, use <a href="/app/devices">Devices</a>.</p>`;
+<p class="note">Removing an <b>account</b> cuts them off entirely, and every machine they enrolled with it. Removing a single <b>machine</b> takes away one computer&#8217;s key and leaves their access alone.</p>`;
 
   if (msg) {
     main += bad

@@ -26,6 +26,8 @@ module.exports = async function handler(req, res) {
   // back to the page either way: it renders roster truth, and the removal
   // shows once the mineral has applied it
   res.statusCode = 303;
-  res.setHeader('Location', r.ok ? '/app/devices' : `/app/devices?problem=${encodeURIComponent(r.reason || 'the removal could not be staged')}`);
+  // Devices was folded into Access and deleted (2026-08-13); removal is
+  // initiated there, so that is where the outcome belongs.
+  res.setHeader('Location', r.ok ? '/app/access' : `/app/access?bad=1&msg=${encodeURIComponent(r.reason || 'the removal could not be staged')}`);
   return res.end();
 };

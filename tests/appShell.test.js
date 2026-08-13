@@ -28,9 +28,9 @@ test('the nav is what an account holds plus its history, and marks where you are
   // Access rides second (2026-08-13): it is the page that answers who and what
   // can reach a mineral, and the only one that can change it. "Activity"
   // promised an archive and delivers a 30-day change feed, so it says so.
-  assert.deepEqual(NAV.map((n) => n.label), ['Minerals', 'Access', 'Devices', 'Recent changes', 'Billing', 'Account']);
-  const nav = renderAppNav('devices');
-  assert.ok(/href="\/app\/devices" class="on"/.test(nav), 'the active item is marked');
+  assert.deepEqual(NAV.map((n) => n.label), ['Minerals', 'Access', 'Recent changes', 'Billing', 'Account']);
+  const nav = renderAppNav('access');
+  assert.ok(/href="\/app\/access" class="on"/.test(nav), 'the active item is marked');
   assert.ok(/href="\/app\/minerals" class=""/.test(nav), 'the others are not');
   for (const gone of ['Book a session', 'Packs', 'Subscription', 'Sessions']) {
     assert.ok(!nav.includes(gone), `the coaching nav item "${gone}" has no place here`);
@@ -95,4 +95,34 @@ test('the account never states something it cannot know', () => {
   const minerals = readFileSync(join(ROOT, 'api', 'app', 'minerals.js'), 'utf8');
   assert.match(minerals, /incomplete rather than wrong/, 'an empty list explains what it cannot see');
   assert.match(minerals, /need claiming once/, 'and names why a pre-ownership mineral is missing');
+});
+
+test('no page reuses a class name the shell already owns', () => {
+  // The bug this pins (found 2026-08-13 by rendering, never by a test): the
+  // Account rebuild used class="who" for a session row. The shell already owns
+  // .who for the sidebar's "Signed in as" block, border-top and all, so every
+  // session row inherited a stray horizontal rule and 40px of margin.
+  //
+  // Page-local styles are inlined into a shared document, so any class the shell
+  // defines is effectively a reserved word. This is the cheap check that keeps
+  // it that way.
+  const fs = require('fs');
+  const path = require('path');
+  const shell = fs.readFileSync(path.join(__dirname, '..', 'lib', 'appShell.js'), 'utf8');
+  const style = shell.slice(shell.indexOf('const STYLE'), shell.indexOf('function renderAppNav'));
+  const reserved = new Set([...style.matchAll(/\.([a-z][a-z0-9-]*)\s*[,{:]/g)].map((m) => m[1]));
+  // .chip/.card/.note/.sub and friends are meant to be reused: they are the
+  // shared vocabulary. What must not happen is a page RE-DECLARING one.
+  const dir = path.join(__dirname, '..', 'api', 'app');
+  const offences = [];
+  for (const f of fs.readdirSync(dir).filter((n) => n.endsWith('.js'))) {
+    const src = fs.readFileSync(path.join(dir, f), 'utf8');
+    // comments are prose, not selectors: a note explaining WHY a name was
+    // avoided must not read as using it
+    const styleBlock = ((src.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '').replace(/\/\*[\s\S]*?\*\//g, '');
+    for (const m of styleBlock.matchAll(/(^|[\s,{}])\.([a-z][a-z0-9-]*)\s*[,{ ]/g)) {
+      if (reserved.has(m[2])) offences.push(`${f}: .${m[2]}`);
+    }
+  }
+  assert.deepEqual(offences, [], `these re-declare a shell class: ${offences.join(', ')}`);
 });

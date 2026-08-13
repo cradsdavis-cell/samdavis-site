@@ -52,5 +52,6 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'use_sign_out_for_this_device' });
   }
   await kv.deleteSession(user.email, sid);
-  return res.redirect(303, '/app/devices');
+  // sessions live on Account now (2026-08-13)
+  return res.redirect(303, '/app/account');
 };

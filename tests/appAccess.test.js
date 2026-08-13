@@ -66,7 +66,8 @@ test('a member gets exactly one row, their own, and is told the roster is hidden
   assert.equal(rows[0].who.isMe, true);
   assert.equal(rows[0].rosterHidden, true, 'hidden, which is not the same as empty');
   assert.equal(rows[0].devices, null, 'null means not shown to you, never none');
-  assert.equal(rows[0].canRevoke, false);
+  assert.equal(rows[0].canRemoveAccess, false);
+  assert.equal(rows[0].canRemoveMachines, false);
 });
 
 test('an unresolvable hash is named as unresolved, never dressed up as a person', () => {
@@ -102,12 +103,17 @@ test('only the holder is offered a way to change the roster', () => {
   // nothing, which is what /grant-request enforces server-side
   const notMine = heldByMe({ held_by: 'Acme Ltd', role: 'owner' });
   const rows = buildRows({ minerals: [notMine], byHash: BY_HASH, me: SELF });
-  assert.ok(rows.every((r) => r.canRevoke === false), 'no buttons that would 403');
+  assert.ok(rows.every((r) => r.canRemoveAccess === false && r.canRemoveMachines === false), 'no buttons that would 403');
 });
 
-test('the holder cannot be revoked: handing a mineral over is a transfer', () => {
+test('the holder cannot be revoked, but their machines can', () => {
+  // Two permissions, deliberately separate. Handing a mineral over is a
+  // transfer, so the holder's own access has no Remove button; their laptop is
+  // just a laptop, and with the Devices page gone this is where it is removed.
   const rows = buildRows({ minerals: [heldByMe()], byHash: BY_HASH, me: SELF });
-  assert.equal(rows.find((r) => r.isHolder).canRevoke, false);
+  const holder = rows.find((r) => r.isHolder);
+  assert.equal(holder.canRemoveAccess, false, 'their access is not revocable');
+  assert.equal(holder.canRemoveMachines, true, 'their machines are');
 });
 
 test('a pending invitation sorts last and is not counted as access', () => {
