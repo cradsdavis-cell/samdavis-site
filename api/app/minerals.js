@@ -22,6 +22,15 @@ const { isAdmin } = require('../../lib/auth');
 const { defaultKv } = require('../../lib/kv');
 const { renderAppShell, escapeHtml } = require('../../lib/appShell');
 const { directoryFor, mergeMinerals } = require('../../lib/directory');
+const { freshnessChip, stalenessNote } = require('../../lib/mineralView');
+
+const EXPAND_STYLE = `
+  details.expand{margin-top:.75em;border-top:1px solid var(--line);padding-top:.7em}
+  details.expand summary{cursor:pointer;color:var(--soft);font-size:.92em}
+  details.expand ul.ties{list-style:none;margin:.7em 0 0;padding:0}
+  details.expand ul.ties li{padding:.55em .8em;background:var(--card-2);border-radius:9px;margin-bottom:.45em}
+  details.expand ul.ties li .sub{color:var(--soft);font-size:.88em;margin-top:.15em}
+`;
 
 const TIE_CHIP = {
   anchored: '<span class="chip good">anchored</span>',
@@ -76,7 +85,18 @@ function renderRow(m) {
   else if (m.held_by === 'someone else') held = 'held by someone else';
   else if (m.ownedByOrg) held = `held by <b>${escapeHtml(m.orgDisplay || 'the rock')}</b>`;
 
-  const where = m.org ? `${m.tie === 'joined' ? 'a member of' : 'anchored to'} <b>${escapeHtml(m.orgDisplay || m.org)}</b>` : '';
+  // DO NOT SAY THE SAME ORG TWICE. An org-held pebble rendered "held by Acme
+  // Ltd · a member of Acme Ltd", which is the card arguing with itself again
+  // (the same failure the yours/shared chips were fixed for on 2026-08-12).
+  // When the holder IS the rock, ownership has already answered where it lives,
+  // so the tie only needs to say which KIND of tie it is.
+  const orgName = m.orgDisplay || m.org || '';
+  const heldByThisOrg = orgName && (m.ownedByOrg || (m.held_by && m.held_by === orgName));
+  const where = m.org
+    ? (heldByThisOrg
+      ? (m.tie === 'joined' ? 'joined to it' : 'anchored to it')
+      : `${m.tie === 'joined' ? 'a member of' : 'anchored to'} <b>${escapeHtml(orgName)}</b>`)
+    : '';
   const lines = [held, where].filter(Boolean).join(' &middot; ');
   const members = m.tier === 'rock' && typeof m.members === 'number'
     ? `<div class="sub">${m.members} member${m.members === 1 ? '' : 's'}</div>` : '';
@@ -112,14 +132,64 @@ function renderRow(m) {
       : `<div style="margin-top:.75em"><span class="note">Not ready to open yet. This mineral has not reported in,
        so it is either still being set up or waiting for whoever it was invited for to claim it.</span></div>`;
   if (!m.authoritative) chips.push('<span class="chip warn">not reported in</span>');
+  // HOW OLD IS THIS (2026-08-13). The mirror is a heartbeat, not a change
+  // stamp: enrol-sync re-registers every two minutes whether or not anything
+  // changed, so a stale `updated` means the machine stopped talking. Nothing
+  // rendered below it should be read as current, and the chip is what says so.
+  const stale = m.authoritative ? freshnessChip(m.updated) : '';
+  if (stale) chips.push(stale);
+
   return `<div class="card">
   <h2>${escapeHtml(title)}</h2>
   ${addr}
   ${lines ? `<div class="sub">${lines}</div>` : ''}
   ${members}
   <div class="chips">${chips.join('')}</div>
+  ${renderExpand(m, title)}
   ${open}
 </div>`;
+}
+
+// THE CARD UNFOLDS (Sam's ruling, grill round 4: "expands in place on the
+// card", and round 3: a topology per mineral, from that mineral's perspective,
+// one hop, minerals only).
+//
+// One hop and minerals only is the whole spec, and it is a tighter spec than it
+// first looks: this is NOT the network diagram. It answers one question, "what
+// is this thing attached to", from the point of view of the mineral you clicked.
+// Its own devices and people are deliberately absent, because those live on the
+// Access page where they can be acted on, and duplicating them here would give
+// the product two places that answer the same question and can disagree.
+//
+// <details> rather than a script: it survives with JavaScript off, it is
+// keyboard-operable for free, and the whole app shell carries exactly one
+// script today (the timestamp localiser). Adding a second to fold a box would
+// be a poor trade.
+function renderExpand(m, title) {
+  const rows = [];
+
+  // Its anchor. A rock anchored to `crads-ai` is anchored to the platform
+  // itself, which is not a relationship worth drawing.
+  if (m.tie === 'anchored' && m.org) {
+    rows.push(`<li><b>${escapeHtml(title)}</b> is anchored to <b>${escapeHtml(m.orgDisplay || m.org)}</b><div class="sub">Its home rock. Anchoring is the strong tie: the rock holds it.</div></li>`);
+  } else if (m.tie === 'joined' && m.org) {
+    rows.push(`<li><b>${escapeHtml(title)}</b> has joined <b>${escapeHtml(m.orgDisplay || m.org)}</b><div class="sub">A join is the loose tie: shared catalogue and brain, separate custody.</div></li>`);
+  } else if (m.tier === 'rock') {
+    rows.push(`<li><b>${escapeHtml(title)}</b> is a rock, so it is the anchor rather than the anchored.${typeof m.members === 'number' ? ` It carries ${m.members} member${m.members === 1 ? '' : 's'}.` : ''}</li>`);
+  } else {
+    rows.push(`<li><b>${escapeHtml(title)}</b> stands alone. It is anchored to no rock and has joined none.<div class="sub">Nothing is wrong with that: a solo pebble is a complete mineral.</div></li>`);
+  }
+
+  const note = m.authoritative ? stalenessNote(m.updated) : '';
+  const serial = m.mineral_id ? `<div class="note">Serial ${escapeHtml(String(m.mineral_id).slice(0, 20))}…</div>` : '';
+
+  return `<details class="expand">
+    <summary>What it is attached to</summary>
+    ${note ? `<p class="note"><b>${escapeHtml(note)}</b></p>` : ''}
+    <ul class="ties">${rows.join('')}</ul>
+    <p class="note">Who and what can reach it lives on <a href="/app/access">Access</a>, where you can also change it.</p>
+    ${serial}
+  </details>`;
 }
 
 /** One row per mineral: the mirror is the authority, ties and legacy rows enrich it. */
@@ -140,6 +210,7 @@ function assemble({ minerals = [], edges = [], boxes = [] }) {
       key, mineral_id: m.mineral_id, name: m.label || m.host || m.mineral_id, label: m.label || '',
       host: m.host || '', tier: m.tier || '', role: m.role || '', held_by: m.held_by || '',
       anchor: m.anchor || '', status: 'active', authoritative: true,
+      updated: m.updated || 0,
     });
   }
   // ties add the relationship to a row the mirror already knows, or stand alone
@@ -182,7 +253,8 @@ module.exports = async function handler(req, res) {
   // audit): they are claims by machines, not minerals, and they live in Admin
   const [minR, edgesR] = await Promise.all([ask('minerals'), ask('edges')]);
 
-  let main = `<h1>Your minerals</h1>
+  let main = `<style>${EXPAND_STYLE}</style>
+<h1>Your minerals</h1>
 <p class="lead">Everything this account can reach. Open one from the Crads-AI app on a machine whose keys it knows.</p>`;
 
   const reads = [minR, edgesR];

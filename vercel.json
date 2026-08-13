@@ -62,6 +62,10 @@
       "destination": "/api/app/minerals"
     },
     {
+      "source": "/app/access",
+      "destination": "/api/app/access"
+    },
+    {
       "source": "/app/devices",
       "destination": "/api/app/devices"
     },

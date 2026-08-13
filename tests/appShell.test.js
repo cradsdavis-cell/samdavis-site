@@ -25,7 +25,10 @@ test('the shell carries the app language, never the site stylesheet', () => {
 });
 
 test('the nav is what an account holds plus its history, and marks where you are', () => {
-  assert.deepEqual(NAV.map((n) => n.label), ['Minerals', 'Devices', 'Activity', 'Billing', 'Account']);
+  // Access rides second (2026-08-13): it is the page that answers who and what
+  // can reach a mineral, and the only one that can change it. "Activity"
+  // promised an archive and delivers a 30-day change feed, so it says so.
+  assert.deepEqual(NAV.map((n) => n.label), ['Minerals', 'Access', 'Devices', 'Recent changes', 'Billing', 'Account']);
   const nav = renderAppNav('devices');
   assert.ok(/href="\/app\/devices" class="on"/.test(nav), 'the active item is marked');
   assert.ok(/href="\/app\/minerals" class=""/.test(nav), 'the others are not');

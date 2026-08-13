@@ -16,6 +16,7 @@ const { defaultKv } = require('../../lib/kv');
 const { isAdmin } = require('../../lib/auth');
 const { renderAppShell, escapeHtml } = require('../../lib/appShell');
 const { directoryFor } = require('../../lib/directory');
+const { freshness, hashEmail } = require('../../lib/mineralView');
 const { createHash } = require('node:crypto');
 
 const fmtDate = (v) => {
@@ -103,6 +104,128 @@ function accountsTable(users) {
     <tbody>${rows}</tbody></table></div>`;
 }
 
+// ---- 1. TRIAGE: what is broken or dark ------------------------------------
+//
+// Sam's ruling (grill round 3): triage first, then search, then totals, in that
+// order, on one page. This block is the reason the page is worth opening at
+// 07:00 rather than a table dump you have to read to find the problem in.
+//
+// Everything here is DERIVED, never stored: a triage board with its own state
+// is a second source of truth about the fleet, and the fleet already has one.
+function triage(minerals, byHash, now = Date.now()) {
+  const items = [];
+  for (const m of minerals) {
+    const name = m.label || m.host || m.mineral_id || '(unnamed)';
+    const f = freshness(m.updated, now);
+    // Dark is the loudest thing on this page. enrol-sync re-registers every two
+    // minutes, so a mineral that has not reported in a week is not quiet, it is
+    // gone, off, broken or unreachable, and nobody would otherwise find out.
+    if (f.level === 'dark') items.push({ sev: 'bad', what: `${name} is ${f.words}`, why: 'it re-registers every 2 minutes when it is up, so this is not quiet, it is not running' });
+    else if (f.level === 'stale') items.push({ sev: 'warn', what: `${name} ${f.words}`, why: 'expected every 2 minutes' });
+    else if (f.level === 'unknown') items.push({ sev: 'warn', what: `${name} has never reported in`, why: 'built but never came up, or came up before the mirror existed' });
+    if (!m.holder) items.push({ sev: 'warn', what: `${name} is unclaimed`, why: 'no account holds it, so nobody can see it in their own app' });
+    else if (m.holder.kind === 'account' && m.holder.e && !byHash.get(String(m.holder.e))) {
+      items.push({ sev: 'warn', what: `${name} is held by an account not on this site`, why: 'they cannot sign in here, so they cannot manage it' });
+    }
+    const pending = (m.access || []).filter((g) => g && g.status === 'pending');
+    if (pending.length) items.push({ sev: 'info', what: `${name} has ${pending.length} invitation${pending.length === 1 ? '' : 's'} outstanding`, why: 'sent, not yet accepted' });
+  }
+  const order = { bad: 0, warn: 1, info: 2 };
+  return items.sort((a, b) => order[a.sev] - order[b.sev]);
+}
+
+function triageBlock(items) {
+  if (!items.length) {
+    return `<div class="empty"><b>Nothing needs attention.</b>
+      <p class="note">Every mirrored mineral is reporting, held by a known account, with no invitation left hanging.</p></div>`;
+  }
+  const rows = items.map((i) => `<div class="triage ${escapeHtml(i.sev)}">
+    <b>${escapeHtml(i.what)}</b><div class="sub">${escapeHtml(i.why)}</div></div>`).join('');
+  return `<div class="triagewrap">${rows}</div>`;
+}
+
+// ---- 2. SEARCH: one subject, everything about it --------------------------
+//
+// The support-shaped question, and the one that will actually be needed on
+// cohort-one day: somebody says "I cannot get in" and the operator needs every
+// fact about them in one place rather than four tables to cross-reference by eye.
+function searchAll({ q, users, minerals, boxes, byHash }) {
+  const needle = String(q || '').trim().toLowerCase();
+  if (!needle) return null;
+  const hit = { query: needle, accounts: [], minerals: [], boxes: [] };
+  const nHash = hashEmail(needle);
+
+  hit.accounts = users.filter((u) => String(u.email || '').toLowerCase().includes(needle)
+    || String(u.id || '').toLowerCase() === needle);
+
+  hit.minerals = minerals.filter((m) => {
+    const text = `${m.label || ''} ${m.host || ''} ${m.anchor || ''} ${m.mineral_id || ''}`.toLowerCase();
+    if (text.includes(needle)) return true;
+    // by the PERSON: held by them, or granted to them. This is the arm that
+    // makes an email address a useful thing to type in.
+    if (m.holder && m.holder.e === nHash) return true;
+    if (m.holder && m.holder.kind === 'org' && String(m.holder.org || '').toLowerCase().includes(needle)) return true;
+    return (m.access || []).some((g) => g && (g.e === nHash
+      || (g.account_id && hit.accounts.some((u) => u.id === g.account_id))));
+  });
+
+  hit.boxes = boxes.filter((b) => `${b.label || ''} ${b.host || ''}`.toLowerCase().includes(needle)
+    || String(b.owner_e || '') === nHash);
+  return hit;
+}
+
+function searchBlock(hit, byHash) {
+  if (!hit) {
+    return `<form method="GET" class="search">
+      <input type="search" name="q" placeholder="an email address, a slug, a host or a serial" aria-label="Search">
+      <button class="act" type="submit">Search</button>
+    </form>`;
+  }
+  let html = `<form method="GET" class="search">
+    <input type="search" name="q" value="${escapeHtml(hit.query)}" aria-label="Search">
+    <button class="act" type="submit">Search</button>
+    <a class="act quiet" href="/app/admin">Clear</a>
+  </form>`;
+  const total = hit.accounts.length + hit.minerals.length + hit.boxes.length;
+  if (!total) {
+    return `${html}<div class="empty"><b>Nothing matches &ldquo;${escapeHtml(hit.query)}&rdquo;.</b>
+      <p class="note">Accounts match on email or id; minerals on name, host, anchor, serial, holder or grantee; boxes on name or owner.</p></div>`;
+  }
+  if (hit.accounts.length) html += `<h3 class="sect">Accounts (${hit.accounts.length})</h3>${accountsTable(hit.accounts)}`;
+  if (hit.minerals.length) {
+    html += `<h3 class="sect">Minerals (${hit.minerals.length})</h3>${mineralsTable(hit.minerals, byHash)}`;
+    // the grants themselves, spelled out: the minerals table only counts them,
+    // and "3 grants" is not an answer to "can this person get in"
+    for (const m of hit.minerals) {
+      const gs = (m.access || []);
+      if (!gs.length) continue;
+      const rows = gs.map((g) => {
+        const who = (g.account_id && byHash.get(String(g.account_id))) || (g.e && byHash.get(String(g.e)));
+        return `<li>${who ? `<b>${escapeHtml(who.email)}</b>` : `<span class="sub">an account not on this site (${escapeHtml(String(g.e || g.account_id || '').slice(0, 12))}…)</span>`}
+          &middot; ${escapeHtml(g.role || 'user')}${g.status === 'pending' ? ' &middot; <b>invited, not accepted</b>' : ''}</li>`;
+      }).join('');
+      html += `<p class="note"><b>${escapeHtml(m.label || m.host || 'mineral')}</b> grants:</p><ul class="grants">${rows}</ul>`;
+    }
+  }
+  if (hit.boxes.length) html += `<h3 class="sect">Legacy self-registrations (${hit.boxes.length})</h3>${boxesTable(hit.boxes, byHash)}`;
+  return html;
+}
+
+// ---- 3. TOTALS ------------------------------------------------------------
+function totalsBlock(minerals, users, orgs) {
+  const rocks = minerals.filter((m) => m.tier === 'rock').length;
+  const pebbles = minerals.length - rocks;
+  const grants = minerals.reduce((n, m) => n + (m.access || []).length, 0);
+  const pending = minerals.reduce((n, m) => n + (m.access || []).filter((g) => g && g.status === 'pending').length, 0);
+  const machines = minerals.reduce((n, m) => n + (m.devices || []).filter((d) => d && d.status !== 'revoked').length, 0);
+  const cells = [
+    ['Accounts', users.length], ['Rocks', rocks], ['Pebbles', pebbles],
+    ['Org routes', orgs.length], ['Grants', grants], ['Invitations open', pending],
+    ['Machines enrolled', machines],
+  ];
+  return `<div class="totals">${cells.map(([k, v]) => `<div><b>${v}</b><span>${escapeHtml(k)}</span></div>`).join('')}</div>`;
+}
+
 module.exports = async function handler(req, res) {
   const kv = defaultKv();
   const user = await requireAuth({ kv, req, res });
@@ -117,34 +240,61 @@ module.exports = async function handler(req, res) {
     kv.listUsers().catch(() => []),
   ]);
 
-  // Built once from the accounts just loaded, and handed to both tables that
-  // hold a hash. Neither of them should be doing crypto inline.
+  // Built once from the accounts just loaded, and handed to every block that
+  // holds a hash. None of them should be doing crypto inline.
   const byHash = holderIndex(users);
+  const q = String((req.query && req.query.q) || '').slice(0, 120);
 
-  let main = `<h1>Admin</h1>
-<p class="lead">Every account on this site, and every mineral the directory mirrors. Operator only.</p>
+  let main = `<h1>Operator</h1>
+<p class="lead">What is broken, who is who, and what the platform adds up to. Operator only.</p>
 <style>
   .tablewrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;margin:.8em 0 1.4em}
   table{border-collapse:collapse;width:100%;font-size:.92em}
   th{text-align:left;padding:.55em .8em;border-bottom:1px solid var(--line);color:var(--soft);font-weight:600;white-space:nowrap}
   td{padding:.55em .8em;border-bottom:1px solid var(--line);vertical-align:top}
   tr:last-child td{border-bottom:none}
-  .sect{margin-top:1.2em;font-size:1.05em}
-</style>
+  .sect{margin-top:1.4em;font-size:1.05em}
+  .triagewrap{border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden;margin:.8em 0 1.4em}
+  .triage{padding:.7em 1.1em;border-bottom:1px solid var(--line);border-left:3px solid transparent}
+  .triage:last-child{border-bottom:none}
+  .triage.bad{border-left-color:var(--bad)} .triage.warn{border-left-color:var(--warn)} .triage.info{border-left-color:var(--line)}
+  .triage .sub{color:var(--soft);font-size:.88em}
+  .search{display:flex;gap:.5em;flex-wrap:wrap;margin:.8em 0 1.2em;align-items:center}
+  .search input{flex:1 1 22em;padding:.6em .8em;border:1px solid var(--line);border-radius:9px;
+    background:var(--card);color:var(--ink);font:inherit}
+  .totals{display:flex;flex-wrap:wrap;gap:.7em;margin:.8em 0 1.4em}
+  .totals div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.8em 1.1em;min-width:8em}
+  .totals b{display:block;font-size:1.5em;line-height:1.1}
+  .totals span{color:var(--soft);font-size:.85em}
+  ul.grants{margin:.3em 0 1em 1.2em;padding:0;font-size:.92em}
+  ul.grants li{margin:.2em 0}
+</style>`;
+
+  if (!dirR.ok) {
+    main += `<div class="problem"><b>The directory could not be read.</b>
+      <div class="note">${escapeHtml(dirR.reason)}. The accounts below are this site's own and are complete; every mineral-shaped block on this page is missing, not empty.</div></div>
 <h2 class="sect">Accounts (${users.length})</h2>
 ${accountsTable(users)}`;
-
-  if (dirR.ok) {
-    main += `<h2 class="sect">Minerals (${dirR.minerals.length})</h2>
+  } else {
+    const items = triage(dirR.minerals, byHash);
+    const hit = searchAll({ q, users, minerals: dirR.minerals, boxes: dirR.boxes, byHash });
+    main += `<h2 class="sect">Needs attention (${items.length})</h2>
+${triageBlock(items)}
+<h2 class="sect">Find anything</h2>
+${searchBlock(hit, byHash)}
+<h2 class="sect">Totals</h2>
+${totalsBlock(dirR.minerals, users, dirR.orgs)}
+<h2 class="sect">Accounts (${users.length})</h2>
+${accountsTable(users)}
+<h2 class="sect">Minerals (${dirR.minerals.length})</h2>
 ${mineralsTable(dirR.minerals, byHash)}
 ${boxesTable(dirR.boxes, byHash)}
 <h2 class="sect">Org routes (${dirR.orgs.length})</h2>
 <p class="note">${dirR.orgs.length ? dirR.orgs.map((o) => escapeHtml(o)).join(' &middot; ') : 'none'}</p>`;
-  } else {
-    main += `<div class="problem"><b>The directory could not be read.</b>
-      <div class="note">${escapeHtml(dirR.reason)}. Accounts above are this site's own and are complete; the mineral view is missing, not empty.</div></div>`;
   }
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  return res.status(200).send(renderAppShell({ title: 'Admin', active: 'admin', email: user.email, isAdmin: true, main }));
+  return res.status(200).send(renderAppShell({ title: 'Operator', active: 'admin', email: user.email, isAdmin: true, main }));
 };
+module.exports.triage = triage;
+module.exports.searchAll = searchAll;

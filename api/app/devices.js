@@ -124,8 +124,16 @@ module.exports = async function handler(req, res) {
   });
   const door = assembleDoor(mineralRows);
 
+  // DEVICES AND ACCESS ARE NOT TWO VIEWS OF ONE THING (2026-08-13). They look
+  // adjacent and they act on different objects: this page removes ONE MACHINE'S
+  // KEY, the access matrix removes AN ACCOUNT and cascades to every machine that
+  // account enrolled. Neither can do the other's job, so neither absorbs the
+  // other; what they owe each other is a pointer, because a person who came here
+  // to cut somebody off entirely would otherwise remove three machines one at a
+  // time and leave the access itself live.
   let main = `<h1>Devices</h1>
-<p class="lead">The machines that can open your minerals. A machine stays here until you remove it; signing out of the website does not touch its keys.</p>`;
+<p class="lead">The machines that can open your minerals. A machine stays here until you remove it; signing out of the website does not touch its keys.</p>
+<p class="note">To cut off a whole <b>account</b> rather than one machine, use <a href="/app/access">Access</a>: it removes their access and every machine they enrolled with it.</p>`;
 
   // a staged-removal failure comes back on the redirect; showing it beats a
   // silent bounce that looks like the button did nothing
