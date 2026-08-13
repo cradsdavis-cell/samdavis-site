@@ -72,8 +72,13 @@ test('the operator sees accounts AND minerals, each from its own source', async 
   assert.match(res.body, /Accounts \(2\)/, 'every account, with the count');
   assert.match(res.body, /jo@x\.com/, 'including other people\'s');
   assert.match(res.body, /Test Org 4/, 'every mineral');
-  assert.match(res.body, /Legacy self-registrations/, 'legacy claims labelled as claims');
-  assert.match(res.body, /Not proof of ownership/);
+  // Dropped 2026-08-13. The fixture still SUPPLIES boxes and orgs, deliberately:
+  // the worker still returns them, so this asserts the page ignores what it is
+  // given rather than that it was handed nothing to ignore.
+  assert.doesNotMatch(res.body, /Legacy self-registrations/, 'legacy claims are not rendered');
+  assert.doesNotMatch(res.body, /Not proof of ownership/);
+  assert.doesNotMatch(res.body, /Org routes/, 'org routes are not rendered, tile included');
+  assert.doesNotMatch(res.body, /731d5dceecd6/, 'and no legacy row leaks through another block');
   assert.equal(mintedScope, 'admin');
 });
 

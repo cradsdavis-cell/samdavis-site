@@ -83,22 +83,19 @@ function mineralsTable(minerals, byHash) {
     <tbody>${rows}</tbody></table></div>`;
 }
 
-function boxesTable(boxes, byHash) {
-  if (!boxes.length) return '';
-  const rows = boxes.map((b) => `<tr>
-    <td><b>${escapeHtml(b.label || b.host || '')}</b><div class="sub">${escapeHtml(b.host || '')}</div></td>
-    <td>${(byHash && byHash.get(String(b.owner_e || '').toLowerCase()))
-      ? `<b>${escapeHtml(byHash.get(String(b.owner_e).toLowerCase()))}</b>`
-      : `<span class="sub">${escapeHtml((b.owner_e || '').slice(0, 12))}…</span>`}</td>
-    <td>${fmtDate(b.updated)}</td>
-  </tr>`).join('');
-  return `<h2 class="sect">Legacy self-registrations</h2>
-  <p class="note">Claims by machines holding a box token, kept until every mineral carries a serial. Not proof of ownership.</p>
-  <div class="tablewrap"><table>
-    <thead><tr><th>Box</th><th>Owner</th><th>Updated</th></tr></thead>
-    <tbody>${rows}</tbody></table></div>`;
-}
-
+// LEGACY SELF-REGISTRATIONS AND ORG ROUTES ARE NOT RENDERED (Sam, 2026-08-13).
+// Both were dropped from this page as noise, not as data. Nothing was deleted:
+// /admin-minerals still returns `boxes` and `orgs`, and this handler still
+// receives them, so restoring either is a render change and not a migration.
+//
+// Why they went. A `boxreg:` row is a claim a machine made about itself while
+// holding a box token, and every box that has a mineral has one, saying the
+// same thing the mineral already proves properly. On the live fleet the single
+// legacy row and the single mineral were the same box, so the section's only
+// content was a duplicate the page then had to caption as untrustworthy.
+// Org routes went for the adjacent reason: the count reads as "how many orgs"
+// and is not, because `crads-solo` is the standalone-pebble bucket rather than
+// a rock, so "2" meant one real org for as long as the tile existed.
 function accountsTable(users) {
   if (!users.length) return '<p class="note">No accounts.</p>';
   const rows = users
@@ -174,10 +171,10 @@ function triageBlock(items) {
 // The support-shaped question, and the one that will actually be needed on
 // cohort-one day: somebody says "I cannot get in" and the operator needs every
 // fact about them in one place rather than four tables to cross-reference by eye.
-function searchAll({ q, users, minerals, boxes, byHash }) {
+function searchAll({ q, users, minerals, byHash }) {
   const needle = String(q || '').trim().toLowerCase();
   if (!needle) return null;
-  const hit = { query: needle, accounts: [], minerals: [], boxes: [] };
+  const hit = { query: needle, accounts: [], minerals: [] };
   const nHash = hashEmail(needle);
 
   hit.accounts = users.filter((u) => String(u.email || '').toLowerCase().includes(needle)
@@ -194,8 +191,6 @@ function searchAll({ q, users, minerals, boxes, byHash }) {
       || (g.account_id && hit.accounts.some((u) => u.id === g.account_id))));
   });
 
-  hit.boxes = boxes.filter((b) => `${b.label || ''} ${b.host || ''}`.toLowerCase().includes(needle)
-    || String(b.owner_e || '') === nHash);
   return hit;
 }
 
@@ -211,10 +206,10 @@ function searchBlock(hit, byHash) {
     <button class="act" type="submit">Search</button>
     <a class="act quiet" href="/app/admin">Clear</a>
   </form>`;
-  const total = hit.accounts.length + hit.minerals.length + hit.boxes.length;
+  const total = hit.accounts.length + hit.minerals.length;
   if (!total) {
     return `${html}<div class="empty"><b>Nothing matches &ldquo;${escapeHtml(hit.query)}&rdquo;.</b>
-      <p class="note">Accounts match on email or id; minerals on name, host, anchor, serial, holder or grantee; boxes on name or owner.</p></div>`;
+      <p class="note">Accounts match on email or id; minerals on name, host, anchor, serial, holder or grantee.</p></div>`;
   }
   if (hit.accounts.length) html += `<h3 class="sect">Accounts (${hit.accounts.length})</h3>${accountsTable(hit.accounts)}`;
   if (hit.minerals.length) {
@@ -232,12 +227,11 @@ function searchBlock(hit, byHash) {
       html += `<p class="note"><b>${escapeHtml(m.label || m.host || 'mineral')}</b> grants:</p><ul class="grants">${rows}</ul>`;
     }
   }
-  if (hit.boxes.length) html += `<h3 class="sect">Legacy self-registrations (${hit.boxes.length})</h3>${boxesTable(hit.boxes, byHash)}`;
   return html;
 }
 
 // ---- 3. TOTALS ------------------------------------------------------------
-function totalsBlock(minerals, users, orgs) {
+function totalsBlock(minerals, users) {
   const rocks = minerals.filter((m) => m.tier === 'rock').length;
   const pebbles = minerals.length - rocks;
   const grants = minerals.reduce((n, m) => n + realGrants(m).length, 0);
@@ -245,7 +239,7 @@ function totalsBlock(minerals, users, orgs) {
   const machines = minerals.reduce((n, m) => n + (m.devices || []).filter((d) => d && d.status !== 'revoked').length, 0);
   const cells = [
     ['Accounts', users.length], ['Rocks', rocks], ['Pebbles', pebbles],
-    ['Org routes', orgs.length], ['Grants', grants], ['Invitations open', pending],
+    ['Grants', grants], ['Invitations open', pending],
     ['Machines enrolled', machines],
   ];
   return `<div class="totals">${cells.map(([k, v]) => `<div><b>${v}</b><span>${escapeHtml(k)}</span></div>`).join('')}</div>`;
@@ -302,20 +296,17 @@ module.exports = async function handler(req, res) {
 ${accountsTable(users)}`;
   } else {
     const items = triage(dirR.minerals, byHash);
-    const hit = searchAll({ q, users, minerals: dirR.minerals, boxes: dirR.boxes, byHash });
+    const hit = searchAll({ q, users, minerals: dirR.minerals, byHash });
     main += `<h2 class="sect">Needs attention (${items.length})</h2>
 ${triageBlock(items)}
 <h2 class="sect">Find anything</h2>
 ${searchBlock(hit, byHash)}
 <h2 class="sect">Totals</h2>
-${totalsBlock(dirR.minerals, users, dirR.orgs)}
+${totalsBlock(dirR.minerals, users)}
 <h2 class="sect">Accounts (${users.length})</h2>
 ${accountsTable(users)}
 <h2 class="sect">Minerals (${dirR.minerals.length})</h2>
-${mineralsTable(dirR.minerals, byHash)}
-${boxesTable(dirR.boxes, byHash)}
-<h2 class="sect">Org routes (${dirR.orgs.length})</h2>
-<p class="note">${dirR.orgs.length ? dirR.orgs.map((o) => escapeHtml(o)).join(' &middot; ') : 'none'}</p>`;
+${mineralsTable(dirR.minerals, byHash)}`;
   }
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
