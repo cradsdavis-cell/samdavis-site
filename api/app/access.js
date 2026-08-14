@@ -100,7 +100,7 @@ function renderGrantRow(row) {
       const vault = d.vault ? '<span class="chip">can open sealed secrets</span>' : '';
       const removing = row.pendingRemovals.has(d.slug);
       const act = removing
-        ? '<span class="sub">removing&#8230;</span>'
+        ? '<span class="sub">Removing&#8230;</span>'
         : `<form class="inline" method="POST" action="/api/app/device-remove"
              onsubmit="return confirm('Remove ${escapeHtml(d.label || d.slug)} from ${escapeHtml(row.mineral.name)}? The mineral applies this itself, usually within a couple of minutes.')">
              <input type="hidden" name="mineral_id" value="${escapeHtml(row.mineral.mineral_id)}">

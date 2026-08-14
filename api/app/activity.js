@@ -108,7 +108,7 @@ module.exports = async function handler(req, res) {
   const dir = directoryFor(user);
   const ask = (name, ...args) => (typeof dir[name] === 'function'
     ? dir[name](...args).catch((e) => ({ ok: false, reason: String(e && e.message || e) }))
-    : Promise.resolve({ ok: false, reason: `this page cannot read ${name} yet` }));
+    : Promise.resolve({ ok: false, reason: `This page cannot read ${name} yet` }));
   const [evR, notR, users, minR] = await Promise.all([
     ask('events', WINDOW_DAYS), ask('notices'), kv.listUsers().catch(() => []), ask('minerals'),
   ]);

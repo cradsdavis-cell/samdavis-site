@@ -50,7 +50,7 @@ function holderWords(h, byHash) {
   if (named) return `<b>${escapeHtml(named)}</b>`;
   // Still unresolved: say WHICH hash, so the operator can go and look rather
   // than being told only that an answer exists somewhere.
-  if (h.e) return `an account not on this site <span class="sub">${escapeHtml(String(h.e).slice(0, 12))}…</span>`;
+  if (h.e) return `An account not on this site <span class="sub">${escapeHtml(String(h.e).slice(0, 12))}…</span>`;
   return `an account (${escapeHtml(h.account_id ? h.account_id.slice(0, 12) + '…' : 'no identifier recorded')})`;
 }
 
@@ -130,12 +130,12 @@ function triage(minerals, byHash, now = Date.now()) {
     // Dark is the loudest thing on this page. enrol-sync re-registers every two
     // minutes, so a mineral that has not reported in a week is not quiet, it is
     // gone, off, broken or unreachable, and nobody would otherwise find out.
-    if (f.level === 'dark') items.push({ sev: 'bad', what: `${name} is ${f.words}`, why: 'it re-registers every 2 minutes when it is up, so this is not quiet, it is not running' });
-    else if (f.level === 'stale') items.push({ sev: 'warn', what: `${name} ${f.words}`, why: 'expected every 2 minutes' });
-    else if (f.level === 'unknown') items.push({ sev: 'warn', what: `${name} has never reported in`, why: 'built but never came up, or came up before the mirror existed' });
-    if (!m.holder) items.push({ sev: 'warn', what: `${name} is unclaimed`, why: 'no account holds it, so nobody can see it in their own app' });
+    if (f.level === 'dark') items.push({ sev: 'bad', what: `${name} is ${f.words}`, why: 'It re-registers every 2 minutes when it is up, so this is not quiet, it is not running' });
+    else if (f.level === 'stale') items.push({ sev: 'warn', what: `${name} ${f.words}`, why: 'Expected every 2 minutes' });
+    else if (f.level === 'unknown') items.push({ sev: 'warn', what: `${name} has never reported in`, why: 'Built but never came up, or came up before the mirror existed' });
+    if (!m.holder) items.push({ sev: 'warn', what: `${name} is unclaimed`, why: 'No account holds it, so nobody can see it in their own app' });
     else if (m.holder.kind === 'account' && m.holder.e && !byHash.get(String(m.holder.e))) {
-      items.push({ sev: 'warn', what: `${name} is held by an account not on this site`, why: 'they cannot sign in here, so they cannot manage it' });
+      items.push({ sev: 'warn', what: `${name} is held by an account not on this site`, why: 'They cannot sign in here, so they cannot manage it' });
     }
     // A ROCK WHOSE HANDLE IS NOT ITS HOST LABEL (2026-08-13). Legal, and a
     // trap: four separate code paths used to derive the handle by chopping the
@@ -146,11 +146,11 @@ function triage(minerals, byHash, now = Date.now()) {
     // at all cannot be invited to.
     const hostLabel = String(m.host || '').split('.')[0].toLowerCase();
     if (m.tier === 'rock') {
-      if (!m.org) items.push({ sev: 'warn', what: `${name} has not reported an org handle`, why: 'it is on an image older than 2026-08-13, or its org-policy.yaml has no name' });
-      else if (m.org.toLowerCase() !== hostLabel) items.push({ sev: 'info', what: `${name} answers to "${m.org}" but lives at "${hostLabel}"`, why: 'legal, and the reason anything that guesses a handle from a host gets this rock wrong' });
+      if (!m.org) items.push({ sev: 'warn', what: `${name} has not reported an org handle`, why: 'It is on an image older than 2026-08-13, or its org-policy.yaml has no name' });
+      else if (m.org.toLowerCase() !== hostLabel) items.push({ sev: 'info', what: `${name} answers to "${m.org}" but lives at "${hostLabel}"`, why: 'Legal, and the reason anything that guesses a handle from a host gets this rock wrong' });
     }
     const pending = realGrants(m).filter((g) => g && g.status === 'pending');
-    if (pending.length) items.push({ sev: 'info', what: `${name} has ${pending.length} invitation${pending.length === 1 ? '' : 's'} outstanding`, why: 'sent, not yet accepted' });
+    if (pending.length) items.push({ sev: 'info', what: `${name} has ${pending.length} invitation${pending.length === 1 ? '' : 's'} outstanding`, why: 'Sent, not yet accepted' });
   }
   const order = { bad: 0, warn: 1, info: 2 };
   return items.sort((a, b) => order[a.sev] - order[b.sev]);
@@ -221,7 +221,7 @@ function searchBlock(hit, byHash) {
       if (!gs.length) continue;
       const rows = gs.map((g) => {
         const who = (g.account_id && byHash.get(String(g.account_id))) || (g.e && byHash.get(String(g.e)));
-        return `<li>${who ? `<b>${escapeHtml(who.email)}</b>` : `<span class="sub">an account not on this site (${escapeHtml(String(g.e || g.account_id || '').slice(0, 12))}…)</span>`}
+        return `<li>${who ? `<b>${escapeHtml(who.email)}</b>` : `<span class="sub">An account not on this site (${escapeHtml(String(g.e || g.account_id || '').slice(0, 12))}…)</span>`}
           &middot; ${escapeHtml(g.role || 'user')}${g.status === 'pending' ? ' &middot; <b>invited, not accepted</b>' : ''}</li>`;
       }).join('');
       html += `<p class="note"><b>${escapeHtml(m.label || m.host || 'mineral')}</b> grants:</p><ul class="grants">${rows}</ul>`;

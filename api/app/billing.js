@@ -39,7 +39,7 @@ module.exports = async function handler(req, res) {
     if (held.length) {
       const rows = held.map((m) => `<div class="card">
   <h2>${escapeHtml(m.label || m.host || 'a mineral')}</h2>
-  <div class="sub">${escapeHtml(m.tier === 'rock' ? 'rock' : 'pebble')} &middot; billed to this account when pricing arms &middot; <b>$0 today</b></div>
+  <div class="sub">${escapeHtml(m.tier === 'rock' ? 'Rock' : 'Pebble')} &middot; billed to this account when pricing arms &middot; <b>$0 today</b></div>
 </div>`).join('');
       main += `<h1 style="margin-top:1.6em;font-size:1.15em">What this account holds</h1>${rows}`;
       if (held.some((m) => m.tier === 'rock')) {

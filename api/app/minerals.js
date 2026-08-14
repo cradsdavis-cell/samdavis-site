@@ -128,7 +128,7 @@ function renderRow(m) {
   const open = !addressable ? ''
     : m.authoritative
       ? `<div style="margin-top:.75em"><a class="act" href="crads-ai://box/${escapeHtml(slug)}">Open in the app</a>
-       <span class="note" style="margin-left:.6em">needs the Crads-AI app on this machine</span></div>`
+       <span class="note" style="margin-left:.6em">Needs the Crads-AI app on this machine</span></div>`
       : `<div style="margin-top:.75em"><span class="note">Not ready to open yet. This mineral has not reported in,
        so it is either still being set up or waiting for whoever it was invited for to claim it.</span></div>`;
   if (!m.authoritative) chips.push('<span class="chip warn">not reported in</span>');
@@ -248,7 +248,7 @@ module.exports = async function handler(req, res) {
   // method must degrade the page, never throw it away entirely.
   const ask = (name) => (typeof dir[name] === 'function'
     ? dir[name]().catch((e) => ({ ok: false, reason: String(e && e.message || e) }))
-    : Promise.resolve({ ok: false, reason: `this page cannot read ${name} yet` }));
+    : Promise.resolve({ ok: false, reason: `This page cannot read ${name} yet` }));
   // legacy self-registrations no longer render here (Sam's ruling, 2026-08-10
   // audit): they are claims by machines, not minerals, and they live in Admin
   const [minR, edgesR] = await Promise.all([ask('minerals'), ask('edges')]);

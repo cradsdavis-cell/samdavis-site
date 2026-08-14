@@ -75,7 +75,7 @@ A sign-in is not a key: signing one out here does not touch any machine&#8217;s 
     const current = s.sid === payload.sid;
     rows.push(`<div class="row">
       <div class="sessrow"><b>${escapeHtml(s.label || 'Unknown sign-in')}</b>${current ? ' <span class="chip good">this browser</span>' : ''}
-        <div class="sub">signed in ${renderTime(s.created_at)} &middot; last used ${renderTime(s.last_seen)}</div></div>
+        <div class="sub">Signed in ${renderTime(s.created_at)} &middot; last used ${renderTime(s.last_seen)}</div></div>
       ${current ? '' : `<form method="POST" action="/api/app/device-revoke">
         <input type="hidden" name="sid" value="${escapeHtml(s.sid)}">
         <button type="submit">Sign out</button>
