@@ -181,7 +181,12 @@
     catch (e) { return { ok: false, reason: 'invite payload is not decodable' }; }
     var f = decoded.split('|');
     if (f.length < 4 || !f[0] || !f[3]) return { ok: false, reason: 'invite payload is incomplete' };
-    return { ok: true, org: org, slug: slug, appUrl: 'crads-ai://join/' + raw };
+    // f[6] = the ANCHOR org, which is NOT `org` above (finding 136, 2026-08-16).
+    // `org` is the STAGING LANE, which fulfil-arrivals sets to crads-solo on every
+    // invite it mints, anchored or not, because that is where the enrol job holds
+    // the pull token. Reading the lane as "has no organisation" stripped the
+    // sign-in step from every rock-anchored pebble. Absent on older links.
+    return { ok: true, org: org, slug: slug, anchor: f[6] || '', appUrl: 'crads-ai://join/' + raw };
   }
   function downloadFor(ua){
     var releases = 'https://github.com/cradsdavis-cell/crads-ai-app/releases/latest';
@@ -227,7 +232,7 @@
     // solo claim skips the Google handshake entirely, because there is no org parent
     // for a signed token to prove anything to. The invite token IS the proof, and it
     // works from whichever computer they open it on.
-    var solo = inv.org === 'crads-solo';
+    var solo = inv.anchor ? false : (inv.org === 'crads-solo');
     var orgTxt = solo ? '' : ' for <span class="org">' + inv.org.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }) + '</span>';
     $('orgline').innerHTML = orgTxt; $('orgline2').innerHTML = orgTxt;
     if (solo) {
