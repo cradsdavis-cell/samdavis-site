@@ -21,17 +21,19 @@ test('how-it-works page has the canonical head', () => {
     'expected shared JS link');
 });
 
+// 2026-08-16: same staleness as tests/about.test.js. It pinned exact nav markup
+// from the retired flat nav, so an added aria-label, renamed labels and a second
+// class name each read as a missing nav. Rule now: assert destinations and the
+// current-marker, not the attributes or the visible label.
 test('how-it-works page renders the canonical nav with How it works marked current', () => {
   const html = readHIW();
-  assert.ok(html.includes('<nav class="site-nav-bar">'),
+  assert.match(html, /<nav class="site-nav-bar"[^>]*>/,
     'expected canonical site-nav-bar');
-  assert.match(html, /<a[^>]*href="\/how-it-works"[^>]*class="current"[^>]*>How it works<\/a>|<a[^>]*class="current"[^>]*href="\/how-it-works"[^>]*>How it works<\/a>/,
-    'expected How it works link marked current (attribute order agnostic)');
-  assert.ok(html.includes('<a href="/">Home</a>'));
-  assert.ok(html.includes('<a href="/overview">Overview</a>'));
-  assert.ok(html.includes('<a href="/about">About</a>'));
-  assert.ok(html.includes('<a href="/offer">Offer</a>'));
-  assert.ok(html.includes('<a href="/book">Book →</a>'));
+  assert.match(html, /<a[^>]*href="\/how-it-works"[^>]*class="[^"]*\bcurrent\b[^"]*"[^>]*>How it works<\/a>/,
+    'expected How it works link marked current (tolerates a class list)');
+  for (const href of ['/', '/overview', '/about', '/offer', '/book']) {
+    assert.ok(html.includes(`href="${href}"`), `expected nav link to ${href}`);
+  }
 });
 
 test('how-it-works page contains the 4 canonical session-arc headings', () => {
@@ -85,17 +87,21 @@ const NAV_PAGES = [
   'book/single-session.html',
 ];
 
-test('every nav-bearing page links to /how-it-works between About and Offer', () => {
+// 2026-08-16: was "How it works between About and Offer". In the grouped nav
+// /how-it-works sits inside the Coaching menu and /about is a top-level link
+// after it, so the ordering inverted and this could never pass again. The
+// destination check is in tests/about.test.js; here we keep the pairing that
+// still means something, that /how-it-works ships alongside /offer wherever the
+// Coaching menu exists.
+test('every nav-bearing page carries /how-it-works next to /offer', () => {
   for (const rel of NAV_PAGES) {
     const fp = path.join(__dirname, '..', rel);
     const src = fs.readFileSync(fp, 'utf8');
-    const idxAbout = src.indexOf('<a href="/about"');
-    const idxHIW = src.indexOf('<a href="/how-it-works"');
-    const idxOffer = src.indexOf('<a href="/offer"');
-    assert.ok(idxAbout > -1, `${rel}: missing About link`);
-    assert.ok(idxHIW > -1, `${rel}: missing How it works link`);
-    assert.ok(idxOffer > -1, `${rel}: missing Offer link`);
-    assert.ok(idxAbout < idxHIW && idxHIW < idxOffer,
-      `${rel}: How it works must sit between About and Offer`);
+    assert.ok(src.includes('<a href="/how-it-works"'), `${rel}: missing How it works link`);
+    assert.ok(src.includes('<a href="/offer"'), `${rel}: missing Offer link`);
+    const coaching = src.match(/<div class="nav-group"[^>]*data-group="coaching"[^>]*>[\s\S]*?<\/div>\s*<\/div>/);
+    if (!coaching) continue;
+    assert.ok(coaching[0].includes('/how-it-works'),
+      `${rel}: /how-it-works must sit in the Coaching group`);
   }
 });

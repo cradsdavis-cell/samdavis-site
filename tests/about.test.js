@@ -21,16 +21,22 @@ test('about page has the canonical head', () => {
     'expected shared JS link');
 });
 
+// 2026-08-16: this test asserted the retired FLAT nav, and had been failing on
+// every run since the grouped-dropdown nav landed. What went wrong: it pinned
+// exact markup strings ("<nav class=\"site-nav-bar\">", "<a href=\"/overview\">
+// Overview</a>", class="current" as the whole class attribute), so an added
+// aria-label, a renamed label and a second class name each read as a missing
+// nav. Rule now: assert the DESTINATIONS and the current-marker, never the
+// surrounding attributes or the visible label, which are the designer's to move.
 test('about page renders the canonical nav with About marked current', () => {
   const html = readAbout();
-  assert.ok(html.includes('<nav class="site-nav-bar">'),
+  assert.match(html, /<nav class="site-nav-bar"[^>]*>/,
     'expected canonical site-nav-bar');
-  assert.match(html, /<a[^>]*href="\/about"[^>]*class="current"[^>]*>About<\/a>|<a[^>]*class="current"[^>]*href="\/about"[^>]*>About<\/a>/,
-    'expected About link marked current (attribute order agnostic)');
-  assert.ok(html.includes('<a href="/">Home</a>'));
-  assert.ok(html.includes('<a href="/overview">Overview</a>'));
-  assert.ok(html.includes('<a href="/offer">Offer</a>'));
-  assert.ok(html.includes('<a href="/book">Book →</a>'));
+  assert.match(html, /<a[^>]*href="\/about"[^>]*class="[^"]*\bcurrent\b[^"]*"[^>]*>About<\/a>/,
+    'expected About link marked current (tolerates a class list)');
+  for (const href of ['/', '/overview', '/offer', '/book']) {
+    assert.ok(html.includes(`href="${href}"`), `expected nav link to ${href}`);
+  }
 });
 
 test('about page has identity rail with name', () => {
@@ -122,19 +128,29 @@ const NAV_PAGES = [
   'book/single-session.html',
 ];
 
-test('every nav-bearing page links to /about between Overview and Offer', () => {
+// 2026-08-16: was "About between Overview and Offer", which described the
+// retired flat nav. In the grouped nav /overview sits in the System menu and
+// /about is a top-level link AFTER /offer, so the ordering assertion could
+// never pass again, and four book/ pages still carry the old flat nav, so no
+// single ordering is true site-wide. What it was really protecting is that no
+// page silently loses a nav destination. That is what it asserts now, plus the
+// grouping where the grouped nav is present.
+test('every nav-bearing page keeps all four nav destinations', () => {
   for (const rel of NAV_PAGES) {
     const fp = path.join(__dirname, '..', rel);
     const src = fs.readFileSync(fp, 'utf8');
-    // The About link must appear AFTER the Overview link and BEFORE the Offer link.
-    const idxOverview = src.indexOf('<a href="/overview"');
-    const idxAbout = src.indexOf('<a href="/about"');
-    const idxOffer = src.indexOf('<a href="/offer"');
-    assert.ok(idxOverview > -1, `${rel}: missing Overview link`);
-    assert.ok(idxAbout > -1, `${rel}: missing About link`);
-    assert.ok(idxOffer > -1, `${rel}: missing Offer link`);
-    assert.ok(idxOverview < idxAbout && idxAbout < idxOffer,
-      `${rel}: About must sit between Overview and Offer`);
+    for (const href of ['/overview', '/about', '/how-it-works', '/offer']) {
+      assert.ok(src.includes(`<a href="${href}"`), `${rel}: missing ${href} link`);
+    }
+    // Grouped nav only: /overview belongs to the System menu, /how-it-works and
+    // /offer to the Coaching menu. The legacy flat nav (book/*) has no groups.
+    const coaching = src.match(/<div class="nav-group"[^>]*data-group="coaching"[^>]*>[\s\S]*?<\/div>\s*<\/div>/);
+    if (!coaching) continue;
+    const system = src.match(/<div class="nav-group"[^>]*data-group="system"[^>]*>[\s\S]*?<\/div>\s*<\/div>/);
+    assert.ok(system && system[0].includes('/overview'),
+      `${rel}: /overview must sit in the System group`);
+    assert.ok(coaching[0].includes('/how-it-works') && coaching[0].includes('/offer'),
+      `${rel}: /how-it-works and /offer must sit in the Coaching group`);
   }
 });
 
