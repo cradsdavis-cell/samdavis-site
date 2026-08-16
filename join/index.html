@@ -243,7 +243,30 @@
     // for a signed token to prove anything to. The invite token IS the proof, and it
     // works from whichever computer they open it on.
     var solo = inv.anchor ? false : (inv.org === 'crads-solo');
-    var orgTxt = solo ? '' : ' for <span class="org">' + inv.org.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }) + '</span>';
+    // WHICH NAME, which is a DIFFERENT question from the one above (finding 158,
+    // 2026-08-16). The line under it read the anchor to decide WHETHER to name an
+    // organisation and then printed the LANE as that organisation's name, so this
+    // page said, live and verbatim, "You'll need the Crads-AI app for crads-solo"
+    // to a member whose organisation is qa-r2-gmail. Fourth reader of this one
+    // field to answer the owner question with the lane, after 135, 136 and 139.
+    //
+    // The ANCHOR is the only field in the link that names the owning organisation,
+    // so it is the only thing this page can honestly print. It is a HANDLE, not
+    // the display name: `QA Run Two Gmail` lives in route:<org>.org_display in the
+    // directory, and this page resolves nothing server-side on purpose, so the
+    // handle is what it has. Same fallback the Minerals page already renders
+    // (org_display || org). The lane is still right for a rock-minted invite,
+    // which carries that rock's handle there and no anchor; with neither there is
+    // nothing to name. Kept in lockstep with orgLabel() in ai-os
+    // wizard/join-page/join-parse.mjs.
+    //
+    // Validated only because it is PAINTED: `solo` above stays a bare truthiness
+    // test so it cannot drift from signInRequired() in member-connect.mjs, which
+    // enforces the sign-in. A malformed anchor therefore loses its name and keeps
+    // its sign-in, never the other way round.
+    var orgName = inv.anchor || (solo ? '' : inv.org);
+    if (!/^[A-Za-z0-9][A-Za-z0-9 _-]{0,62}$/.test(orgName)) orgName = '';
+    var orgTxt = orgName ? ' for <span class="org">' + orgName.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }) + '</span>' : '';
     $('orgline').innerHTML = orgTxt; $('orgline2').innerHTML = orgTxt;
     if (solo) {
       var s3 = $('step3');
