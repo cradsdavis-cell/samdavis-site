@@ -144,12 +144,22 @@
     <p>You'll need the Crads-AI app<span id="orgline2"></span>. It takes about a minute:</p>
     <ol class="stepslist">
       <li><span><b>Install and open the app.</b> The download button below picks the right version for this computer.</span></li>
-      <li><span><b>It finds your invite by itself.</b> Nothing to type or paste. (If it ever asks, choose <b>Join</b> and paste this page's link.)</span></li>
+      <!-- "I have an invitation", verbatim off the door's own button (finding 142,
+           2026-08-16). This said "choose Join", and the door has a DIFFERENT button
+           called "Join a community" which wants a rock handle, not an invite link.
+           The one word sent the reader to the one screen their link cannot answer. -->
+      <li><span><b>It finds your invite by itself.</b> Nothing to type or paste. (If it ever asks, choose <b>I have an invitation</b> and paste this page's link.)</span></li>
       <li id="step3"><span><b>Sign in with the email address this invite was sent to.</b> The invite only works for that address.</span></li>
     </ol>
     <p class="btnrow"><a class="btn" id="dlBtn" href="#" rel="noopener">Download the app</a>
        <button class="btn ghost" id="copyBtn">Copy my invite</button></p>
-    <p class="fine" id="expiry">This invite works until you use it.</p>
+    <!-- 48 hours because that is the only expiry any code enforces: CLAIM_TTL_MS in
+         cockpit/jobs/enrol-arrivals.mjs, which refuses an older claim outright. One
+         link carried three different promises (finding 140, 2026-08-16): the email
+         said 48 hours, this page said "works until you use it", the repo's copy of
+         this page said 14 days, and nothing anywhere enforces 14 days at all. The
+         member read the email and the very next screen contradicted it. -->
+    <p class="fine" id="expiry">This invite is good for 48 hours. If it lapses, ask for a fresh one.</p>
     <p class="hint">Already installed? <a href="#" id="retry">Try opening the app again</a>.</p>
   </div>
 
@@ -240,9 +250,11 @@
       if (s3) s3.innerHTML = '<span><b>That is it: no password, no sign-in.</b> The app makes a key on this computer and the private half never leaves it.</span>';
     } else {
       // an organisation can revoke a member's invite; a standalone box's cannot be
-      // revoked by anyone but Sam, so only the org line carries that caveat
+      // revoked by anyone but Sam, so only the org line carries that caveat. The
+      // 48 hours is the same enforced number as the default copy above (finding
+      // 140): the caveat is the only part that differs by audience.
       var ex = $('expiry');
-      if (ex) ex.textContent = 'This invite works until you use it, unless your organisation revokes it first.';
+      if (ex) ex.textContent = 'This invite is good for 48 hours, and your organisation can revoke it sooner.';
     }
     var dl = downloadFor(navigator.userAgent);
     if (dl.mobile) {
