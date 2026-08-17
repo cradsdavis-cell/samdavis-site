@@ -71,7 +71,12 @@ function renderRow(m) {
   chips.push(isYours
     ? '<span class="chip good">yours</span>'
     : '<span class="chip">shared with you</span>');
-  if (!isYours && m.role === 'owner') chips.push('<span class="chip">you can manage it</span>');
+  // Reads `admin`, not `owner` (2026-08-14). /my-minerals sends the caller's own
+  // role here, and no path has ever produced an `owner` grant: the box accepts
+  // member|admin only. So this chip could never fire, one page over from the same
+  // dead chip on /app/access. It now says the one thing the role actually
+  // carries, in the same words that page uses.
+  if (!isYours && m.role === 'admin') chips.push('<span class="chip">you can invite people</span>');
   if (m.tie && TIE_CHIP[m.tie]) chips.push(TIE_CHIP[m.tie]);
   if (m.status && m.status !== 'active') chips.push(`<span class="chip warn">${escapeHtml(m.status)}</span>`);
   if (m.legacy) chips.push('<span class="chip">registered itself</span>');

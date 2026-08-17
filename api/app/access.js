@@ -68,7 +68,12 @@ function renderGrantRow(row) {
 
   const chips = [];
   if (row.isHolder) chips.push('<span class="chip good">holds it</span>');
-  else if (row.role === 'owner') chips.push('<span class="chip">can manage it</span>');
+  // "can invite people" rather than "can manage it" (2026-08-14). The old chip
+  // read on `owner`, a role no path could actually produce, and promised a
+  // vaguer power than the one an admin has. Sam's ruling: an admin can invite
+  // new people and a member cannot, and that is the ONLY difference, so the chip
+  // says that and nothing wider.
+  else if (row.role === 'admin') chips.push('<span class="chip">can invite people</span>');
   if (row.status === 'pending') chips.push('<span class="chip warn">invited, not accepted</span>');
 
   // "not shown to you" and "none" are different facts and the page must never
@@ -178,8 +183,12 @@ function renderMatrix(rows, { canInviteTo }) {
            <input type="hidden" name="do" value="invite">
            <input type="hidden" name="mineral_id" value="${escapeHtml(mineral.mineral_id)}">
            <input type="email" name="email" placeholder="their email address" required>
+           <select name="role" aria-label="What they can do">
+             <option value="member">Can read it</option>
+             <option value="admin">Can read it and invite others</option>
+           </select>
            <button class="act" type="submit">Give access</button>
-           <p class="note">They get a link. It only works when they sign in with this exact address, so a forwarded link is worthless to whoever receives it.</p>
+           <p class="note">They get a link. It only works when they sign in with this exact address, so a forwarded link is worthless to whoever receives it. An admin can invite and remove other people; that is the only thing the two choices change.</p>
          </form>`
       : '';
     html += `<div class="mineralblock">
@@ -219,11 +228,17 @@ async function act(req, res, user) {
   const mineralId = String(body.mineral_id || '');
   const email = String(body.email || '').trim().toLowerCase();
 
+  // VALIDATED HERE, not trusted from the form (2026-08-14): a select is a
+  // suggestion, and this decides whether somebody can widen who reaches a box.
+  // The two names are the box's own (grants.mjs ROLES), so nothing is translated
+  // on the way down; translating it is how the role got lost in five places.
+  const role = body.role === 'admin' ? 'admin' : 'member';
+
   let flash;
   if (what === 'invite') {
     if (!EMAIL_RE.test(email)) flash = { bad: true, msg: 'That does not look like an email address.' };
     else {
-      const r = await dir.grantAccess(mineralId, email);
+      const r = await dir.grantAccess(mineralId, email, role);
       if (!r.ok) flash = { bad: true, msg: `That could not be staged: ${r.reason}` };
       else {
         // Remember WHO was invited, so the pending row can name them. The
@@ -333,11 +348,21 @@ module.exports = async function handler(req, res) {
     const me = { hash: hashEmail(user.email), id: user.id || '', email: user.email };
     const inviteHints = new Map((invites || []).map((i) => [`${i.mineral_id}:${i.hash}`, i.email]));
     const rows = buildRows({ minerals: minR.minerals, byHash, me, invites: inviteHints });
-    // Only minerals this account HOLDS can take a new grant, which is what
-    // /grant-request enforces. Deriving the set here keeps the form off every
-    // row the worker would refuse.
+    // Minerals this account holds OR is an admin on can take a new grant, which
+    // is what /grant-request now lets past and what the mineral re-checks on its
+    // own disk. Deriving the set here keeps the form off every row the worker
+    // would refuse; it was holder-only until 2026-08-14, when Sam ruled that
+    // inviting people is the one thing an admin can do that a member cannot.
+    //
+    // Pending admins are excluded here for the same reason the other two gates
+    // exclude them: an invitation nobody has accepted is not a permission.
     const canInviteTo = new Set(
-      (minR.minerals || []).filter((m) => m.held_by === 'you' && m.mineral_id).map((m) => m.mineral_id),
+      (minR.minerals || []).filter((m) => m.mineral_id && (
+        m.held_by === 'you'
+        || (Array.isArray(m.access) && m.access.some((g) => g
+          && g.role === 'admin' && g.status !== 'pending'
+          && ((g.e && g.e === me.hash) || (g.account_id && me.id && g.account_id === me.id))))
+      )).map((m) => m.mineral_id),
     );
 
     if (!rows.length) {

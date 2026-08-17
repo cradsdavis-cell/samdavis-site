@@ -233,3 +233,100 @@ test('the fallback does NOT fire on a mineral somebody else holds', () => {
   assert.equal(rows.length, 2, 'the holder row plus my own real grant');
   assert.ok(rows.some((r) => !r.isHolder && r.who.isMe), 'my grant is still listed');
 });
+
+// ---- the admin role (2026-08-14) ------------------------------------------
+//
+// Sam's ruling: an admin can invite new people and a member cannot, and that is
+// the ONLY difference between the two roles. It could not be rendered before
+// this, because five layers each dropped it: the invite form sent no role, the
+// worker's /grant-request mapped it to owner|member, the mineral record's norm()
+// collapsed it to owner|user, buildRows collapsed it again, and grants.mjs on
+// the box throws on anything that is not member|admin.
+
+/** A mineral I do not hold, on which I am an admin: roster present. */
+const adminOfIt = (over = {}) => ({
+  mineral_id: 'min_ghi789', label: 'Acme Rock', host: 'acme.crads-ai.com', tier: 'rock',
+  held_by: 'Acme Ltd', role: 'admin', updated: Date.now(),
+  access: [{ e: ME_HASH, role: 'admin', status: 'active' }, { e: HER_HASH, role: 'user', status: 'active' }],
+  devices: [],
+  ...over,
+});
+
+test('an admin grant renders as an admin, not flattened to an ordinary one', () => {
+  const rows = buildRows({
+    minerals: [heldByMe({ access: [{ e: HER_HASH, role: 'admin', status: 'active' }] })],
+    byHash: BY_HASH, me: SELF,
+  });
+  assert.equal(rows[1].role, 'admin',
+    'this read `g.role === "owner" ? "owner" : "user"`, so an admin arrived here as a plain user');
+});
+
+test('an ADMIN may change the roster; a plain member may not', () => {
+  const mine = buildRows({ minerals: [adminOfIt()], byHash: BY_HASH, me: SELF });
+  const others = mine.filter((r) => !r.isHolder && !r.who.isMe);
+  assert.ok(others.length, 'the admin can see the other people on it');
+  assert.ok(others.every((r) => r.canRemoveAccess),
+    'inviting and removing is the one power the role carries');
+
+  const asMember = buildRows({
+    minerals: [adminOfIt({ access: [{ e: ME_HASH, role: 'user', status: 'active' }, { e: HER_HASH, role: 'user', status: 'active' }] })],
+    byHash: BY_HASH, me: SELF,
+  });
+  assert.ok(asMember.filter((r) => !r.isHolder).every((r) => !r.canRemoveAccess),
+    'a member reading the same roster is offered nothing, because the box would refuse it');
+});
+
+test('a PENDING admin may not: an unaccepted invitation is not a permission', () => {
+  const rows = buildRows({
+    minerals: [adminOfIt({ access: [{ e: ME_HASH, role: 'admin', status: 'pending' }, { e: HER_HASH, role: 'user', status: 'active' }] })],
+    byHash: BY_HASH, me: SELF,
+  });
+  assert.ok(rows.filter((r) => !r.isHolder).every((r) => !r.canRemoveAccess),
+    'the same line /grant-request and the mineral both draw');
+});
+
+test('an admin still may not remove somebody MACHINES: only one power was ruled', () => {
+  const rows = buildRows({ minerals: [adminOfIt({
+    devices: [{ slug: 'abbeypc', label: 'Abbey PC', status: 'active', account_e: HER_HASH, last_seen: '' }],
+  }) ], byHash: BY_HASH, me: SELF });
+  assert.ok(rows.every((r) => !r.canRemoveMachines),
+    'removing a machine is a different act on a different registry, and nobody has ruled on it');
+});
+
+// ---- the role reaches the wire (2026-08-14) -------------------------------
+//
+// The unit tests above prove the matrix RENDERS a role. This proves the site
+// SENDS one, which is the half that was missing: the invite form carried no
+// role at all, so every invitation ever staged arrived as a member however the
+// page described it.
+const crypto = require('crypto');
+const { privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 });
+process.env.APP_TOKEN_PRIVATE_KEY = privateKey.export({ type: 'pkcs8', format: 'pem' });
+process.env.APP_TOKEN_KID = 'test-kid-1';
+const { directoryFor } = require('../lib/directory');
+
+function grantFetcher() {
+  const calls = [];
+  const f = async (url, init = {}) => {
+    calls.push({ path: new URL(url).pathname, body: JSON.parse(init.body || '{}') });
+    return { ok: true, status: 200, json: async () => ({ ok: true }) };
+  };
+  f.calls = calls;
+  return f;
+}
+
+test('grantAccess puts the chosen role on the wire', async () => {
+  const fetcher = grantFetcher();
+  const dir = directoryFor({ email: ME, state_version: 1, id: 'acc_11111111' }, { fetcher, baseUrl: 'https://dir.test' });
+  await dir.grantAccess('min_abc123', HER, 'admin');
+  assert.equal(fetcher.calls[0].path, '/grant-request');
+  assert.equal(fetcher.calls[0].body.role, 'admin',
+    'without this the worker defaults it to member and the choice is silently discarded');
+});
+
+test('grantAccess defaults to member when no role is chosen', async () => {
+  const fetcher = grantFetcher();
+  const dir = directoryFor({ email: ME, state_version: 1, id: 'acc_11111111' }, { fetcher, baseUrl: 'https://dir.test' });
+  await dir.grantAccess('min_abc123', HER);
+  assert.equal(fetcher.calls[0].body.role, 'member', 'the safe end of the range is less access');
+});

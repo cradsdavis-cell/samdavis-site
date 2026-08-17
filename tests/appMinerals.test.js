@@ -199,8 +199,15 @@ test('the ownership chip is driven by ownership, not by what you may do', () => 
 });
 
 test('a role only speaks when it adds something', () => {
-  assert.match(MIN_SRC, /!isYours && m\.role === 'owner'/,
-    '"you can manage it" is noise on your own mineral and news on somebody else\'s');
+  // The GUARD is the contract; the role word is not. This pinned
+  // `m.role === 'owner'` verbatim and broke on 2026-08-14 when the chip moved to
+  // `admin`, which is the role the box actually has ('owner' was a word no path
+  // could produce, so the chip had never once fired). Matching the guard keeps
+  // the intent pinned without re-breaking on the next vocabulary correction.
+  assert.match(MIN_SRC, /!isYours && m\.role === '[a-z]+'/,
+    '"you can invite people" is noise on your own mineral and news on somebody else\'s');
+  assert.match(MIN_SRC, /m\.role === 'admin'/,
+    'and it reads the role the box grants, not one nothing can create');
 });
 
 test('the card does not say "shared with you" twice', () => {
