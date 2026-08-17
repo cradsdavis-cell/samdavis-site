@@ -69,7 +69,7 @@ function realGrants(m) {
 
 function mineralsTable(minerals, byHash) {
   if (!minerals.length) return '<p class="note">The directory mirrors no minerals yet.</p>';
-  const rows = minerals.map((m) => `<tr>
+  const rows = minerals.map((m) => `<tr id="m-${escapeHtml(String(m.mineral_id || '').slice(0, 16))}">
     <td><b>${escapeHtml(m.label || m.host || '(unnamed)')}</b><div class="sub">${escapeHtml(m.host || '')}</div></td>
     <td>${escapeHtml(m.tier || '')}</td>
     <td>${escapeHtml(m.anchor || '')}</td>
@@ -230,6 +230,106 @@ function searchBlock(hit, byHash) {
   return html;
 }
 
+// ---- 4. TOPOLOGY: the shape of the fleet, drawn ----------------------------
+//
+// Sam's ask (2026-08-17, grilled then revised the same evening): a widget on
+// THIS page, a card tree with lines, nowhere near the sandbox. Directory lens
+// only (ai-os spec 2026-08-17-operator-topology-directory-lens): what the
+// registry knows, gaps render as gaps. Edge truth belongs to edges-reflect,
+// and its heartbeat is worn on every rock card: stale or absent IS the alarm.
+// One health fact per card, the enrol-sync tick (mineral.updated, <=5m = on).
+const hostLabel = (h) => String(h || '').split('.')[0];
+const humanizeSlug = (s) => String(s || '').replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+function topoModel(t) {
+  const nodes = new Map();
+  const rocks = new Map();
+  for (const m of t.minerals || []) {
+    const id = m.tier === 'rock' ? (m.org || hostLabel(m.host) || m.mineral_id) : (hostLabel(m.host) || m.mineral_id);
+    const n = { id, m, kids: [], joins: [], parent: null, rel: '' };
+    nodes.set(id, n);
+    if (m.tier === 'rock') rocks.set(m.org || id, n);
+  }
+  // A route with no mineral record still renders: the registry asserts the
+  // org exists, and hiding a half-known thing defeats an existence audit.
+  for (const o of t.orgs || []) {
+    if (rocks.has(o)) continue;
+    const n = { id: o, m: null, kids: [], joins: [], parent: null, rel: '', routeOnly: true };
+    nodes.set(o, n); rocks.set(o, n);
+  }
+  const ties = (t.edges || []).filter((e) => e && e.role === 'member' && e.status !== 'left');
+  for (const n of nodes.values()) {
+    const anchor = n.m && n.m.anchor && rocks.has(n.m.anchor) && n.m.anchor !== n.id ? n.m.anchor : '';
+    const joined = [...new Set(ties.filter((e) => e.slug === n.id).map((e) => e.org))]
+      .filter((o) => rocks.has(o) && o !== n.id && o !== anchor);
+    if (anchor) { n.parent = anchor; n.rel = 'anchored'; n.joins = joined; }
+    else if (joined.length) { n.parent = joined[0]; n.rel = 'joined'; n.joins = joined.slice(1); }
+  }
+  for (const n of nodes.values()) { const p = n.parent && nodes.get(n.parent); if (p) p.kids.push(n); }
+  const roots = [...nodes.values()].filter((n) => !(n.parent && nodes.get(n.parent)));
+  const sortKids = (arr) => { arr.sort((a, b) => (b.kids.length - a.kids.length) || String(a.id).localeCompare(String(b.id))); arr.forEach((k) => sortKids(k.kids)); };
+  sortKids(roots);
+  return { roots, ties };
+}
+
+function topoCard(n, { byHash, reflect, now }) {
+  if (n.routeOnly) {
+    return `<span class="tcard ghost"><span class="tname">${escapeHtml(humanizeSlug(n.id))}</span>
+      <span class="thandle">${escapeHtml(n.id)}</span>
+      <span class="tsub">a community route with no mineral record</span></span>`;
+  }
+  const m = n.m;
+  const isRock = m.tier === 'rock';
+  const handle = isRock ? (m.org || hostLabel(m.host)) : hostLabel(m.host);
+  const live = (Number(m.updated) || 0) > 0 && (now - m.updated) <= 5 * 60 * 1000;
+  const f = freshness(m.updated, now);
+  const dotTitle = live ? 'reporting (enrol-sync ticks every 2 minutes)' : (f.words || 'quiet just now');
+  let sub = '';
+  if (isRock) {
+    const at = reflect && reflect[m.org || n.id];
+    if (!at) sub = '<span class="warntxt">edges never re-asserted</span>';
+    else {
+      const mins = Math.max(1, Math.round((now - at) / 60000));
+      sub = mins > 45 ? `<span class="warntxt">edges re-asserted ${mins}m ago (rhythm 30m)</span>` : `edges re-asserted ${mins}m ago`;
+    }
+  }
+  const chips = [`<span class="chip">${escapeHtml(m.tier || '')}</span>`]
+    .concat(n.rel === 'joined' ? ['<span class="chip">joined</span>'] : [])
+    .concat((n.joins || []).map((o) => `<span class="chip">also in ${escapeHtml(o)}</span>`)).join('');
+  return `<a class="tcard${live ? '' : ' quiet'}" href="#m-${escapeHtml(String(m.mineral_id || '').slice(0, 16))}">
+    <span class="tdot ${live ? 'on' : 'off'}" title="${escapeHtml(dotTitle)}"></span>
+    <span class="tname">${escapeHtml(m.label || m.host || '(unnamed)')}</span>
+    <span class="thandle">${escapeHtml(handle)}</span>
+    <span class="tchips">${chips}</span>
+    ${sub ? `<span class="tsub">${sub}</span>` : ''}</a>`;
+}
+
+function topoTree(list, opts) {
+  if (!list.length) return '';
+  return `<ul class="ttree">${list.map((n) => `<li class="${escapeHtml(n.rel || 'root')}">${topoCard(n, opts)}${topoTree(n.kids, opts)}</li>`).join('')}</ul>`;
+}
+
+function topologyBlock(t, byHash, now = Date.now()) {
+  const { roots, ties } = topoModel(t);
+  const reserved = t.reserved || [];
+  const rocksN = (t.minerals || []).filter((m) => m.tier === 'rock').length;
+  const stamps = Object.values(t.reflect || {});
+  const reflectWords = !rocksN ? '' : !stamps.length ? 'no reflect heartbeats yet'
+    : `oldest reflect heartbeat ${Math.max(1, Math.round((now - Math.min(...stamps)) / 60000))}m ago`;
+  let html = `<div class="topo-strip">${(t.minerals || []).length} minerals · ${ties.length} live tie${ties.length === 1 ? '' : 's'} · ${reserved.length} reserved${reflectWords ? ` · ${escapeHtml(reflectWords)}` : ''} · fetched live</div>`;
+  html += `<div class="topowrap">${roots.length ? topoTree(roots, { byHash, reflect: t.reflect || {}, now }) : '<p class="note">The directory mirrors no minerals yet.</p>'}`;
+  if (reserved.length) {
+    html += `<div class="tres">${reserved.map((r) => {
+      const till = r.expires_at ? `frees in ${Math.max(0, Math.ceil((r.expires_at - now) / 86400000))}d` : 'held until released';
+      return `<span class="tcard ghost"><span class="tname">${escapeHtml(r.display || humanizeSlug(r.org))}</span>
+        <span class="thandle">${escapeHtml(r.org)}</span>
+        <span class="tsub">reserved handle${r.promote ? ' · promote in flight' : ''} · ${escapeHtml(till)}</span></span>`;
+    }).join('')}</div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
 // ---- 3. TOTALS ------------------------------------------------------------
 function totalsBlock(minerals, users) {
   const rocks = minerals.filter((m) => m.tier === 'rock').length;
@@ -254,8 +354,12 @@ module.exports = async function handler(req, res) {
     return res.status(404).send('Not found');
   }
 
-  const [dirR, users] = await Promise.all([
-    directoryFor(user).adminAll().catch((e) => ({ ok: false, reason: String(e && e.message || e) })),
+  const dir = directoryFor(user);
+  const [dirR, dirT, users] = await Promise.all([
+    dir.adminAll().catch((e) => ({ ok: false, reason: String(e && e.message || e) })),
+    // async wrapper so a reader without adminTopology (older mock, older build)
+    // rejects into the catch instead of throwing before a promise exists
+    (async () => dir.adminTopology())().catch((e) => ({ ok: false, reason: String(e && e.message || e) })),
     kv.listUsers().catch(() => []),
   ]);
 
@@ -287,6 +391,26 @@ module.exports = async function handler(req, res) {
   .totals span{color:var(--soft);font-size:.85em}
   ul.grants{margin:.3em 0 1em 1.2em;padding:0;font-size:.92em}
   ul.grants li{margin:.2em 0}
+  .topo-strip{color:var(--soft);font-size:.9em;margin:.8em 0 .6em}
+  .topowrap{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1em 1.2em;margin:0 0 1.4em;overflow-x:auto}
+  ul.ttree{list-style:none;margin:0;padding:0}
+  ul.ttree ul.ttree{margin:.15em 0 0 1.35em;padding-left:1.15em;border-left:2px solid var(--line)}
+  ul.ttree li{margin:.55em 0;position:relative}
+  ul.ttree ul.ttree li::before{content:"";position:absolute;left:-1.15em;top:1.15em;width:.85em;height:2px;background:var(--line)}
+  ul.ttree ul.ttree li.joined::before{background:repeating-linear-gradient(90deg,var(--line) 0 3px,transparent 3px 6px)}
+  .tcard{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:.55em;border:1px solid var(--line);
+    border-radius:10px;padding:.5em .85em;text-decoration:none;color:inherit;max-width:100%}
+  a.tcard:hover{border-color:var(--soft)}
+  .tcard.ghost{border-style:dashed;color:var(--soft)}
+  .tcard.quiet .tname{color:var(--soft)}
+  .tname{font-weight:650}
+  .thandle{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82em;color:var(--soft)}
+  .tsub{flex-basis:100%;font-size:.82em;color:var(--soft)}
+  .warntxt{color:var(--warn)}
+  .tdot{width:.55em;height:.55em;border-radius:50%;align-self:center;flex:none}
+  .tdot.on{background:var(--good,#2e9e5b)} .tdot.off{background:var(--line)}
+  .tchips .chip{font-size:.75em;border:1px solid var(--line);border-radius:999px;padding:.1em .55em;color:var(--soft)}
+  .tres{margin-top:.9em;padding-top:.8em;border-top:1px dashed var(--line);display:flex;flex-wrap:wrap;gap:.6em}
 </style>`;
 
   if (!dirR.ok) {
@@ -303,6 +427,8 @@ ${triageBlock(items)}
 ${searchBlock(hit, byHash)}
 <h2 class="sect">Totals</h2>
 ${totalsBlock(dirR.minerals, users)}
+<h2 class="sect">Topology</h2>
+${dirT.ok ? topologyBlock(dirT, byHash) : `<p class="note">The topology could not be read: ${escapeHtml(dirT.reason || 'unknown')}. Everything below is unaffected.</p>`}
 <h2 class="sect">Accounts (${users.length})</h2>
 ${accountsTable(users)}
 <h2 class="sect">Minerals (${dirR.minerals.length})</h2>
@@ -314,3 +440,5 @@ ${mineralsTable(dirR.minerals, byHash)}`;
 };
 module.exports.triage = triage;
 module.exports.searchAll = searchAll;
+module.exports.topoModel = topoModel;
+module.exports.topologyBlock = topologyBlock;
