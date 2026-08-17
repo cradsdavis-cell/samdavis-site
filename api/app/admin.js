@@ -272,11 +272,38 @@ function topoModel(t) {
   return { roots, ties };
 }
 
-function topoCard(n, { byHash, reflect, now }) {
+// The chart is a real flowchart (Sam's revision of the revision, same night:
+// "more of a flow charty vision"): absolutely-positioned cards over one SVG
+// layer of drawn connectors. Layout is the classic tidy-tree measure/place —
+// a subtree is as wide as its children, a node sits centred over its own —
+// done server-side so the page ships finished, no client JS.
+const TN = { W: 208, H: 104, HG: 30, VG: 64 };
+
+function layoutTopo(roots) {
+  const w = new Map(), pos = new Map();
+  let maxDepth = 0;
+  const measure = (n) => {
+    const kw = n.kids.map(measure);
+    const width = Math.max(TN.W, kw.reduce((s, x) => s + x, 0) + TN.HG * Math.max(0, n.kids.length - 1));
+    w.set(n, width); return width;
+  };
+  roots.forEach(measure);
+  const place = (n, left, depth) => {
+    maxDepth = Math.max(maxDepth, depth);
+    pos.set(n, { x: Math.round(left + w.get(n) / 2 - TN.W / 2), y: depth * (TN.H + TN.VG) });
+    let x = left;
+    n.kids.forEach((k) => { place(k, x, depth + 1); x += w.get(k) + TN.HG; });
+  };
+  let x = 0;
+  roots.forEach((r) => { place(r, x, 0); x += w.get(r) + TN.HG; });
+  return { pos, W: Math.max(x - TN.HG, TN.W), H: (maxDepth + 1) * (TN.H + TN.VG) - TN.VG };
+}
+
+function topoCardInner(n, { reflect, now }) {
   if (n.routeOnly) {
-    return `<span class="tcard ghost"><span class="tname">${escapeHtml(humanizeSlug(n.id))}</span>
-      <span class="thandle">${escapeHtml(n.id)}</span>
-      <span class="tsub">a community route with no mineral record</span></span>`;
+    return `<span class="tname">${escapeHtml(humanizeSlug(n.id))}</span>
+      <span class="thandle" title="${escapeHtml(n.id)}">${escapeHtml(n.id)}</span>
+      <span class="tsub">a community route with no mineral record</span>`;
   }
   const m = n.m;
   const isRock = m.tier === 'rock';
@@ -294,20 +321,15 @@ function topoCard(n, { byHash, reflect, now }) {
     }
   }
   const chips = [`<span class="chip">${escapeHtml(m.tier || '')}</span>`]
-    .concat(n.rel === 'joined' ? ['<span class="chip">joined</span>'] : [])
-    .concat((n.joins || []).map((o) => `<span class="chip">also in ${escapeHtml(o)}</span>`)).join('');
-  return `<a class="tcard${live ? '' : ' quiet'}" href="#m-${escapeHtml(String(m.mineral_id || '').slice(0, 16))}">
-    <span class="tdot ${live ? 'on' : 'off'}" title="${escapeHtml(dotTitle)}"></span>
-    <span class="tname">${escapeHtml(m.label || m.host || '(unnamed)')}</span>
-    <span class="thandle">${escapeHtml(handle)}</span>
+    .concat(n.rel === 'joined' ? ['<span class="chip">joined</span>'] : []).join('');
+  return `<span class="trow"><span class="tdot ${live ? 'on' : 'off'}" title="${escapeHtml(dotTitle)}"></span>
+    <span class="tname">${escapeHtml(m.label || m.host || '(unnamed)')}</span></span>
+    <span class="thandle" title="${escapeHtml(handle)}">${escapeHtml(handle)}</span>
     <span class="tchips">${chips}</span>
-    ${sub ? `<span class="tsub">${sub}</span>` : ''}</a>`;
+    ${sub ? `<span class="tsub">${sub}</span>` : ''}`;
 }
 
-function topoTree(list, opts) {
-  if (!list.length) return '';
-  return `<ul class="ttree">${list.map((n) => `<li class="${escapeHtml(n.rel || 'root')}">${topoCard(n, opts)}${topoTree(n.kids, opts)}</li>`).join('')}</ul>`;
-}
+const tieCurve = (x1, y1, x2, y2) => `M${x1} ${y1} C${x1} ${y1 + 30}, ${x2} ${y2 - 30}, ${x2} ${y2}`;
 
 function topologyBlock(t, byHash, now = Date.now()) {
   const { roots, ties } = topoModel(t);
@@ -316,12 +338,48 @@ function topologyBlock(t, byHash, now = Date.now()) {
   const stamps = Object.values(t.reflect || {});
   const reflectWords = !rocksN ? '' : !stamps.length ? 'no reflect heartbeats yet'
     : `oldest reflect heartbeat ${Math.max(1, Math.round((now - Math.min(...stamps)) / 60000))}m ago`;
-  let html = `<div class="topo-strip">${(t.minerals || []).length} minerals · ${ties.length} live tie${ties.length === 1 ? '' : 's'} · ${reserved.length} reserved${reflectWords ? ` · ${escapeHtml(reflectWords)}` : ''} · fetched live</div>`;
-  html += `<div class="topowrap">${roots.length ? topoTree(roots, { byHash, reflect: t.reflect || {}, now }) : '<p class="note">The directory mirrors no minerals yet.</p>'}`;
+  let html = `<div class="topo-strip">${(t.minerals || []).length} minerals · ${ties.length} live tie${ties.length === 1 ? '' : 's'} · ${reserved.length} reserved${reflectWords ? ` · ${escapeHtml(reflectWords)}` : ''} · fetched live · <span class="tkey"><svg width="22" height="8" aria-hidden="true"><path d="M1 4h20" class="tie-anchored"/></svg> anchored</span> <span class="tkey"><svg width="22" height="8" aria-hidden="true"><path d="M1 4h20" class="tie-joined"/></svg> joined</span></div>`;
+  if (!roots.length) return html + '<div class="topowrap"><p class="note">The directory mirrors no minerals yet.</p></div>';
+
+  // flatten with positions
+  const { pos, W, H } = layoutTopo(roots);
+  const all = [];
+  const walk = (n) => { all.push(n); n.kids.forEach(walk); };
+  roots.forEach(walk);
+  const byId = new Map(all.map((n) => [n.id, n]));
+
+  // connectors: the primary tie (parent) solid-or-dashed by rel, every extra
+  // join its own dashed curve — a flowchart can draw the DAG the tree elided
+  let paths = '';
+  for (const n of all) {
+    const p = n.parent && byId.get(n.parent);
+    const c = pos.get(n);
+    if (p) {
+      const pp = pos.get(p);
+      paths += `<path class="tie-${n.rel === 'joined' ? 'joined' : 'anchored'}" d="${tieCurve(pp.x + TN.W / 2, pp.y + TN.H, c.x + TN.W / 2, c.y)}"/>`;
+    }
+    for (const j of n.joins || []) {
+      const jp = byId.get(j) && pos.get(byId.get(j));
+      if (jp) paths += `<path class="tie-joined" d="${tieCurve(jp.x + TN.W / 2, jp.y + TN.H, c.x + TN.W / 3, c.y)}"/>`;
+    }
+  }
+
+  const cards = all.map((n) => {
+    const c = pos.get(n);
+    const style = `left:${c.x}px;top:${c.y}px;width:${TN.W}px;height:${TN.H}px`;
+    const inner = topoCardInner(n, { reflect: t.reflect || {}, now });
+    return n.routeOnly
+      ? `<span class="tcard ghost" style="${style}">${inner}</span>`
+      : `<a class="tcard" href="#m-${escapeHtml(String(n.m.mineral_id || '').slice(0, 16))}" style="${style}">${inner}</a>`;
+  }).join('');
+
+  html += `<div class="topowrap"><div class="tchart" style="width:${W}px;height:${H}px">
+    <svg class="tlines" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">${paths}</svg>
+    ${cards}</div>`;
   if (reserved.length) {
     html += `<div class="tres">${reserved.map((r) => {
       const till = r.expires_at ? `frees in ${Math.max(0, Math.ceil((r.expires_at - now) / 86400000))}d` : 'held until released';
-      return `<span class="tcard ghost"><span class="tname">${escapeHtml(r.display || humanizeSlug(r.org))}</span>
+      return `<span class="tcard resv"><span class="tname">${escapeHtml(r.display || humanizeSlug(r.org))}</span>
         <span class="thandle">${escapeHtml(r.org)}</span>
         <span class="tsub">reserved handle${r.promote ? ' · promote in flight' : ''} · ${escapeHtml(till)}</span></span>`;
     }).join('')}</div>`;
@@ -392,25 +450,28 @@ module.exports = async function handler(req, res) {
   ul.grants{margin:.3em 0 1em 1.2em;padding:0;font-size:.92em}
   ul.grants li{margin:.2em 0}
   .topo-strip{color:var(--soft);font-size:.9em;margin:.8em 0 .6em}
-  .topowrap{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1em 1.2em;margin:0 0 1.4em;overflow-x:auto}
-  ul.ttree{list-style:none;margin:0;padding:0}
-  ul.ttree ul.ttree{margin:.15em 0 0 1.35em;padding-left:1.15em;border-left:2px solid var(--line)}
-  ul.ttree li{margin:.55em 0;position:relative}
-  ul.ttree ul.ttree li::before{content:"";position:absolute;left:-1.15em;top:1.15em;width:.85em;height:2px;background:var(--line)}
-  ul.ttree ul.ttree li.joined::before{background:repeating-linear-gradient(90deg,var(--line) 0 3px,transparent 3px 6px)}
-  .tcard{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:.55em;border:1px solid var(--line);
-    border-radius:10px;padding:.5em .85em;text-decoration:none;color:inherit;max-width:100%}
+  .tkey{white-space:nowrap} .tkey svg{vertical-align:middle}
+  .topowrap{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.2em;margin:0 0 1.4em;overflow-x:auto}
+  .tchart{position:relative;margin:0 auto}
+  .tlines{position:absolute;inset:0;pointer-events:none}
+  .tlines path,.tkey path{fill:none;stroke:var(--line);stroke-width:2}
+  .tie-joined{stroke-dasharray:5 4}
+  .tcard{position:absolute;display:flex;flex-direction:column;gap:.18em;box-sizing:border-box;
+    border:1px solid var(--line);border-radius:10px;padding:.55em .8em;text-decoration:none;color:inherit;
+    background:var(--card);overflow:hidden}
   a.tcard:hover{border-color:var(--soft)}
-  .tcard.ghost{border-style:dashed;color:var(--soft)}
-  .tcard.quiet .tname{color:var(--soft)}
-  .tname{font-weight:650}
-  .thandle{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82em;color:var(--soft)}
-  .tsub{flex-basis:100%;font-size:.82em;color:var(--soft)}
+  .tcard.ghost,.tcard.resv{border-style:dashed;color:var(--soft)}
+  .trow{display:flex;align-items:center;gap:.5em;min-width:0}
+  .tname{font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .thandle{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8em;color:var(--soft);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tsub{font-size:.78em;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .warntxt{color:var(--warn)}
-  .tdot{width:.55em;height:.55em;border-radius:50%;align-self:center;flex:none}
+  .tdot{width:.55em;height:.55em;border-radius:50%;flex:none}
   .tdot.on{background:var(--good,#2e9e5b)} .tdot.off{background:var(--line)}
-  .tchips .chip{font-size:.75em;border:1px solid var(--line);border-radius:999px;padding:.1em .55em;color:var(--soft)}
-  .tres{margin-top:.9em;padding-top:.8em;border-top:1px dashed var(--line);display:flex;flex-wrap:wrap;gap:.6em}
+  .tchips .chip{font-size:.72em;border:1px solid var(--line);border-radius:999px;padding:.08em .5em;color:var(--soft)}
+  .tres{margin-top:1em;padding-top:.9em;border-top:1px dashed var(--line);display:flex;flex-wrap:wrap;gap:.6em}
+  .tres .tcard{position:static;width:14em;height:auto}
 </style>`;
 
   if (!dirR.ok) {

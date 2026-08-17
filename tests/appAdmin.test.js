@@ -136,6 +136,12 @@ test('topology block: cards, reflect honesty, ghost reservation, jump anchors', 
   assert.match(html, /reserved handle · promote in flight · frees in 26d/, 'the reservation ghost with its expiry');
   assert.match(html, /a community route with no mineral record/, 'the half-known org is named');
   assert.ok(!/f{64}/.test(html), 'no raw holder hash is rendered in the widget');
+  // the flowchart itself: one SVG layer, drawn ties of both kinds, placed cards
+  assert.match(html, /<svg class="tlines"/, 'the connector layer is an SVG');
+  assert.match(html, /class="tie-anchored" d="M/, 'an anchored tie is a drawn path');
+  assert.match(html, /class="tie-joined" d="M/, 'a joined tie is a drawn (dashed) path');
+  const placed = [...html.matchAll(/class="tcard[^"]*" (?:href="[^"]*" )?style="left:\d+px;top:\d+px/g)].length;
+  assert.equal(placed, 4, 'all four chart nodes are absolutely placed (3 minerals + the route-only org)');
 });
 
 test('the operator page renders the Topology section from the topology reader', async () => {
