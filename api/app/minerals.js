@@ -176,9 +176,13 @@ function renderExpand(m, title) {
   // Its anchor. A rock anchored to `crads-ai` is anchored to the platform
   // itself, which is not a relationship worth drawing.
   if (m.tie === 'anchored' && m.org) {
-    rows.push(`<li><b>${escapeHtml(title)}</b> is anchored to <b>${escapeHtml(m.orgDisplay || m.org)}</b><div class="sub">Its home rock. Anchoring is the strong tie: the rock holds it.</div></li>`);
+    // Tie words mean BILLING (Sam's ruling, run-6 audit 2026-08-17): anchored =
+    // the rock carries the seat, joined = the member pays their own way. Who
+    // HOLDS a mineral never moves with a tie, and the old sub-line ("the rock
+    // holds it") said otherwise directly under a "held by you" line.
+    rows.push(`<li><b>${escapeHtml(title)}</b> is anchored to <b>${escapeHtml(m.orgDisplay || m.org)}</b><div class="sub">Its home rock. Anchored means the rock carries this mineral's seat (hosting and bill). Who holds it does not change with a tie.</div></li>`);
   } else if (m.tie === 'joined' && m.org) {
-    rows.push(`<li><b>${escapeHtml(title)}</b> has joined <b>${escapeHtml(m.orgDisplay || m.org)}</b><div class="sub">A join is the loose tie: shared catalogue and brain, separate custody.</div></li>`);
+    rows.push(`<li><b>${escapeHtml(title)}</b> has joined <b>${escapeHtml(m.orgDisplay || m.org)}</b><div class="sub">Joined means membership on the member's own bill: shared catalogue and brain, everything else stays theirs.</div></li>`);
   } else if (m.tier === 'rock') {
     rows.push(`<li><b>${escapeHtml(title)}</b> is a rock, so it is the anchor rather than the anchored.${typeof m.members === 'number' ? ` It carries ${m.members} member${m.members === 1 ? '' : 's'}.` : ''}</li>`);
   } else {
