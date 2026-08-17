@@ -78,6 +78,9 @@ function renderRow(m) {
   // carries, in the same words that page uses.
   if (!isYours && m.role === 'admin') chips.push('<span class="chip">you can invite people</span>');
   if (m.tie && TIE_CHIP[m.tie]) chips.push(TIE_CHIP[m.tie]);
+  // one chip per tie KIND: an anchored pebble that also joined a community
+  // carries both chips (run-6 multi-tie fix)
+  if ((m.ties || []).some((t) => t.tie === 'joined') && m.tie !== 'joined') chips.push(TIE_CHIP.joined);
   if (m.status && m.status !== 'active') chips.push(`<span class="chip warn">${escapeHtml(m.status)}</span>`);
   if (m.legacy) chips.push('<span class="chip">registered itself</span>');
 
@@ -102,7 +105,11 @@ function renderRow(m) {
       ? (m.tie === 'joined' ? 'joined to it' : 'anchored to it')
       : `${m.tie === 'joined' ? 'a member of' : 'anchored to'} <b>${escapeHtml(orgName)}</b>`)
     : '';
-  const lines = [held, where].filter(Boolean).join(' &middot; ');
+  // secondary ties (a join beside the anchor, or further joins) get their own
+  // clause each, so no membership is invisible on the member's own page
+  const extraTies = (m.ties || []).filter((t) => t.org !== m.org)
+    .map((t) => `${t.tie === 'joined' ? 'a member of' : 'anchored to'} <b>${escapeHtml(t.orgDisplay || t.org)}</b>`);
+  const lines = [held, where, ...extraTies].filter(Boolean).join(' &middot; ');
   const members = m.tier === 'rock' && typeof m.members === 'number'
     ? `<div class="sub">${m.members} member${m.members === 1 ? '' : 's'}</div>` : '';
 
@@ -181,8 +188,14 @@ function renderExpand(m, title) {
     // HOLDS a mineral never moves with a tie, and the old sub-line ("the rock
     // holds it") said otherwise directly under a "held by you" line.
     rows.push(`<li><b>${escapeHtml(title)}</b> is anchored to <b>${escapeHtml(m.orgDisplay || m.org)}</b><div class="sub">Its home rock. Anchored means the rock carries this mineral's seat (hosting and bill). Who holds it does not change with a tie.</div></li>`);
+    for (const t of (m.ties || []).filter((x) => x.org !== m.org && x.tie === 'joined')) {
+      rows.push(`<li><b>${escapeHtml(title)}</b> has joined <b>${escapeHtml(t.orgDisplay || t.org)}</b><div class="sub">Joined means membership on the member's own bill: shared catalogue and brain, everything else stays theirs.</div></li>`);
+    }
   } else if (m.tie === 'joined' && m.org) {
     rows.push(`<li><b>${escapeHtml(title)}</b> has joined <b>${escapeHtml(m.orgDisplay || m.org)}</b><div class="sub">Joined means membership on the member's own bill: shared catalogue and brain, everything else stays theirs.</div></li>`);
+    for (const t of (m.ties || []).filter((x) => x.org !== m.org && x.tie === 'joined')) {
+      rows.push(`<li><b>${escapeHtml(title)}</b> has also joined <b>${escapeHtml(t.orgDisplay || t.org)}</b><div class="sub">Same loose tie, another community.</div></li>`);
+    }
   } else if (m.tier === 'rock') {
     rows.push(`<li><b>${escapeHtml(title)}</b> is a rock, so it is the anchor rather than the anchored.${typeof m.members === 'number' ? ` It carries ${m.members} member${m.members === 1 ? '' : 's'}.` : ''}</li>`);
   } else {
@@ -223,16 +236,26 @@ function assemble({ minerals = [], edges = [], boxes = [] }) {
     });
   }
   // ties add the relationship to a row the mirror already knows, or stand alone
-  // for a mineral that has not registered yet
+  // for a mineral that has not registered yet.
+  //
+  // A mineral may hold SEVERAL ties at once (one anchor + any number of joins:
+  // run-6 audit, 2026-08-17 — test-pebble-sam anchored to qa-r2-gmail AND
+  // joined to e2e-a rendered only the anchor, so the join existed on the rock's
+  // panel and nowhere on the member's own account). Every tie lands in
+  // row.ties; the primary slot (row.tie/org) is the anchor when one exists,
+  // else the first join, purely for the headline line.
   for (const e of edges) {
     if (!e || (e.role && e.role !== 'member')) continue;
     const key = keyOf(e.slug || e.box || e.org);
     const row = rows.get(key) || { key, name: e.slug || e.box || e.org, host: e.box || '', status: 'active' };
-    row.org = e.org;
-    row.orgDisplay = e.org_display || e.org;
-    row.tie = e.rel || 'joined';
-    row.status = e.status || 'active';
-    row.ownedByOrg = e.owner === 'org';
+    const tie = { org: e.org, orgDisplay: e.org_display || e.org, tie: e.rel || 'joined', status: e.status || 'active', ownedByOrg: e.owner === 'org' };
+    row.ties = (row.ties || []).filter((t) => t.org !== tie.org).concat([tie]);
+    const primary = row.ties.find((t) => t.tie === 'anchored') || row.ties[0];
+    row.org = primary.org;
+    row.orgDisplay = primary.orgDisplay;
+    row.tie = primary.tie;
+    row.status = primary.status;
+    row.ownedByOrg = primary.ownedByOrg;
     if (!row.tier) row.tier = e.tier || '';
     rows.set(key, row);
   }
