@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en" class="nojs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download Crads-AI</title>
+<meta name="description" content="Download the Crads-AI desktop app for Windows or Mac.">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABhklEQVR42mNgGGyAV1BcildQvI1XUPwir6D4T15B8f8U4p9Qs0BmShGyPIFXUPwbFSzFhUFmJ+Cz/D+dcAK2YP9GRwd8Q4kOaPwQ1CgqJvk/0Uvj/5wik/9H+mz/35jtCMYgNkgMJAdSQ6Qj2pAdcJGQhpJwHbBljxc748UgNSC1RDjgIrIDcKZ2DWWZ/xsaLDAsOjPZ7v/mJkswBrHR5UF6QHrx5Q5kB+C0HBS8yAY3xOv/N9CUw1ALEgPJIasF6cXnCIIOQPY5yKfYLMbmEJBa5JAgywGgeES2XFSc6MQFVovsCCMtedIcAErJyAmOGJ+jY31Nuf+ra83/d6UZkh4CoOyEHOe0Kg9wOgCUpynxPQwLSMr/N8nP/e88pf+/RXXFf0ldQ+IcAEv5oOxFiQ/t2pv/+29aBcceC2eDHUXQAbD4ByUkci0H+RbZchhW8/UbAg4Y8CgY8EQ44NlwwAuiAS+KB0VlRO/qeMAbJAPeJBvwRunANssHvGMyKLpmg6JzOhAAAKk1Ca5ZgCEjAAAAAElFTkSuQmCC">
+<style>
+  /* Download page. Same design language and token block as /join (which ships as a
+     single static file with no external fetches); keep them in lockstep. */
+  :root{
+    --paper:#F7F5EF; --card:#FFFFFF; --card-2:#F1EFE7; --line:#E3E1D6; --line-2:#D3D1C4;
+    --ink:#1F2D24; --soft:#5C6B60; --soft-2:#4F5D53; --faint:#8A968C;
+    --accent:#A4582C; --accent-hi:#C2703D; --accent-soft:color-mix(in srgb,#A4582C 10%,transparent); --on-accent:#FFFFFF;
+    --good:#4E7A55; --warn:#7E6C1E; --bad:#B3402E;
+    --focus:0 0 0 2px #F7F5EF, 0 0 0 4px #A4582C;
+    --shadow-1:0 1px 2px rgba(31,45,36,.05),0 4px 16px -8px rgba(31,45,36,.10);
+    --shadow-2:0 2px 6px rgba(31,45,36,.06),0 16px 40px -16px rgba(31,45,36,.18);
+    --sans:'Inter',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --serif:"Palatino Linotype",Palatino,Georgia,serif;
+    --r-input:8px; --r-btn:10px; --r-card:14px;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#161A16; --card:#1D231E; --card-2:#232A24; --line:#2E362F; --line-2:#3B453C;
+      --ink:#E9ECE6; --soft:#9AA69B; --soft-2:#ABB5AC; --faint:#6F7B70;
+      --accent:#D08A52; --accent-hi:#DEA06C; --accent-soft:color-mix(in srgb,#D08A52 12%,transparent); --on-accent:#1C1108;
+      --good:#7FA884; --warn:#CBB755; --bad:#D9705C;
+      --focus:0 0 0 2px #161A16, 0 0 0 4px #D08A52;
+      --shadow-1:0 1px 2px rgba(0,0,0,.25),0 4px 16px -8px rgba(0,0,0,.4);
+      --shadow-2:0 2px 6px rgba(0,0,0,.3),0 16px 40px -16px rgba(0,0,0,.55);
+      color-scheme:dark;
+    }
+    body{--card:#262E25;--card-2:#2C342B}
+    .card{border-color:color-mix(in srgb,var(--soft) 35%,var(--line-2))}
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px}
+  .wrap{max-width:480px;width:100%}
+
+  .brand{display:flex;align-items:center;gap:12px;margin:0 0 24px}
+  .brand svg{width:36px;height:36px;flex:none}
+  .brand svg rect{stroke:var(--line-2);stroke-width:1}
+  .brand .wordmark{font-family:var(--serif);font-size:18px;letter-spacing:.01em;color:var(--ink)}
+  .brand .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft-2);margin-top:2px;font-weight:500}
+
+  h1{font-size:20px;letter-spacing:-.015em;margin:0 0 4px;font-weight:650}
+  p{margin:8px 0;color:var(--soft-2)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:24px;margin-top:16px;box-shadow:var(--shadow-1)}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:var(--on-accent);border:1px solid var(--accent);border-radius:var(--r-btn);padding:11px 20px;font-size:14px;font-weight:650;font-family:inherit;text-decoration:none;cursor:pointer;transition:background .12s ease,border-color .12s ease,box-shadow .12s ease}
+  .btn:hover{background:var(--accent-hi);border-color:var(--accent-hi)}
+  .btn:active{transform:translateY(1px)}
+  .btn:focus-visible{outline:none;box-shadow:var(--focus)}
+  /* the one thing to press: full width, and it carries the file it fetches */
+  .btn.primary{width:100%;padding:14px 20px;font-size:15px;flex-direction:column;gap:3px}
+  .btn.primary .sub{font-size:11.5px;font-weight:500;font-family:var(--mono);opacity:.85;letter-spacing:.02em}
+
+  ol.stepslist{list-style:none;counter-reset:s;margin:14px 0 4px;padding:0}
+  ol.stepslist li{counter-increment:s;display:flex;gap:12px;align-items:baseline;padding:7px 0;font-size:13px;line-height:1.55;color:var(--soft-2)}
+  ol.stepslist li+li{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
+  ol.stepslist li::before{content:counter(s);flex:none;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--line-2);background:var(--card-2);color:var(--ink);font-family:var(--mono);font-size:11px;font-weight:500;transform:translateY(3px)}
+  ol.stepslist b{color:var(--ink);font-weight:600}
+
+  /* the security warning: a heads-up, not an alarm. --warn mixed toward ink for AA. */
+  .heads{margin-top:16px;border:1px solid color-mix(in srgb,var(--warn) 35%,var(--line));background:color-mix(in srgb,var(--warn) 7%,var(--card));border-radius:var(--r-card);padding:16px 18px}
+  .heads h2{font-size:13.5px;font-weight:650;margin:0 0 6px;color:var(--ink);display:flex;align-items:center;gap:8px}
+  .heads h2 svg{width:15px;height:15px;flex:none;color:color-mix(in srgb,var(--warn) 78%,var(--ink))}
+  .heads p{margin:6px 0 0;font-size:13px;color:var(--soft-2)}
+  .heads b{color:var(--ink);font-weight:600}
+
+  .hint{font-size:13px;color:var(--soft-2);line-height:1.6;margin-top:14px}
+  .hint b{color:var(--ink);font-weight:600}
+  a.q{color:var(--accent);text-decoration:none;border-radius:6px}
+  a.q:hover{text-decoration:underline}
+  a.q:focus-visible{outline:none;box-shadow:var(--focus)}
+  .foot{font-size:12.5px;color:var(--soft-2);line-height:1.65;margin-top:20px;border-top:1px solid var(--line);padding-top:16px}
+  .foot p{margin:0}
+  .foot p+p{margin-top:14px}
+  .other{margin-top:12px;font-size:12.5px;color:var(--soft-2);text-align:center}
+
+  /* one OS is shown, the other is a quiet line; no-JS reveals both */
+  .osblock{display:none}
+  .osblock.on{display:block}
+  #mobile{display:none}
+  html.nojs .osblock{display:block}
+  html.nojs #pickline{display:none}
+
+  @media (prefers-reduced-motion:reduce){
+    .btn{transition:none}
+    .btn:active{transform:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="1" y="1" width="62" height="62" rx="14" fill="#1F2D24"/>
+      <path d="M47.63 43.15 A19.2 19.2 0 1 1 47.63 20.85" fill="none" stroke="#C2703D" stroke-width="5.44" stroke-linecap="round"/>
+      <circle cx="51.2" cy="32" r="5.63" fill="#7FA884"/>
+    </svg>
+    <div>
+      <div class="wordmark">Crads-AI</div>
+      <div class="tag">Your private assistant</div>
+    </div>
+  </div>
+
+  <h1>Download the app</h1>
+  <p id="pickline">One download, then it keeps itself up to date.</p>
+
+  <!-- Windows -->
+  <div class="osblock" id="win">
+    <div class="card">
+      <a class="btn primary" id="winbtn"
+         href="https://github.com/cradsdavis-cell/crads-ai-app/releases/download/wizard-app/crads-ai.exe">
+        Download for Windows
+        <span class="sub">crads-ai.exe &middot; 86 MB</span>
+      </a>
+      <div class="heads">
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
+          Windows will warn you. That's expected.
+        </h2>
+        <p>The app isn't code-signed yet, so you'll get a blue <b>"Windows protected your PC"</b> box the first time you open it. Click <b>More info</b>, then <b>Run anyway</b>. You'll only see it once.</p>
+      </div>
+      <ol class="stepslist">
+        <li><span><b>Open the file</b> once it finishes downloading.</span></li>
+        <li><span><b>Click through the warning</b> as above.</span></li>
+        <li><span><b>It installs itself</b> and adds a Start menu and desktop icon.</span></li>
+      </ol>
+    </div>
+    <p class="other">On a Mac instead? <a class="q" href="https://github.com/cradsdavis-cell/crads-ai-app/releases/download/wizard-app/crads-ai-mac.zip">Download the Mac version</a></p>
+  </div>
+
+  <!-- Mac -->
+  <div class="osblock" id="mac">
+    <div class="card">
+      <a class="btn primary" id="macbtn"
+         href="https://github.com/cradsdavis-cell/crads-ai-app/releases/download/wizard-app/crads-ai-mac.zip">
+        Download for Mac
+        <span class="sub">crads-ai-mac.zip &middot; 36 MB</span>
+      </a>
+      <div class="heads">
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
+          Your Mac will refuse it once. That's expected.
+        </h2>
+        <p>The app isn't signed by Apple yet, so a double-click won't open it. <b>Right-click</b> the icon and choose <b>Open</b> instead, then confirm.</p>
+        <p>If your Mac still refuses, open <b>System Settings</b> &rsaquo; <b>Privacy &amp; Security</b>, scroll down, and click <b>Open Anyway</b> next to the Crads-AI line. Newer macOS versions send you there rather than offering the right-click route.</p>
+      </div>
+      <ol class="stepslist">
+        <li><span><b>Unzip</b> the download, then drag <b>Crads-AI</b> to your Applications folder.</span></li>
+        <li><span><b>Right-click it and choose Open</b>, as above. Only the first time.</span></li>
+        <li><span><b>It's ready.</b> Every run after that is a normal double-click.</span></li>
+      </ol>
+    </div>
+    <p class="other">On Windows instead? <a class="q" href="https://github.com/cradsdavis-cell/crads-ai-app/releases/download/wizard-app/crads-ai.exe">Download the Windows version</a></p>
+  </div>
+
+  <!-- Phones cannot run a desktop app; a dead-end .exe helps nobody (same rule as /join) -->
+  <div class="card" id="mobile">
+    <p><b>This one needs a computer.</b> Crads-AI is a desktop app, so it won't install on a phone or tablet.</p>
+    <p class="hint">Open <b>crads-ai.com/download</b> on your laptop or desktop and it'll pick the right version by itself.</p>
+  </div>
+
+  <div class="foot">
+    <p>Everything runs on your own machine. Your credentials go only to your own cloud providers, never through us.</p>
+    <p>Stuck on any of this? Reply to whoever sent you here and say where it stopped. Small reports are the useful ones.</p>
+  </div>
+</div>
+
+<script>
+  document.documentElement.classList.remove('nojs');
+  (function () {
+    var ua = navigator.userAgent || '';
+    // Order matters: iPad reports "Mac" in recent iPadOS, so phones/tablets go first.
+    var id = /iPhone|iPad|iPod|Android|Mobile/i.test(ua) ? 'mobile'
+           : /Mac|Darwin/i.test(ua) ? 'mac'
+           : /Windows|Win32|Win64/i.test(ua) ? 'win'
+           : null;
+    if (id === 'mobile') {
+      document.getElementById('mobile').style.display = 'block';
+      document.getElementById('pickline').textContent = '';
+      return;
+    }
+    if (id) {
+      document.getElementById(id).classList.add('on');
+      return;
+    }
+    // Unknown platform: show both rather than guessing wrong.
+    document.getElementById('win').classList.add('on');
+    document.getElementById('mac').classList.add('on');
+    document.getElementById('pickline').textContent = 'One download, then it keeps itself up to date. Pick the one that matches your computer.';
+  })();
+</script>
+</body>
+</html>

@@ -199,11 +199,16 @@
     return { ok: true, org: org, slug: slug, anchor: f[6] || '', appUrl: 'crads-ai://join/' + raw };
   }
   function downloadFor(ua){
-    var releases = 'https://github.com/cradsdavis-cell/crads-ai-app/releases/latest';
-    if (/iPhone|iPad|Android|Mobile/i.test(ua)) return { mobile: true, label: 'Download the app', url: releases };
-    if (/Windows/i.test(ua)) return { label: 'Download for Windows', url: releases };
-    if (/Mac/i.test(ua)) return { label: 'Download for Mac', url: releases };
-    return { label: 'Download the app', url: releases };
+    // ASSET urls, not the releases page. /releases/latest 302s to the release LIST
+    // here, because the rolling build is a prerelease and GitHub excludes those from
+    // `latest`, so every button dropped the member on four files and asked them to
+    // pick. Keep in lockstep with wizard/join-page/join-parse.mjs.
+    var rel = 'https://github.com/cradsdavis-cell/crads-ai-app/releases/download/wizard-app';
+    // Phones first: recent iPadOS reports "Mac" in its UA.
+    if (/iPhone|iPad|iPod|Android|Mobile/i.test(ua)) return { mobile: true, label: 'Download the app', url: rel + '/crads-ai.exe' };
+    if (/Windows/i.test(ua)) return { label: 'Download for Windows', url: rel + '/crads-ai.exe' };
+    if (/Mac/i.test(ua)) return { label: 'Download for Mac', url: rel + '/crads-ai-mac.zip' };
+    return { label: 'Download the app', url: rel + '/crads-ai.exe' };
   }
 
   var $ = function(id){ return document.getElementById(id); };
