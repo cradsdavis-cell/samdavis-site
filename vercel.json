@@ -153,6 +153,18 @@
     {
       "source": "/account/admin/client",
       "destination": "/api/account/admin/client"
+    },
+    {
+      "source": "/download",
+      "destination": "/api/download"
+    },
+    {
+      "source": "/download/",
+      "destination": "/api/download"
+    },
+    {
+      "source": "/download/:asset",
+      "destination": "/api/download?asset=:asset"
     }
   ],
   "headers": [
