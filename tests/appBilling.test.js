@@ -91,3 +91,19 @@ test('coaching URLs still answer for existing clients (the handlers survive unro
     assert.ok(fs.existsSync(path.join(__dirname, '..', 'api', 'account', f)), `${f} still exists at its old URL`);
   }
 });
+
+test('every line carries its breakdown: component × quantity = amount, and the anchored pebble shows what its rock carries', () => {
+  const prices = { tier: 10000, hosting: 2000, direct: 3000 };
+  const v = billingView({ user: { billing_enabled: true }, minerals: MINERALS, events: EVENTS, bands: BANDS, now: NOW, prices });
+  const rock = v.lines[0];
+  assert.deepEqual(rock.parts.map((p) => [p.label, p.unit, p.qty, p.amount]), [
+    ['Tier 1 (2 members)', 10000, 1, 10000],
+    ['Hosting, 2 boxes', 2000, 2, 4000],
+  ]);
+  assert.equal(rock.parts.reduce((s, p) => s + p.amount, 0), rock.monthly, 'the parts sum to the line');
+  assert.deepEqual(v.lines[1].parts, [{ label: 'Hosting, 1 box', unit: 3000, qty: 1, amount: 3000 }]);
+  const anchored = v.lines[2].parts[0];
+  assert.equal(anchored.carried, 2000, 'what the rock pays for this box');
+  assert.equal(anchored.amount, 0, 'and nothing lands on this account');
+  assert.match(src, /So far this period/, 'the page shows the accrued figure per line');
+});

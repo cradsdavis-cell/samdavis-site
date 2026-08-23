@@ -96,6 +96,19 @@ module.exports = async function handler(req, res) {
     return (m && (m.label || m.host)) || org;
   };
   const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+  // THE BREAKDOWN under every line (Sam, 2026-08-23: "more of a breakdown of
+  // the prices on each listed mineral"): each component as unit × quantity =
+  // amount, then the month total and what has accrued so far this period.
+  const breakdown = (l) => {
+    const rows = (l.parts || []).map((pt) => `<div>${escapeHtml(pt.label)}</div>
+    <div class="u">${pt.carried !== undefined ? `${money(pt.carried)} to the rock` : `${money(pt.unit)} &times; ${pt.qty}`}</div>
+    <div class="a">${pt.carried !== undefined ? `${money(0)} to you` : money(pt.amount)}</div>`).join('');
+    const total = l.kind === 'pebble-anchored'
+      ? ''
+      : `<div class="t">Per month</div><div class="u"></div><div class="t a">${money(l.monthly)}</div>
+    <div>So far this period</div><div class="u">${l.days_so_far} of ${view.daysInPeriod} days</div><div class="a">${money(l.so_far)}</div>`;
+    return `<div class="bparts">${rows}${total}</div>`;
+  };
 
   // UX audit 2026-08-23: one idea per block, the money first. Scoped styles
   // reuse the shell's tokens only (no new colours, fonts or spacing values).
@@ -115,8 +128,13 @@ module.exports = async function handler(req, res) {
   .blines .m{grid-column:1;grid-row:2;color:var(--soft);font-size:.92em}
   .blines .amt{grid-column:2;grid-row:1/span 2;align-self:center;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap;text-align:right}
   .blines .chip{margin-left:.5em;vertical-align:middle}
+  .bparts{grid-column:1/-1;margin:.55em 0 0;padding:.55em 0 0;border-top:1px dashed var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:.25em 1.2em;font-size:.9em;color:var(--soft);font-variant-numeric:tabular-nums}
+  .bparts .u{text-align:right;white-space:nowrap;color:var(--faint)}
+  .bparts .a{text-align:right;white-space:nowrap;color:var(--ink)}
+  .bparts .t{color:var(--ink);font-weight:600}
+  .bparts .t.u,.bparts .t.a{font-weight:600}
   .bfoot{color:var(--faint);font-size:.88em;margin:.8em .2em 0}
-  @media (max-width:480px){.bstat b{font-size:1.7em}.blines li{grid-template-columns:1fr}.blines .amt{grid-row:3;grid-column:1;text-align:left}}
+  @media (max-width:480px){.bstat b{font-size:1.7em}.blines li{grid-template-columns:1fr}.blines .amt{grid-row:3;grid-column:1;text-align:left}.bparts{grid-template-columns:minmax(0,1fr) auto}.bparts .u{display:none}}
 </style>
 <h1>Billing</h1>
 <p class="lead">One account, one bill, for everything it holds.</p>`;
@@ -155,16 +173,16 @@ module.exports = async function handler(req, res) {
           const tierN = l.tier.replace('crads-rock-tier-', '');
           return `<li><div class="n">${escapeHtml(l.label)}<span class="chip">Rock</span></div>
   <div class="m">${plural(l.seats, 'member', 'members')} &middot; runs ${plural(l.hosting, 'box', 'boxes')}${l.hosting > 1 ? ` (its own + ${plural(l.hosting - 1, 'anchored member', 'anchored members')})` : ''} &middot; tier ${escapeHtml(tierN)}</div>
-  <div class="amt">${money(l.monthly)}<span style="color:var(--faint);font-weight:400">/mo</span></div></li>`;
+  <div class="amt">${money(l.monthly)}<span style="color:var(--faint);font-weight:400">/mo</span></div>${breakdown(l)}</li>`;
         }
         if (l.kind === 'pebble-direct') {
           return `<li><div class="n">${escapeHtml(l.label)}<span class="chip">Pebble</span></div>
   <div class="m">Hosted by Crads-AI directly</div>
-  <div class="amt">${money(l.monthly)}<span style="color:var(--faint);font-weight:400">/mo</span></div></li>`;
+  <div class="amt">${money(l.monthly)}<span style="color:var(--faint);font-weight:400">/mo</span></div>${breakdown(l)}</li>`;
         }
         return `<li><div class="n">${escapeHtml(l.label)}<span class="chip">Pebble</span></div>
   <div class="m">Hosted by ${escapeHtml(labelOfOrg(l.anchor))}</div>
-  <div class="amt" style="color:var(--faint);font-weight:400">on their bill</div></li>`;
+  <div class="amt" style="color:var(--faint);font-weight:400">on their bill</div>${breakdown(l)}</li>`;
       }).join('');
       main += `<h2 class="cardh2" style="margin-top:1.6em">What you hold</h2><ul class="blines">${rows}</ul>
 <p class="bfoot">A rock pays a tier fee plus hosting for each box it runs. Members, joined or anchored, are never charged per head; how many you have sets the tier.</p>`;
