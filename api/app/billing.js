@@ -51,6 +51,17 @@ module.exports = async function handler(req, res) {
     rec.billing_enabled = on;
     rec.billing_enabled_at = on ? Date.now() : (rec.billing_enabled_at || null);
     await kv.setUser(user.email, rec);
+    // every rock this account HOLDS learns the new state: the worker's gate for
+    // acts that grow a rock's hosting line reads licence:<org>, not the member's
+    // token. Best-effort: a directory that cannot answer must not undo the flip;
+    // the next flip (or the backfill) repeats the mirror.
+    const dirAfter = directoryFor(rec);
+    const held = await dirAfter.minerals().catch(() => ({ ok: false }));
+    if (held.ok) {
+      for (const m of held.minerals) {
+        if (m.held_by === 'you' && m.tier === 'rock') await dirAfter.setLicence(m.mineral_id).catch(() => ({ ok: false }));
+      }
+    }
     res.setHeader('Location', '/app/billing?saved=1');
     return res.status(303).end();
   }

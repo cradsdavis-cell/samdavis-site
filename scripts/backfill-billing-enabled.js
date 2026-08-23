@@ -14,6 +14,7 @@
 const fs = require('fs');
 const { execFileSync } = require('child_process');
 const { defaultKv } = require('../lib/kv');
+const { directoryFor } = require('../lib/directory');
 
 const APPLY = process.argv.includes('--apply');
 const argOf = (f) => { const i = process.argv.indexOf(f); return i > 0 ? process.argv[i + 1] : null; };
@@ -45,6 +46,15 @@ const ARRIVALS = argOf('--arrivals') || '/home/sam/second-brain/cockpit/data/arr
       user.billing_enabled_at = Date.now();
       user.billing_enabled_by = 'backfill-2026-08-23';
       await kv.setUser(email, user);
+      // mirror onto every rock they hold (licence:<org>), same as the page does
+      const dir = directoryFor(user);
+      const held = await dir.minerals().catch(() => ({ ok: false }));
+      for (const m of (held.ok ? held.minerals : [])) {
+        if (m.held_by === 'you' && m.tier === 'rock') {
+          const r = await dir.setLicence(m.mineral_id).catch((e) => ({ ok: false, reason: String(e) }));
+          console.log(`    licence ${m.org || m.host}: ${r.ok ? r.status : 'FAILED ' + r.reason}`);
+        }
+      }
     }
     changed++;
   }
