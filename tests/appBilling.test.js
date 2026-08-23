@@ -146,3 +146,19 @@ test('the v3 ladder: seven tiers, fine at the bottom, sorted by seats not by key
   assert.equal(v.lines[0].hosting, 0, 'a rock with no anchored members hosts nothing');
   assert.equal(v.lines[0].monthly, 8900, 'and pays only its tier: the own box is folded into it, a little above a solo pebble');
 });
+
+test('GET /api/pricing publishes the rate card, CORS-open, so the box card reads one source', async () => {
+  const handler = require('../api/pricing');
+  const headers = {}; let body = '', code = 0;
+  const res = { setHeader: (k, v) => { headers[k] = v; }, status: (c) => { code = c; return res; }, send: (b) => { body = b; return res; }, end: () => res };
+  await handler({ method: 'GET' }, res);
+  assert.equal(code, 200);
+  assert.equal(headers['Access-Control-Allow-Origin'], '*');
+  const j = JSON.parse(body);
+  assert.equal(j.charging, false);
+  assert.equal(j.direct, 7900);
+  assert.equal(j.hosting, 4900);
+  assert.equal(j.tiers.length, 7);
+  assert.equal(j.tiers[0].fee, 8900);
+  assert.equal(j.tiers[6].seats, null, 'the top tier is open-ended');
+});
