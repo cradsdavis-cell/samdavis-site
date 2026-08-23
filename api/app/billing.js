@@ -22,7 +22,8 @@ const { isAdmin } = require('../../lib/auth');
 const { defaultKv } = require('../../lib/kv');
 const { renderAppShell, escapeHtml } = require('../../lib/appShell');
 const { directoryFor } = require('../../lib/directory');
-const { billingView, ZERO } = require('../../lib/appBilling');
+const { billingView } = require('../../lib/appBilling');
+const { priceTable } = require('../../lib/pricing');
 
 function parseBody(req) {
   if (req.body && typeof req.body === 'object') return Promise.resolve(req.body);
@@ -85,7 +86,7 @@ module.exports = async function handler(req, res) {
     typeof dir.events === 'function' ? dir.events(400).catch(() => ({ ok: false })) : { ok: false },
   ]);
   const view = billingView({
-    user, prices: ZERO,
+    user, prices: priceTable(),
     minerals: minR.ok ? minR.minerals : [],
     events: evR.ok ? evR.events : [],
   });
@@ -155,14 +156,16 @@ module.exports = async function handler(req, res) {
 
   // THE STATEMENT: the two figures are the page
   main += `<div class="card">
-  <div class="chips"><span class="chip">${view.armed ? escapeHtml(view.period) : 'Nothing is charged today'}</span></div>
+  <div class="chips"><span class="chip">${view.charging ? escapeHtml(view.period) : (view.priced ? 'Indicative pricing · nothing is charged yet' : 'Nothing is charged today')}</span></div>
   <div class="bstat">
     <div><b>${money(view.soFar)}</b><span>so far this period</span></div>
     <div><b>${money(view.monthly)}</b><span>per month at what you hold now</span></div>
   </div>
-  <div class="note">${view.armed
+  <div class="note">${view.charging
     ? `Pro-rated by the days each mineral existed this period. Your Stripe invoice is the record; this is the running view.`
-    : `Launch pricing is $0 while Crads-AI is in beta. When prices are set, your figures appear here first and your invoice follows.`}</div>
+    : view.priced
+      ? `What this account would pay at the indicative rates, pro-rated by the days each mineral existed this period. Crads-AI is in beta: no card is charged and no invoice is sent until pricing is switched on, and you will be told first.`
+      : `Launch pricing is $0 while Crads-AI is in beta. When prices are set, your figures appear here first and your invoice follows.`}</div>
 </div>`;
 
   // THE LINES
@@ -185,7 +188,7 @@ module.exports = async function handler(req, res) {
   <div class="amt" style="color:var(--faint);font-weight:400">on their bill</div>${breakdown(l)}</li>`;
       }).join('');
       main += `<h2 class="cardh2" style="margin-top:1.6em">What you hold</h2><ul class="blines">${rows}</ul>
-<p class="bfoot">A rock pays a tier fee plus hosting for each box it runs. Members, joined or anchored, are never charged per head; how many you have sets the tier.</p>`;
+<p class="bfoot">A rock pays a tier fee plus hosting for each box it runs. Members, joined or anchored, are never charged per head; how many you have sets the tier.${view.priced && !view.charging ? ' Rates shown are indicative and may change before pricing is switched on.' : ''}</p>`;
     } else {
       main += `<div class="empty" style="margin-top:1.2em">You hold no minerals yet, so there is nothing to bill.</div>`;
     }

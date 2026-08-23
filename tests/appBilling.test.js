@@ -107,3 +107,27 @@ test('every line carries its breakdown: component × quantity = amount, and the 
   assert.equal(anchored.amount, 0, 'and nothing lands on this account');
   assert.match(src, /So far this period/, 'the page shows the accrued figure per line');
 });
+
+test('the indicative rate card (Sam, 11 Aug) prices the page without charging anyone', () => {
+  const { priceTable, INDICATIVE } = require('../lib/pricing');
+  assert.equal(INDICATIVE.charging, false, 'display only until a price is armed on Stripe');
+  const v = billingView({ user: { billing_enabled: true }, minerals: MINERALS, events: EVENTS, now: NOW, prices: priceTable() });
+  assert.equal(v.priced, true);
+  assert.equal(v.charging, false);
+  const rock = v.lines[0];
+  assert.equal(rock.tier, 'crads-rock-tier-1', 'bands come from the card when the caller passes none');
+  assert.equal(rock.monthly, 14900 + 4900 * 2, '$149 tier + 2 × $49 hosting');
+  assert.equal(v.lines[1].monthly, 19900, 'a direct pebble at $199');
+  assert.match(src, /Indicative pricing/, 'the page says the numbers are indicative');
+  assert.match(src, /no card is charged and no invoice is sent/, 'and that nothing is collected');
+});
+
+test('a bigger rock pays a bigger tier fee: the band picks the tier, the tier picks the fee', () => {
+  const { priceTable } = require('../lib/pricing');
+  const many = Array.from({ length: 60 }, (_, i) => ({ type: 'member-join', at: NOW - 1000, org: 'acme-org', e: `h${i}`, role: 'member', slug: `p${i}`, rel: 'joined', status: 'active' }));
+  const v = billingView({ user: { billing_enabled: true }, minerals: [MINERALS[0]], events: many, now: NOW, prices: priceTable() });
+  assert.equal(v.lines[0].seats, 60);
+  assert.equal(v.lines[0].tier, 'crads-rock-tier-2');
+  assert.equal(v.lines[0].parts[0].amount, 44900);
+  assert.equal(v.lines[0].monthly, 44900 + 4900, '60 joined members cost nothing per head; the tier stepped up once');
+});
