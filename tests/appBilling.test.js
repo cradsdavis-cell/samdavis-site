@@ -116,7 +116,7 @@ test('the indicative rate card (pricing v3, 23 Aug) prices the page without char
   assert.equal(v.charging, false);
   const rock = v.lines[0];
   assert.equal(rock.tier, 'crads-rock-tier-1', '2 seats sits in the 3-seat tier; bands come from the card');
-  assert.equal(rock.monthly, 2900 + 4900 * 1, '$29 tier + 1 × $49 hosting for the anchored member');
+  assert.equal(rock.monthly, 7900 + 4900 * 1, '$79 tier (own box folded in) + 1 × $49 hosting for the anchored member');
   assert.equal(v.lines[1].monthly, 7900, 'a direct pebble at $79');
   assert.match(src, /Indicative pricing/, 'the page says the numbers are indicative');
   assert.match(src, /no card is charged and no invoice is sent/, 'and that nothing is collected');
@@ -128,8 +128,8 @@ test('a bigger rock pays a bigger tier fee: the band picks the tier, the tier pi
   const v = billingView({ user: { billing_enabled: true }, minerals: [MINERALS[0]], events: many, now: NOW, prices: priceTable() });
   assert.equal(v.lines[0].seats, 60);
   assert.equal(v.lines[0].tier, 'crads-rock-tier-6', '60 seats: the 100-seat tier');
-  assert.equal(v.lines[0].parts[0].amount, 49900);
-  assert.equal(v.lines[0].monthly, 49900, '60 joined members cost the rock nothing per head and no hosting; only the tier moved');
+  assert.equal(v.lines[0].parts[0].amount, 54900);
+  assert.equal(v.lines[0].monthly, 54900, '60 joined members cost the rock nothing per head and no hosting; only the tier moved');
 });
 
 
@@ -137,12 +137,12 @@ test('the v3 ladder: seven tiers, fine at the bottom, sorted by seats not by key
   const { priceTable, INDICATIVE } = require('../lib/pricing');
   const t = priceTable();
   assert.equal(Object.keys(INDICATIVE.tiers).length, 7);
-  assert.equal(tierKeyFor(2, t.bands), 'crads-rock-tier-1', 'a two-pebble rock is tier 1 at $29');
+  assert.equal(tierKeyFor(2, t.bands), 'crads-rock-tier-1', 'a two-pebble rock is tier 1 at $79');
   assert.equal(tierKeyFor(7, t.bands), 'crads-rock-tier-3');
   assert.equal(tierKeyFor(40, t.bands), 'crads-rock-tier-5', 'IC-sized');
   assert.equal(tierKeyFor(500, t.bands), 'crads-rock-tier-7', 'open-ended top');
-  assert.equal(t.tierFee('crads-rock-tier-7'), 89900);
+  assert.equal(t.tierFee('crads-rock-tier-7'), 94900);
   const v = billingView({ user: { billing_enabled: true }, minerals: [MINERALS[0]], events: [], now: NOW, prices: t });
   assert.equal(v.lines[0].hosting, 0, 'a rock with no anchored members hosts nothing');
-  assert.equal(v.lines[0].monthly, 2900, 'and pays only its tier: the own box is inside it');
+  assert.equal(v.lines[0].monthly, 7900, 'and pays only its tier: the own box is folded into it');
 });

@@ -188,7 +188,7 @@ module.exports = async function handler(req, res) {
   <div class="amt" style="color:var(--faint);font-weight:400">on their bill</div>${breakdown(l)}</li>`;
       }).join('');
       main += `<h2 class="cardh2" style="margin-top:1.6em">What you hold</h2><ul class="blines">${rows}</ul>
-<p class="bfoot">A rock pays a tier fee, set by how many members it has, plus hosting for each anchored member. Its own box is included in the tier. Joined members host their own pebble and pay Crads-AI for it directly.${view.priced && !view.charging ? ' Rates shown are indicative and may change before pricing is switched on.' : ''}</p>`;
+<p class="bfoot">A rock pays a tier fee, set by how many members it has, plus hosting for each anchored member. Its own box is included in the tier fee. Joined members host their own pebble and pay Crads-AI for it directly.${view.priced && !view.charging ? ' Rates shown are indicative and may change before pricing is switched on.' : ''}</p>`;
     } else {
       main += `<div class="empty" style="margin-top:1.2em">You hold no minerals yet, so there is nothing to bill.</div>`;
     }
