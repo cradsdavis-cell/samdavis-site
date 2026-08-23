@@ -68,9 +68,10 @@ test('billingView with prices: a rock is TIER + HOSTING, seats are never money, 
 test('the page carries the switch, gates the four growing acts, and never gates a reducing one', () => {
   assert.match(src, /billing_enabled/, 'the switch is the user-record field');
   assert.match(src, /req\.method === 'POST'/, 'the user flips it');
-  assert.match(src, /cannot create a mineral, promote a pebble, anchor to a rock or receive a transfer/);
-  assert.match(src, /Leaving, downgrading and removing are never blocked/);
-  assert.match(src, /Nothing is being charged today/);
+  assert.match(src, /create minerals, promote a pebble, anchor to a rock (and|or) receive a transfer/, 'the four gated acts are named');
+  assert.match(src, /Leaving, downgrading and removing always work/, 'and the never-gated ones');
+  assert.match(src, /Nothing is charged today/);
+  assert.match(src, /onsubmit="return confirm\(/, 'turning billing OFF asks first and says what it blocks');
   assert.match(src, /Nothing is being charged either way/, 'an unreadable mineral list still cannot cost money');
   assert.ok(!/billingPortal/.test(src) && !/engagement/i.test(src), 'coaching stays out of the product page');
 });

@@ -90,29 +90,61 @@ module.exports = async function handler(req, res) {
     events: evR.ok ? evR.events : [],
   });
 
-  let main = `<h1>Billing</h1>
-<p class="lead">What this account pays for its minerals. One account, one bill, whatever it holds.</p>`;
+  // a rock's display label, for the anchored-pebble line (never a raw handle)
+  const labelOfOrg = (org) => {
+    const m = (minR.ok ? minR.minerals : []).find((x) => x.tier === 'rock' && x.org === org);
+    return (m && (m.label || m.host)) || org;
+  };
+  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
-  // THE SWITCH
-  main += `<div class="card">
-  <h2>${view.enabled ? 'Billing is set up' : 'Billing is not set up'}</h2>
-  <div class="sub">${view.enabled
-    ? 'This account can create minerals, promote a pebble, anchor to a rock and receive a transfer.'
-    : 'Until it is, this account cannot create a mineral, promote a pebble, anchor to a rock or receive a transfer. Leaving, downgrading and removing are never blocked.'}</div>
-  <form method="POST" action="/app/billing" style="margin-top:.8em">
+  // UX audit 2026-08-23: one idea per block, the money first. Scoped styles
+  // reuse the shell's tokens only (no new colours, fonts or spacing values).
+  let main = `<style>
+  .bstat{display:flex;gap:2.2em;flex-wrap:wrap;align-items:flex-end;margin:.4em 0 .6em}
+  .bstat b{display:block;font-size:2.1em;line-height:1.05;letter-spacing:-.01em;color:var(--ink);font-variant-numeric:tabular-nums}
+  .bstat span{display:block;color:var(--soft);font-size:.9em;margin-top:.25em}
+  .bstatus{display:flex;gap:1em;align-items:center;flex-wrap:wrap;justify-content:space-between;margin:0 0 1.2em;padding:.9em 1.1em;border:1px solid var(--line);border-radius:12px;background:var(--card-2)}
+  .bstatus .l{display:flex;gap:.8em;align-items:center;flex-wrap:wrap}
+  .bstatus .chip.on{background:var(--good);color:var(--card);border-color:var(--good)}
+  .bstatus .chip.off{background:var(--bad);color:var(--card);border-color:var(--bad)}
+  .bstatus form{margin:0}
+  .blines{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden}
+  .blines li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.3em 1.2em;align-items:baseline;padding:.95em 1.1em;border-top:1px solid var(--line)}
+  .blines li:first-child{border-top:none}
+  .blines .n{grid-column:1;grid-row:1;font-weight:600;color:var(--ink)}
+  .blines .m{grid-column:1;grid-row:2;color:var(--soft);font-size:.92em}
+  .blines .amt{grid-column:2;grid-row:1/span 2;align-self:center;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap;text-align:right}
+  .blines .chip{margin-left:.5em;vertical-align:middle}
+  .bfoot{color:var(--faint);font-size:.88em;margin:.8em .2em 0}
+  @media (max-width:480px){.bstat b{font-size:1.7em}.blines li{grid-template-columns:1fr}.blines .amt{grid-row:3;grid-column:1;text-align:left}}
+</style>
+<h1>Billing</h1>
+<p class="lead">One account, one bill, for everything it holds.</p>`;
+
+  // STATUS: the switch and its consequence, one line, not a card
+  main += `<div class="bstatus">
+  <div class="l">
+    <span class="chip ${view.enabled ? 'on' : 'off'}">Billing ${view.enabled ? 'on' : 'off'}</span>
+    <span class="sub" style="margin:0">${view.enabled
+      ? 'You can create minerals, promote a pebble, anchor to a rock and receive a transfer.'
+      : 'Turn billing on to create minerals, promote a pebble, anchor to a rock or receive a transfer. Leaving, downgrading and removing always work.'}</span>
+  </div>
+  <form method="POST" action="/app/billing"${view.enabled ? ` onsubmit="return confirm('Turn billing off?\\n\\nYou keep everything you hold. Until it is back on, this account cannot create a mineral, promote, anchor to a rock or receive a transfer.')"` : ''}>
     <input type="hidden" name="billing_enabled" value="${view.enabled ? 'off' : 'on'}">
-    <button type="submit">${view.enabled ? 'Switch billing off' : 'Set up billing'}</button>
+    <button class="act${view.enabled ? ' quiet' : ''}" type="submit">${view.enabled ? 'Turn off' : 'Turn billing on'}</button>
   </form>
-  <div class="note">Placeholder while pricing is off: the switch stands in for a card on file. Nothing is charged either way.</div>
 </div>`;
 
-  // THE NUMBER
+  // THE STATEMENT: the two figures are the page
   main += `<div class="card">
-  <h2>${view.armed ? 'This period' : 'Nothing is being charged today'}</h2>
-  <div class="sub"><b>${money(view.soFar)}</b> so far this period &middot; <b>${money(view.monthly)}</b> per month at current seats</div>
+  <div class="chips"><span class="chip">${view.armed ? escapeHtml(view.period) : 'Nothing is charged today'}</span></div>
+  <div class="bstat">
+    <div><b>${money(view.soFar)}</b><span>so far this period</span></div>
+    <div><b>${money(view.monthly)}</b><span>per month at what you hold now</span></div>
+  </div>
   <div class="note">${view.armed
-    ? `Period ${escapeHtml(view.period)}, ${view.daysInPeriod} days, pro-rated by the days each mineral existed. Your Stripe invoice is the record; this is the running view.`
-    : 'Crads-AI pricing is not switched on yet. These figures are computed from what you hold at launch pricing ($0) and become real the day prices arm, without this page changing.'}</div>
+    ? `Pro-rated by the days each mineral existed this period. Your Stripe invoice is the record; this is the running view.`
+    : `Launch pricing is $0 while Crads-AI is in beta. When prices are set, your figures appear here first and your invoice follows.`}</div>
 </div>`;
 
   // THE LINES
@@ -120,29 +152,27 @@ module.exports = async function handler(req, res) {
     if (view.lines.length) {
       const rows = view.lines.map((l) => {
         if (l.kind === 'rock') {
-          return `<div class="card">
-  <h2>${escapeHtml(l.label)}</h2>
-  <div class="sub">Rock &middot; ${escapeHtml(l.tier.replace('crads-rock-', ''))} &middot; ${l.seats} seat${l.seats === 1 ? '' : 's'} &middot; hosting &times; ${l.hosting} (own box${l.hosting > 1 ? ` + ${l.hosting - 1} anchored` : ''}) &middot; <b>${money(l.monthly)}/mo</b></div>
-  <div class="note">Seats are every member tie, joined or anchored; they set the tier and are never charged. Hosting counts the boxes this rock runs.</div>
-</div>`;
+          const tierN = l.tier.replace('crads-rock-tier-', '');
+          return `<li><div class="n">${escapeHtml(l.label)}<span class="chip">Rock</span></div>
+  <div class="m">${plural(l.seats, 'member', 'members')} &middot; runs ${plural(l.hosting, 'box', 'boxes')}${l.hosting > 1 ? ` (its own + ${plural(l.hosting - 1, 'anchored member', 'anchored members')})` : ''} &middot; tier ${escapeHtml(tierN)}</div>
+  <div class="amt">${money(l.monthly)}<span style="color:var(--faint);font-weight:400">/mo</span></div></li>`;
         }
         if (l.kind === 'pebble-direct') {
-          return `<div class="card">
-  <h2>${escapeHtml(l.label)}</h2>
-  <div class="sub">Pebble &middot; hosted directly &middot; <b>${money(l.monthly)}/mo</b></div>
-</div>`;
+          return `<li><div class="n">${escapeHtml(l.label)}<span class="chip">Pebble</span></div>
+  <div class="m">Hosted by Crads-AI directly</div>
+  <div class="amt">${money(l.monthly)}<span style="color:var(--faint);font-weight:400">/mo</span></div></li>`;
         }
-        return `<div class="card">
-  <h2>${escapeHtml(l.label)}</h2>
-  <div class="sub">Pebble &middot; anchored at ${escapeHtml(l.anchor)} &middot; billed on that rock, not here</div>
-</div>`;
+        return `<li><div class="n">${escapeHtml(l.label)}<span class="chip">Pebble</span></div>
+  <div class="m">Hosted by ${escapeHtml(labelOfOrg(l.anchor))}</div>
+  <div class="amt" style="color:var(--faint);font-weight:400">on their bill</div></li>`;
       }).join('');
-      main += `<h1 style="margin-top:1.6em;font-size:1.15em">What this account holds</h1>${rows}`;
+      main += `<h2 class="cardh2" style="margin-top:1.6em">What you hold</h2><ul class="blines">${rows}</ul>
+<p class="bfoot">A rock pays a tier fee plus hosting for each box it runs. Members, joined or anchored, are never charged per head; how many you have sets the tier.</p>`;
     } else {
-      main += `<p class="note" style="margin-top:1.2em">This account holds no minerals yet, so there is nothing that could be billed.</p>`;
+      main += `<div class="empty" style="margin-top:1.2em">You hold no minerals yet, so there is nothing to bill.</div>`;
     }
   } else {
-    main += `<div class="problem" style="margin-top:1.2em"><b>Could not read what this account holds just now.</b>
+    main += `<div class="problem" style="margin-top:1.2em"><b>Could not read what you hold just now.</b>
       <div class="note">${escapeHtml(minR.reason)}. Nothing is being charged either way.</div></div>`;
   }
 
