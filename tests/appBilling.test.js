@@ -47,7 +47,7 @@ test('billingView at $0: the structure stands, every figure is honestly zero, li
   assert.deepEqual(v.lines.map((l) => l.kind), ['rock', 'pebble-direct', 'pebble-anchored'], 'held only; the anchored pebble is shown but pointed at its rock');
   const rock = v.lines[0];
   assert.equal(rock.seats, 2, 'bob + cat; dan left');
-  assert.equal(rock.hosting, 2, 'own box + bob');
+  assert.equal(rock.hosting, 1, 'bob only: the own box is inside the tier (v3)');
   assert.equal(rock.tier, 'crads-rock-tier-1');
   assert.equal(rock.days_so_far, 6, 'built on the 18th, read at noon on the 23rd: 5.5 days rounds UP, never down to free');
   assert.equal(v.lines[1].days_so_far, 23, 'no build event: present since the 1st, so every day of the period so far');
@@ -58,11 +58,11 @@ test('billingView with prices: a rock is TIER + HOSTING, seats are never money, 
   const v = billingView({ user: { billing_enabled: true }, minerals: MINERALS, events: EVENTS, bands: BANDS, now: NOW, prices });
   assert.equal(v.armed, true);
   const rock = v.lines[0];
-  assert.equal(rock.monthly, 10000 + 2000 * 2, 'tier + 2 hosting; the joined member costs nothing');
-  assert.equal(rock.so_far, Math.round(14000 * 6 / 31));
+  assert.equal(rock.monthly, 10000 + 2000 * 1, 'tier + 1 hosting; the joined member costs the rock nothing');
+  assert.equal(rock.so_far, Math.round(12000 * 6 / 31));
   assert.equal(v.lines[1].monthly, 3000);
   assert.equal(v.lines[2].monthly, 0, 'an anchored pebble has no line of its own');
-  assert.equal(v.monthly, 17000);
+  assert.equal(v.monthly, 15000);
 });
 
 test('the page carries the switch, gates the four growing acts, and never gates a reducing one', () => {
@@ -98,7 +98,7 @@ test('every line carries its breakdown: component × quantity = amount, and the 
   const rock = v.lines[0];
   assert.deepEqual(rock.parts.map((p) => [p.label, p.unit, p.qty, p.amount]), [
     ['Tier 1 (2 members)', 10000, 1, 10000],
-    ['Hosting, 2 boxes', 2000, 2, 4000],
+    ['Hosting, 1 anchored member', 2000, 1, 2000],
   ]);
   assert.equal(rock.parts.reduce((s, p) => s + p.amount, 0), rock.monthly, 'the parts sum to the line');
   assert.deepEqual(v.lines[1].parts, [{ label: 'Hosting, 1 box', unit: 3000, qty: 1, amount: 3000 }]);
@@ -108,16 +108,16 @@ test('every line carries its breakdown: component × quantity = amount, and the 
   assert.match(src, /So far this period/, 'the page shows the accrued figure per line');
 });
 
-test('the indicative rate card (Sam, 11 Aug) prices the page without charging anyone', () => {
+test('the indicative rate card (pricing v3, 23 Aug) prices the page without charging anyone', () => {
   const { priceTable, INDICATIVE } = require('../lib/pricing');
   assert.equal(INDICATIVE.charging, false, 'display only until a price is armed on Stripe');
   const v = billingView({ user: { billing_enabled: true }, minerals: MINERALS, events: EVENTS, now: NOW, prices: priceTable() });
   assert.equal(v.priced, true);
   assert.equal(v.charging, false);
   const rock = v.lines[0];
-  assert.equal(rock.tier, 'crads-rock-tier-1', 'bands come from the card when the caller passes none');
-  assert.equal(rock.monthly, 14900 + 4900 * 2, '$149 tier + 2 × $49 hosting');
-  assert.equal(v.lines[1].monthly, 19900, 'a direct pebble at $199');
+  assert.equal(rock.tier, 'crads-rock-tier-1', '2 seats sits in the 3-seat tier; bands come from the card');
+  assert.equal(rock.monthly, 2900 + 4900 * 1, '$29 tier + 1 × $49 hosting for the anchored member');
+  assert.equal(v.lines[1].monthly, 7900, 'a direct pebble at $79');
   assert.match(src, /Indicative pricing/, 'the page says the numbers are indicative');
   assert.match(src, /no card is charged and no invoice is sent/, 'and that nothing is collected');
 });
@@ -127,7 +127,22 @@ test('a bigger rock pays a bigger tier fee: the band picks the tier, the tier pi
   const many = Array.from({ length: 60 }, (_, i) => ({ type: 'member-join', at: NOW - 1000, org: 'acme-org', e: `h${i}`, role: 'member', slug: `p${i}`, rel: 'joined', status: 'active' }));
   const v = billingView({ user: { billing_enabled: true }, minerals: [MINERALS[0]], events: many, now: NOW, prices: priceTable() });
   assert.equal(v.lines[0].seats, 60);
-  assert.equal(v.lines[0].tier, 'crads-rock-tier-2');
-  assert.equal(v.lines[0].parts[0].amount, 44900);
-  assert.equal(v.lines[0].monthly, 44900 + 4900, '60 joined members cost nothing per head; the tier stepped up once');
+  assert.equal(v.lines[0].tier, 'crads-rock-tier-6', '60 seats: the 100-seat tier');
+  assert.equal(v.lines[0].parts[0].amount, 49900);
+  assert.equal(v.lines[0].monthly, 49900, '60 joined members cost the rock nothing per head and no hosting; only the tier moved');
+});
+
+
+test('the v3 ladder: seven tiers, fine at the bottom, sorted by seats not by key', () => {
+  const { priceTable, INDICATIVE } = require('../lib/pricing');
+  const t = priceTable();
+  assert.equal(Object.keys(INDICATIVE.tiers).length, 7);
+  assert.equal(tierKeyFor(2, t.bands), 'crads-rock-tier-1', 'a two-pebble rock is tier 1 at $29');
+  assert.equal(tierKeyFor(7, t.bands), 'crads-rock-tier-3');
+  assert.equal(tierKeyFor(40, t.bands), 'crads-rock-tier-5', 'IC-sized');
+  assert.equal(tierKeyFor(500, t.bands), 'crads-rock-tier-7', 'open-ended top');
+  assert.equal(t.tierFee('crads-rock-tier-7'), 89900);
+  const v = billingView({ user: { billing_enabled: true }, minerals: [MINERALS[0]], events: [], now: NOW, prices: t });
+  assert.equal(v.lines[0].hosting, 0, 'a rock with no anchored members hosts nothing');
+  assert.equal(v.lines[0].monthly, 2900, 'and pays only its tier: the own box is inside it');
 });

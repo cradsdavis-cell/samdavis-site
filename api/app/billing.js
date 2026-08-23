@@ -175,7 +175,7 @@ module.exports = async function handler(req, res) {
         if (l.kind === 'rock') {
           const tierN = l.tier.replace('crads-rock-tier-', '');
           return `<li><div class="n">${escapeHtml(l.label)}<span class="chip">Rock</span></div>
-  <div class="m">${plural(l.seats, 'member', 'members')} &middot; runs ${plural(l.hosting, 'box', 'boxes')}${l.hosting > 1 ? ` (its own + ${plural(l.hosting - 1, 'anchored member', 'anchored members')})` : ''} &middot; tier ${escapeHtml(tierN)}</div>
+  <div class="m">${plural(l.seats, 'member', 'members')} &middot; hosts ${l.hosting ? plural(l.hosting, 'anchored member', 'anchored members') : 'no anchored members'} &middot; tier ${escapeHtml(tierN)}</div>
   <div class="amt">${money(l.monthly)}<span style="color:var(--faint);font-weight:400">/mo</span></div>${breakdown(l)}</li>`;
         }
         if (l.kind === 'pebble-direct') {
@@ -188,7 +188,7 @@ module.exports = async function handler(req, res) {
   <div class="amt" style="color:var(--faint);font-weight:400">on their bill</div>${breakdown(l)}</li>`;
       }).join('');
       main += `<h2 class="cardh2" style="margin-top:1.6em">What you hold</h2><ul class="blines">${rows}</ul>
-<p class="bfoot">A rock pays a tier fee plus hosting for each box it runs. Members, joined or anchored, are never charged per head; how many you have sets the tier.${view.priced && !view.charging ? ' Rates shown are indicative and may change before pricing is switched on.' : ''}</p>`;
+<p class="bfoot">A rock pays a tier fee, set by how many members it has, plus hosting for each anchored member. Its own box is included in the tier. Joined members host their own pebble and pay Crads-AI for it directly.${view.priced && !view.charging ? ' Rates shown are indicative and may change before pricing is switched on.' : ''}</p>`;
     } else {
       main += `<div class="empty" style="margin-top:1.2em">You hold no minerals yet, so there is nothing to bill.</div>`;
     }
