@@ -67,6 +67,19 @@ module.exports = async function handler(req, res) {
   }
 
   const dir = directoryFor(user);
+  // THE PAGE IS THE MIRROR. The signing key lives only on Vercel (env pull
+  // redacts it), so no script off the platform can mint the manage token the
+  // mirror needs, and the backfill could not. Every visit with billing on
+  // re-writes licence:<org> for each rock this account holds: idempotent,
+  // self-healing, and exactly the state the worker's gate reads.
+  if (user.billing_enabled) {
+    const held = await dir.minerals().catch(() => ({ ok: false }));
+    if (held.ok) {
+      for (const m of held.minerals) {
+        if (m.held_by === 'you' && m.tier === 'rock') await dir.setLicence(m.mineral_id).catch(() => ({ ok: false }));
+      }
+    }
+  }
   const [minR, evR] = await Promise.all([
     typeof dir.minerals === 'function' ? dir.minerals().catch((e) => ({ ok: false, reason: String(e && e.message || e) })) : { ok: false, reason: 'unreadable' },
     typeof dir.events === 'function' ? dir.events(400).catch(() => ({ ok: false })) : { ok: false },
