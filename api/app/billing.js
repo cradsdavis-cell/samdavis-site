@@ -102,8 +102,8 @@ module.exports = async function handler(req, res) {
   // amount, then the month total and what has accrued so far this period.
   const breakdown = (l) => {
     const rows = (l.parts || []).map((pt) => `<div>${escapeHtml(pt.label)}</div>
-    <div class="u">${pt.carried !== undefined ? `${money(pt.carried)} to the rock` : `${money(pt.unit)} &times; ${pt.qty}`}</div>
-    <div class="a">${pt.carried !== undefined ? `${money(0)} to you` : money(pt.amount)}</div>`).join('');
+    <div class="u">${pt.carried !== undefined ? `${money(pt.carried)} paid by ${escapeHtml(labelOfOrg(l.anchor))}` : `${money(pt.unit)} &times; ${pt.qty}`}</div>
+    <div class="a">${pt.carried !== undefined ? 'nothing to you' : money(pt.amount)}</div>`).join('');
     const total = l.kind === 'pebble-anchored'
       ? ''
       : `<div class="t">Per month</div><div class="u"></div><div class="t a">${money(l.monthly)}</div>
@@ -184,8 +184,8 @@ module.exports = async function handler(req, res) {
   <div class="amt">${money(l.monthly)}<span style="color:var(--faint);font-weight:400">/mo</span></div>${breakdown(l)}</li>`;
         }
         return `<li><div class="n">${escapeHtml(l.label)}<span class="chip">Pebble</span></div>
-  <div class="m">Hosted by ${escapeHtml(labelOfOrg(l.anchor))}</div>
-  <div class="amt" style="color:var(--faint);font-weight:400">on their bill</div>${breakdown(l)}</li>`;
+  <div class="m">${escapeHtml(labelOfOrg(l.anchor))} pays for this pebble</div>
+  <div class="amt" style="color:var(--faint);font-weight:400">nothing to you</div>${breakdown(l)}</li>`;
       }).join('');
       main += `<h2 class="cardh2" style="margin-top:1.6em">What you hold</h2><ul class="blines">${rows}</ul>
 <p class="bfoot">A rock pays a tier fee, set by how many members it has, plus hosting for each anchored member. Its own box is included in the tier fee. Joined members host their own pebble and pay Crads-AI for it directly.${view.priced && !view.charging ? ' Rates shown are indicative and may change before pricing is switched on.' : ''}</p>`;
