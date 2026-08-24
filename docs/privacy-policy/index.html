@@ -11,61 +11,159 @@
 <script defer src="/lib/site.js"></script>
 
 <style>
-  .docs-page { max-width: 46rem; }
-  .docs-page .docs-eyebrow { font-family: var(--sans); font-size: 13px; letter-spacing: .04em;
-    text-transform: uppercase; color: var(--ink-faint); margin-bottom: var(--space-1); }
-  .docs-page h1 { margin-top: 0; }
-  .docs-page .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
-    margin: 0 0 var(--space-4); }
-  .docs-page table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
-    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
-  .docs-page th, .docs-page td { text-align: left; padding: 8px 12px 8px 0;
-    border-bottom: 1px solid var(--rule, #e5e2dc); vertical-align: top; }
-  .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
-    overflow-x: auto; font-size: 13.5px; }
-  .docs-page figure.shot { margin: var(--space-4) 0; }
-  .docs-page .shot-frame { position: relative; display: block; line-height: 0; }
-  .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
-    border: 1px solid var(--rule, #e5e2dc); }
-  .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
-    color: var(--ink-faint); margin-top: 8px; }
+  /* ---- layout: sidebar | article | on-page contents ------------------- */
+  .docs-shell { display: grid; grid-template-columns: 232px minmax(0,1fr) 200px;
+    gap: var(--space-4); align-items: start; max-width: var(--wrap-max); }
+  .docs-page { max-width: none; }
+  @media (max-width: 1080px) { .docs-shell { grid-template-columns: 214px minmax(0,1fr); } .docs-toc { display: none; } }
+  @media (max-width: 820px)  { .docs-shell { grid-template-columns: minmax(0,1fr); gap: var(--space-3); } }
 
-  /* Annotations. The marker outlines the real control and carries its number at
-     the corner, so the eye goes box -> number -> legend line. Positioned in
-     percentages by the capture rig, never by hand. */
-  .docs-page .shot-mark { position: absolute; box-sizing: border-box;
-    border: 2px solid var(--accent, #b4531f); border-radius: 6px;
-    box-shadow: 0 0 0 3px rgba(255,255,255,.55); pointer-events: none; }
-  .docs-page .shot-mark b { position: absolute; left: -11px; top: -11px;
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--accent, #b4531f); color: #fff;
-    font-family: var(--sans); font-size: 12.5px; font-weight: 700;
-    line-height: 22px; text-align: center; letter-spacing: 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,.28); }
-  .docs-page .shot-legend { list-style: none; counter-reset: mark;
-    margin: 12px 0 0; padding: 0; font-family: var(--sans); font-size: 14px;
-    color: var(--ink-deep); }
-  .docs-page .shot-legend li { counter-increment: mark; position: relative;
-    padding: 4px 0 4px 30px; line-height: 1.55; }
-  .docs-page .shot-legend li::before { content: counter(mark);
-    position: absolute; left: 0; top: 4px; width: 20px; height: 20px;
-    border-radius: 50%; background: var(--accent, #b4531f); color: #fff;
-    font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
-  @media (max-width: 640px) {
-    .docs-page .shot-mark b { width: 18px; height: 18px; line-height: 18px;
-      font-size: 11px; left: -9px; top: -9px; }
+  /* ---- sidebar --------------------------------------------------------- */
+  .docs-side { position: sticky; top: var(--space-3); font-family: var(--sans);
+    font-size: 14px; max-height: calc(100vh - var(--space-4)); overflow-y: auto; }
+  /* DESKTOP ONLY: no disclosure, and the tree shows whether or not the element
+     is open. Scoped to a min-width because unscoped it also forced the tree
+     open on mobile, which is the exact thing the closed default exists to
+     avoid. Verified in a browser at both widths rather than reasoned about. */
+  @media (min-width: 821px) {
+    .docs-side > details > summary { display: none; }
+    .docs-side > details > *:not(summary) { display: revert; }
+    .docs-side > details::details-content { content-visibility: visible; display: revert; block-size: auto; }
   }
-  .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
-  .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
-    margin-bottom: var(--space-3); }
+  .docs-side h2 { font-family: var(--sans); font-size: 11.5px; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--ink-faint); margin: var(--space-3) 0 6px; font-weight: 650; }
+  .docs-side h2:first-child { margin-top: 0; }
+  .docs-side ul { list-style: none; margin: 0; padding: 0; }
+  .docs-side a { display: block; padding: 5px 10px; margin-left: -10px; border-radius: 7px;
+    color: var(--ink-soft); text-decoration: none; line-height: 1.4; }
+  .docs-side a:hover { background: var(--bg-soft); color: var(--ink-deep); }
+  .docs-side a[aria-current="page"] { background: var(--bg-card); color: var(--ink-deep); font-weight: 600; }
+  @media (max-width: 820px) {
+    .docs-side { position: static; max-height: none; border-bottom: 1px solid var(--rule);
+      padding-bottom: var(--space-2); margin-bottom: var(--space-2); }
+    .docs-side > details > summary { display: block; cursor: pointer; font-family: var(--sans);
+      font-weight: 600; color: var(--ink-deep); list-style: none; padding: 6px 0; }
+    .docs-side details > summary::-webkit-details-marker { display: none; }
+    .docs-side details > summary::before { content: "\2630"; margin-right: 8px; color: var(--ink-faint); }
+  }
+
+  /* ---- article --------------------------------------------------------- */
+  /* A DOCS TYPE SCALE. The site's headings clamp to 72px (h1) and 48px (h2),
+     which is right for a landing page and wrong here: at that size a docs title
+     runs to four lines and an h2 outweighs the paragraph it introduces. Same
+     family, same colour, same weight, smaller steps and a longer measure. */
+  .docs-article { max-width: var(--read-col); }
+  .docs-article h1 { font-size: clamp(30px, 3.4vw, 40px); line-height: 1.12; margin-bottom: var(--space-1); }
+  .docs-article h2 { font-size: clamp(21px, 2.1vw, 25px); line-height: 1.22;
+    margin: var(--space-4) 0 var(--space-1); }
+  .docs-article h3 { font-size: clamp(17px, 1.6vw, 19px); line-height: 1.3;
+    margin: var(--space-3) 0 var(--space-1); }
+  .docs-article p, .docs-article li { font-size: 16.5px; line-height: 1.62; }
+  .docs-article ul, .docs-article ol { padding-left: 22px; }
+  .docs-article li { margin: 4px 0; }
+  .docs-article li > ul, .docs-article li > ol { margin-top: 4px; }
+  .docs-article .docs-eyebrow { font-family: var(--sans); font-size: 12px; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--accent-deep); margin: 0 0 var(--space-1); font-weight: 650; }
+  .docs-article h1 { margin-top: 0; }
+  .docs-article .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
+    margin: 0 0 var(--space-4); line-height: 1.5; }
+  .docs-article h2, .docs-article h3 { scroll-margin-top: var(--space-3); }
+  .docs-article h2 .anchor, .docs-article h3 .anchor { opacity: 0; text-decoration: none;
+    color: var(--ink-faint); font-weight: 400; margin-left: 8px; }
+  .docs-article h2:hover .anchor, .docs-article h3:hover .anchor { opacity: 1; }
+  .docs-article table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
+    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
+  .docs-article th, .docs-article td { text-align: left; padding: 9px 14px 9px 0;
+    border-bottom: 1px solid var(--rule); vertical-align: top; }
+  .docs-article th { font-weight: 650; color: var(--ink-deep); }
+
+  /* ---- code, with a copy button ---------------------------------------- */
+  .docs-article .codewrap { position: relative; margin: var(--space-3) 0; }
+  .docs-article pre { background: var(--bg-soft); border: 1px solid var(--rule);
+    padding: 16px 18px; border-radius: 10px; overflow-x: auto; font-size: 13.5px; margin: 0; }
+  .docs-article .copy { position: absolute; top: 8px; right: 8px; font-family: var(--sans);
+    font-size: 12px; padding: 4px 10px; border: 1px solid var(--rule); border-radius: 6px;
+    background: var(--bg-main); color: var(--ink-faint); cursor: pointer; opacity: 0; transition: opacity .12s; }
+  .docs-article .codewrap:hover .copy, .docs-article .copy:focus { opacity: 1; }
+
+  /* ---- callouts -------------------------------------------------------- */
+  .docs-article blockquote { margin: var(--space-3) 0; padding: 14px 18px;
+    border-left: 3px solid var(--rule); background: var(--bg-soft); border-radius: 0 8px 8px 0; }
+  .docs-article blockquote p { margin: 0; font-size: 16px; }
+  .docs-article blockquote.note { border-left-color: var(--accent); }
+  .docs-article blockquote.warn { border-left-color: var(--accent-deep); background: var(--accent-glow); }
+
+  /* ---- screenshots + annotations ---------------------------------------- */
+  .docs-article figure.shot { margin: var(--space-4) 0; }
+  .docs-article .shot-frame { position: relative; display: block; line-height: 0; }
+  .docs-article figure.shot img { width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--rule); }
+  .docs-article figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 8px; }
+  .docs-article .shot-mark { position: absolute; box-sizing: border-box;
+    border: 2px solid var(--accent); border-radius: 6px;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.55); pointer-events: none; }
+  .docs-article .shot-mark b { position: absolute; left: -11px; top: -11px; width: 22px; height: 22px;
+    border-radius: 50%; background: var(--accent); color: #fff; font-family: var(--sans);
+    font-size: 12.5px; font-weight: 700; line-height: 22px; text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,.28); }
+  .docs-article .shot-legend { list-style: none; counter-reset: mark; margin: 12px 0 0; padding: 0;
+    font-family: var(--sans); font-size: 14px; color: var(--ink-soft); }
+  .docs-article .shot-legend li { counter-increment: mark; position: relative; padding: 4px 0 4px 30px; line-height: 1.55; }
+  .docs-article .shot-legend li::before { content: counter(mark); position: absolute; left: 0; top: 4px;
+    width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: #fff;
+    font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
+  @media (max-width: 640px) { .docs-article .shot-mark b { width: 18px; height: 18px; line-height: 18px; font-size: 11px; left: -9px; top: -9px; } }
+
+  /* ---- on-page contents -------------------------------------------------- */
+  .docs-toc { position: sticky; top: var(--space-3); font-family: var(--sans); font-size: 13px; }
+  .docs-toc h2 { font-size: 11.5px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 0 0 8px; font-weight: 650; }
+  .docs-toc ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--rule); }
+  .docs-toc a { display: block; padding: 4px 0 4px 12px; margin-left: -1px;
+    border-left: 2px solid transparent; color: var(--ink-faint); text-decoration: none; line-height: 1.45; }
+  .docs-toc a:hover { color: var(--ink-deep); border-left-color: var(--rule); }
+
+  /* ---- prev / next --------------------------------------------------------- */
+  .docs-nextprev { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);
+    margin-top: var(--space-5); padding-top: var(--space-3); border-top: 1px solid var(--rule);
+    font-family: var(--sans); }
+  .docs-nextprev a { display: block; padding: 12px 16px; border: 1px solid var(--rule);
+    border-radius: 10px; text-decoration: none; color: var(--ink-deep); }
+  .docs-nextprev a:hover { background: var(--bg-soft); }
+  .docs-nextprev .dir { display: block; font-size: 11.5px; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: 3px; }
+  .docs-nextprev .next { text-align: right; }
+  @media (max-width: 560px) { .docs-nextprev { grid-template-columns: 1fr; } }
+
+  /* ---- index page ---------------------------------------------------------- */
   .docs-index-groups { display: grid; gap: var(--space-4); }
   .docs-index-groups h2 { margin-bottom: var(--space-1); }
   .docs-index-groups ul { list-style: none; padding: 0; margin: 0; }
-  .docs-index-groups li { padding: 10px 0; border-bottom: 1px solid var(--rule, #e5e2dc); }
+  .docs-index-groups li { padding: 11px 0; border-bottom: 1px solid var(--rule); }
   .docs-index-groups a { font-weight: 600; }
   .docs-index-groups .d { display: block; font-family: var(--sans); font-size: 14px;
-    color: var(--ink-faint); margin-top: 2px; }
+    color: var(--ink-faint); margin-top: 3px; line-height: 1.5; }
 </style>
+<script>
+  // Copy button per code block. Written here rather than in a bundle because the
+  // docs are static files and one inline listener beats a build step.
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.docs-article pre').forEach(function (pre) {
+      var wrap = document.createElement('div');
+      wrap.className = 'codewrap';
+      pre.parentNode.insertBefore(wrap, pre);
+      wrap.appendChild(pre);
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'copy'; b.textContent = 'Copy';
+      b.addEventListener('click', function () {
+        navigator.clipboard.writeText(pre.innerText).then(function () {
+          b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1400);
+        }).catch(function () { b.textContent = 'Press Ctrl+C'; });
+      });
+      wrap.appendChild(b);
+    });
+  });
+</script>
 <link rel="canonical" href="https://crads-ai.com/docs/privacy-policy">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Sam Davis — Crads AI">
@@ -115,23 +213,62 @@
   </div>
 </nav>
 <main class="docs-page wrap ">
-<a class="docs-back" href="/docs">← All docs</a>
+<div class="docs-shell">
+<aside class="docs-side"><details>
+  <summary>All docs</summary>
+  <p style="margin:0 0 var(--space-2)"><a href="/docs">Docs home</a></p>
+    <h2>Explained</h2>
+    <ul>
+      <li><a href="/docs/rocks-and-pebbles">Rocks and pebbles</a></li>
+      <li><a href="/docs/continuity">What happens if Crads AI goes away</a></li>
+      <li><a href="/docs/what-your-community-can-see">What your community can see</a></li>
+      <li><a href="/docs/the-three-layers">Who edits what</a></li>
+      <li><a href="/docs/how-updates-reach-you">How updates reach you</a></li>
+    </ul>
+    <h2>Walkthrough</h2>
+    <ul>
+      <li><a href="/docs/first-hour">Your first hour</a></li>
+    </ul>
+    <h2>How to</h2>
+    <ul>
+      <li><a href="/docs/connect-google">Connect Google, with your own key</a></li>
+      <li><a href="/docs/become-a-rock">Turn your mineral into a rock</a></li>
+      <li><a href="/docs/manage-members">Invite and manage members</a></li>
+      <li><a href="/docs/fix-a-broken-connection">Fix a connection that has stopped working</a></li>
+      <li><a href="/docs/back-up-and-restore">Back up your mineral, and get it back</a></li>
+      <li><a href="/docs/claude-code-on-your-mineral">Use Claude Code on your mineral</a></li>
+    </ul>
+    <h2>Reference</h2>
+    <ul>
+      <li><a href="/docs/skills">Every skill your mineral ships with</a></li>
+      <li><a href="/docs/connections">What you can connect</a></li>
+      <li><a href="/docs/machinery-jobs">The jobs your mineral runs by itself</a></li>
+    </ul>
+    <h2>Legal</h2>
+    <ul>
+      <li><a href="/docs/privacy-policy" aria-current="page">Privacy policy</a></li>
+      <li><a href="/docs/terms">Terms of service</a></li>
+      <li><a href="/docs/hosting-a-rock">Hosting a rock</a></li>
+      <li><a href="/docs/acceptable-use">Acceptable use</a></li>
+    </ul>
+</details></aside>
+<article class="docs-article">
 <p class="docs-eyebrow">Legal</p>
 <h1>Privacy policy</h1>
 <p class="legal-stamp">Version 0.4, effective 2026-08-24. Samuel Davis trading as Crads AI.</p>
-<h2>Who this is</h2>
+<h2 id="who-this-is">Who this is<a class="anchor" href="#who-this-is" aria-label="Link to this section">#</a></h2>
 <p>Crads AI is operated by Samuel Davis, trading as Crads AI, <strong>ABN 26 929 349 775</strong>, in Coogee, New South Wales, Australia. Contact: cradsdavis@gmail.com.</p>
 <p>This is version 0.4, effective 24 August 2026, covering the beta programme. It will be reviewed by a lawyer before the programme converts to paid, and the version and date at the top of this page change whenever the text does.</p>
 <p><em>Changed in 0.2: added &quot;What a support session can see&quot;, below. Version 0.1 said support access is bounded and logged, which was true and incomplete: it did not say what a person with that access can read.</em></p>
 <p><em>Changed in 0.4: corrected the deletion section, which claimed we remove your registration pointers from the directory. Two records were being left behind to expire on a 400-day timer instead. The software was changed the same day so they are deleted with the machine, and this section now lists exactly what goes and what remains.</em></p>
 <p><em>Changed in 0.3: corrected &quot;There is no standing key&quot;. A mineral built for you by a community is born carrying a Crads AI setup key, because somebody has to build the machine before you can reach it. See &quot;The key your mineral is born with&quot;. Version 0.2 stated the opposite, and it was wrong.</em></p>
-<h2>The short version</h2>
+<h2 id="the-short-version">The short version<a class="anchor" href="#the-short-version" aria-label="Link to this section">#</a></h2>
 <p>Your mineral is a machine you hold, in the EU, running your assistant on your own Claude account. Your brain lives on it as ordinary files. <strong>Nobody at Crads AI reads your notes.</strong> That is a description of how it is built, not a promise about our conduct: your pages sit on your box, and operating the box does not include reading it.</p>
 <p>What we can see is operational: whether your mineral is alive, which software it runs, and whatever you have deliberately switched on for your community. The rest of this page is that sentence, in detail.</p>
-<h2>Where your mineral runs</h2>
+<h2 id="where-your-mineral-runs">Where your mineral runs<a class="anchor" href="#where-your-mineral-runs" aria-label="Link to this section">#</a></h2>
 <p>On a virtual machine rented from Hetzner Online GmbH, in the <strong>EU only</strong>: their data centres in Nuremberg or Falkenstein (Germany) or Helsinki (Finland). Which one depends on capacity at the moment your mineral was built. No mineral is provisioned outside the EU.</p>
 <p>If you are in Australia, as most of the beta is, that means your data is stored overseas. We are telling you so plainly because Australian privacy law expects us to, and because you should know it regardless.</p>
-<h2>What lives on your mineral, and stays there</h2>
+<h2 id="what-lives-on-your-mineral-and-stays-there">What lives on your mineral, and stays there<a class="anchor" href="#what-lives-on-your-mineral-and-stays-there" aria-label="Link to this section">#</a></h2>
 <ul>
 <li><strong>Your brain.</strong> The pages your assistant writes and reads: who you are, your</li>
 </ul>
@@ -144,15 +281,15 @@
 <li><strong>Your run history.</strong> What your assistant did and when.</li>
 </ul>
 <p>None of this is copied to us. There is no central store of member brains, because there is no central store: one member, one machine.</p>
-<h2>What leaves your mineral</h2>
+<h2 id="what-leaves-your-mineral">What leaves your mineral<a class="anchor" href="#what-leaves-your-mineral" aria-label="Link to this section">#</a></h2>
 <p>Three things, and nothing else.</p>
-<h3>1. A heartbeat, to your community</h3>
+<h3 id="1-a-heartbeat-to-your-community">1. A heartbeat, to your community<a class="anchor" href="#1-a-heartbeat-to-your-community" aria-label="Link to this section">#</a></h3>
 <p>If your mineral belongs to a rock, it sends that rock a small status record. What it contains is fixed in the software, and two switches under <strong>Privacy and access</strong> control most of it:</p>
 <table><thead><tr><th>Always sent</th><th>Sent only if you enable &quot;activity&quot;</th><th>Sent only if you enable &quot;engagement&quot;</th></tr></thead><tbody><tr><td>when it was generated</td><td>whether onboarding is done</td><td>which skills are installed</td></tr><tr><td>whether Claude is signed in</td><td>how full the disk is</td><td>which skills are enabled</td></tr><tr><td>which software build it runs</td><td>when you were last active</td><td>when skills ran, and which succeeded</td></tr></tbody></table>
 <p>No page, no note, no message, no email, no calendar entry, and no name from your brain is in that record. Turn both switches off and your rock sees only that your mineral exists, is reachable, and is signed in.</p>
-<h3>2. A backup, to a repository you own</h3>
+<h3 id="2-a-backup-to-a-repository-you-own">2. A backup, to a repository you own<a class="anchor" href="#2-a-backup-to-a-repository-you-own" aria-label="Link to this section">#</a></h3>
 <p>Your mineral takes a nightly encrypted snapshot of the parts of it that are not already in your own git repository. It is encrypted on your box with AES-256 and a passphrase generated on your box, then pushed to <strong>your own private GitHub repository</strong>. We never hold the passphrase and the repository is not ours. If you have not connected a repository, the snapshot stays local.</p>
-<h3>3. Registration pointers, to the directory</h3>
+<h3 id="3-registration-pointers-to-the-directory">3. Registration pointers, to the directory<a class="anchor" href="#3-registration-pointers-to-the-directory" aria-label="Link to this section">#</a></h3>
 <p>A small Cloudflare Worker routes people to the right mineral and records who holds what. It stores:</p>
 <ul>
 <li>a <strong>one-way hash of your email address</strong>, not the address itself</li>
@@ -160,7 +297,7 @@
 <li>which communities you belong to, and whether that link is active</li>
 </ul>
 <p>It holds no credentials, no brain content and no message content. We do not treat the email hash as anonymous, because a hash of a known email can be recognised; we treat it as personal information and this section discloses it as such.</p>
-<h2>Services you connect</h2>
+<h2 id="services-you-connect">Services you connect<a class="anchor" href="#services-you-connect" aria-label="Link to this section">#</a></h2>
 <ul>
 <li><strong>Google</strong> (Gmail, Calendar, Drive). You create your own Google OAuth client</li>
 </ul>
@@ -177,11 +314,11 @@
 <li><strong>Anthropic.</strong> Your assistant runs on <strong>your</strong> Claude account, under your</li>
 </ul>
 <p>  agreement with Anthropic. What you send your assistant, you are sending through   their service on your own account.</p>
-<h2>When we can reach your mineral</h2>
+<h2 id="when-we-can-reach-your-mineral">When we can reach your mineral<a class="anchor" href="#when-we-can-reach-your-mineral" aria-label="Link to this section">#</a></h2>
 <p>Two ways, both bounded.</p>
 <p><strong>Software updates.</strong> Your mineral restarts nightly onto the software your community has published. That updates the machinery, not your files, and you can switch it off.</p>
 <p><strong>Support access, only if you grant it.</strong> If something is broken and you want us to look, you grant access explicitly. That grant <strong>expires on a clock</strong>, is recorded on your own mineral, and every use of it is logged where you can read it. We cannot add ourselves to your mineral later without you granting it.</p>
-<h3>The key your mineral is born with</h3>
+<h3 id="the-key-your-mineral-is-born-with">The key your mineral is born with<a class="anchor" href="#the-key-your-mineral-is-born-with" aria-label="Link to this section">#</a></h3>
 <p>One honest exception, and version 0.2 of this page got it wrong by saying there was none.</p>
 <p>If your mineral was built for you by a community, somebody had to build the machine before you could reach it, and that was us. So the machine is born with a <strong>Crads AI setup key</strong> on it. It is not hidden: it appears in your own list of machines, named <strong>&quot;Crads-AI setup access (not your computer)&quot;</strong>, and it has a Remove button like any other.</p>
 <p>What happens to it:</p>
@@ -198,7 +335,7 @@
 </ul>
 <p>  approval, which is the same gate that stops anyone else adding one.</p>
 <p>Two things worth knowing while it is there. Until handover completes, that key opens your mineral, so if you can see it on your list after you have taken ownership, remove it and tell us. And if you built your mineral yourself rather than receiving one from a community, your own key is the first one on it and this section does not apply to you at all.</p>
-<h2>What a support session can see</h2>
+<h2 id="what-a-support-session-can-see">What a support session can see<a class="anchor" href="#what-a-support-session-can-see" aria-label="Link to this section">#</a></h2>
 <p>Worth being exact about, because &quot;we can look at your mineral&quot; and &quot;we can read your saved passwords&quot; are different sentences and you should know which one you are agreeing to.</p>
 <p>Your mineral stores secrets in two tiers, and the app labels which tier each one is in:</p>
 <ul>
@@ -211,9 +348,9 @@
 <p>  machines can open. There is deliberately no code on your mineral that can   decrypt these, so a support session cannot read them, and neither can a   scheduled job.</p>
 <p>If a credential would be damaging in someone else's hands and nothing scheduled needs it, put it in the sealed tier. If you have granted a support session and change your mind, revoke it: the grant is a record on your own mineral, not a key we hold.</p>
 <p>The same is true of your brain during a support session. A granted session is server access, and server access can read files. We do not, that is not what support is for, and every use of the grant is logged where you can see it. But the honest statement is that the protection during an active grant is the log and the clock, not an inability.</p>
-<h2>What your community can and cannot see</h2>
+<h2 id="what-your-community-can-and-cannot-see">What your community can and cannot see<a class="anchor" href="#what-your-community-can-and-cannot-see" aria-label="Link to this section">#</a></h2>
 <p>Your rock hosts your mineral. It <strong>cannot read</strong> your brain, your mail, your messages or your notes. It sees the heartbeat described above, whatever you have chosen to share, and the fact of your membership. This is structural: your pages are on your machine, and hosting a machine does not grant reading it.</p>
-<h2>Taking your data, and deletion</h2>
+<h2 id="taking-your-data-and-deletion">Taking your data, and deletion<a class="anchor" href="#taking-your-data-and-deletion" aria-label="Link to this section">#</a></h2>
 <p>Your brain is a folder of readable files in a git repository. There is no export step, because there is nothing to export from: it is already yours, in a portable format, on a machine you hold. You can <strong>take the box</strong> itself, keep the repository, or both.</p>
 <p>Ask us to delete your mineral and we destroy the machine and its disk. Copies you hold, including your own backup repository, remain yours and we cannot reach them.</p>
 <p><strong>What the directory keeps afterwards, stated honestly.</strong> Version 0.3 of this page said deletion removes your registration pointers. That is only partly true today, and the honest version is:</p>
@@ -238,12 +375,31 @@
 </ul>
 <p>None of that is your brain, your notes or your content: those live on the disk we destroy. It is bookkeeping about a machine that no longer exists.</p>
 <p>We found the gap while checking this page against the software rather than against our intentions. Two of those records already expired on their own after 400 days, so nothing was kept forever, but 400 days is not what &quot;we deleted your mineral&quot; should mean. They now go when the machine goes.</p>
-<h2>Sub-processors</h2>
+<h2 id="sub-processors">Sub-processors<a class="anchor" href="#sub-processors" aria-label="Link to this section">#</a></h2>
 <table><thead><tr><th>Who</th><th>What for</th><th>Where</th></tr></thead><tbody><tr><td>Hetzner Online GmbH</td><td>the machine your mineral runs on</td><td>Germany, Finland</td></tr><tr><td>Cloudflare, Inc.</td><td>routing and the registration directory</td><td>global edge</td></tr><tr><td>Anthropic</td><td>your assistant, on your own account</td><td>per your Anthropic agreement</td></tr><tr><td>GitHub, Inc.</td><td>your own backup repository, encrypted</td><td>your account</td></tr><tr><td>Microsoft</td><td>only if you connect Microsoft 365</td><td>per Microsoft</td></tr><tr><td>Google</td><td>only if you connect Google, with your own key</td><td>per Google</td></tr></tbody></table>
-<h2>Breaches</h2>
+<h2 id="breaches">Breaches<a class="anchor" href="#breaches" aria-label="Link to this section">#</a></h2>
 <p>If member data is exposed, we will tell affected members what happened, what was exposed, and what to do, without waiting to have a complete picture first. Given what is stored where, the realistic exposure is the directory's registration pointers rather than brain content.</p>
-<h2>Complaints</h2>
+<h2 id="complaints">Complaints<a class="anchor" href="#complaints" aria-label="Link to this section">#</a></h2>
 <p>Write to cradsdavis@gmail.com. If you are in Australia and unsatisfied, you can complain to the Office of the Australian Information Commissioner.</p>
+<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/machinery-jobs"><span class="dir">Previous</span>The jobs your mineral runs by itself</a><a class="next" href="/docs/terms"><span class="dir">Next</span>Terms of service</a></nav>
+</article>
+<nav class="docs-toc" aria-label="On this page"><h2>On this page</h2>
+<ul>
+  <li><a href="#who-this-is">Who this is</a></li>
+  <li><a href="#the-short-version">The short version</a></li>
+  <li><a href="#where-your-mineral-runs">Where your mineral runs</a></li>
+  <li><a href="#what-lives-on-your-mineral-and-stays-there">What lives on your mineral, and stays there</a></li>
+  <li><a href="#what-leaves-your-mineral">What leaves your mineral</a></li>
+  <li><a href="#services-you-connect">Services you connect</a></li>
+  <li><a href="#when-we-can-reach-your-mineral">When we can reach your mineral</a></li>
+  <li><a href="#what-a-support-session-can-see">What a support session can see</a></li>
+  <li><a href="#what-your-community-can-and-cannot-see">What your community can and cannot see</a></li>
+  <li><a href="#taking-your-data-and-deletion">Taking your data, and deletion</a></li>
+  <li><a href="#sub-processors">Sub-processors</a></li>
+  <li><a href="#breaches">Breaches</a></li>
+  <li><a href="#complaints">Complaints</a></li>
+</ul></nav>
+</div>
 </main>
 
 <footer class="site-footer wrap">

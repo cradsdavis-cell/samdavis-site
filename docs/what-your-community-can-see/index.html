@@ -11,61 +11,159 @@
 <script defer src="/lib/site.js"></script>
 
 <style>
-  .docs-page { max-width: 46rem; }
-  .docs-page .docs-eyebrow { font-family: var(--sans); font-size: 13px; letter-spacing: .04em;
-    text-transform: uppercase; color: var(--ink-faint); margin-bottom: var(--space-1); }
-  .docs-page h1 { margin-top: 0; }
-  .docs-page .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
-    margin: 0 0 var(--space-4); }
-  .docs-page table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
-    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
-  .docs-page th, .docs-page td { text-align: left; padding: 8px 12px 8px 0;
-    border-bottom: 1px solid var(--rule, #e5e2dc); vertical-align: top; }
-  .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
-    overflow-x: auto; font-size: 13.5px; }
-  .docs-page figure.shot { margin: var(--space-4) 0; }
-  .docs-page .shot-frame { position: relative; display: block; line-height: 0; }
-  .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
-    border: 1px solid var(--rule, #e5e2dc); }
-  .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
-    color: var(--ink-faint); margin-top: 8px; }
+  /* ---- layout: sidebar | article | on-page contents ------------------- */
+  .docs-shell { display: grid; grid-template-columns: 232px minmax(0,1fr) 200px;
+    gap: var(--space-4); align-items: start; max-width: var(--wrap-max); }
+  .docs-page { max-width: none; }
+  @media (max-width: 1080px) { .docs-shell { grid-template-columns: 214px minmax(0,1fr); } .docs-toc { display: none; } }
+  @media (max-width: 820px)  { .docs-shell { grid-template-columns: minmax(0,1fr); gap: var(--space-3); } }
 
-  /* Annotations. The marker outlines the real control and carries its number at
-     the corner, so the eye goes box -> number -> legend line. Positioned in
-     percentages by the capture rig, never by hand. */
-  .docs-page .shot-mark { position: absolute; box-sizing: border-box;
-    border: 2px solid var(--accent, #b4531f); border-radius: 6px;
-    box-shadow: 0 0 0 3px rgba(255,255,255,.55); pointer-events: none; }
-  .docs-page .shot-mark b { position: absolute; left: -11px; top: -11px;
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--accent, #b4531f); color: #fff;
-    font-family: var(--sans); font-size: 12.5px; font-weight: 700;
-    line-height: 22px; text-align: center; letter-spacing: 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,.28); }
-  .docs-page .shot-legend { list-style: none; counter-reset: mark;
-    margin: 12px 0 0; padding: 0; font-family: var(--sans); font-size: 14px;
-    color: var(--ink-deep); }
-  .docs-page .shot-legend li { counter-increment: mark; position: relative;
-    padding: 4px 0 4px 30px; line-height: 1.55; }
-  .docs-page .shot-legend li::before { content: counter(mark);
-    position: absolute; left: 0; top: 4px; width: 20px; height: 20px;
-    border-radius: 50%; background: var(--accent, #b4531f); color: #fff;
-    font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
-  @media (max-width: 640px) {
-    .docs-page .shot-mark b { width: 18px; height: 18px; line-height: 18px;
-      font-size: 11px; left: -9px; top: -9px; }
+  /* ---- sidebar --------------------------------------------------------- */
+  .docs-side { position: sticky; top: var(--space-3); font-family: var(--sans);
+    font-size: 14px; max-height: calc(100vh - var(--space-4)); overflow-y: auto; }
+  /* DESKTOP ONLY: no disclosure, and the tree shows whether or not the element
+     is open. Scoped to a min-width because unscoped it also forced the tree
+     open on mobile, which is the exact thing the closed default exists to
+     avoid. Verified in a browser at both widths rather than reasoned about. */
+  @media (min-width: 821px) {
+    .docs-side > details > summary { display: none; }
+    .docs-side > details > *:not(summary) { display: revert; }
+    .docs-side > details::details-content { content-visibility: visible; display: revert; block-size: auto; }
   }
-  .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
-  .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
-    margin-bottom: var(--space-3); }
+  .docs-side h2 { font-family: var(--sans); font-size: 11.5px; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--ink-faint); margin: var(--space-3) 0 6px; font-weight: 650; }
+  .docs-side h2:first-child { margin-top: 0; }
+  .docs-side ul { list-style: none; margin: 0; padding: 0; }
+  .docs-side a { display: block; padding: 5px 10px; margin-left: -10px; border-radius: 7px;
+    color: var(--ink-soft); text-decoration: none; line-height: 1.4; }
+  .docs-side a:hover { background: var(--bg-soft); color: var(--ink-deep); }
+  .docs-side a[aria-current="page"] { background: var(--bg-card); color: var(--ink-deep); font-weight: 600; }
+  @media (max-width: 820px) {
+    .docs-side { position: static; max-height: none; border-bottom: 1px solid var(--rule);
+      padding-bottom: var(--space-2); margin-bottom: var(--space-2); }
+    .docs-side > details > summary { display: block; cursor: pointer; font-family: var(--sans);
+      font-weight: 600; color: var(--ink-deep); list-style: none; padding: 6px 0; }
+    .docs-side details > summary::-webkit-details-marker { display: none; }
+    .docs-side details > summary::before { content: "\2630"; margin-right: 8px; color: var(--ink-faint); }
+  }
+
+  /* ---- article --------------------------------------------------------- */
+  /* A DOCS TYPE SCALE. The site's headings clamp to 72px (h1) and 48px (h2),
+     which is right for a landing page and wrong here: at that size a docs title
+     runs to four lines and an h2 outweighs the paragraph it introduces. Same
+     family, same colour, same weight, smaller steps and a longer measure. */
+  .docs-article { max-width: var(--read-col); }
+  .docs-article h1 { font-size: clamp(30px, 3.4vw, 40px); line-height: 1.12; margin-bottom: var(--space-1); }
+  .docs-article h2 { font-size: clamp(21px, 2.1vw, 25px); line-height: 1.22;
+    margin: var(--space-4) 0 var(--space-1); }
+  .docs-article h3 { font-size: clamp(17px, 1.6vw, 19px); line-height: 1.3;
+    margin: var(--space-3) 0 var(--space-1); }
+  .docs-article p, .docs-article li { font-size: 16.5px; line-height: 1.62; }
+  .docs-article ul, .docs-article ol { padding-left: 22px; }
+  .docs-article li { margin: 4px 0; }
+  .docs-article li > ul, .docs-article li > ol { margin-top: 4px; }
+  .docs-article .docs-eyebrow { font-family: var(--sans); font-size: 12px; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--accent-deep); margin: 0 0 var(--space-1); font-weight: 650; }
+  .docs-article h1 { margin-top: 0; }
+  .docs-article .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
+    margin: 0 0 var(--space-4); line-height: 1.5; }
+  .docs-article h2, .docs-article h3 { scroll-margin-top: var(--space-3); }
+  .docs-article h2 .anchor, .docs-article h3 .anchor { opacity: 0; text-decoration: none;
+    color: var(--ink-faint); font-weight: 400; margin-left: 8px; }
+  .docs-article h2:hover .anchor, .docs-article h3:hover .anchor { opacity: 1; }
+  .docs-article table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
+    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
+  .docs-article th, .docs-article td { text-align: left; padding: 9px 14px 9px 0;
+    border-bottom: 1px solid var(--rule); vertical-align: top; }
+  .docs-article th { font-weight: 650; color: var(--ink-deep); }
+
+  /* ---- code, with a copy button ---------------------------------------- */
+  .docs-article .codewrap { position: relative; margin: var(--space-3) 0; }
+  .docs-article pre { background: var(--bg-soft); border: 1px solid var(--rule);
+    padding: 16px 18px; border-radius: 10px; overflow-x: auto; font-size: 13.5px; margin: 0; }
+  .docs-article .copy { position: absolute; top: 8px; right: 8px; font-family: var(--sans);
+    font-size: 12px; padding: 4px 10px; border: 1px solid var(--rule); border-radius: 6px;
+    background: var(--bg-main); color: var(--ink-faint); cursor: pointer; opacity: 0; transition: opacity .12s; }
+  .docs-article .codewrap:hover .copy, .docs-article .copy:focus { opacity: 1; }
+
+  /* ---- callouts -------------------------------------------------------- */
+  .docs-article blockquote { margin: var(--space-3) 0; padding: 14px 18px;
+    border-left: 3px solid var(--rule); background: var(--bg-soft); border-radius: 0 8px 8px 0; }
+  .docs-article blockquote p { margin: 0; font-size: 16px; }
+  .docs-article blockquote.note { border-left-color: var(--accent); }
+  .docs-article blockquote.warn { border-left-color: var(--accent-deep); background: var(--accent-glow); }
+
+  /* ---- screenshots + annotations ---------------------------------------- */
+  .docs-article figure.shot { margin: var(--space-4) 0; }
+  .docs-article .shot-frame { position: relative; display: block; line-height: 0; }
+  .docs-article figure.shot img { width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--rule); }
+  .docs-article figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 8px; }
+  .docs-article .shot-mark { position: absolute; box-sizing: border-box;
+    border: 2px solid var(--accent); border-radius: 6px;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.55); pointer-events: none; }
+  .docs-article .shot-mark b { position: absolute; left: -11px; top: -11px; width: 22px; height: 22px;
+    border-radius: 50%; background: var(--accent); color: #fff; font-family: var(--sans);
+    font-size: 12.5px; font-weight: 700; line-height: 22px; text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,.28); }
+  .docs-article .shot-legend { list-style: none; counter-reset: mark; margin: 12px 0 0; padding: 0;
+    font-family: var(--sans); font-size: 14px; color: var(--ink-soft); }
+  .docs-article .shot-legend li { counter-increment: mark; position: relative; padding: 4px 0 4px 30px; line-height: 1.55; }
+  .docs-article .shot-legend li::before { content: counter(mark); position: absolute; left: 0; top: 4px;
+    width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: #fff;
+    font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
+  @media (max-width: 640px) { .docs-article .shot-mark b { width: 18px; height: 18px; line-height: 18px; font-size: 11px; left: -9px; top: -9px; } }
+
+  /* ---- on-page contents -------------------------------------------------- */
+  .docs-toc { position: sticky; top: var(--space-3); font-family: var(--sans); font-size: 13px; }
+  .docs-toc h2 { font-size: 11.5px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 0 0 8px; font-weight: 650; }
+  .docs-toc ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--rule); }
+  .docs-toc a { display: block; padding: 4px 0 4px 12px; margin-left: -1px;
+    border-left: 2px solid transparent; color: var(--ink-faint); text-decoration: none; line-height: 1.45; }
+  .docs-toc a:hover { color: var(--ink-deep); border-left-color: var(--rule); }
+
+  /* ---- prev / next --------------------------------------------------------- */
+  .docs-nextprev { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);
+    margin-top: var(--space-5); padding-top: var(--space-3); border-top: 1px solid var(--rule);
+    font-family: var(--sans); }
+  .docs-nextprev a { display: block; padding: 12px 16px; border: 1px solid var(--rule);
+    border-radius: 10px; text-decoration: none; color: var(--ink-deep); }
+  .docs-nextprev a:hover { background: var(--bg-soft); }
+  .docs-nextprev .dir { display: block; font-size: 11.5px; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: 3px; }
+  .docs-nextprev .next { text-align: right; }
+  @media (max-width: 560px) { .docs-nextprev { grid-template-columns: 1fr; } }
+
+  /* ---- index page ---------------------------------------------------------- */
   .docs-index-groups { display: grid; gap: var(--space-4); }
   .docs-index-groups h2 { margin-bottom: var(--space-1); }
   .docs-index-groups ul { list-style: none; padding: 0; margin: 0; }
-  .docs-index-groups li { padding: 10px 0; border-bottom: 1px solid var(--rule, #e5e2dc); }
+  .docs-index-groups li { padding: 11px 0; border-bottom: 1px solid var(--rule); }
   .docs-index-groups a { font-weight: 600; }
   .docs-index-groups .d { display: block; font-family: var(--sans); font-size: 14px;
-    color: var(--ink-faint); margin-top: 2px; }
+    color: var(--ink-faint); margin-top: 3px; line-height: 1.5; }
 </style>
+<script>
+  // Copy button per code block. Written here rather than in a bundle because the
+  // docs are static files and one inline listener beats a build step.
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.docs-article pre').forEach(function (pre) {
+      var wrap = document.createElement('div');
+      wrap.className = 'codewrap';
+      pre.parentNode.insertBefore(wrap, pre);
+      wrap.appendChild(pre);
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'copy'; b.textContent = 'Copy';
+      b.addEventListener('click', function () {
+        navigator.clipboard.writeText(pre.innerText).then(function () {
+          b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1400);
+        }).catch(function () { b.textContent = 'Press Ctrl+C'; });
+      });
+      wrap.appendChild(b);
+    });
+  });
+</script>
 <link rel="canonical" href="https://crads-ai.com/docs/what-your-community-can-see">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Sam Davis — Crads AI">
@@ -115,11 +213,50 @@
   </div>
 </nav>
 <main class="docs-page wrap ">
-<a class="docs-back" href="/docs">← All docs</a>
+<div class="docs-shell">
+<aside class="docs-side"><details>
+  <summary>All docs</summary>
+  <p style="margin:0 0 var(--space-2)"><a href="/docs">Docs home</a></p>
+    <h2>Explained</h2>
+    <ul>
+      <li><a href="/docs/rocks-and-pebbles">Rocks and pebbles</a></li>
+      <li><a href="/docs/continuity">What happens if Crads AI goes away</a></li>
+      <li><a href="/docs/what-your-community-can-see" aria-current="page">What your community can see</a></li>
+      <li><a href="/docs/the-three-layers">Who edits what</a></li>
+      <li><a href="/docs/how-updates-reach-you">How updates reach you</a></li>
+    </ul>
+    <h2>Walkthrough</h2>
+    <ul>
+      <li><a href="/docs/first-hour">Your first hour</a></li>
+    </ul>
+    <h2>How to</h2>
+    <ul>
+      <li><a href="/docs/connect-google">Connect Google, with your own key</a></li>
+      <li><a href="/docs/become-a-rock">Turn your mineral into a rock</a></li>
+      <li><a href="/docs/manage-members">Invite and manage members</a></li>
+      <li><a href="/docs/fix-a-broken-connection">Fix a connection that has stopped working</a></li>
+      <li><a href="/docs/back-up-and-restore">Back up your mineral, and get it back</a></li>
+      <li><a href="/docs/claude-code-on-your-mineral">Use Claude Code on your mineral</a></li>
+    </ul>
+    <h2>Reference</h2>
+    <ul>
+      <li><a href="/docs/skills">Every skill your mineral ships with</a></li>
+      <li><a href="/docs/connections">What you can connect</a></li>
+      <li><a href="/docs/machinery-jobs">The jobs your mineral runs by itself</a></li>
+    </ul>
+    <h2>Legal</h2>
+    <ul>
+      <li><a href="/docs/privacy-policy">Privacy policy</a></li>
+      <li><a href="/docs/terms">Terms of service</a></li>
+      <li><a href="/docs/hosting-a-rock">Hosting a rock</a></li>
+      <li><a href="/docs/acceptable-use">Acceptable use</a></li>
+    </ul>
+</details></aside>
+<article class="docs-article">
 <p class="docs-eyebrow">Explained</p>
 <h1>What your community can see</h1>
 <p>If your mineral belongs to a rock, it tells that rock some things about itself. This page is the whole list, because &quot;we respect your privacy&quot; is not an answer and a list is.</p>
-<h2>The list</h2>
+<h2 id="the-list">The list<a class="anchor" href="#the-list" aria-label="Link to this section">#</a></h2>
 <p>Your mineral sends a small status record to its rock. Three groups:</p>
 <p><strong>Always sent, if you are in a community at all</strong></p>
 <table><thead><tr><th>Field</th><th>What it means</th></tr></thead><tbody><tr><td>when it was generated</td><td>so a stale record is visibly stale</td></tr><tr><td>whether Claude is signed in</td><td>an unsigned mineral cannot do anything, and your host can help</td></tr><tr><td>which software build it runs</td><td>so your host knows if you are behind</td></tr><tr><td>which skills came from your rock</td><td>what they gave you, reflected back</td></tr><tr><td>any catalogue requests</td><td>skills you asked your rock for</td></tr></tbody></table>
@@ -128,17 +265,28 @@
 <p><strong>Sent only if you switch on &quot;engagement&quot;</strong></p>
 <table><thead><tr><th>Field</th><th>What it means</th></tr></thead><tbody><tr><td>which skills are installed</td><td>the list, not the contents</td></tr><tr><td>which are enabled on a schedule</td><td>ditto</td></tr><tr><td>when skills ran, and which succeeded</td><td>timestamps and outcomes</td></tr></tbody></table>
 <figure class="shot"><span class="shot-frame"><a href="/docs/shots/member-sharing.png" target="_blank" rel="noopener"><img src="/docs/shots/member-sharing.png" alt="What you have chosen to share, and with whom" loading="lazy"></a></span><figcaption>What you have chosen to share, and with whom</figcaption></figure>
-<h2>What is not in it, at all</h2>
+<h2 id="what-is-not-in-it-at-all">What is not in it, at all<a class="anchor" href="#what-is-not-in-it-at-all" aria-label="Link to this section">#</a></h2>
 <p>No page. No note. No sentence from your brain. No email, no message, no calendar entry, no contact, no name, no file. Not redacted, not summarised: <strong>not collected</strong>. There is no field in the record that could carry it.</p>
 <p>Your mineral also writes a much fuller version of that status file for itself, locally, so you can see what it knows. That one is never sent anywhere. The two files sit next to each other on your disk with different names, which is a slightly graceless design that makes the boundary impossible to blur.</p>
-<h2>Why the switches default the way they do</h2>
+<h2 id="why-the-switches-default-the-way-they-do">Why the switches default the way they do<a class="anchor" href="#why-the-switches-default-the-way-they-do" aria-label="Link to this section">#</a></h2>
 <p>Both start off. A mineral that has told its rock nothing but &quot;I am here and I am signed in&quot; is a working mineral, and turning either switch on is a favour to your host rather than a requirement.</p>
 <p>The favour is real, though, so here is the honest case for turning them on. A host who can see that eleven of twelve minerals ran their morning brief and one has not run anything for nine days can go and ask that person if they are stuck. A host who can see none of that is running a community blind, and the person who is stuck stays stuck. That is the entire argument, and it is yours to weigh.</p>
-<h2>What a host cannot do, structurally</h2>
+<h2 id="what-a-host-cannot-do-structurally">What a host cannot do, structurally<a class="anchor" href="#what-a-host-cannot-do-structurally" aria-label="Link to this section">#</a></h2>
 <p>A host cannot read your brain. Not &quot;does not&quot;: cannot. Your pages are files on your machine, and hosting a machine does not grant reading it. There is no console we are choosing not to build.</p>
 <p>The exception you should know about is not the host, it is us: if you grant a support session, that is server access, and server access can read files. The privacy policy sets out what that means and what to do about the credentials you care about.</p>
-<h2>Changing your mind</h2>
+<h2 id="changing-your-mind">Changing your mind<a class="anchor" href="#changing-your-mind" aria-label="Link to this section">#</a></h2>
 <p>The switches are on the sharing page and take effect on the next heartbeat, which is minutes. Turning one off does not retract what a host already saw, in the same way that closing a curtain does not unsee. If that matters to you, decide before you switch it on rather than after.</p>
+<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/continuity"><span class="dir">Previous</span>What happens if Crads AI goes away</a><a class="next" href="/docs/the-three-layers"><span class="dir">Next</span>Who edits what</a></nav>
+</article>
+<nav class="docs-toc" aria-label="On this page"><h2>On this page</h2>
+<ul>
+  <li><a href="#the-list">The list</a></li>
+  <li><a href="#what-is-not-in-it-at-all">What is not in it, at all</a></li>
+  <li><a href="#why-the-switches-default-the-way-they-do">Why the switches default the way they do</a></li>
+  <li><a href="#what-a-host-cannot-do-structurally">What a host cannot do, structurally</a></li>
+  <li><a href="#changing-your-mind">Changing your mind</a></li>
+</ul></nav>
+</div>
 </main>
 
 <footer class="site-footer wrap">

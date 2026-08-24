@@ -11,61 +11,159 @@
 <script defer src="/lib/site.js"></script>
 
 <style>
-  .docs-page { max-width: 46rem; }
-  .docs-page .docs-eyebrow { font-family: var(--sans); font-size: 13px; letter-spacing: .04em;
-    text-transform: uppercase; color: var(--ink-faint); margin-bottom: var(--space-1); }
-  .docs-page h1 { margin-top: 0; }
-  .docs-page .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
-    margin: 0 0 var(--space-4); }
-  .docs-page table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
-    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
-  .docs-page th, .docs-page td { text-align: left; padding: 8px 12px 8px 0;
-    border-bottom: 1px solid var(--rule, #e5e2dc); vertical-align: top; }
-  .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
-    overflow-x: auto; font-size: 13.5px; }
-  .docs-page figure.shot { margin: var(--space-4) 0; }
-  .docs-page .shot-frame { position: relative; display: block; line-height: 0; }
-  .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
-    border: 1px solid var(--rule, #e5e2dc); }
-  .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
-    color: var(--ink-faint); margin-top: 8px; }
+  /* ---- layout: sidebar | article | on-page contents ------------------- */
+  .docs-shell { display: grid; grid-template-columns: 232px minmax(0,1fr) 200px;
+    gap: var(--space-4); align-items: start; max-width: var(--wrap-max); }
+  .docs-page { max-width: none; }
+  @media (max-width: 1080px) { .docs-shell { grid-template-columns: 214px minmax(0,1fr); } .docs-toc { display: none; } }
+  @media (max-width: 820px)  { .docs-shell { grid-template-columns: minmax(0,1fr); gap: var(--space-3); } }
 
-  /* Annotations. The marker outlines the real control and carries its number at
-     the corner, so the eye goes box -> number -> legend line. Positioned in
-     percentages by the capture rig, never by hand. */
-  .docs-page .shot-mark { position: absolute; box-sizing: border-box;
-    border: 2px solid var(--accent, #b4531f); border-radius: 6px;
-    box-shadow: 0 0 0 3px rgba(255,255,255,.55); pointer-events: none; }
-  .docs-page .shot-mark b { position: absolute; left: -11px; top: -11px;
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--accent, #b4531f); color: #fff;
-    font-family: var(--sans); font-size: 12.5px; font-weight: 700;
-    line-height: 22px; text-align: center; letter-spacing: 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,.28); }
-  .docs-page .shot-legend { list-style: none; counter-reset: mark;
-    margin: 12px 0 0; padding: 0; font-family: var(--sans); font-size: 14px;
-    color: var(--ink-deep); }
-  .docs-page .shot-legend li { counter-increment: mark; position: relative;
-    padding: 4px 0 4px 30px; line-height: 1.55; }
-  .docs-page .shot-legend li::before { content: counter(mark);
-    position: absolute; left: 0; top: 4px; width: 20px; height: 20px;
-    border-radius: 50%; background: var(--accent, #b4531f); color: #fff;
-    font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
-  @media (max-width: 640px) {
-    .docs-page .shot-mark b { width: 18px; height: 18px; line-height: 18px;
-      font-size: 11px; left: -9px; top: -9px; }
+  /* ---- sidebar --------------------------------------------------------- */
+  .docs-side { position: sticky; top: var(--space-3); font-family: var(--sans);
+    font-size: 14px; max-height: calc(100vh - var(--space-4)); overflow-y: auto; }
+  /* DESKTOP ONLY: no disclosure, and the tree shows whether or not the element
+     is open. Scoped to a min-width because unscoped it also forced the tree
+     open on mobile, which is the exact thing the closed default exists to
+     avoid. Verified in a browser at both widths rather than reasoned about. */
+  @media (min-width: 821px) {
+    .docs-side > details > summary { display: none; }
+    .docs-side > details > *:not(summary) { display: revert; }
+    .docs-side > details::details-content { content-visibility: visible; display: revert; block-size: auto; }
   }
-  .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
-  .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
-    margin-bottom: var(--space-3); }
+  .docs-side h2 { font-family: var(--sans); font-size: 11.5px; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--ink-faint); margin: var(--space-3) 0 6px; font-weight: 650; }
+  .docs-side h2:first-child { margin-top: 0; }
+  .docs-side ul { list-style: none; margin: 0; padding: 0; }
+  .docs-side a { display: block; padding: 5px 10px; margin-left: -10px; border-radius: 7px;
+    color: var(--ink-soft); text-decoration: none; line-height: 1.4; }
+  .docs-side a:hover { background: var(--bg-soft); color: var(--ink-deep); }
+  .docs-side a[aria-current="page"] { background: var(--bg-card); color: var(--ink-deep); font-weight: 600; }
+  @media (max-width: 820px) {
+    .docs-side { position: static; max-height: none; border-bottom: 1px solid var(--rule);
+      padding-bottom: var(--space-2); margin-bottom: var(--space-2); }
+    .docs-side > details > summary { display: block; cursor: pointer; font-family: var(--sans);
+      font-weight: 600; color: var(--ink-deep); list-style: none; padding: 6px 0; }
+    .docs-side details > summary::-webkit-details-marker { display: none; }
+    .docs-side details > summary::before { content: "\2630"; margin-right: 8px; color: var(--ink-faint); }
+  }
+
+  /* ---- article --------------------------------------------------------- */
+  /* A DOCS TYPE SCALE. The site's headings clamp to 72px (h1) and 48px (h2),
+     which is right for a landing page and wrong here: at that size a docs title
+     runs to four lines and an h2 outweighs the paragraph it introduces. Same
+     family, same colour, same weight, smaller steps and a longer measure. */
+  .docs-article { max-width: var(--read-col); }
+  .docs-article h1 { font-size: clamp(30px, 3.4vw, 40px); line-height: 1.12; margin-bottom: var(--space-1); }
+  .docs-article h2 { font-size: clamp(21px, 2.1vw, 25px); line-height: 1.22;
+    margin: var(--space-4) 0 var(--space-1); }
+  .docs-article h3 { font-size: clamp(17px, 1.6vw, 19px); line-height: 1.3;
+    margin: var(--space-3) 0 var(--space-1); }
+  .docs-article p, .docs-article li { font-size: 16.5px; line-height: 1.62; }
+  .docs-article ul, .docs-article ol { padding-left: 22px; }
+  .docs-article li { margin: 4px 0; }
+  .docs-article li > ul, .docs-article li > ol { margin-top: 4px; }
+  .docs-article .docs-eyebrow { font-family: var(--sans); font-size: 12px; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--accent-deep); margin: 0 0 var(--space-1); font-weight: 650; }
+  .docs-article h1 { margin-top: 0; }
+  .docs-article .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
+    margin: 0 0 var(--space-4); line-height: 1.5; }
+  .docs-article h2, .docs-article h3 { scroll-margin-top: var(--space-3); }
+  .docs-article h2 .anchor, .docs-article h3 .anchor { opacity: 0; text-decoration: none;
+    color: var(--ink-faint); font-weight: 400; margin-left: 8px; }
+  .docs-article h2:hover .anchor, .docs-article h3:hover .anchor { opacity: 1; }
+  .docs-article table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
+    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
+  .docs-article th, .docs-article td { text-align: left; padding: 9px 14px 9px 0;
+    border-bottom: 1px solid var(--rule); vertical-align: top; }
+  .docs-article th { font-weight: 650; color: var(--ink-deep); }
+
+  /* ---- code, with a copy button ---------------------------------------- */
+  .docs-article .codewrap { position: relative; margin: var(--space-3) 0; }
+  .docs-article pre { background: var(--bg-soft); border: 1px solid var(--rule);
+    padding: 16px 18px; border-radius: 10px; overflow-x: auto; font-size: 13.5px; margin: 0; }
+  .docs-article .copy { position: absolute; top: 8px; right: 8px; font-family: var(--sans);
+    font-size: 12px; padding: 4px 10px; border: 1px solid var(--rule); border-radius: 6px;
+    background: var(--bg-main); color: var(--ink-faint); cursor: pointer; opacity: 0; transition: opacity .12s; }
+  .docs-article .codewrap:hover .copy, .docs-article .copy:focus { opacity: 1; }
+
+  /* ---- callouts -------------------------------------------------------- */
+  .docs-article blockquote { margin: var(--space-3) 0; padding: 14px 18px;
+    border-left: 3px solid var(--rule); background: var(--bg-soft); border-radius: 0 8px 8px 0; }
+  .docs-article blockquote p { margin: 0; font-size: 16px; }
+  .docs-article blockquote.note { border-left-color: var(--accent); }
+  .docs-article blockquote.warn { border-left-color: var(--accent-deep); background: var(--accent-glow); }
+
+  /* ---- screenshots + annotations ---------------------------------------- */
+  .docs-article figure.shot { margin: var(--space-4) 0; }
+  .docs-article .shot-frame { position: relative; display: block; line-height: 0; }
+  .docs-article figure.shot img { width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--rule); }
+  .docs-article figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 8px; }
+  .docs-article .shot-mark { position: absolute; box-sizing: border-box;
+    border: 2px solid var(--accent); border-radius: 6px;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.55); pointer-events: none; }
+  .docs-article .shot-mark b { position: absolute; left: -11px; top: -11px; width: 22px; height: 22px;
+    border-radius: 50%; background: var(--accent); color: #fff; font-family: var(--sans);
+    font-size: 12.5px; font-weight: 700; line-height: 22px; text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,.28); }
+  .docs-article .shot-legend { list-style: none; counter-reset: mark; margin: 12px 0 0; padding: 0;
+    font-family: var(--sans); font-size: 14px; color: var(--ink-soft); }
+  .docs-article .shot-legend li { counter-increment: mark; position: relative; padding: 4px 0 4px 30px; line-height: 1.55; }
+  .docs-article .shot-legend li::before { content: counter(mark); position: absolute; left: 0; top: 4px;
+    width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: #fff;
+    font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
+  @media (max-width: 640px) { .docs-article .shot-mark b { width: 18px; height: 18px; line-height: 18px; font-size: 11px; left: -9px; top: -9px; } }
+
+  /* ---- on-page contents -------------------------------------------------- */
+  .docs-toc { position: sticky; top: var(--space-3); font-family: var(--sans); font-size: 13px; }
+  .docs-toc h2 { font-size: 11.5px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 0 0 8px; font-weight: 650; }
+  .docs-toc ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--rule); }
+  .docs-toc a { display: block; padding: 4px 0 4px 12px; margin-left: -1px;
+    border-left: 2px solid transparent; color: var(--ink-faint); text-decoration: none; line-height: 1.45; }
+  .docs-toc a:hover { color: var(--ink-deep); border-left-color: var(--rule); }
+
+  /* ---- prev / next --------------------------------------------------------- */
+  .docs-nextprev { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);
+    margin-top: var(--space-5); padding-top: var(--space-3); border-top: 1px solid var(--rule);
+    font-family: var(--sans); }
+  .docs-nextprev a { display: block; padding: 12px 16px; border: 1px solid var(--rule);
+    border-radius: 10px; text-decoration: none; color: var(--ink-deep); }
+  .docs-nextprev a:hover { background: var(--bg-soft); }
+  .docs-nextprev .dir { display: block; font-size: 11.5px; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: 3px; }
+  .docs-nextprev .next { text-align: right; }
+  @media (max-width: 560px) { .docs-nextprev { grid-template-columns: 1fr; } }
+
+  /* ---- index page ---------------------------------------------------------- */
   .docs-index-groups { display: grid; gap: var(--space-4); }
   .docs-index-groups h2 { margin-bottom: var(--space-1); }
   .docs-index-groups ul { list-style: none; padding: 0; margin: 0; }
-  .docs-index-groups li { padding: 10px 0; border-bottom: 1px solid var(--rule, #e5e2dc); }
+  .docs-index-groups li { padding: 11px 0; border-bottom: 1px solid var(--rule); }
   .docs-index-groups a { font-weight: 600; }
   .docs-index-groups .d { display: block; font-family: var(--sans); font-size: 14px;
-    color: var(--ink-faint); margin-top: 2px; }
+    color: var(--ink-faint); margin-top: 3px; line-height: 1.5; }
 </style>
+<script>
+  // Copy button per code block. Written here rather than in a bundle because the
+  // docs are static files and one inline listener beats a build step.
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.docs-article pre').forEach(function (pre) {
+      var wrap = document.createElement('div');
+      wrap.className = 'codewrap';
+      pre.parentNode.insertBefore(wrap, pre);
+      wrap.appendChild(pre);
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'copy'; b.textContent = 'Copy';
+      b.addEventListener('click', function () {
+        navigator.clipboard.writeText(pre.innerText).then(function () {
+          b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1400);
+        }).catch(function () { b.textContent = 'Press Ctrl+C'; });
+      });
+      wrap.appendChild(b);
+    });
+  });
+</script>
 <link rel="canonical" href="https://crads-ai.com/docs/back-up-and-restore">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Sam Davis — Crads AI">
@@ -115,33 +213,84 @@
   </div>
 </nav>
 <main class="docs-page wrap ">
-<a class="docs-back" href="/docs">← All docs</a>
+<div class="docs-shell">
+<aside class="docs-side"><details>
+  <summary>All docs</summary>
+  <p style="margin:0 0 var(--space-2)"><a href="/docs">Docs home</a></p>
+    <h2>Explained</h2>
+    <ul>
+      <li><a href="/docs/rocks-and-pebbles">Rocks and pebbles</a></li>
+      <li><a href="/docs/continuity">What happens if Crads AI goes away</a></li>
+      <li><a href="/docs/what-your-community-can-see">What your community can see</a></li>
+      <li><a href="/docs/the-three-layers">Who edits what</a></li>
+      <li><a href="/docs/how-updates-reach-you">How updates reach you</a></li>
+    </ul>
+    <h2>Walkthrough</h2>
+    <ul>
+      <li><a href="/docs/first-hour">Your first hour</a></li>
+    </ul>
+    <h2>How to</h2>
+    <ul>
+      <li><a href="/docs/connect-google">Connect Google, with your own key</a></li>
+      <li><a href="/docs/become-a-rock">Turn your mineral into a rock</a></li>
+      <li><a href="/docs/manage-members">Invite and manage members</a></li>
+      <li><a href="/docs/fix-a-broken-connection">Fix a connection that has stopped working</a></li>
+      <li><a href="/docs/back-up-and-restore" aria-current="page">Back up your mineral, and get it back</a></li>
+      <li><a href="/docs/claude-code-on-your-mineral">Use Claude Code on your mineral</a></li>
+    </ul>
+    <h2>Reference</h2>
+    <ul>
+      <li><a href="/docs/skills">Every skill your mineral ships with</a></li>
+      <li><a href="/docs/connections">What you can connect</a></li>
+      <li><a href="/docs/machinery-jobs">The jobs your mineral runs by itself</a></li>
+    </ul>
+    <h2>Legal</h2>
+    <ul>
+      <li><a href="/docs/privacy-policy">Privacy policy</a></li>
+      <li><a href="/docs/terms">Terms of service</a></li>
+      <li><a href="/docs/hosting-a-rock">Hosting a rock</a></li>
+      <li><a href="/docs/acceptable-use">Acceptable use</a></li>
+    </ul>
+</details></aside>
+<article class="docs-article">
 <p class="docs-eyebrow">How to</p>
 <h1>Back up your mineral, and get it back</h1>
 <p>Two different things get backed up, by two different mechanisms, and the second one has a step only you can do.</p>
 <p><strong>This page describes a pebble.</strong> A rock does not run either of the nightly jobs below: no encrypted snapshot, no scheduled brain push. If you host a rock, read the last section, because the difference matters and it is not a setting you have switched off.</p>
-<h2>Your brain backs itself up</h2>
+<h2 id="your-brain-backs-itself-up">Your brain backs itself up<a class="anchor" href="#your-brain-backs-itself-up" aria-label="Link to this section">#</a></h2>
 <p>Your brain is a git repository. Connect GitHub and it pushes to a <strong>private repository in your own account</strong>, on its own, from then on.</p>
 <p>That is the important half. It means the pages your assistant has written about your world exist somewhere that is not this machine and is not ours, in a format you can read in any text editor, on infrastructure we cannot reach.</p>
 <p><strong>If you do nothing else on this page, connect GitHub.</strong> A mineral with no repository connected is a mineral whose brain exists in exactly one place.</p>
-<h2>Everything else backs up encrypted</h2>
+<h2 id="everything-else-backs-up-encrypted">Everything else backs up encrypted<a class="anchor" href="#everything-else-backs-up-encrypted" aria-label="Link to this section">#</a></h2>
 <p>Some things cannot live in a git repository: your Claude sign-in, your service tokens, your bot token, your scheduled jobs, your connection wiring. Those are deliberately excluded from your brain repo, because a repository that carried your credentials would be a repository you could not safely share or clone.</p>
 <p>So once a night your mineral tars them up, <strong>encrypts them on your machine</strong> with a passphrase generated on your machine, and pushes the encrypted blob to the same repository. The repository only ever sees ciphertext. We never hold the passphrase.</p>
-<h2>The step only you can do</h2>
+<h2 id="the-step-only-you-can-do">The step only you can do<a class="anchor" href="#the-step-only-you-can-do" aria-label="Link to this section">#</a></h2>
 <p>Here is the catch, and it is a real one rather than a formality.</p>
 <p>The passphrase is generated on your mineral on the first backup run, and printed once, on that run. <strong>Its only other copy is inside the backup it encrypts.</strong></p>
 <p>Which means: if your machine dies and the passphrase lived only on that machine, you have an encrypted blob that nobody, including us, can open. That is not a backup. It is a souvenir.</p>
 <p>So take the passphrase off the box, once, into wherever you keep things like that. Your mineral tracks whether you have done this and reports itself as <strong>not recoverable</strong> until you have. That is not nagging, it is the honest state.</p>
-<h2>Getting it back</h2>
+<h2 id="getting-it-back">Getting it back<a class="anchor" href="#getting-it-back" aria-label="Link to this section">#</a></h2>
 <p>Restoring is a real, tested procedure rather than a hope. It needs the encrypted blob, which is in your repository, and the passphrase, which is with you.</p>
 <p>Ask us and we walk it with you. There is a written runbook we follow rather than improvising, and part of our wind-down commitment is that restores get verified before anything is switched off, because a backup nobody has tested is not a backup.</p>
-<h2>What is not backed up</h2>
+<h2 id="what-is-not-backed-up">What is not backed up<a class="anchor" href="#what-is-not-backed-up" aria-label="Link to this section">#</a></h2>
 <p>Anything you never told your assistant, and anything you deleted before the last run. Backups are nightly, not continuous.</p>
 <p>If you are about to do something drastic to your brain, the safe move is to let a night pass first, or push your brain manually before you start.</p>
-<h2>If you host a rock</h2>
+<h2 id="if-you-host-a-rock">If you host a rock<a class="anchor" href="#if-you-host-a-rock" aria-label="Link to this section">#</a></h2>
 <p>A rock runs a much smaller set of jobs than a pebble, and two of the ones it does not run are the two on this page. <strong>Neither the nightly encrypted snapshot nor the nightly brain push happens on a rock.</strong></p>
 <p>The push that runs when you turn a mineral into a rock is a one-time step inside that upgrade. It is not the beginning of a nightly habit, and it is easy to read it as one, because the Custody card afterwards says your brain backs up to a repository and does not say how long ago.</p>
 <p>So if you host a rock, treat its backup as <strong>something you do</strong>, not something that happens. Push it deliberately before anything significant: before you change what the rock publishes, before an update, before you invite a cohort.</p>
+<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/fix-a-broken-connection"><span class="dir">Previous</span>Fix a connection that has stopped working</a><a class="next" href="/docs/claude-code-on-your-mineral"><span class="dir">Next</span>Use Claude Code on your mineral</a></nav>
+</article>
+<nav class="docs-toc" aria-label="On this page"><h2>On this page</h2>
+<ul>
+  <li><a href="#your-brain-backs-itself-up">Your brain backs itself up</a></li>
+  <li><a href="#everything-else-backs-up-encrypted">Everything else backs up encrypted</a></li>
+  <li><a href="#the-step-only-you-can-do">The step only you can do</a></li>
+  <li><a href="#getting-it-back">Getting it back</a></li>
+  <li><a href="#what-is-not-backed-up">What is not backed up</a></li>
+  <li><a href="#if-you-host-a-rock">If you host a rock</a></li>
+</ul></nav>
+</div>
 </main>
 
 <footer class="site-footer wrap">

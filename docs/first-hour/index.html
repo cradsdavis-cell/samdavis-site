@@ -11,61 +11,159 @@
 <script defer src="/lib/site.js"></script>
 
 <style>
-  .docs-page { max-width: 46rem; }
-  .docs-page .docs-eyebrow { font-family: var(--sans); font-size: 13px; letter-spacing: .04em;
-    text-transform: uppercase; color: var(--ink-faint); margin-bottom: var(--space-1); }
-  .docs-page h1 { margin-top: 0; }
-  .docs-page .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
-    margin: 0 0 var(--space-4); }
-  .docs-page table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
-    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
-  .docs-page th, .docs-page td { text-align: left; padding: 8px 12px 8px 0;
-    border-bottom: 1px solid var(--rule, #e5e2dc); vertical-align: top; }
-  .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
-    overflow-x: auto; font-size: 13.5px; }
-  .docs-page figure.shot { margin: var(--space-4) 0; }
-  .docs-page .shot-frame { position: relative; display: block; line-height: 0; }
-  .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
-    border: 1px solid var(--rule, #e5e2dc); }
-  .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
-    color: var(--ink-faint); margin-top: 8px; }
+  /* ---- layout: sidebar | article | on-page contents ------------------- */
+  .docs-shell { display: grid; grid-template-columns: 232px minmax(0,1fr) 200px;
+    gap: var(--space-4); align-items: start; max-width: var(--wrap-max); }
+  .docs-page { max-width: none; }
+  @media (max-width: 1080px) { .docs-shell { grid-template-columns: 214px minmax(0,1fr); } .docs-toc { display: none; } }
+  @media (max-width: 820px)  { .docs-shell { grid-template-columns: minmax(0,1fr); gap: var(--space-3); } }
 
-  /* Annotations. The marker outlines the real control and carries its number at
-     the corner, so the eye goes box -> number -> legend line. Positioned in
-     percentages by the capture rig, never by hand. */
-  .docs-page .shot-mark { position: absolute; box-sizing: border-box;
-    border: 2px solid var(--accent, #b4531f); border-radius: 6px;
-    box-shadow: 0 0 0 3px rgba(255,255,255,.55); pointer-events: none; }
-  .docs-page .shot-mark b { position: absolute; left: -11px; top: -11px;
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--accent, #b4531f); color: #fff;
-    font-family: var(--sans); font-size: 12.5px; font-weight: 700;
-    line-height: 22px; text-align: center; letter-spacing: 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,.28); }
-  .docs-page .shot-legend { list-style: none; counter-reset: mark;
-    margin: 12px 0 0; padding: 0; font-family: var(--sans); font-size: 14px;
-    color: var(--ink-deep); }
-  .docs-page .shot-legend li { counter-increment: mark; position: relative;
-    padding: 4px 0 4px 30px; line-height: 1.55; }
-  .docs-page .shot-legend li::before { content: counter(mark);
-    position: absolute; left: 0; top: 4px; width: 20px; height: 20px;
-    border-radius: 50%; background: var(--accent, #b4531f); color: #fff;
-    font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
-  @media (max-width: 640px) {
-    .docs-page .shot-mark b { width: 18px; height: 18px; line-height: 18px;
-      font-size: 11px; left: -9px; top: -9px; }
+  /* ---- sidebar --------------------------------------------------------- */
+  .docs-side { position: sticky; top: var(--space-3); font-family: var(--sans);
+    font-size: 14px; max-height: calc(100vh - var(--space-4)); overflow-y: auto; }
+  /* DESKTOP ONLY: no disclosure, and the tree shows whether or not the element
+     is open. Scoped to a min-width because unscoped it also forced the tree
+     open on mobile, which is the exact thing the closed default exists to
+     avoid. Verified in a browser at both widths rather than reasoned about. */
+  @media (min-width: 821px) {
+    .docs-side > details > summary { display: none; }
+    .docs-side > details > *:not(summary) { display: revert; }
+    .docs-side > details::details-content { content-visibility: visible; display: revert; block-size: auto; }
   }
-  .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
-  .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
-    margin-bottom: var(--space-3); }
+  .docs-side h2 { font-family: var(--sans); font-size: 11.5px; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--ink-faint); margin: var(--space-3) 0 6px; font-weight: 650; }
+  .docs-side h2:first-child { margin-top: 0; }
+  .docs-side ul { list-style: none; margin: 0; padding: 0; }
+  .docs-side a { display: block; padding: 5px 10px; margin-left: -10px; border-radius: 7px;
+    color: var(--ink-soft); text-decoration: none; line-height: 1.4; }
+  .docs-side a:hover { background: var(--bg-soft); color: var(--ink-deep); }
+  .docs-side a[aria-current="page"] { background: var(--bg-card); color: var(--ink-deep); font-weight: 600; }
+  @media (max-width: 820px) {
+    .docs-side { position: static; max-height: none; border-bottom: 1px solid var(--rule);
+      padding-bottom: var(--space-2); margin-bottom: var(--space-2); }
+    .docs-side > details > summary { display: block; cursor: pointer; font-family: var(--sans);
+      font-weight: 600; color: var(--ink-deep); list-style: none; padding: 6px 0; }
+    .docs-side details > summary::-webkit-details-marker { display: none; }
+    .docs-side details > summary::before { content: "\2630"; margin-right: 8px; color: var(--ink-faint); }
+  }
+
+  /* ---- article --------------------------------------------------------- */
+  /* A DOCS TYPE SCALE. The site's headings clamp to 72px (h1) and 48px (h2),
+     which is right for a landing page and wrong here: at that size a docs title
+     runs to four lines and an h2 outweighs the paragraph it introduces. Same
+     family, same colour, same weight, smaller steps and a longer measure. */
+  .docs-article { max-width: var(--read-col); }
+  .docs-article h1 { font-size: clamp(30px, 3.4vw, 40px); line-height: 1.12; margin-bottom: var(--space-1); }
+  .docs-article h2 { font-size: clamp(21px, 2.1vw, 25px); line-height: 1.22;
+    margin: var(--space-4) 0 var(--space-1); }
+  .docs-article h3 { font-size: clamp(17px, 1.6vw, 19px); line-height: 1.3;
+    margin: var(--space-3) 0 var(--space-1); }
+  .docs-article p, .docs-article li { font-size: 16.5px; line-height: 1.62; }
+  .docs-article ul, .docs-article ol { padding-left: 22px; }
+  .docs-article li { margin: 4px 0; }
+  .docs-article li > ul, .docs-article li > ol { margin-top: 4px; }
+  .docs-article .docs-eyebrow { font-family: var(--sans); font-size: 12px; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--accent-deep); margin: 0 0 var(--space-1); font-weight: 650; }
+  .docs-article h1 { margin-top: 0; }
+  .docs-article .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
+    margin: 0 0 var(--space-4); line-height: 1.5; }
+  .docs-article h2, .docs-article h3 { scroll-margin-top: var(--space-3); }
+  .docs-article h2 .anchor, .docs-article h3 .anchor { opacity: 0; text-decoration: none;
+    color: var(--ink-faint); font-weight: 400; margin-left: 8px; }
+  .docs-article h2:hover .anchor, .docs-article h3:hover .anchor { opacity: 1; }
+  .docs-article table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
+    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
+  .docs-article th, .docs-article td { text-align: left; padding: 9px 14px 9px 0;
+    border-bottom: 1px solid var(--rule); vertical-align: top; }
+  .docs-article th { font-weight: 650; color: var(--ink-deep); }
+
+  /* ---- code, with a copy button ---------------------------------------- */
+  .docs-article .codewrap { position: relative; margin: var(--space-3) 0; }
+  .docs-article pre { background: var(--bg-soft); border: 1px solid var(--rule);
+    padding: 16px 18px; border-radius: 10px; overflow-x: auto; font-size: 13.5px; margin: 0; }
+  .docs-article .copy { position: absolute; top: 8px; right: 8px; font-family: var(--sans);
+    font-size: 12px; padding: 4px 10px; border: 1px solid var(--rule); border-radius: 6px;
+    background: var(--bg-main); color: var(--ink-faint); cursor: pointer; opacity: 0; transition: opacity .12s; }
+  .docs-article .codewrap:hover .copy, .docs-article .copy:focus { opacity: 1; }
+
+  /* ---- callouts -------------------------------------------------------- */
+  .docs-article blockquote { margin: var(--space-3) 0; padding: 14px 18px;
+    border-left: 3px solid var(--rule); background: var(--bg-soft); border-radius: 0 8px 8px 0; }
+  .docs-article blockquote p { margin: 0; font-size: 16px; }
+  .docs-article blockquote.note { border-left-color: var(--accent); }
+  .docs-article blockquote.warn { border-left-color: var(--accent-deep); background: var(--accent-glow); }
+
+  /* ---- screenshots + annotations ---------------------------------------- */
+  .docs-article figure.shot { margin: var(--space-4) 0; }
+  .docs-article .shot-frame { position: relative; display: block; line-height: 0; }
+  .docs-article figure.shot img { width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--rule); }
+  .docs-article figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 8px; }
+  .docs-article .shot-mark { position: absolute; box-sizing: border-box;
+    border: 2px solid var(--accent); border-radius: 6px;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.55); pointer-events: none; }
+  .docs-article .shot-mark b { position: absolute; left: -11px; top: -11px; width: 22px; height: 22px;
+    border-radius: 50%; background: var(--accent); color: #fff; font-family: var(--sans);
+    font-size: 12.5px; font-weight: 700; line-height: 22px; text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,.28); }
+  .docs-article .shot-legend { list-style: none; counter-reset: mark; margin: 12px 0 0; padding: 0;
+    font-family: var(--sans); font-size: 14px; color: var(--ink-soft); }
+  .docs-article .shot-legend li { counter-increment: mark; position: relative; padding: 4px 0 4px 30px; line-height: 1.55; }
+  .docs-article .shot-legend li::before { content: counter(mark); position: absolute; left: 0; top: 4px;
+    width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: #fff;
+    font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
+  @media (max-width: 640px) { .docs-article .shot-mark b { width: 18px; height: 18px; line-height: 18px; font-size: 11px; left: -9px; top: -9px; } }
+
+  /* ---- on-page contents -------------------------------------------------- */
+  .docs-toc { position: sticky; top: var(--space-3); font-family: var(--sans); font-size: 13px; }
+  .docs-toc h2 { font-size: 11.5px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 0 0 8px; font-weight: 650; }
+  .docs-toc ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--rule); }
+  .docs-toc a { display: block; padding: 4px 0 4px 12px; margin-left: -1px;
+    border-left: 2px solid transparent; color: var(--ink-faint); text-decoration: none; line-height: 1.45; }
+  .docs-toc a:hover { color: var(--ink-deep); border-left-color: var(--rule); }
+
+  /* ---- prev / next --------------------------------------------------------- */
+  .docs-nextprev { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);
+    margin-top: var(--space-5); padding-top: var(--space-3); border-top: 1px solid var(--rule);
+    font-family: var(--sans); }
+  .docs-nextprev a { display: block; padding: 12px 16px; border: 1px solid var(--rule);
+    border-radius: 10px; text-decoration: none; color: var(--ink-deep); }
+  .docs-nextprev a:hover { background: var(--bg-soft); }
+  .docs-nextprev .dir { display: block; font-size: 11.5px; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: 3px; }
+  .docs-nextprev .next { text-align: right; }
+  @media (max-width: 560px) { .docs-nextprev { grid-template-columns: 1fr; } }
+
+  /* ---- index page ---------------------------------------------------------- */
   .docs-index-groups { display: grid; gap: var(--space-4); }
   .docs-index-groups h2 { margin-bottom: var(--space-1); }
   .docs-index-groups ul { list-style: none; padding: 0; margin: 0; }
-  .docs-index-groups li { padding: 10px 0; border-bottom: 1px solid var(--rule, #e5e2dc); }
+  .docs-index-groups li { padding: 11px 0; border-bottom: 1px solid var(--rule); }
   .docs-index-groups a { font-weight: 600; }
   .docs-index-groups .d { display: block; font-family: var(--sans); font-size: 14px;
-    color: var(--ink-faint); margin-top: 2px; }
+    color: var(--ink-faint); margin-top: 3px; line-height: 1.5; }
 </style>
+<script>
+  // Copy button per code block. Written here rather than in a bundle because the
+  // docs are static files and one inline listener beats a build step.
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.docs-article pre').forEach(function (pre) {
+      var wrap = document.createElement('div');
+      wrap.className = 'codewrap';
+      pre.parentNode.insertBefore(wrap, pre);
+      wrap.appendChild(pre);
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'copy'; b.textContent = 'Copy';
+      b.addEventListener('click', function () {
+        navigator.clipboard.writeText(pre.innerText).then(function () {
+          b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1400);
+        }).catch(function () { b.textContent = 'Press Ctrl+C'; });
+      });
+      wrap.appendChild(b);
+    });
+  });
+</script>
 <link rel="canonical" href="https://crads-ai.com/docs/first-hour">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Sam Davis — Crads AI">
@@ -115,12 +213,51 @@
   </div>
 </nav>
 <main class="docs-page wrap ">
-<a class="docs-back" href="/docs">← All docs</a>
+<div class="docs-shell">
+<aside class="docs-side"><details>
+  <summary>All docs</summary>
+  <p style="margin:0 0 var(--space-2)"><a href="/docs">Docs home</a></p>
+    <h2>Explained</h2>
+    <ul>
+      <li><a href="/docs/rocks-and-pebbles">Rocks and pebbles</a></li>
+      <li><a href="/docs/continuity">What happens if Crads AI goes away</a></li>
+      <li><a href="/docs/what-your-community-can-see">What your community can see</a></li>
+      <li><a href="/docs/the-three-layers">Who edits what</a></li>
+      <li><a href="/docs/how-updates-reach-you">How updates reach you</a></li>
+    </ul>
+    <h2>Walkthrough</h2>
+    <ul>
+      <li><a href="/docs/first-hour" aria-current="page">Your first hour</a></li>
+    </ul>
+    <h2>How to</h2>
+    <ul>
+      <li><a href="/docs/connect-google">Connect Google, with your own key</a></li>
+      <li><a href="/docs/become-a-rock">Turn your mineral into a rock</a></li>
+      <li><a href="/docs/manage-members">Invite and manage members</a></li>
+      <li><a href="/docs/fix-a-broken-connection">Fix a connection that has stopped working</a></li>
+      <li><a href="/docs/back-up-and-restore">Back up your mineral, and get it back</a></li>
+      <li><a href="/docs/claude-code-on-your-mineral">Use Claude Code on your mineral</a></li>
+    </ul>
+    <h2>Reference</h2>
+    <ul>
+      <li><a href="/docs/skills">Every skill your mineral ships with</a></li>
+      <li><a href="/docs/connections">What you can connect</a></li>
+      <li><a href="/docs/machinery-jobs">The jobs your mineral runs by itself</a></li>
+    </ul>
+    <h2>Legal</h2>
+    <ul>
+      <li><a href="/docs/privacy-policy">Privacy policy</a></li>
+      <li><a href="/docs/terms">Terms of service</a></li>
+      <li><a href="/docs/hosting-a-rock">Hosting a rock</a></li>
+      <li><a href="/docs/acceptable-use">Acceptable use</a></li>
+    </ul>
+</details></aside>
+<article class="docs-article">
 <p class="docs-eyebrow">Walkthrough</p>
 <h1>Your first hour</h1>
 <p>This walks the whole way in, from a machine with nothing on it to an assistant that answers you. It takes about an hour, most of which is the interview at the end, and you can stop after step 3 and come back.</p>
 <p>You need the Crads AI app, and the email address your invitation went to.</p>
-<h2>1. Open the door</h2>
+<h2 id="1-open-the-door">1. Open the door<a class="anchor" href="#1-open-the-door" aria-label="Link to this section">#</a></h2>
 <p>The first screen is the door. It asks which mineral you are opening.</p>
 <figure class="shot"><span class="shot-frame"><a href="/docs/shots/door-identity-chooser.png" target="_blank" rel="noopener"><img src="/docs/shots/door-identity-chooser.png" alt="The door, listing the minerals this machine can open" loading="lazy"></a></span><figcaption>The door, listing the minerals this machine can open</figcaption></figure>
 <p>On a machine that has never opened one, the list is empty and the door offers to claim your invitation instead.</p>
@@ -134,11 +271,11 @@
 <li><strong>It has to be the address the invitation went to.</strong> A forwarded link will not</li>
 </ul>
 <p>  claim someone else's mineral, by design.</p>
-<h2>2. Sign Claude in</h2>
+<h2 id="2-sign-claude-in">2. Sign Claude in<a class="anchor" href="#2-sign-claude-in" aria-label="Link to this section">#</a></h2>
 <p>Your mineral is inert until you sign Claude in on it. This is deliberate: it is your assistant, running on your box, using your Claude account.</p>
 <figure class="shot"><span class="shot-frame"><a href="/docs/shots/connect-onboarding.png" target="_blank" rel="noopener"><img src="/docs/shots/connect-onboarding.png" alt="The connect screen, where the assistant is signed in" loading="lazy"></a></span><figcaption>The connect screen, where the assistant is signed in</figcaption></figure>
 <p>Follow the prompt, approve the code, and come back. Nothing else in this tutorial works until this step is done.</p>
-<h2>3. Look around an empty mineral</h2>
+<h2 id="3-look-around-an-empty-mineral">3. Look around an empty mineral<a class="anchor" href="#3-look-around-an-empty-mineral" aria-label="Link to this section">#</a></h2>
 <p>Now the app opens on your mineral. It looks sparse, because it is: nothing knows anything about you yet.</p>
 <figure class="shot"><span class="shot-frame"><a href="/docs/shots/member-empty.png" target="_blank" rel="noopener"><img src="/docs/shots/member-empty.png" alt="A mineral before onboarding" loading="lazy"></a></span><figcaption>A mineral before onboarding</figcaption></figure>
 <p>The sidebar is worth naming now, because the rest of the documentation assumes it. Two of these are single pages and three are groups you open:</p>
@@ -166,16 +303,27 @@
 <li><strong>Terminal</strong> sits on its own at the bottom. That is where you talk to your</li>
 </ul>
 <p>  assistant directly.</p>
-<h2>4. Do the interview</h2>
+<h2 id="4-do-the-interview">4. Do the interview<a class="anchor" href="#4-do-the-interview" aria-label="Link to this section">#</a></h2>
 <p>The last step is the long one. Your assistant interviews you, and out of that interview it builds your brain: who you are, what you are trying to do, who is in your world, how you work, what to never touch.</p>
 <p>Start it by opening the Terminal tab and asking for it:</p>
 <pre><code>/onboard</code></pre>
 <p>It runs as a conversation, one question at a time, and it is resumable. Nobody answers all of it in one sitting, and it is designed for you not to. Leave it and come back; it picks up where it stopped.</p>
 <p>When it has enough, it writes your brain as a set of linked pages you own and can read. That is the thing everything else reads from.</p>
-<h2>Where you land</h2>
+<h2 id="where-you-land">Where you land<a class="anchor" href="#where-you-land" aria-label="Link to this section">#</a></h2>
 <figure class="shot marked"><span class="shot-frame"><a href="/docs/shots/member-overview.png" target="_blank" rel="noopener"><img src="/docs/shots/member-overview.png" alt="The assistant home, once the brain has something in it" loading="lazy"></a><span class="shot-mark" style="left:20.94%;top:12.5%;width:76.25%;height:10.16%"><b aria-hidden="true">1</b></span><span class="shot-mark" style="left:20.94%;top:24.25%;width:15.63%;height:12.03%"><b aria-hidden="true">2</b></span><span class="shot-mark" style="left:37.66%;top:24.25%;width:15.63%;height:12.03%"><b aria-hidden="true">3</b></span><span class="shot-mark" style="left:20.94%;top:37.7%;width:76.25%;height:42.82%"><b aria-hidden="true">4</b></span><span class="shot-mark" style="left:20.94%;top:81.95%;width:24.48%;height:12.98%"><b aria-hidden="true">5</b></span></span><figcaption>The assistant home, once the brain has something in it</figcaption><ol class="shot-legend"><li>Your assistant, by the name you gave it. &quot;Talk to it&quot; opens a conversation.</li><li>How much of the interview is done. Until this completes, every answer your assistant gives is generic.</li><li>How many pages your brain holds. This is what your assistant reads before it answers anything.</li><li>What your pebble can do, and what is still switched off. Each row links to the way in.</li><li>The jobs your mineral runs by itself. Expand it to see each one and when it last ran.</li></ol></figure>
 <p>Prices shown in these screenshots are indicative and not a quote.</p>
 <p>That is the whole setup. From here, the how-to guides each add one habit: a sorted inbox before you get up, a brief each morning, a nudge when someone owes you a reply.</p>
+<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/how-updates-reach-you"><span class="dir">Previous</span>How updates reach you</a><a class="next" href="/docs/connect-google"><span class="dir">Next</span>Connect Google, with your own key</a></nav>
+</article>
+<nav class="docs-toc" aria-label="On this page"><h2>On this page</h2>
+<ul>
+  <li><a href="#1-open-the-door">1. Open the door</a></li>
+  <li><a href="#2-sign-claude-in">2. Sign Claude in</a></li>
+  <li><a href="#3-look-around-an-empty-mineral">3. Look around an empty mineral</a></li>
+  <li><a href="#4-do-the-interview">4. Do the interview</a></li>
+  <li><a href="#where-you-land">Where you land</a></li>
+</ul></nav>
+</div>
 </main>
 
 <footer class="site-footer wrap">
