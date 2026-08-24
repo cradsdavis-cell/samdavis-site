@@ -114,6 +114,13 @@
     font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
   @media (max-width: 640px) { .docs-article .shot-mark b { width: 18px; height: 18px; line-height: 18px; font-size: 11px; left: -9px; top: -9px; } }
 
+  /* ---- diagrams ---------------------------------------------------------- */
+  .docs-article figure.diagram { margin: var(--space-4) 0; }
+  .docs-article figure.diagram svg.dgm { width: 100%; height: auto; display: block; }
+  .docs-article figure.diagram figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 10px; }
+  .docs-article figure.diagram text { font-family: var(--sans); }
+
   /* ---- on-page contents -------------------------------------------------- */
   .docs-toc { position: sticky; top: var(--space-3); font-family: var(--sans); font-size: 13px; }
   .docs-toc h2 { font-size: 11.5px; letter-spacing: .07em; text-transform: uppercase;
@@ -256,6 +263,26 @@
 <p class="docs-eyebrow">Explained</p>
 <h1>What your community can see</h1>
 <p>If your mineral belongs to a rock, it tells that rock some things about itself. This page is the whole list, because &quot;we respect your privacy&quot; is not an answer and a list is.</p>
+<figure class="diagram">
+<svg viewBox="0 0 824 216" role="img" aria-labelledby="d-sees-t d-sees-d" class="dgm">
+<title id="d-sees-t">Who can see what</title><desc id="d-sees-d">Your brain and credentials stay on your mineral. Your rock receives only a small status heartbeat and cannot read your brain. Crads AI reaches the machine only through a support session you grant, which expires and is logged.</desc>
+<defs><marker id="d-sees-a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+<path d="M0 0.5 L7.5 4 L0 7.5 z" fill="var(--ink-faint)"/></marker></defs>
+<rect x="0" y="28" width="330" height="184" rx="12" fill="var(--bg-soft)" stroke="var(--rule)"/>
+<text x="16" y="50" fill="var(--ink-faint)" font-size="11.5" letter-spacing="0.06em">YOUR MINERAL</text>
+<g><rect x="16" y="62" width="132" height="52" rx="9" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/><text x="82" y="81" text-anchor="middle" dominant-baseline="middle" fill="var(--ink-deep)" font-size="13.5" font-weight="600">Your brain</text><text x="82" y="98" text-anchor="middle" dominant-baseline="middle" fill="var(--ink-faint)" font-size="11.5">pages, notes</text></g>
+<g><rect x="160" y="62" width="154" height="52" rx="9" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/><text x="237" y="81" text-anchor="middle" dominant-baseline="middle" fill="var(--ink-deep)" font-size="13.5" font-weight="600">Your credentials</text><text x="237" y="98" text-anchor="middle" dominant-baseline="middle" fill="var(--ink-faint)" font-size="11.5">keys and tokens</text></g>
+<g><rect x="16" y="126" width="298" height="46" rx="9" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/><text x="165" y="149" text-anchor="middle" dominant-baseline="middle" fill="var(--ink-deep)" font-size="13.5" font-weight="600">Everything your assistant reads and writes</text></g>
+<text x="16" y="196" fill="var(--accent)" font-size="12" font-weight="600">None of this leaves the machine.</text>
+<g><rect x="452" y="34" width="176" height="52" rx="9" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/><text x="540" y="53" text-anchor="middle" dominant-baseline="middle" fill="var(--ink-deep)" font-size="13.5" font-weight="600">Your rock</text><text x="540" y="70" text-anchor="middle" dominant-baseline="middle" fill="var(--ink-faint)" font-size="11.5">the community hosting you</text></g>
+<g><rect x="452" y="130" width="176" height="52" rx="9" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/><text x="540" y="149" text-anchor="middle" dominant-baseline="middle" fill="var(--ink-deep)" font-size="13.5" font-weight="600">Crads AI</text><text x="540" y="166" text-anchor="middle" dominant-baseline="middle" fill="var(--ink-faint)" font-size="11.5">keeps the software running</text></g>
+<g><path d="M338 82 L446 62" fill="none" stroke="var(--ink-faint)" stroke-width="1.4" marker-end="url(#d-sees-a)"/><text x="392" y="60" text-anchor="middle" fill="var(--ink-faint)" font-size="11.5">heartbeat only</text></g>
+<g><path d="M446 152 L338 152" fill="none" stroke="var(--ink-faint)" stroke-width="1.4" stroke-dasharray="4 4" marker-end="url(#d-sees-a)"/><text x="392" y="168" text-anchor="middle" fill="var(--ink-faint)" font-size="11.5">you let us in</text></g>
+<text x="452" y="104" text-anchor="start" fill="var(--ink-faint)" font-size="11.5" font-style="italic">Cannot read your brain.</text>
+<text x="452" y="200" text-anchor="start" fill="var(--ink-faint)" font-size="11.5" font-style="italic">Only while the grant is live, and logged.</text>
+</svg>
+<figcaption>Who can see what</figcaption>
+</figure>
 <h2 id="the-list">The list<a class="anchor" href="#the-list" aria-label="Link to this section">#</a></h2>
 <p>Your mineral sends a small status record to its rock. Three groups:</p>
 <p><strong>Always sent, if you are in a community at all</strong></p>

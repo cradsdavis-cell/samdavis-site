@@ -114,6 +114,13 @@
     font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
   @media (max-width: 640px) { .docs-article .shot-mark b { width: 18px; height: 18px; line-height: 18px; font-size: 11px; left: -9px; top: -9px; } }
 
+  /* ---- diagrams ---------------------------------------------------------- */
+  .docs-article figure.diagram { margin: var(--space-4) 0; }
+  .docs-article figure.diagram svg.dgm { width: 100%; height: auto; display: block; }
+  .docs-article figure.diagram figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 10px; }
+  .docs-article figure.diagram text { font-family: var(--sans); }
+
   /* ---- on-page contents -------------------------------------------------- */
   .docs-toc { position: sticky; top: var(--space-3); font-family: var(--sans); font-size: 13px; }
   .docs-toc h2 { font-size: 11.5px; letter-spacing: .07em; text-transform: uppercase;
