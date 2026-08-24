@@ -96,7 +96,7 @@
 <p>Crads AI is operated by Samuel Davis, trading as Crads AI, <strong>ABN 26 929 349 775</strong>, in Coogee, New South Wales, Australia. Contact: cradsdavis@gmail.com.</p>
 <p>This is version 0.4, effective 24 August 2026, covering the beta programme. It will be reviewed by a lawyer before the programme converts to paid, and the version and date at the top of this page change whenever the text does.</p>
 <p><em>Changed in 0.2: added &quot;What a support session can see&quot;, below. Version 0.1 said support access is bounded and logged, which was true and incomplete: it did not say what a person with that access can read.</em></p>
-<p><em>Changed in 0.4: corrected the deletion section, which claimed we remove your registration pointers from the directory. Some are removed and some currently are not. See &quot;Taking your data, and deletion&quot;.</em></p>
+<p><em>Changed in 0.4: corrected the deletion section, which claimed we remove your registration pointers from the directory. Two records were being left behind to expire on a 400-day timer instead. The software was changed the same day so they are deleted with the machine, and this section now lists exactly what goes and what remains.</em></p>
 <p><em>Changed in 0.3: corrected &quot;There is no standing key&quot;. A mineral built for you by a community is born carrying a Crads AI setup key, because somebody has to build the machine before you can reach it. See &quot;The key your mineral is born with&quot;. Version 0.2 stated the opposite, and it was wrong.</em></p>
 <h2>The short version</h2>
 <p>Your mineral is a machine you hold, in the EU, running your assistant on your own Claude account. Your brain lives on it as ordinary files. <strong>Nobody at Crads AI reads your notes.</strong> That is a description of how it is built, not a promise about our conduct: your pages sit on your box, and operating the box does not include reading it.</p>
@@ -196,18 +196,21 @@
 <li>its membership links to any community</li>
 <li>its build record</li>
 </ul>
-<p>Currently <strong>not</strong> removed, and we are fixing this:</p>
+<p>Also removed, as of 24 August 2026:</p>
 <ul>
-<li>a registration record for the machine, holding its address, a one-way hash of</li>
+<li>the machine's registration record, holding its address, a one-way hash of the</li>
 </ul>
-<p>  the owner's email, and a hash of the access token it used</p>
+<p>  owner's email, and a hash of the access token it authenticated with</p>
 <ul>
-<li>a record of where the mineral came from</li>
-<li>the mineral's own directory entry, which expires on a timer rather than being</li>
+<li>the record of where the mineral came from</li>
+<li>the pointer to it in the owner's own list of machines</li>
 </ul>
-<p>  deleted outright</p>
-<p>None of that is your brain, your notes or your content: those live on the disk we destroy. It is bookkeeping about a machine that no longer exists, and it should go when the machine goes. It does not today, we found it while checking this page against the software rather than against our intentions, and this paragraph will change when the software does.</p>
-<p>If you want that residue gone sooner, ask, and we will clear it by hand and tell you when it is done.</p>
+<p>Still expiring on a timer rather than being deleted outright:</p>
+<ul>
+<li>the mineral's own directory entry</li>
+</ul>
+<p>None of that is your brain, your notes or your content: those live on the disk we destroy. It is bookkeeping about a machine that no longer exists.</p>
+<p>We found the gap while checking this page against the software rather than against our intentions. Two of those records already expired on their own after 400 days, so nothing was kept forever, but 400 days is not what &quot;we deleted your mineral&quot; should mean. They now go when the machine goes.</p>
 <h2>Sub-processors</h2>
 <table><thead><tr><th>Who</th><th>What for</th><th>Where</th></tr></thead><tbody><tr><td>Hetzner Online GmbH</td><td>the machine your mineral runs on</td><td>Germany, Finland</td></tr><tr><td>Cloudflare, Inc.</td><td>routing and the registration directory</td><td>global edge</td></tr><tr><td>Anthropic</td><td>your assistant, on your own account</td><td>per your Anthropic agreement</td></tr><tr><td>GitHub, Inc.</td><td>your own backup repository, encrypted</td><td>your account</td></tr><tr><td>Microsoft</td><td>only if you connect Microsoft 365</td><td>per Microsoft</td></tr><tr><td>Google</td><td>only if you connect Google, with your own key</td><td>per Google</td></tr></tbody></table>
 <h2>Breaches</h2>
