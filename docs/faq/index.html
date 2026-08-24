@@ -5,8 +5,8 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Back up your mineral, and get it back · Crads AI docs</title>
-<meta name="description" content="What is already backed up, the one thing you have to do yourself, and why the passphrase matters more than the backup.">
+<title>Questions, answered straight · Crads AI docs</title>
+<meta name="description" content="The questions people actually ask before and after getting a mineral, each answered in a few sentences with the deep page beside it.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 
@@ -171,16 +171,16 @@
     });
   });
 </script>
-<link rel="canonical" href="https://crads-ai.com/docs/back-up-and-restore">
+<link rel="canonical" href="https://crads-ai.com/docs/faq">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Sam Davis — Crads AI">
-<meta property="og:url" content="https://crads-ai.com/docs/back-up-and-restore">
-<meta property="og:title" content="Back up your mineral, and get it back">
-<meta property="og:description" content="What is already backed up, the one thing you have to do yourself, and why the passphrase matters more than the backup.">
+<meta property="og:url" content="https://crads-ai.com/docs/faq">
+<meta property="og:title" content="Questions, answered straight">
+<meta property="og:description" content="The questions people actually ask before and after getting a mineral, each answered in a few sentences with the deep page beside it.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Back up your mineral, and get it back">
-<meta name="twitter:description" content="What is already backed up, the one thing you have to do yourself, and why the passphrase matters more than the backup.">
+<meta name="twitter:title" content="Questions, answered straight">
+<meta name="twitter:description" content="The questions people actually ask before and after getting a mineral, each answered in a few sentences with the deep page beside it.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body>
@@ -226,7 +226,7 @@
   <p style="margin:0 0 var(--space-2)"><a href="/docs">Docs home</a></p>
     <h2>Explained</h2>
     <ul>
-      <li><a href="/docs/faq">Questions, answered straight</a></li>
+      <li><a href="/docs/faq" aria-current="page">Questions, answered straight</a></li>
       <li><a href="/docs/what-an-ai-ea-is">What an AI EA actually is</a></li>
       <li><a href="/docs/rocks-and-pebbles">Rocks and pebbles</a></li>
       <li><a href="/docs/continuity">What happens if Crads AI goes away</a></li>
@@ -246,7 +246,7 @@
       <li><a href="/docs/become-a-rock">Turn your mineral into a rock</a></li>
       <li><a href="/docs/manage-members">Invite and manage members</a></li>
       <li><a href="/docs/fix-a-broken-connection">Fix a connection that has stopped working</a></li>
-      <li><a href="/docs/back-up-and-restore" aria-current="page">Back up your mineral, and get it back</a></li>
+      <li><a href="/docs/back-up-and-restore">Back up your mineral, and get it back</a></li>
       <li><a href="/docs/claude-code-on-your-mineral">Use Claude Code on your mineral</a></li>
       <li><a href="/docs/connect-telegram">Connect Telegram</a></li>
       <li><a href="/docs/devices-and-access">Machines that can open your mineral</a></li>
@@ -278,54 +278,55 @@
     </ul>
 </details></aside>
 <article class="docs-article">
-<p class="docs-eyebrow">How to</p>
-<h1>Back up your mineral, and get it back</h1>
-<p>Two different things get backed up, by two different mechanisms, and the second one has a step only you can do.</p>
-<p><strong>This page describes a pebble.</strong> A rock does not run either of the nightly jobs below: no encrypted snapshot, no scheduled brain push. If you host a rock, read the last section, because the difference matters and it is not a setting you have switched off.</p>
-<h2 id="your-brain-backs-itself-up">Your brain backs itself up<a class="anchor" href="#your-brain-backs-itself-up" aria-label="Link to this section">#</a></h2>
-<p>Your brain is a folder of ordinary files, kept under git (the same change-tracking system programmers use, working quietly underneath; you never have to touch it). Connect GitHub and it pushes to a <strong>private repository in your own account</strong>, on its own, from then on.</p>
-<p>That is the important half. It means the pages your assistant has written about your world exist somewhere that is not this machine and is not ours, in a format you can read in any text editor, on infrastructure we cannot reach.</p>
-<p><strong>If you do nothing else on this page, connect GitHub.</strong> It happens on the <strong>Backup</strong> card, midway down <strong>Your pebble</strong>:</p>
-<figure class="shot"><span class="shot-frame"><a href="/docs/shots/member-seat.png" target="_blank" rel="noopener"><img src="/docs/shots/member-seat.png" alt="Your pebble, with the Backup card mid-page" loading="lazy"></a></span><figcaption>Your pebble, with the Backup card mid-page</figcaption></figure>
-<p>Here is the whole of it:</p>
-<ol>
-<li>If you do not have a GitHub account, make one at github.com first. The free kind is fine; it is a place to keep private copies of files.</li>
-<li>In the app, open <strong>Your pebble</strong>. The <strong>Backup</strong> card says where you stand. If nothing is connected yet it reads &quot;Your brain lives on this mineral and nowhere else&quot;, which is the app being honest with you.</li>
-<li>Press <strong>Connect my GitHub</strong>. A code appears; approve it on the github.com page that opens. Nothing to install, nothing to type beyond the sign-in.</li>
-<li>Wait for the card to say <strong>Done. Your brain now lives at github.com/...</strong>, private and yours. From then on it stays current on its own, every night.</li>
-</ol>
-<p>The card also offers <strong>Download a copy now</strong> at any time, which saves your whole brain to the computer you are sitting at. Connected or not, that button is always yours.</p>
-<h2 id="everything-else-backs-up-encrypted">Everything else backs up encrypted<a class="anchor" href="#everything-else-backs-up-encrypted" aria-label="Link to this section">#</a></h2>
-<p>Some things cannot live in a git repository: your Claude sign-in, your service tokens, your bot token, your scheduled jobs, your connection wiring. Those are deliberately excluded from your brain repo, because a repository that carried your credentials would be a repository you could not safely share or clone.</p>
-<p>So once a night your mineral tars them up, <strong>encrypts them on your machine</strong> with a passphrase generated on your machine, and pushes the encrypted blob to the same repository. The repository only ever sees ciphertext. We never hold the passphrase.</p>
-<h2 id="the-step-only-you-can-do">The step only you can do<a class="anchor" href="#the-step-only-you-can-do" aria-label="Link to this section">#</a></h2>
-<p>Here is the catch, and it is a real one rather than a formality.</p>
-<p>The passphrase is generated on your mineral on the first backup run, and printed once, on that run. <strong>Its only other copy is inside the backup it encrypts.</strong></p>
-<p>Which means: if your machine dies and the passphrase lived only on that machine, you have an encrypted blob that nobody, including us, can open. That is not a backup. It is a souvenir.</p>
-<p>So take the passphrase off the box, once, into wherever you keep things like that: a password manager, or a piece of paper somewhere safe. The passphrase lives in your mineral's own secrets, which your assistant can read for you, so the way to do it is to ask, in the Terminal, in plain words:</p>
-<pre><code>Show me my backup passphrase so I can store it somewhere safe,
-then record that I have.</code></pre>
-<p>Your mineral tracks whether this has happened (the record is the escrow marker you can see listed on the <a href="/docs/secrets-page">Secrets</a> page) and reports itself as <strong>not recoverable</strong> until it has. That is not nagging, it is the honest state.</p>
-<h2 id="getting-it-back">Getting it back<a class="anchor" href="#getting-it-back" aria-label="Link to this section">#</a></h2>
-<p>Restoring is a real, tested procedure rather than a hope. It needs the encrypted blob, which is in your repository, and the passphrase, which is with you.</p>
-<p>Ask us and we walk it with you. There is a written runbook we follow rather than improvising, and part of our wind-down commitment is that restores get verified before anything is switched off, because a backup nobody has tested is not a backup.</p>
-<h2 id="what-is-not-backed-up">What is not backed up<a class="anchor" href="#what-is-not-backed-up" aria-label="Link to this section">#</a></h2>
-<p>Anything you never told your assistant, and anything you deleted before the last run. Backups are nightly, not continuous.</p>
-<p>If you are about to do something drastic to your brain, the safe move is to let a night pass first, or push your brain manually before you start.</p>
-<h2 id="if-you-host-a-rock">If you host a rock<a class="anchor" href="#if-you-host-a-rock" aria-label="Link to this section">#</a></h2>
-<p>A rock runs a much smaller set of jobs than a pebble, and two of the ones it does not run are the two on this page. <strong>Neither the nightly encrypted snapshot nor the nightly brain push happens on a rock.</strong></p>
-<p>The push that runs when you turn a mineral into a rock is a one-time step inside that upgrade. It is not the beginning of a nightly habit, and it is easy to read it as one. The Custody card shows when the last push happened; a &quot;last push&quot; date that keeps getting older is the tell.</p>
-<p>So if you host a rock, treat its backup as <strong>something you do</strong>, not something that happens. Push it deliberately before anything significant: before you change what the rock publishes, before an update, before you invite a cohort.</p>
-<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/fix-a-broken-connection"><span class="dir">Previous</span>Fix a connection that has stopped working</a><a class="next" href="/docs/claude-code-on-your-mineral"><span class="dir">Next</span>Use Claude Code on your mineral</a></nav>
+<p class="docs-eyebrow">Explained</p>
+<h1>Questions, answered straight</h1>
+<p>Short answers, in the order people ask them. Every answer links the page that carries the detail, and nothing here says anything the deeper pages do not.</p>
+<h2 id="what-actually-is-this">What actually is this?<a class="anchor" href="#what-actually-is-this" aria-label="Link to this section">#</a></h2>
+<p>A private AI assistant that lives on a machine of your own (we call the machine a <strong>mineral</strong>), knows your world because it interviewed you, and works for you on a schedule: inbox sorted before you wake, a brief that knows what matters, follow-ups chased. <a href="/docs/what-an-ai-ea-is">What an AI EA actually is</a> makes the full argument; <a href="/docs/rocks-and-pebbles">rocks and pebbles</a> explains the two words you will keep meeting.</p>
+<h2 id="can-you-read-my-stuff">Can you read my stuff?<a class="anchor" href="#can-you-read-my-stuff" aria-label="Link to this section">#</a></h2>
+<p>No. Your notes live on your machine, not on a central store, and operating the machine does not include reading it. What we can see is operational: whether your mineral is alive and which software it runs. The one exception is a support session <strong>you</strong> grant, which expires on a clock and is logged on your own mineral: <a href="/docs/grant-support-access">what a grant opens</a>, and the <a href="/docs/privacy-policy">privacy policy</a> in full.</p>
+<h2 id="can-my-community-leader-read-my-stuff">Can my community leader read my stuff?<a class="anchor" href="#can-my-community-leader-read-my-stuff" aria-label="Link to this section">#</a></h2>
+<p>No. A rock can send things to your mineral and sees a small status heartbeat, most of which you control with two switches. It cannot read your pages, and there is no page in their app that would show them. <a href="/docs/what-your-community-can-see">What your community can see</a> lists every field.</p>
+<h2 id="what-does-it-cost">What does it cost?<a class="anchor" href="#what-does-it-cost" aria-label="Link to this section">#</a></h2>
+<p>During the beta, nothing is charged: no payment method is taken, and any price you see in the app is indicative. What hosting will cost is settled in the open on 26 September 2026, and nothing converts to paid without your explicit agreement to a stated price. That promise is in the <a href="/docs/terms">terms of service</a>, not just here.</p>
+<h2 id="do-i-need-to-be-technical">Do I need to be technical?<a class="anchor" href="#do-i-need-to-be-technical" aria-label="Link to this section">#</a></h2>
+<p>No. If you can install an app and answer questions in plain language, you can run a mineral. <a href="/docs/first-hour">Your first hour</a> assumes nothing, and the one technical-looking setup (Google, with your own key) is <a href="/docs/connect-google">walked click by click</a>. The deliberately technical route exists too, for those who want it: <a href="/docs/claude-code-on-your-mineral">Claude Code on your mineral</a>.</p>
+<h2 id="do-i-need-a-claude-account">Do I need a Claude account?<a class="anchor" href="#do-i-need-a-claude-account" aria-label="Link to this section">#</a></h2>
+<p>Yes. Your assistant runs on Claude, on <strong>your</strong> Claude account, on your machine. That is deliberate: it keeps us out of your conversations. You sign in once during <a href="/docs/first-hour">your first hour</a>, and scheduled jobs run on that sign-in.</p>
+<h2 id="where-is-my-data-kept">Where is my data kept?<a class="anchor" href="#where-is-my-data-kept" aria-label="Link to this section">#</a></h2>
+<p>Your mineral runs on a rented machine in the EU (Germany or Finland), and your brain also backs up to a private GitHub repository in your own account. If you are in Australia, your data is stored overseas; the <a href="/docs/privacy-policy">privacy policy</a> says so plainly, because Australian privacy law expects it and you should know regardless.</p>
+<h2 id="what-happens-if-crads-ai-disappears">What happens if Crads AI disappears?<a class="anchor" href="#what-happens-if-crads-ai-disappears" aria-label="Link to this section">#</a></h2>
+<p>You keep everything. Your brain is ordinary files on a machine you hold, your backup is in your own repository, and the wind-down commitments are contractual, not a statement of intent. <a href="/docs/continuity">What happens if Crads AI goes away</a> answers this at length, starting by conceding it is the right question.</p>
+<h2 id="can-i-leave-what-do-i-keep">Can I leave? What do I keep?<a class="anchor" href="#can-i-leave-what-do-i-keep" aria-label="Link to this section">#</a></h2>
+<p>Leave any time, keep everything: your brain, your backup, and the mineral itself if you want to take the machine. Ask and we destroy the machine and its records. There is nothing to claw back and no reason required. The <a href="/docs/terms">terms</a> section 7 is the binding version.</p>
+<h2 id="what-is-the-interview-and-do-i-have-to-do-it-in-one-go">What is the interview, and do I have to do it in one go?<a class="anchor" href="#what-is-the-interview-and-do-i-have-to-do-it-in-one-go" aria-label="Link to this section">#</a></h2>
+<p>The interview is the hour that turns a blank machine into an assistant that knows your world, and no, it resumes exactly where you stopped, days later if need be. Three twenty-minute sittings beat one exhausted hour. <a href="/docs/the-interview">The interview</a> explains the eight layers and what happens to your answers.</p>
+<h2 id="the-brief-got-something-wrong-is-that-it">The brief got something wrong. Is that it?<a class="anchor" href="#the-brief-got-something-wrong-is-that-it" aria-label="Link to this section">#</a></h2>
+<p>No, that is day two. Tell your assistant, in plain words, in the Terminal: what it got wrong and what matters instead. It writes that down and the next brief reads it. An assistant you correct gets sharper every week; <a href="/docs/your-first-week">your first week</a> builds the habit.</p>
+<h2 id="something-looks-broken-where-do-i-start">Something looks broken. Where do I start?<a class="anchor" href="#something-looks-broken-where-do-i-start" aria-label="Link to this section">#</a></h2>
+<p><a href="/docs/when-something-looks-wrong">When something looks wrong</a> lists the eight symptoms people actually hit, each with its one-line cause and fix. If a scheduled job went quiet, the answer is usually on <a href="/docs/connections-page">Connections</a>: jobs fail rather than pretend when a connection dies.</p>
+<h2 id="how-is-this-different-from-just-using-chatgpt">How is this different from just using ChatGPT?<a class="anchor" href="#how-is-this-different-from-just-using-chatgpt" aria-label="Link to this section">#</a></h2>
+<p>Ask a chat window &quot;what should I focus on today&quot; and you get advice-shaped filler, because it cannot know you. Your assistant answers from your actual goals, your actual inbox, your actual people, and it acts on a schedule instead of waiting to be asked. The longer answer, including what this is <em>not</em>, is <a href="/docs/what-an-ai-ea-is">what an AI EA actually is</a>.</p>
+<h2 id="who-owns-what-i-write-do-you-train-on-it">Who owns what I write? Do you train on it?<a class="anchor" href="#who-owns-what-i-write-do-you-train-on-it" aria-label="Link to this section">#</a></h2>
+<p>You own your content; we claim no licence over it and do not train on it. The <a href="/docs/terms">terms</a> say both in as many words. Your assistant's answers to you run on your own Claude account, under your agreement with Anthropic.</p>
+<nav class="docs-nextprev" aria-label="More docs"><span></span><a class="next" href="/docs/what-an-ai-ea-is"><span class="dir">Next</span>What an AI EA actually is</a></nav>
 </article>
 <nav class="docs-toc" aria-label="On this page"><h2>On this page</h2>
 <ul>
-  <li><a href="#your-brain-backs-itself-up">Your brain backs itself up</a></li>
-  <li><a href="#everything-else-backs-up-encrypted">Everything else backs up encrypted</a></li>
-  <li><a href="#the-step-only-you-can-do">The step only you can do</a></li>
-  <li><a href="#getting-it-back">Getting it back</a></li>
-  <li><a href="#what-is-not-backed-up">What is not backed up</a></li>
-  <li><a href="#if-you-host-a-rock">If you host a rock</a></li>
+  <li><a href="#what-actually-is-this">What actually is this?</a></li>
+  <li><a href="#can-you-read-my-stuff">Can you read my stuff?</a></li>
+  <li><a href="#can-my-community-leader-read-my-stuff">Can my community leader read my stuff?</a></li>
+  <li><a href="#what-does-it-cost">What does it cost?</a></li>
+  <li><a href="#do-i-need-to-be-technical">Do I need to be technical?</a></li>
+  <li><a href="#do-i-need-a-claude-account">Do I need a Claude account?</a></li>
+  <li><a href="#where-is-my-data-kept">Where is my data kept?</a></li>
+  <li><a href="#what-happens-if-crads-ai-disappears">What happens if Crads AI disappears?</a></li>
+  <li><a href="#can-i-leave-what-do-i-keep">Can I leave? What do I keep?</a></li>
+  <li><a href="#what-is-the-interview-and-do-i-have-to-do-it-in-one-go">What is the interview, and do I have to do it in one go?</a></li>
+  <li><a href="#the-brief-got-something-wrong-is-that-it">The brief got something wrong. Is that it?</a></li>
+  <li><a href="#something-looks-broken-where-do-i-start">Something looks broken. Where do I start?</a></li>
+  <li><a href="#how-is-this-different-from-just-using-chatgpt">How is this different from just using ChatGPT?</a></li>
+  <li><a href="#who-owns-what-i-write-do-you-train-on-it">Who owns what I write? Do you train on it?</a></li>
 </ul></nav>
 </div>
 </main>
