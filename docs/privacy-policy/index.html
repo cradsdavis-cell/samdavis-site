@@ -278,10 +278,11 @@
 <article class="docs-article">
 <p class="docs-eyebrow">Legal</p>
 <h1>Privacy policy</h1>
-<p class="legal-stamp">Version 0.5, effective 2026-08-24. Samuel Davis trading as Crads AI.</p>
+<p class="legal-stamp">Version 0.6, effective 2026-08-24. Samuel Davis trading as Crads AI.</p>
 <h2 id="who-this-is">Who this is<a class="anchor" href="#who-this-is" aria-label="Link to this section">#</a></h2>
 <p>Crads AI is operated by Samuel Davis, trading as Crads AI, <strong>ABN 26 929 349 775</strong>, in Coogee, New South Wales, Australia. Contact: cradsdavis@gmail.com.</p>
-<p>This is version 0.5, effective 24 August 2026, covering the beta programme. It will be reviewed by a lawyer before the programme converts to paid, and the version and date at the top of this page change whenever the text does.</p>
+<p>This is version 0.6, effective 24 August 2026, covering the beta programme. It will be reviewed by a lawyer before the programme converts to paid, and the version and date at the top of this page change whenever the text does.</p>
+<p><em>Changed in 0.6: two corrections. The Google section said your own key costs you a weekly re-sign-in; the setup now publishes your own app, so the sign-in is permanent, and the weekly chore this page described no longer exists. The secrets section said the app labels which tier each credential is in; the Secrets page groups entries by purpose and does not label tiers, so this page now states the rule that decides the tier instead of pointing at a label that is not there.</em></p>
 <p><em>Changed in 0.2: added &quot;What a support session can see&quot;, below. Version 0.1 said support access is bounded and logged, which was true and incomplete: it did not say what a person with that access can read.</em></p>
 <p><em>Changed in 0.5: the nightly backup and the nightly software restart are pebble behaviour, and this page previously described both as what every mineral does. A rock runs neither on a schedule: its backup is a deliberate act by its host, and it updates when its host presses Update.</em></p>
 <p><em>Changed in 0.4: corrected the deletion section, which claimed we remove your registration pointers from the directory. Two records were being left behind to expire on a 400-day timer instead. The software was changed the same day so they are deleted with the machine, and this section now lists exactly what goes and what remains.</em></p>
@@ -325,7 +326,7 @@
 <ul>
 <li><strong><a href="/docs/connect-google">Google</a></strong> (Gmail, Calendar, Drive). You create your own Google OAuth client</li>
 </ul>
-<p>  and it stays on your mineral. Your Google key <strong>never touches</strong> Crads AI   infrastructure, and we could not read your mail if we wanted to. The trade is a   guided one-time setup and a weekly re-sign-in, which is a consequence of using   your own key rather than an oversight.</p>
+<p>  and it stays on your mineral. Your Google key <strong>never touches</strong> Crads AI   infrastructure, and we could not read your mail if we wanted to. The trade is a   guided setup of about ten minutes, done once: the setup publishes your own app   so the sign-in is permanent, and your assistant tells you if it ever stops   working.</p>
 <ul>
 <li><strong>Microsoft 365.</strong> Different, and worth knowing: this one uses a single Crads AI</li>
 </ul>
@@ -361,7 +362,7 @@
 <p>Two things worth knowing while it is there. Until handover completes, that key opens your mineral, so if you can see it on your list after you have taken ownership, remove it and tell us. And if you built your mineral yourself rather than receiving one from a community, your own key is the first one on it and this section does not apply to you at all.</p>
 <h2 id="what-a-support-session-can-see">What a support session can see<a class="anchor" href="#what-a-support-session-can-see" aria-label="Link to this section">#</a></h2>
 <p>Worth being exact about, because &quot;we can look at your mineral&quot; and &quot;we can read your saved passwords&quot; are different sentences and you should know which one you are agreeing to.</p>
-<p>Your mineral stores secrets in two tiers, and the app labels which tier each one is in:</p>
+<p>Your mineral stores secrets in two tiers:</p>
 <ul>
 <li><strong>Available to the box</strong> (the default for anything a scheduled job needs at</li>
 </ul>
@@ -370,6 +371,7 @@
 <li><strong>Sealed to your devices.</strong> Stored as an envelope only your own enrolled</li>
 </ul>
 <p>  machines can open. There is deliberately no code on your mineral that can   decrypt these, so a support session cannot read them, and neither can a   scheduled job.</p>
+<p>The <a href="/docs/secrets-page">Secrets page</a> in the app lists every entry grouped by what it is for; it does not label the tier on each row. The rule that decides the tier is the one above: anything a scheduled job needs while you are asleep is available to the box.</p>
 <p>If a credential would be damaging in someone else's hands and nothing scheduled needs it, put it in the sealed tier. If you have granted a support session and change your mind, revoke it: the grant is a record on your own mineral, not a key we hold.</p>
 <p>The same is true of your brain during a support session. A granted session is server access, and server access can read files. We do not, that is not what support is for, and every use of the grant is logged where you can see it. But the honest statement is that the protection during an active grant is the log and the clock, not an inability.</p>
 <h2 id="what-your-community-can-and-cannot-see">What your community can and cannot see<a class="anchor" href="#what-your-community-can-and-cannot-see" aria-label="Link to this section">#</a></h2>
