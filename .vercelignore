@@ -5,6 +5,15 @@ README.md
 
 # UI audit loop internals — never serve publicly (ledger notes internal strategy)
 docs/audit/
+
+# Engineering docs: never serve publicly. Found live on 2026-08-24, all 200:
+# prepaid-booking.md names a real client and the problems she hit, and the
+# superpowers plans/reviews/specs carry internal design history. Same intent as
+# docs/audit/ above, which was already excluded. docs/<slug>/index.html (the
+# public manual, generated from ai-os) is NOT affected: these are file and
+# directory paths, not the whole docs tree.
+docs/superpowers/
+docs/prepaid-booking.md
 UI-AUDIT.md
 scratchpad/
 scripts/audit-shots.mjs
