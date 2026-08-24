@@ -237,6 +237,7 @@
     <ul>
       <li><a href="/docs/first-hour">Your first hour</a></li>
       <li><a href="/docs/the-interview">The interview</a></li>
+      <li><a href="/docs/your-first-week">Your first week</a></li>
     </ul>
     <h2>How to</h2>
     <ul>
@@ -315,13 +316,9 @@
 <p><strong>Managing is not reading.</strong> A rock manages its members and <em>must never be able to open one</em>. Those are separate fields in that file, and no part of the software is allowed to promote one into the other. If they were ever conflated, the member privacy boundary would dissolve without anyone noticing, which is exactly why they are kept apart by rule rather than by good intentions.</p>
 <p>Two more properties of that file worth knowing:</p>
 <ul>
-<li><strong>Not knowing who owns a mineral resolves to you, never to your community.</strong></li>
+<li><strong>Not knowing who owns a mineral resolves to you, never to your community.</strong> If the answer is missing or unreadable, the software records <code>member</code>. It fails towards you on purpose.</li>
+<li><strong>A grant is an intent until the address proves itself.</strong> Granting somebody access does not give it to them: it records an intention addressed to an email, and it becomes real only when someone signs in as that address. So a typo grants nobody anything, and an unclaimed invitation is inert rather than dangerous.</li>
 </ul>
-<p>  If the answer is missing or unreadable, the software records <code>member</code>. It fails   towards you on purpose.</p>
-<ul>
-<li><strong>A grant is an intent until the address proves itself.</strong> Granting somebody</li>
-</ul>
-<p>  access does not give it to them: it records an intention addressed to an email,   and it becomes real only when someone signs in as that address. So a typo grants   nobody anything, and an unclaimed invitation is inert rather than dangerous.</p>
 <p>This is still the layer where the product is yours to change. Installing a skill, moving a schedule from daily to twice a week, connecting a service, disconnecting one: all yours, no permission needed, whoever is looking after the box.</p>
 <h2 id="layer-3-your-pages-you-build-them">Layer 3: your pages. You build them.<a class="anchor" href="#layer-3-your-pages-you-build-them" aria-label="Link to this section">#</a></h2>
 <p>The dashboard pages your app renders. Ask your assistant for a page that shows the thing you check every morning, and it builds it.</p>

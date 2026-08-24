@@ -6,7 +6,7 @@
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Connect Telegram · Crads AI docs</title>
-<meta name="description" content="Your assistant in your pocket: your own private bot, made in a minute, that drafts and never sends.">
+<meta name="description" content="Your assistant in your pocket, step by step: your own private bot, made in about two minutes, that drafts and never sends.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 
@@ -176,11 +176,11 @@
 <meta property="og:site_name" content="Sam Davis — Crads AI">
 <meta property="og:url" content="https://crads-ai.com/docs/connect-telegram">
 <meta property="og:title" content="Connect Telegram">
-<meta property="og:description" content="Your assistant in your pocket: your own private bot, made in a minute, that drafts and never sends.">
+<meta property="og:description" content="Your assistant in your pocket, step by step: your own private bot, made in about two minutes, that drafts and never sends.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Connect Telegram">
-<meta name="twitter:description" content="Your assistant in your pocket: your own private bot, made in a minute, that drafts and never sends.">
+<meta name="twitter:description" content="Your assistant in your pocket, step by step: your own private bot, made in about two minutes, that drafts and never sends.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body>
@@ -237,6 +237,7 @@
     <ul>
       <li><a href="/docs/first-hour">Your first hour</a></li>
       <li><a href="/docs/the-interview">The interview</a></li>
+      <li><a href="/docs/your-first-week">Your first week</a></li>
     </ul>
     <h2>How to</h2>
     <ul>
@@ -279,34 +280,48 @@
 <p class="docs-eyebrow">How to</p>
 <h1>Connect Telegram</h1>
 <p>Telegram is how your assistant reaches you when you are not at the app: the morning brief on your phone, a question answered from the beach, and the place scheduled output lands when a recipe says <code>deliver: true</code>.</p>
-<p>It is one of the three arming steps for a new mineral, and it is the one people are most surprised by, because you make <strong>your own private bot</strong> rather than messaging ours.</p>
+<p>It is one of the three arming steps for a new mineral, and it is the one people are most surprised by, because you make <strong>your own private bot</strong> rather than messaging ours. A bot here just means a contact in Telegram that a machine answers instead of a person. Yours answers to your mineral, and to nothing else.</p>
 <h2 id="why-your-own-bot">Why your own bot<a class="anchor" href="#why-your-own-bot" aria-label="Link to this section">#</a></h2>
 <p>The same reason your Google key is your own: it keeps us out of the path. Your messages travel between your phone and your mineral through a bot only you control. There is no shared Crads AI bot reading everyone's traffic, because there is no shared bot at all.</p>
-<h2 id="making-it-in-about-a-minute">Making it, in about a minute<a class="anchor" href="#making-it-in-about-a-minute" aria-label="Link to this section">#</a></h2>
+<h2 id="before-you-start">Before you start<a class="anchor" href="#before-you-start" aria-label="Link to this section">#</a></h2>
+<p>You need Telegram itself, on your phone or computer, signed in. If you do not use Telegram yet, install it and create an account first; that part is Telegram's, not ours.</p>
+<p>Then, in the Crads AI app, open <strong>Your assistant</strong>, then <strong>Connections</strong>, and press <strong>Set up Telegram</strong> on the card at the top. The card opens into two steps, and it stays on screen while you hop over to Telegram:</p>
+<figure class="shot"><span class="shot-frame"><a href="/docs/shots/member-telegram-setup.png" target="_blank" rel="noopener"><img src="/docs/shots/member-telegram-setup.png" alt="The Telegram card, opened to its two steps" loading="lazy"></a></span><figcaption>The Telegram card, opened to its two steps</figcaption></figure>
+<h2 id="step-1-make-your-bot-about-a-minute">Step 1. Make your bot (about a minute)<a class="anchor" href="#step-1-make-your-bot-about-a-minute" aria-label="Link to this section">#</a></h2>
 <ol>
-<li>In Telegram, open a chat with <strong>@BotFather</strong> (Telegram's own bot for making</li>
+<li>Press <strong>Open @BotFather in Telegram</strong> on the card. It opens a chat with BotFather, which is Telegram's own official tool for making bots.</li>
+<li>In that chat, send the message <code>/newbot</code>.</li>
+<li>BotFather asks for a <strong>name</strong>. This is the name you will see in your chat list, so pick something you like. Your assistant's own name works well.</li>
+<li>It then asks for a <strong>username</strong>, which must be unique across all of Telegram and must end in <code>bot</code>. Keep trying variations until it accepts one; nobody but you ever needs to remember it.</li>
+<li>BotFather replies with a long token that looks like <code>123456789:AAF...</code>. Copy the whole thing.</li>
 </ol>
-<p>   bots).</p>
+<p><strong>Back in the Crads AI app:</strong> paste the token into the box on the card and press <strong>Save token</strong>.</p>
+<p>The token is handled the way a credential should be: it goes to your mineral and nowhere else, this page never shows it again, and it is never passed anywhere a bystander process could read it.</p>
+<h2 id="step-2-prove-the-bot-is-yours">Step 2. Prove the bot is yours<a class="anchor" href="#step-2-prove-the-bot-is-yours" aria-label="Link to this section">#</a></h2>
+<p>The card now shows <strong>a pairing code</strong>, in large digits.</p>
 <ol>
-<li>Send <code>/newbot</code> and follow the prompts. Any name you like.</li>
-<li>BotFather replies with a token like <code>123456789:ABCdef...</code>. Copy it.</li>
-<li>Paste it where the arming step asks, then <strong>send your new bot any message</strong>,</li>
+<li>Press <strong>Open your bot in Telegram</strong>. This opens a chat with the bot you just made.</li>
+<li>Press <strong>Start</strong> if Telegram offers it.</li>
+<li>Send the pairing code as an ordinary message.</li>
 </ol>
-<p>   so your mineral can see who its person is.</p>
-<p>The token is handled the way a credential should be: it goes to your mineral and nowhere else, and it is never passed anywhere a bystander process could read it.</p>
+<p><strong>You should see:</strong> within a few seconds, the card in the app notices and finishes the link on its own.</p>
+<p>The code matters. Anyone on Telegram can find a bot by its username and message it, so without the code, the first stranger to say hello would be the one your mineral answers to. Sending the code is what proves the person linking the bot is you.</p>
+<p><strong>If nothing happens after sending the code:</strong> check you sent it to your own new bot (the chat BotFather made for you) and not to BotFather itself. That is the one wrong turn everyone takes once.</p>
 <h2 id="what-your-assistant-will-and-will-not-do-there">What your assistant will and will not do there<a class="anchor" href="#what-your-assistant-will-and-will-not-do-there" aria-label="Link to this section">#</a></h2>
 <p><strong>It drafts. It never sends.</strong> Anything outbound (an email, a reply, a message to another person) is shown to you for approval first. Messaging your assistant is private by construction; things <em>leaving</em> on your behalf need your yes, every time. That is the rule for everything Crads AI ships. A skill you write or install that sends unattended is your own choice, and the <a href="/docs/acceptable-use">acceptable use policy</a> treats what it sends as yours.</p>
 <h2 id="scheduled-output-lands-here">Scheduled output lands here<a class="anchor" href="#scheduled-output-lands-here" aria-label="Link to this section">#</a></h2>
 <p>Recipes with <code>deliver: true</code> route their result to Telegram: the daily brief arrives where you already look rather than waiting in an app you have to remember to open. Set <code>deliver: false</code> on any schedule and that job's output stays in the app instead.</p>
 <p>Custody changes also land here: a support grant, a transfer, a device removed. Your phone hears about anything that changes who can reach your mineral.</p>
 <h2 id="disconnecting">Disconnecting<a class="anchor" href="#disconnecting" aria-label="Link to this section">#</a></h2>
-<p>Forgetting Telegram removes the link and the token from your mineral. Your bot keeps existing on Telegram's side (it is yours, made with your account); it just no longer reaches anything.</p>
+<p>Press <strong>Set up Telegram</strong> again (it reads <strong>Details</strong> once linked) and use <strong>Disconnect Telegram</strong>. That removes the link and the token from your mineral. Your bot keeps existing on Telegram's side (it is yours, made with your account); it just no longer reaches anything.</p>
 <nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/claude-code-on-your-mineral"><span class="dir">Previous</span>Use Claude Code on your mineral</a><a class="next" href="/docs/devices-and-access"><span class="dir">Next</span>Machines that can open your mineral</a></nav>
 </article>
 <nav class="docs-toc" aria-label="On this page"><h2>On this page</h2>
 <ul>
   <li><a href="#why-your-own-bot">Why your own bot</a></li>
-  <li><a href="#making-it-in-about-a-minute">Making it, in about a minute</a></li>
+  <li><a href="#before-you-start">Before you start</a></li>
+  <li><a href="#step-1-make-your-bot-about-a-minute">Step 1. Make your bot (about a minute)</a></li>
+  <li><a href="#step-2-prove-the-bot-is-yours">Step 2. Prove the bot is yours</a></li>
   <li><a href="#what-your-assistant-will-and-will-not-do-there">What your assistant will and will not do there</a></li>
   <li><a href="#scheduled-output-lands-here">Scheduled output lands here</a></li>
   <li><a href="#disconnecting">Disconnecting</a></li>

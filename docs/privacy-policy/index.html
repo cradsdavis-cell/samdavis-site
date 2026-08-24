@@ -237,6 +237,7 @@
     <ul>
       <li><a href="/docs/first-hour">Your first hour</a></li>
       <li><a href="/docs/the-interview">The interview</a></li>
+      <li><a href="/docs/your-first-week">Your first week</a></li>
     </ul>
     <h2>How to</h2>
     <ul>
@@ -295,14 +296,8 @@
 <p>If you are in Australia, as most of the beta is, that means your data is stored overseas. We are telling you so plainly because Australian privacy law expects us to, and because you should know it regardless.</p>
 <h2 id="what-lives-on-your-mineral-and-stays-there">What lives on your mineral, and stays there<a class="anchor" href="#what-lives-on-your-mineral-and-stays-there" aria-label="Link to this section">#</a></h2>
 <ul>
-<li><strong>Your brain.</strong> The pages your assistant writes and reads: who you are, your</li>
-</ul>
-<p>  goals, your people, your business, your voice.</p>
-<ul>
-<li><strong>Your credentials.</strong> Your Claude sign-in, your connected service tokens, your</li>
-</ul>
-<p>  Telegram bot token if you use one.</p>
-<ul>
+<li><strong>Your brain.</strong> The pages your assistant writes and reads: who you are, your goals, your people, your business, your voice.</li>
+<li><strong>Your credentials.</strong> Your Claude sign-in, your connected service tokens, your Telegram bot token if you use one.</li>
 <li><strong>Your run history.</strong> What your assistant did and when.</li>
 </ul>
 <p>None of this is copied to us. There is no central store of member brains, because there is no central store: one member, one machine.</p>
@@ -324,21 +319,11 @@
 <p>It holds no credentials, no brain content and no message content. We do not treat the email hash as anonymous, because a hash of a known email can be recognised; we treat it as personal information and this section discloses it as such.</p>
 <h2 id="services-you-connect">Services you connect<a class="anchor" href="#services-you-connect" aria-label="Link to this section">#</a></h2>
 <ul>
-<li><strong><a href="/docs/connect-google">Google</a></strong> (Gmail, Calendar, Drive). You create your own Google OAuth client</li>
+<li><strong><a href="/docs/connect-google">Google</a></strong> (Gmail, Calendar, Drive). You create your own Google OAuth client and it stays on your mineral. Your Google key <strong>never touches</strong> Crads AI infrastructure, and we could not read your mail if we wanted to. The trade is a guided setup of about ten minutes, done once: the setup publishes your own app so the sign-in is permanent, and your assistant tells you if it ever stops working.</li>
+<li><strong>Microsoft 365.</strong> Different, and worth knowing: this one uses a single Crads AI application registration, so our application name appears on your consent screen and we are in that authorisation path. The tokens still live on your mineral and we do not receive your mail.</li>
+<li><strong>Everything else</strong> in the connections catalogue signs in on your mineral, with the token stored on your mineral.</li>
+<li><strong>Anthropic.</strong> Your assistant runs on <strong>your</strong> Claude account, under your agreement with Anthropic. What you send your assistant, you are sending through their service on your own account.</li>
 </ul>
-<p>  and it stays on your mineral. Your Google key <strong>never touches</strong> Crads AI   infrastructure, and we could not read your mail if we wanted to. The trade is a   guided setup of about ten minutes, done once: the setup publishes your own app   so the sign-in is permanent, and your assistant tells you if it ever stops   working.</p>
-<ul>
-<li><strong>Microsoft 365.</strong> Different, and worth knowing: this one uses a single Crads AI</li>
-</ul>
-<p>  application registration, so our application name appears on your consent   screen and we are in that authorisation path. The tokens still live on your   mineral and we do not receive your mail.</p>
-<ul>
-<li><strong>Everything else</strong> in the connections catalogue signs in on your mineral, with</li>
-</ul>
-<p>  the token stored on your mineral.</p>
-<ul>
-<li><strong>Anthropic.</strong> Your assistant runs on <strong>your</strong> Claude account, under your</li>
-</ul>
-<p>  agreement with Anthropic. What you send your assistant, you are sending through   their service on your own account.</p>
 <h2 id="when-we-can-reach-your-mineral">When we can reach your mineral<a class="anchor" href="#when-we-can-reach-your-mineral" aria-label="Link to this section">#</a></h2>
 <p>Two ways, both bounded.</p>
 <p><strong>Software updates.</strong> A pebble restarts nightly onto the software your community has published. That updates the machinery, not your files, and you can switch it off. A rock does not update itself: it stays on its software until its host restarts it.</p>
@@ -348,29 +333,18 @@
 <p>If your mineral was built for you by a community, somebody had to build the machine before you could reach it, and that was us. So the machine is born with a <strong>Crads AI setup key</strong> on it. It is not hidden: it appears in your own list of machines, named <strong>&quot;Crads-AI setup access (not your computer)&quot;</strong>, and it has a Remove button like any other.</p>
 <p>What happens to it:</p>
 <ul>
-<li><strong>It is removed when your mineral is handed to you.</strong> The handover revokes it</li>
+<li><strong>It is removed when your mineral is handed to you.</strong> The handover revokes it and then checks it is actually gone, and says so loudly if it is not.</li>
+<li><strong>You can remove it yourself</strong>, at any time, from that same list. You do not need our permission and we are not told first.</li>
+<li><strong>We cannot put it back.</strong> Adding a machine to your mineral needs your approval, which is the same gate that stops anyone else adding one.</li>
 </ul>
-<p>  and then checks it is actually gone, and says so loudly if it is not.</p>
-<ul>
-<li><strong>You can remove it yourself</strong>, at any time, from that same list. You do not</li>
-</ul>
-<p>  need our permission and we are not told first.</p>
-<ul>
-<li><strong>We cannot put it back.</strong> Adding a machine to your mineral needs your</li>
-</ul>
-<p>  approval, which is the same gate that stops anyone else adding one.</p>
 <p>Two things worth knowing while it is there. Until handover completes, that key opens your mineral, so if you can see it on your list after you have taken ownership, remove it and tell us. And if you built your mineral yourself rather than receiving one from a community, your own key is the first one on it and this section does not apply to you at all.</p>
 <h2 id="what-a-support-session-can-see">What a support session can see<a class="anchor" href="#what-a-support-session-can-see" aria-label="Link to this section">#</a></h2>
 <p>Worth being exact about, because &quot;we can look at your mineral&quot; and &quot;we can read your saved passwords&quot; are different sentences and you should know which one you are agreeing to.</p>
 <p>Your mineral stores secrets in two tiers:</p>
 <ul>
-<li><strong>Available to the box</strong> (the default for anything a scheduled job needs at</li>
+<li><strong>Available to the box</strong> (the default for anything a scheduled job needs at 3am). Stored as a value on your disk. Encrypting it there would be theatre, because the box would have to keep the key on the same disk to use it at 3am. <strong>Anyone with access to the server can read these, and that includes us during a support session you have granted.</strong></li>
+<li><strong>Sealed to your devices.</strong> Stored as an envelope only your own enrolled machines can open. There is deliberately no code on your mineral that can decrypt these, so a support session cannot read them, and neither can a scheduled job.</li>
 </ul>
-<p>  3am). Stored as a value on your disk. Encrypting it there would be theatre,   because the box would have to keep the key on the same disk to use it at 3am.   <strong>Anyone with access to the server can read these, and that includes us during   a support session you have granted.</strong></p>
-<ul>
-<li><strong>Sealed to your devices.</strong> Stored as an envelope only your own enrolled</li>
-</ul>
-<p>  machines can open. There is deliberately no code on your mineral that can   decrypt these, so a support session cannot read them, and neither can a   scheduled job.</p>
 <p>The <a href="/docs/secrets-page">Secrets page</a> in the app lists every entry grouped by what it is for; it does not label the tier on each row. The rule that decides the tier is the one above: anything a scheduled job needs while you are asleep is available to the box.</p>
 <p>If a credential would be damaging in someone else's hands and nothing scheduled needs it, put it in the sealed tier. If you have granted a support session and change your mind, revoke it: the grant is a record on your own mineral, not a key we hold.</p>
 <p>The same is true of your brain during a support session. A granted session is server access, and server access can read files. We do not, that is not what support is for, and every use of the grant is logged where you can see it. But the honest statement is that the protection during an active grant is the log and the clock, not an inability.</p>
@@ -388,10 +362,7 @@
 </ul>
 <p>Also removed, as of 24 August 2026:</p>
 <ul>
-<li>the machine's registration record, holding its address, a one-way hash of the</li>
-</ul>
-<p>  owner's email, and a hash of the access token it authenticated with</p>
-<ul>
+<li>the machine's registration record, holding its address, a one-way hash of the owner's email, and a hash of the access token it authenticated with</li>
 <li>the record of where the mineral came from</li>
 <li>the pointer to it in the owner's own list of machines</li>
 </ul>
