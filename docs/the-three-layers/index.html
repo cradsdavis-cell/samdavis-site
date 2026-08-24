@@ -98,8 +98,21 @@
 <p>The trade is honest: you give up the ability to change the engine, and in return the engine is somebody else's problem.</p>
 <h2>Layer 2: the infrastructure. You own it.</h2>
 <p>Which skills exist on your mineral, what runs on a schedule and when, which outside services are wired up and with whose tokens, and the machine itself.</p>
-<p><strong>Owner is a recorded fact, not a vibe.</strong> A file on your mineral says whether this layer is held by you or by your community, it is visible in the app, and it can move in either direction with your sign-in. For a member of a community using their own box, the answer is you.</p>
-<p>This is the layer where the product is actually yours. Installing a recipe, changing a cadence from daily to twice a week, connecting a service, disconnecting one: all yours, no permission needed.</p>
+<p><strong>Owning it and looking after it are two different things</strong>, and this is the part worth reading slowly, because it is where the privacy boundary actually lives.</p>
+<p>A file on your mineral records four separate answers:</p>
+<table><thead><tr><th>What it records</th><th>What it means</th></tr></thead><tbody><tr><td><strong>holder</strong></td><td>whose mineral this is. Written when it is born, and no grant can ever make somebody the holder</td></tr><tr><td><strong>owner</strong></td><td>you, or your community. If your community had it built for you and paid for it, you can still be the owner</td></tr><tr><td><strong>managed by</strong></td><td>who looks after it: status, skills, updates, teardown</td></tr><tr><td><strong>grants</strong></td><td>who may <strong>read</strong> it</td></tr></tbody></table>
+<p>If a community had your mineral built for you, the usual answer is that <strong>you own it and they look after it</strong>. That is one arrangement, not two words for the same thing, and the difference is the whole reason a host can host you safely.</p>
+<p><strong>Managing is not reading.</strong> A rock manages its members and <em>must never be able to open one</em>. Those are separate fields in that file, and no part of the software is allowed to promote one into the other. If they were ever conflated, the member privacy boundary would dissolve without anyone noticing, which is exactly why they are kept apart by rule rather than by good intentions.</p>
+<p>Two more properties of that file worth knowing:</p>
+<ul>
+<li><strong>Not knowing who owns a mineral resolves to you, never to your community.</strong></li>
+</ul>
+<p>  If the answer is missing or unreadable, the software records <code>member</code>. It fails   towards you on purpose.</p>
+<ul>
+<li><strong>A grant is an intent until the address proves itself.</strong> Granting somebody</li>
+</ul>
+<p>  access does not give it to them: it records an intention addressed to an email,   and it becomes real only when someone signs in as that address. So a typo grants   nobody anything, and an unclaimed invitation is inert rather than dangerous.</p>
+<p>This is still the layer where the product is yours to change. Installing a skill, moving a schedule from daily to twice a week, connecting a service, disconnecting one: all yours, no permission needed, whoever is looking after the box.</p>
 <h2>Layer 3: your pages. You build them.</h2>
 <p>The dashboard pages your app renders. Ask your assistant for a page that shows the thing you check every morning, and it builds it.</p>
 <p>Two things follow from these being <em>your</em> files. Updates may add new template pages, but an update will never overwrite a page you have edited. And a page you build is sandboxed when it renders, with no access to the rest of the app, which is why you can be careless with them.</p>
