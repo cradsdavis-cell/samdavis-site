@@ -278,11 +278,12 @@
 <article class="docs-article">
 <p class="docs-eyebrow">Legal</p>
 <h1>Privacy policy</h1>
-<p class="legal-stamp">Version 0.4, effective 2026-08-24. Samuel Davis trading as Crads AI.</p>
+<p class="legal-stamp">Version 0.5, effective 2026-08-24. Samuel Davis trading as Crads AI.</p>
 <h2 id="who-this-is">Who this is<a class="anchor" href="#who-this-is" aria-label="Link to this section">#</a></h2>
 <p>Crads AI is operated by Samuel Davis, trading as Crads AI, <strong>ABN 26 929 349 775</strong>, in Coogee, New South Wales, Australia. Contact: cradsdavis@gmail.com.</p>
-<p>This is version 0.4, effective 24 August 2026, covering the beta programme. It will be reviewed by a lawyer before the programme converts to paid, and the version and date at the top of this page change whenever the text does.</p>
+<p>This is version 0.5, effective 24 August 2026, covering the beta programme. It will be reviewed by a lawyer before the programme converts to paid, and the version and date at the top of this page change whenever the text does.</p>
 <p><em>Changed in 0.2: added &quot;What a support session can see&quot;, below. Version 0.1 said support access is bounded and logged, which was true and incomplete: it did not say what a person with that access can read.</em></p>
+<p><em>Changed in 0.5: the nightly backup and the nightly software restart are pebble behaviour, and this page previously described both as what every mineral does. A rock runs neither on a schedule: its backup is a deliberate act by its host, and it updates when its host presses Update.</em></p>
 <p><em>Changed in 0.4: corrected the deletion section, which claimed we remove your registration pointers from the directory. Two records were being left behind to expire on a 400-day timer instead. The software was changed the same day so they are deleted with the machine, and this section now lists exactly what goes and what remains.</em></p>
 <p><em>Changed in 0.3: corrected &quot;There is no standing key&quot;. A mineral built for you by a community is born carrying a Crads AI setup key, because somebody has to build the machine before you can reach it. See &quot;The key your mineral is born with&quot;. Version 0.2 stated the opposite, and it was wrong.</em></p>
 <h2 id="the-short-version">The short version<a class="anchor" href="#the-short-version" aria-label="Link to this section">#</a></h2>
@@ -311,7 +312,7 @@
 <table><thead><tr><th>Always sent</th><th>Sent only if you enable &quot;activity&quot;</th><th>Sent only if you enable &quot;engagement&quot;</th></tr></thead><tbody><tr><td>when it was generated</td><td>whether onboarding is done</td><td>which skills are installed</td></tr><tr><td>whether Claude is signed in</td><td>how full the disk is</td><td>which skills are enabled</td></tr><tr><td>which software build it runs</td><td>when you were last active</td><td>when skills ran, and which succeeded</td></tr></tbody></table>
 <p>No page, no note, no message, no email, no calendar entry, and no name from your brain is in that record. Turn both switches off and your rock sees only that your mineral exists, is reachable, and is signed in.</p>
 <h3 id="2-a-backup-to-a-repository-you-own">2. A backup, to a repository you own<a class="anchor" href="#2-a-backup-to-a-repository-you-own" aria-label="Link to this section">#</a></h3>
-<p>Your mineral takes a nightly encrypted snapshot of the parts of it that are not already in your own git repository. It is encrypted on your box with AES-256 and a passphrase generated on your box, then pushed to <strong>your own private GitHub repository</strong>. We never hold the passphrase and the repository is not ours. If you have not connected a repository, the snapshot stays local.</p>
+<p>A pebble takes a nightly encrypted snapshot of the parts of it that are not already in your own git repository. A rock does not run this on a schedule: its host backs it up as a deliberate act, and the app says when that last happened. It is encrypted on your box with AES-256 and a passphrase generated on your box, then pushed to <strong>your own private GitHub repository</strong>. We never hold the passphrase and the repository is not ours. If you have not connected a repository, the snapshot stays local.</p>
 <h3 id="3-registration-pointers-to-the-directory">3. Registration pointers, to the directory<a class="anchor" href="#3-registration-pointers-to-the-directory" aria-label="Link to this section">#</a></h3>
 <p>A small Cloudflare Worker routes people to the right mineral and records who holds what. It stores:</p>
 <ul>
@@ -339,7 +340,7 @@
 <p>  agreement with Anthropic. What you send your assistant, you are sending through   their service on your own account.</p>
 <h2 id="when-we-can-reach-your-mineral">When we can reach your mineral<a class="anchor" href="#when-we-can-reach-your-mineral" aria-label="Link to this section">#</a></h2>
 <p>Two ways, both bounded.</p>
-<p><strong>Software updates.</strong> Your mineral restarts nightly onto the software your community has published. That updates the machinery, not your files, and you can switch it off.</p>
+<p><strong>Software updates.</strong> A pebble restarts nightly onto the software your community has published. That updates the machinery, not your files, and you can switch it off. A rock does not update itself: it stays on its software until its host restarts it.</p>
 <p><strong>Support access, only if you grant it.</strong> If something is broken and you want us to look, you grant access explicitly. That grant <strong>expires on a clock</strong>, is recorded on your own mineral, and every use of it is logged where you can read it. We cannot add ourselves to your mineral later without you granting it.</p>
 <h3 id="the-key-your-mineral-is-born-with">The key your mineral is born with<a class="anchor" href="#the-key-your-mineral-is-born-with" aria-label="Link to this section">#</a></h3>
 <p>One honest exception, and version 0.2 of this page got it wrong by saying there was none.</p>
