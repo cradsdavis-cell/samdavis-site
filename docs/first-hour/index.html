@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your first hour · Crads AI docs</title>
+<meta name="description" content="From opening the app to an assistant that is awake, in about an hour.">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+
+<style>
+  .docs-page { max-width: 46rem; }
+  .docs-page .docs-eyebrow { font-family: var(--sans); font-size: 13px; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: var(--space-1); }
+  .docs-page h1 { margin-top: 0; }
+  .docs-page .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
+    margin: 0 0 var(--space-4); }
+  .docs-page table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
+    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
+  .docs-page th, .docs-page td { text-align: left; padding: 8px 12px 8px 0;
+    border-bottom: 1px solid var(--rule, #e5e2dc); vertical-align: top; }
+  .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
+    overflow-x: auto; font-size: 13.5px; }
+  .docs-page figure.shot { margin: var(--space-4) 0; }
+  .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
+    border: 1px solid var(--rule, #e5e2dc); }
+  .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 8px; }
+  .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
+  .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
+    margin-bottom: var(--space-3); }
+  .docs-index-groups { display: grid; gap: var(--space-4); }
+  .docs-index-groups h2 { margin-bottom: var(--space-1); }
+  .docs-index-groups ul { list-style: none; padding: 0; margin: 0; }
+  .docs-index-groups li { padding: 10px 0; border-bottom: 1px solid var(--rule, #e5e2dc); }
+  .docs-index-groups a { font-weight: 600; }
+  .docs-index-groups .d { display: block; font-family: var(--sans); font-size: 14px;
+    color: var(--ink-faint); margin-top: 2px; }
+</style>
+<link rel="canonical" href="https://crads-ai.com/docs/first-hour">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:url" content="https://crads-ai.com/docs/first-hour">
+<meta property="og:title" content="Your first hour">
+<meta property="og:description" content="From opening the app to an assistant that is awake, in about an hour.">
+<meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Your first hour">
+<meta name="twitter:description" content="From opening the app to an assistant that is awake, in about an hour.">
+<meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
+</head>
+<body>
+
+<nav class="site-nav-bar" aria-label="Primary">
+  <a href="/" class="brand" aria-label="crads-ai home">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
+  </a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav-links" aria-label="Open menu">
+    <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+  </button>
+  <div class="nav-links" id="site-nav-links">
+    <div class="nav-group" data-open="false" data-group="system">
+      <a href="/system" class="nav-trigger">The System</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The System pages">▾</button>
+      <div class="nav-menu">
+        <a href="/system" class="nav-menu-hub">The system, in one place →</a>
+        <a href="/overview">What it does</a>
+        <a href="/anatomy">Anatomy of an AI-OS</a>
+        <a href="/dashboard">See it live</a>
+      </div>
+    </div>
+    <div class="nav-group" data-open="false" data-group="coaching">
+      <a href="/coaching" class="nav-trigger">Coaching</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Coaching pages">▾</button>
+      <div class="nav-menu">
+        <a href="/coaching" class="nav-menu-hub">How we work together →</a>
+        <a href="/how-it-works">How it works</a>
+        <a href="/offer">Pricing</a>
+      </div>
+    </div>
+    <a href="/docs" class="nav-simple current">Docs</a>
+    <a href="/about" class="nav-simple">About</a>
+    <a href="/book" class="nav-simple nav-book">Book →</a>
+    <a href="/account/login" class="nav-account">Sign in</a>
+  </div>
+</nav>
+<main class="docs-page wrap ">
+<a class="docs-back" href="/docs">← All docs</a>
+<p class="docs-eyebrow">Walkthrough</p>
+<h1>Your first hour</h1>
+<p>This walks the whole way in, from a machine with nothing on it to an assistant that answers you. It takes about an hour, most of which is the interview at the end, and you can stop after step 3 and come back.</p>
+<p>You need the Crads AI app, and the email address your invitation went to.</p>
+<h2>1. Open the door</h2>
+<p>The first screen is the door. It asks which mineral you are opening.</p>
+<figure class="shot"><a href="/docs/shots/door-identity-chooser.png" target="_blank" rel="noopener"><img src="/docs/shots/door-identity-chooser.png" alt="The door, listing the minerals this machine can open" loading="lazy"></a><figcaption>The door, listing the minerals this machine can open</figcaption></figure>
+<p>On a machine that has never opened one, the list is empty and the door offers to claim your invitation instead.</p>
+<figure class="shot"><a href="/docs/shots/door-empty.png" target="_blank" rel="noopener"><img src="/docs/shots/door-empty.png" alt="The door on a machine with nothing on it yet" loading="lazy"></a><figcaption>The door on a machine with nothing on it yet</figcaption></figure>
+<p>Click your invitation, sign in with the account it was sent to, and the door hands you the mineral. Two things are worth knowing about that sign-in:</p>
+<ul>
+<li><strong>The invitation is only a door.</strong> Once you have signed in, your account holds</li>
+</ul>
+<p>  the mineral, and the link stops being the thing that grants access.</p>
+<ul>
+<li><strong>It has to be the address the invitation went to.</strong> A forwarded link will not</li>
+</ul>
+<p>  claim someone else's mineral, by design.</p>
+<h2>2. Sign Claude in</h2>
+<p>Your mineral is inert until you sign Claude in on it. This is deliberate: it is your assistant, running on your box, using your Claude account.</p>
+<figure class="shot"><a href="/docs/shots/connect-onboarding.png" target="_blank" rel="noopener"><img src="/docs/shots/connect-onboarding.png" alt="The connect screen, where the assistant is signed in" loading="lazy"></a><figcaption>The connect screen, where the assistant is signed in</figcaption></figure>
+<p>Follow the prompt, approve the code, and come back. Nothing else in this tutorial works until this step is done.</p>
+<h2>3. Look around an empty mineral</h2>
+<p>Now the app opens on your mineral. It looks sparse, because it is: nothing knows anything about you yet.</p>
+<figure class="shot"><a href="/docs/shots/member-empty.png" target="_blank" rel="noopener"><img src="/docs/shots/member-empty.png" alt="A mineral before onboarding" loading="lazy"></a><figcaption>A mineral before onboarding</figcaption></figure>
+<p>The five things in the sidebar are worth naming now, because the rest of the documentation assumes them:</p>
+<ul>
+<li><strong>Overview</strong> is home. Everything's state, on one page.</li>
+<li><strong>Your pebble</strong> is this mineral itself: what it is, who holds it, what it runs.</li>
+</ul>
+<p>  Your pebble is your own private workspace, and nobody else can read into it.</p>
+<ul>
+<li><strong>Network</strong> is who you know, once your brain knows anyone.</li>
+<li><strong>Your assistant</strong> is its brain, its skills and what it runs on a schedule.</li>
+<li><strong>Privacy and access</strong> is what leaves this box, and what does not. The short</li>
+</ul>
+<p>  answer is: almost nothing, and only what you turn on.</p>
+<h2>4. Do the interview</h2>
+<p>The last step is the long one. Your assistant interviews you, and out of that interview it builds your brain: who you are, what you are trying to do, who is in your world, how you work, what to never touch.</p>
+<p>Start it by opening the Terminal tab and asking for it:</p>
+<pre><code>/onboard</code></pre>
+<p>It runs as a conversation, one question at a time, and it is resumable. Nobody answers all of it in one sitting, and it is designed for you not to. Leave it and come back; it picks up where it stopped.</p>
+<p>When it has enough, it writes your brain as a set of linked pages you own and can read. That is the thing everything else reads from.</p>
+<h2>Where you land</h2>
+<figure class="shot"><a href="/docs/shots/member-overview.png" target="_blank" rel="noopener"><img src="/docs/shots/member-overview.png" alt="The assistant home, once the brain has something in it" loading="lazy"></a><figcaption>The assistant home, once the brain has something in it</figcaption></figure>
+<p>Prices shown in these screenshots are indicative and not a quote.</p>
+<p>That is the whole setup. From here, the how-to guides each add one habit: a sorted inbox before you get up, a brief each morning, a nudge when someone owes you a reply.</p>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">crads-<span class="accent">ai</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div><a href="/book">Book a 30-minute call →</a></div>
+  <div><a href="/account/login">Sign in</a></div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+</body>
+</html>

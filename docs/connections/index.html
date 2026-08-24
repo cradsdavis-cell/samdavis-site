@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What you can connect · Crads AI docs</title>
+<meta name="description" content="The 62 services in the curated connections catalogue, and how each one signs in.">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+
+<style>
+  .docs-page { max-width: 46rem; }
+  .docs-page .docs-eyebrow { font-family: var(--sans); font-size: 13px; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: var(--space-1); }
+  .docs-page h1 { margin-top: 0; }
+  .docs-page .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
+    margin: 0 0 var(--space-4); }
+  .docs-page table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
+    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
+  .docs-page th, .docs-page td { text-align: left; padding: 8px 12px 8px 0;
+    border-bottom: 1px solid var(--rule, #e5e2dc); vertical-align: top; }
+  .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
+    overflow-x: auto; font-size: 13.5px; }
+  .docs-page figure.shot { margin: var(--space-4) 0; }
+  .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
+    border: 1px solid var(--rule, #e5e2dc); }
+  .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 8px; }
+  .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
+  .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
+    margin-bottom: var(--space-3); }
+  .docs-index-groups { display: grid; gap: var(--space-4); }
+  .docs-index-groups h2 { margin-bottom: var(--space-1); }
+  .docs-index-groups ul { list-style: none; padding: 0; margin: 0; }
+  .docs-index-groups li { padding: 10px 0; border-bottom: 1px solid var(--rule, #e5e2dc); }
+  .docs-index-groups a { font-weight: 600; }
+  .docs-index-groups .d { display: block; font-family: var(--sans); font-size: 14px;
+    color: var(--ink-faint); margin-top: 2px; }
+</style>
+<link rel="canonical" href="https://crads-ai.com/docs/connections">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:url" content="https://crads-ai.com/docs/connections">
+<meta property="og:title" content="What you can connect">
+<meta property="og:description" content="The 62 services in the curated connections catalogue, and how each one signs in.">
+<meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What you can connect">
+<meta name="twitter:description" content="The 62 services in the curated connections catalogue, and how each one signs in.">
+<meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
+</head>
+<body>
+
+<nav class="site-nav-bar" aria-label="Primary">
+  <a href="/" class="brand" aria-label="crads-ai home">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
+  </a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav-links" aria-label="Open menu">
+    <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+  </button>
+  <div class="nav-links" id="site-nav-links">
+    <div class="nav-group" data-open="false" data-group="system">
+      <a href="/system" class="nav-trigger">The System</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The System pages">▾</button>
+      <div class="nav-menu">
+        <a href="/system" class="nav-menu-hub">The system, in one place →</a>
+        <a href="/overview">What it does</a>
+        <a href="/anatomy">Anatomy of an AI-OS</a>
+        <a href="/dashboard">See it live</a>
+      </div>
+    </div>
+    <div class="nav-group" data-open="false" data-group="coaching">
+      <a href="/coaching" class="nav-trigger">Coaching</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Coaching pages">▾</button>
+      <div class="nav-menu">
+        <a href="/coaching" class="nav-menu-hub">How we work together →</a>
+        <a href="/how-it-works">How it works</a>
+        <a href="/offer">Pricing</a>
+      </div>
+    </div>
+    <a href="/docs" class="nav-simple current">Docs</a>
+    <a href="/about" class="nav-simple">About</a>
+    <a href="/book" class="nav-simple nav-book">Book →</a>
+    <a href="/account/login" class="nav-account">Sign in</a>
+  </div>
+</nav>
+<main class="docs-page wrap ">
+<a class="docs-back" href="/docs">← All docs</a>
+<p class="docs-eyebrow">Reference</p>
+<h1>What you can connect</h1>
+<blockquote><p>Generated from the code by docs/product/pipeline/generate.mjs. Do not edit by hand: run the generator.</p></blockquote>
+<p>62 services your mineral can connect to without you finding an endpoint yourself. 6 of them ship inside the box as featured connectors; the rest connect by URL from the same page.</p>
+<p>The sign-in column says how you authorise it. <strong>One click</strong> means the service supports dynamic registration, so you sign in and it is done. <strong>Token</strong> means you paste an API token instead, because that endpoint advertises no one-click flow.</p>
+<h2>Design</h2>
+<table><thead><tr><th>Service</th><th>What you get</th><th>Sign-in</th><th>In the box</th></tr></thead><tbody><tr><td><strong>Canva</strong></td><td>work with your designs</td><td>One click</td><td>Featured</td></tr><tr><td><strong>Figma</strong></td><td>read your design files</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Miro</strong></td><td>boards and diagrams</td><td>One click</td><td>By URL</td></tr></tbody></table>
+<h2>Dev</h2>
+<table><thead><tr><th>Service</th><th>What you get</th><th>Sign-in</th><th>In the box</th></tr></thead><tbody><tr><td><strong>Linear</strong></td><td>see and file issues</td><td>One click</td><td>Featured</td></tr><tr><td><strong>Sentry</strong></td><td>read errors from your apps</td><td>One click</td><td>Featured</td></tr><tr><td><strong>Vercel</strong></td><td>see your deployments</td><td>One click</td><td>Featured</td></tr><tr><td><strong>Atlassian</strong></td><td>Jira issues and Confluence pages</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Semgrep</strong></td><td>scan code for security issues</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Heroku</strong></td><td>apps, dynos and add-ons</td><td>One click</td><td>By URL</td></tr><tr><td><strong>CircleCI</strong></td><td>pipelines and build failures</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Shortcut</strong></td><td>stories and epics</td><td>One click</td><td>By URL</td></tr><tr><td><strong>GitLab</strong></td><td>repos, issues and merge requests</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Honeycomb</strong></td><td>traces and queries</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Buildkite</strong></td><td>pipelines and builds</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Stytch</strong></td><td>auth users and sessions</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Cloudflare Observability</strong></td><td>Workers logs and analytics</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Cloudflare Bindings</strong></td><td>D1, KV, R2 and Workers</td><td>One click</td><td>By URL</td></tr><tr><td><strong>WorkOS</strong></td><td>SSO and directory sync</td><td>One click</td><td>By URL</td></tr><tr><td><strong>PagerDuty</strong></td><td>incidents and on-call</td><td>Token</td><td>By URL</td></tr></tbody></table>
+<h2>Docs</h2>
+<table><thead><tr><th>Service</th><th>What you get</th><th>Sign-in</th><th>In the box</th></tr></thead><tbody><tr><td><strong>Notion</strong></td><td>read and update your pages and databases</td><td>One click</td><td>Featured</td></tr><tr><td><strong>Asana</strong></td><td>tasks and projects</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Todoist</strong></td><td>tasks and projects</td><td>One click</td><td>By URL</td></tr><tr><td><strong>ClickUp</strong></td><td>tasks, docs and goals</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Readwise</strong></td><td>highlights and reading list</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Coda</strong></td><td>docs, tables and formulas</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Box</strong></td><td>files and folders</td><td>Token</td><td>By URL</td></tr></tbody></table>
+<h2>Comms</h2>
+<table><thead><tr><th>Service</th><th>What you get</th><th>Sign-in</th><th>In the box</th></tr></thead><tbody><tr><td><strong>Intercom</strong></td><td>conversations and customers</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Close</strong></td><td>CRM leads and conversations</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Attio</strong></td><td>CRM records and lists</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Resend</strong></td><td>send and inspect email</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Klaviyo</strong></td><td>campaigns and audiences</td><td>One click</td><td>By URL</td></tr><tr><td><strong>HubSpot</strong></td><td>contacts, deals and companies</td><td>Token</td><td>By URL</td></tr><tr><td><strong>Zoom</strong></td><td>meetings and recordings</td><td>Token</td><td>By URL</td></tr></tbody></table>
+<h2>Data</h2>
+<table><thead><tr><th>Service</th><th>What you get</th><th>Sign-in</th><th>In the box</th></tr></thead><tbody><tr><td><strong>Apify</strong></td><td>run scrapers and read results</td><td>One click</td><td>Featured</td></tr><tr><td><strong>Neon</strong></td><td>Postgres branches and queries</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Amplitude</strong></td><td>product analytics and charts</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Prisma</strong></td><td>database schema and queries</td><td>One click</td><td>By URL</td></tr><tr><td><strong>PostHog</strong></td><td>analytics and session replays</td><td>One click</td><td>By URL</td></tr><tr><td><strong>MongoDB</strong></td><td>collections and queries</td><td>Token</td><td>By URL</td></tr></tbody></table>
+<h2>Meetings</h2>
+<table><thead><tr><th>Service</th><th>What you get</th><th>Sign-in</th><th>In the box</th></tr></thead><tbody><tr><td><strong>Otter.ai</strong></td><td>meeting transcripts and summaries</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Fireflies.ai</strong></td><td>meeting recordings, transcripts and notes</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Granola</strong></td><td>your meeting notes and transcripts</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Avoma</strong></td><td>meeting notes, transcripts and insights</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Krisp</strong></td><td>call transcripts and meeting notes</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Fyxer</strong></td><td>meeting notes and drafted email replies</td><td>One click</td><td>By URL</td></tr></tbody></table>
+<h2>Payments</h2>
+<table><thead><tr><th>Service</th><th>What you get</th><th>Sign-in</th><th>In the box</th></tr></thead><tbody><tr><td><strong>PayPal</strong></td><td>orders, payments and disputes</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Square</strong></td><td>payments and point of sale</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Plaid</strong></td><td>bank connections and items</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Polar</strong></td><td>products and subscriptions</td><td>One click</td><td>By URL</td></tr></tbody></table>
+<h2>Web</h2>
+<table><thead><tr><th>Service</th><th>What you get</th><th>Sign-in</th><th>In the box</th></tr></thead><tbody><tr><td><strong>Webflow</strong></td><td>sites, collections and content</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Wix</strong></td><td>manage your Wix site</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Netlify</strong></td><td>deploys and site config</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Globalping</strong></td><td>network tests from anywhere</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Zapier</strong></td><td>run your Zaps</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Algolia</strong></td><td>search indices and records</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Sanity</strong></td><td>content and datasets</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Contentful</strong></td><td>entries and content types</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Render</strong></td><td>services and deploys</td><td>Token</td><td>By URL</td></tr></tbody></table>
+<h2>AI</h2>
+<table><thead><tr><th>Service</th><th>What you get</th><th>Sign-in</th><th>In the box</th></tr></thead><tbody><tr><td><strong>Hugging Face</strong></td><td>models, datasets and Spaces</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Context7</strong></td><td>up-to-date library documentation</td><td>One click</td><td>By URL</td></tr><tr><td><strong>Exa</strong></td><td>web search for agents</td><td>One click</td><td>By URL</td></tr><tr><td><strong>ElevenLabs</strong></td><td>text to speech and voices</td><td>Token</td><td>By URL</td></tr></tbody></table>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">crads-<span class="accent">ai</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div><a href="/book">Book a 30-minute call →</a></div>
+  <div><a href="/account/login">Sign in</a></div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What happens if Crads AI goes away · Crads AI docs</title>
+<meta name="description" content="The honest answer to &quot;what if you pick up another job&quot;, and the mechanisms that make it survivable.">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+
+<style>
+  .docs-page { max-width: 46rem; }
+  .docs-page .docs-eyebrow { font-family: var(--sans); font-size: 13px; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: var(--space-1); }
+  .docs-page h1 { margin-top: 0; }
+  .docs-page .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
+    margin: 0 0 var(--space-4); }
+  .docs-page table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
+    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
+  .docs-page th, .docs-page td { text-align: left; padding: 8px 12px 8px 0;
+    border-bottom: 1px solid var(--rule, #e5e2dc); vertical-align: top; }
+  .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
+    overflow-x: auto; font-size: 13.5px; }
+  .docs-page figure.shot { margin: var(--space-4) 0; }
+  .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
+    border: 1px solid var(--rule, #e5e2dc); }
+  .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 8px; }
+  .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
+  .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
+    margin-bottom: var(--space-3); }
+  .docs-index-groups { display: grid; gap: var(--space-4); }
+  .docs-index-groups h2 { margin-bottom: var(--space-1); }
+  .docs-index-groups ul { list-style: none; padding: 0; margin: 0; }
+  .docs-index-groups li { padding: 10px 0; border-bottom: 1px solid var(--rule, #e5e2dc); }
+  .docs-index-groups a { font-weight: 600; }
+  .docs-index-groups .d { display: block; font-family: var(--sans); font-size: 14px;
+    color: var(--ink-faint); margin-top: 2px; }
+</style>
+<link rel="canonical" href="https://crads-ai.com/docs/continuity">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:url" content="https://crads-ai.com/docs/continuity">
+<meta property="og:title" content="What happens if Crads AI goes away">
+<meta property="og:description" content="The honest answer to &quot;what if you pick up another job&quot;, and the mechanisms that make it survivable.">
+<meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What happens if Crads AI goes away">
+<meta name="twitter:description" content="The honest answer to &quot;what if you pick up another job&quot;, and the mechanisms that make it survivable.">
+<meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
+</head>
+<body>
+
+<nav class="site-nav-bar" aria-label="Primary">
+  <a href="/" class="brand" aria-label="crads-ai home">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
+  </a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav-links" aria-label="Open menu">
+    <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+  </button>
+  <div class="nav-links" id="site-nav-links">
+    <div class="nav-group" data-open="false" data-group="system">
+      <a href="/system" class="nav-trigger">The System</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The System pages">▾</button>
+      <div class="nav-menu">
+        <a href="/system" class="nav-menu-hub">The system, in one place →</a>
+        <a href="/overview">What it does</a>
+        <a href="/anatomy">Anatomy of an AI-OS</a>
+        <a href="/dashboard">See it live</a>
+      </div>
+    </div>
+    <div class="nav-group" data-open="false" data-group="coaching">
+      <a href="/coaching" class="nav-trigger">Coaching</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Coaching pages">▾</button>
+      <div class="nav-menu">
+        <a href="/coaching" class="nav-menu-hub">How we work together →</a>
+        <a href="/how-it-works">How it works</a>
+        <a href="/offer">Pricing</a>
+      </div>
+    </div>
+    <a href="/docs" class="nav-simple current">Docs</a>
+    <a href="/about" class="nav-simple">About</a>
+    <a href="/book" class="nav-simple nav-book">Book →</a>
+    <a href="/account/login" class="nav-account">Sign in</a>
+  </div>
+</nav>
+<main class="docs-page wrap ">
+<a class="docs-back" href="/docs">← All docs</a>
+<p class="docs-eyebrow">Explained</p>
+<h1>What happens if Crads AI goes away</h1>
+<p>The first serious objection I got to this whole thing was not about the software. It was: <em>what happens if you pick up another job, or decide this isn't something you want to do any more.</em></p>
+<p>It is the right question, it was asked by someone whose members would have been the ones affected, and the answer cannot be &quot;don't worry&quot;. So here it is properly.</p>
+<h2>What I am</h2>
+<p>One person. Samuel Davis, trading as Crads AI, in Sydney. Not a company with a board and a runway, and I am not going to dress it up as one. That is the actual risk you are weighing, and no architecture makes a sole operator into an institution.</p>
+<p>What I can do is make sure the risk is <em>survivable</em> rather than <em>fatal</em>, which is a different and achievable thing. Most software you buy fails badly when the vendor disappears, because the vendor holds the thing you actually needed. This is built so that I do not.</p>
+<h2>Three reasons this survives me</h2>
+<p><strong>Your brain is files, not a database row.</strong> Your pages are markdown in a git repository, on a machine you hold, mirrored to a repository in your own GitHub account. If Crads AI stopped existing tonight, you would still have every page, readable in any text editor, on infrastructure I have no access to. There is no proprietary format and no export button, because there is nothing to export from.</p>
+<p><strong>You can take the box.</strong> Ownership is a pointer that can move. A member can hold their own mineral outright, a community can hand a mineral to the member on it, and a member can walk away with it. That mechanism exists today and works in both directions; it is not a promise about a future version. If I vanished, the machine would keep running the software it already has, and you would keep the keys to it.</p>
+<p><strong>Nothing routes through me at runtime.</strong> Your assistant is your Claude account talking to your files on your machine. It does not call a Crads AI API to think. If my infrastructure went dark, your mineral would keep working: what you would lose is new software, the community directory, and me.</p>
+<h2>What you would actually lose</h2>
+<p>I would rather be specific than reassuring.</p>
+<ul>
+<li><strong>Updates stop.</strong> Your mineral keeps running the last build it received. Over</li>
+</ul>
+<p>  months that matters: connectors break when services change their APIs, and   nobody would be fixing them.</p>
+<ul>
+<li><strong>The directory goes quiet.</strong> Joining, invitations, transfers and the community</li>
+</ul>
+<p>  listing all run through a small service I operate. Existing minerals keep   working; new links between them stop being made.</p>
+<ul>
+<li><strong>Support ends.</strong> Anything on your box that breaks in a way you cannot fix</li>
+</ul>
+<p>  yourself stays broken, unless you or someone you hire picks it up. It is   ordinary Linux, node and markdown, so that is a real option rather than a   theoretical one.</p>
+<ul>
+<li><strong>Your rock's shared skills stop arriving.</strong> What is already installed stays.</li>
+</ul>
+<h2>What I will do if I stop</h2>
+<p>Committing to this in writing is the only part of this page that is a promise rather than a description:</p>
+<ol>
+<li><strong>Notice, not silence.</strong> If I wind this down deliberately, every member gets</li>
+</ol>
+<p>   told with a stated date, not left to notice the updates stopped.</p>
+<ol>
+<li><strong>Ownership handed over first.</strong> Before anything is switched off, every mineral</li>
+</ol>
+<p>   is transferred outright to the person or community holding it, and every    backup repository is confirmed as theirs and working.</p>
+<ol>
+<li><strong>The software goes with you.</strong> The code that runs your mineral gets handed to</li>
+</ol>
+<p>   you, or opened, so that anyone you hire can keep it running.</p>
+<ol>
+<li><strong>Backups verified before the lights go off.</strong> A backup nobody has tested is</li>
+</ol>
+<p>   not a backup. Restores get checked before a wind-down completes, not after.</p>
+<h2>What I cannot promise</h2>
+<p>I cannot promise the business continues. I cannot promise that if I am hit by a bus tomorrow, the orderly version above happens rather than the abrupt one: it is one person and there is no second operator today. That is why the first three sections matter more than the fourth. The design is the guarantee; my intentions are only the improvement on it.</p>
+<p>If you are a community leader deciding whether to put your name on this for your members, that is the trade in one sentence: <strong>the operator is a single point of failure, and the thing your members depend on is deliberately not.</strong></p>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">crads-<span class="accent">ai</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div><a href="/book">Book a 30-minute call →</a></div>
+  <div><a href="/account/login">Sign in</a></div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Use Claude Code on your mineral · Crads AI docs</title>
+<meta name="description" content="The fuller way in, for people who want a terminal and their whole brain in one session.">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+
+<style>
+  .docs-page { max-width: 46rem; }
+  .docs-page .docs-eyebrow { font-family: var(--sans); font-size: 13px; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: var(--space-1); }
+  .docs-page h1 { margin-top: 0; }
+  .docs-page .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
+    margin: 0 0 var(--space-4); }
+  .docs-page table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
+    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
+  .docs-page th, .docs-page td { text-align: left; padding: 8px 12px 8px 0;
+    border-bottom: 1px solid var(--rule, #e5e2dc); vertical-align: top; }
+  .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
+    overflow-x: auto; font-size: 13.5px; }
+  .docs-page figure.shot { margin: var(--space-4) 0; }
+  .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
+    border: 1px solid var(--rule, #e5e2dc); }
+  .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 8px; }
+  .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
+  .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
+    margin-bottom: var(--space-3); }
+  .docs-index-groups { display: grid; gap: var(--space-4); }
+  .docs-index-groups h2 { margin-bottom: var(--space-1); }
+  .docs-index-groups ul { list-style: none; padding: 0; margin: 0; }
+  .docs-index-groups li { padding: 10px 0; border-bottom: 1px solid var(--rule, #e5e2dc); }
+  .docs-index-groups a { font-weight: 600; }
+  .docs-index-groups .d { display: block; font-family: var(--sans); font-size: 14px;
+    color: var(--ink-faint); margin-top: 2px; }
+</style>
+<link rel="canonical" href="https://crads-ai.com/docs/claude-code-on-your-mineral">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:url" content="https://crads-ai.com/docs/claude-code-on-your-mineral">
+<meta property="og:title" content="Use Claude Code on your mineral">
+<meta property="og:description" content="The fuller way in, for people who want a terminal and their whole brain in one session.">
+<meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Use Claude Code on your mineral">
+<meta name="twitter:description" content="The fuller way in, for people who want a terminal and their whole brain in one session.">
+<meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
+</head>
+<body>
+
+<nav class="site-nav-bar" aria-label="Primary">
+  <a href="/" class="brand" aria-label="crads-ai home">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
+  </a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav-links" aria-label="Open menu">
+    <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+  </button>
+  <div class="nav-links" id="site-nav-links">
+    <div class="nav-group" data-open="false" data-group="system">
+      <a href="/system" class="nav-trigger">The System</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The System pages">▾</button>
+      <div class="nav-menu">
+        <a href="/system" class="nav-menu-hub">The system, in one place →</a>
+        <a href="/overview">What it does</a>
+        <a href="/anatomy">Anatomy of an AI-OS</a>
+        <a href="/dashboard">See it live</a>
+      </div>
+    </div>
+    <div class="nav-group" data-open="false" data-group="coaching">
+      <a href="/coaching" class="nav-trigger">Coaching</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Coaching pages">▾</button>
+      <div class="nav-menu">
+        <a href="/coaching" class="nav-menu-hub">How we work together →</a>
+        <a href="/how-it-works">How it works</a>
+        <a href="/offer">Pricing</a>
+      </div>
+    </div>
+    <a href="/docs" class="nav-simple current">Docs</a>
+    <a href="/about" class="nav-simple">About</a>
+    <a href="/book" class="nav-simple nav-book">Book →</a>
+    <a href="/account/login" class="nav-account">Sign in</a>
+  </div>
+</nav>
+<main class="docs-page wrap ">
+<a class="docs-back" href="/docs">← All docs</a>
+<p class="docs-eyebrow">How to</p>
+<h1>Use Claude Code on your mineral</h1>
+<p>The app is the everyday way to talk to your assistant, and for most people it is enough. This page is for the other case: you want a real session, in a real terminal, with your whole brain in context and the ability to build things.</p>
+<p>That is Claude Code, connected to your mineral over SSH. Same assistant, same brain, much more room.</p>
+<h2>When this is worth it</h2>
+<p>Honestly, not always. Reach for it when you are:</p>
+<ul>
+<li><strong>building or editing skills</strong> rather than running them</li>
+<li><strong>restructuring your brain</strong>, where you want to see and move files</li>
+<li>doing something long and iterative that a chat window makes tedious</li>
+</ul>
+<p>For &quot;what is on today&quot; and &quot;sort my inbox&quot;, the app is faster and the terminal is theatre.</p>
+<h2>Getting connected</h2>
+<p>The connect guide lives in the app under <strong>Help</strong>. It is there rather than here because it hands you the exact host for <em>your</em> mineral, and a page that told you the general shape would just be a worse version of the thing that knows your address.</p>
+<p>What the guide gives you is an SSH host entry. Once that is in place, opening Claude Code against your mineral is the same as opening it against any machine you have access to.</p>
+<h2>What is different on a mineral</h2>
+<p>Two things surprise people.</p>
+<p><strong>Your brain is just files.</strong> Markdown, in a git repository, with wikilinks between pages. There is no database and no API. You can <code>grep</code> it, edit it in place, move pages around, and your assistant will read whatever it finds next time. The brain graph in the app draws your actual structure rather than a structure it expected, so you can see the effect of a reorganisation immediately.</p>
+<p><strong>Skills are files too.</strong> A skill is a markdown file with frontmatter describing when it applies. Writing a new one is writing a file. Editing one is editing a file. Nothing needs to be registered, compiled or deployed: it is present, so it works.</p>
+<p>That is the whole reason this route exists. Once you can see that the product is files, the ceiling on what you can make it do stops being our imagination.</p>
+<h2>The terminal in the app</h2>
+<p>There is also a Terminal tab in the app, which is the short version of this: good for asking your assistant something directly or running a skill by name, not intended for a long build session.</p>
+<p>Use it for <code>/onboard</code> and for one-off asks. Use Claude Code when you are actually working.</p>
+<h2>Two cautions</h2>
+<p><strong>You have real access.</strong> From a session on your mineral you can delete your own brain. There is a nightly backup and a repository in your own account, and neither of those is a reason to be casual the day you decide to reorganise everything.</p>
+<p><strong>The machinery is not yours to edit.</strong> The engine, the scheduler and the app are maintained by us and replaced on the nightly restart, so a change you make there is a change that disappears tonight. Everything under your own brain and your own skills survives updates, by design: that boundary is what &quot;who edits what&quot; describes.</p>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">crads-<span class="accent">ai</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div><a href="/book">Book a 30-minute call →</a></div>
+  <div><a href="/account/login">Sign in</a></div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+</body>
+</html>

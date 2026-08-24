@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hosting a rock · Crads AI docs</title>
+<meta name="description" content="What a community host is responsible for, what it is not, and why paying for a box does not put you in the data chain.">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+
+<style>
+  .docs-page { max-width: 46rem; }
+  .docs-page .docs-eyebrow { font-family: var(--sans); font-size: 13px; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: var(--space-1); }
+  .docs-page h1 { margin-top: 0; }
+  .docs-page .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
+    margin: 0 0 var(--space-4); }
+  .docs-page table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
+    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
+  .docs-page th, .docs-page td { text-align: left; padding: 8px 12px 8px 0;
+    border-bottom: 1px solid var(--rule, #e5e2dc); vertical-align: top; }
+  .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
+    overflow-x: auto; font-size: 13.5px; }
+  .docs-page figure.shot { margin: var(--space-4) 0; }
+  .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
+    border: 1px solid var(--rule, #e5e2dc); }
+  .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 8px; }
+  .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
+  .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
+    margin-bottom: var(--space-3); }
+  .docs-index-groups { display: grid; gap: var(--space-4); }
+  .docs-index-groups h2 { margin-bottom: var(--space-1); }
+  .docs-index-groups ul { list-style: none; padding: 0; margin: 0; }
+  .docs-index-groups li { padding: 10px 0; border-bottom: 1px solid var(--rule, #e5e2dc); }
+  .docs-index-groups a { font-weight: 600; }
+  .docs-index-groups .d { display: block; font-family: var(--sans); font-size: 14px;
+    color: var(--ink-faint); margin-top: 2px; }
+</style>
+<link rel="canonical" href="https://crads-ai.com/docs/hosting-a-rock">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:url" content="https://crads-ai.com/docs/hosting-a-rock">
+<meta property="og:title" content="Hosting a rock">
+<meta property="og:description" content="What a community host is responsible for, what it is not, and why paying for a box does not put you in the data chain.">
+<meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hosting a rock">
+<meta name="twitter:description" content="What a community host is responsible for, what it is not, and why paying for a box does not put you in the data chain.">
+<meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
+</head>
+<body>
+
+<nav class="site-nav-bar" aria-label="Primary">
+  <a href="/" class="brand" aria-label="crads-ai home">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
+  </a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav-links" aria-label="Open menu">
+    <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+  </button>
+  <div class="nav-links" id="site-nav-links">
+    <div class="nav-group" data-open="false" data-group="system">
+      <a href="/system" class="nav-trigger">The System</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The System pages">▾</button>
+      <div class="nav-menu">
+        <a href="/system" class="nav-menu-hub">The system, in one place →</a>
+        <a href="/overview">What it does</a>
+        <a href="/anatomy">Anatomy of an AI-OS</a>
+        <a href="/dashboard">See it live</a>
+      </div>
+    </div>
+    <div class="nav-group" data-open="false" data-group="coaching">
+      <a href="/coaching" class="nav-trigger">Coaching</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Coaching pages">▾</button>
+      <div class="nav-menu">
+        <a href="/coaching" class="nav-menu-hub">How we work together →</a>
+        <a href="/how-it-works">How it works</a>
+        <a href="/offer">Pricing</a>
+      </div>
+    </div>
+    <a href="/docs" class="nav-simple current">Docs</a>
+    <a href="/about" class="nav-simple">About</a>
+    <a href="/book" class="nav-simple nav-book">Book →</a>
+    <a href="/account/login" class="nav-account">Sign in</a>
+  </div>
+</nav>
+<main class="docs-page wrap ">
+<a class="docs-back" href="/docs">← All docs</a>
+<p class="docs-eyebrow">Legal</p>
+<h1>Hosting a rock</h1>
+<p class="legal-stamp">Version 0.1, effective 2026-08-24. Samuel Davis trading as Crads AI.</p>
+<p>The agreement for hosting a rock, between the host (&quot;you&quot;) and <strong>Samuel Davis, trading as Crads AI, ABN 26 929 349 775</strong>. Written to be readable by the person signing it rather than by their lawyer, though theirs is welcome to it.</p>
+<p>Version 0.1, effective 24 August 2026.</p>
+<h2>1. What a rock is, legally</h2>
+<p>You are a <strong>community host and referrer</strong>. Not a reseller, not a data processor, not our agent.</p>
+<p>Concretely: <strong>each of your members contracts directly with us for their own mineral.</strong> You introduce them, you vouch for us, you curate what they get, and you can pay for their boxes. What you do not do is stand between them and us on their data.</p>
+<p>This matters more than it sounds. It means:</p>
+<ul>
+<li>Your members' privacy obligations are ours, not yours. You are not processing</li>
+</ul>
+<p>  their data because you never hold it.</p>
+<ul>
+<li>If a member has a complaint about the software, it is ours to answer.</li>
+<li>If you stop hosting, your members' minerals do not die with your involvement.</li>
+</ul>
+<h2>2. What you cannot see, and why it is not a promise</h2>
+<p>You <strong>cannot read</strong> your members' brains, notes, mail, messages or calendars. This is not a policy we are asking you to trust us on. Each member's pages sit on that member's own machine, and hosting a machine does not grant reading it. There is no console we are choosing not to give you.</p>
+<p>What you do see:</p>
+<ul>
+<li>that a member exists, and whether their mineral is reachable and signed in</li>
+<li>which software build each mineral runs</li>
+<li>whatever that member has switched on for you: optionally whether they have</li>
+</ul>
+<p>  onboarded, disk use, last activity, and which skills they have installed,   enabled and run</p>
+<ul>
+<li>anything a member has deliberately shared with the community</li>
+</ul>
+<p>Every one of those beyond the first line is a <strong>member-controlled toggle</strong>, and a member who turns them off is not doing anything wrong.</p>
+<h2>3. Paying for boxes does not put you in the data chain</h2>
+<p>You may pay for the minerals you anchor. That is a commercial arrangement about hosting costs between you and us.</p>
+<p><strong>It gives you no rights over the member's data, and no responsibility for it.</strong> Paying an invoice is not a data role. We are writing that in as many words because it is the point people most often get wrong about this model, in both directions: hosts assume paying gives them visibility, and members assume paying gives hosts control. Neither is true.</p>
+<h2>4. What you are responsible for</h2>
+<ul>
+<li><strong>Who you let in.</strong> You decide who joins. If someone should not be in your</li>
+</ul>
+<p>  community, that is your call and your call alone.</p>
+<ul>
+<li><strong>What you tell your members.</strong> If you publish your own guidance to their</li>
+</ul>
+<p>  minerals, that content is yours. Keep it accurate.</p>
+<ul>
+<li><strong>Not overselling us.</strong> Do not promise your members capabilities the product</li>
+</ul>
+<p>  does not have, or an uptime we have not offered. If you are unsure whether   something is true, ask before you say it.</p>
+<ul>
+<li><strong>Telling us when something is wrong.</strong> You are closer to your members than we</li>
+</ul>
+<p>  are, and in a beta that is the whole feedback loop.</p>
+<h2>5. What we are responsible for</h2>
+<ul>
+<li>The machinery: the image, the engine, the app, the scheduler, the updates.</li>
+<li>Your members' privacy, per the privacy policy, which is our obligation and not</li>
+</ul>
+<p>  yours.</p>
+<ul>
+<li>Answering your members' problems with the software, individually.</li>
+<li>Telling you before we change anything that changes what you have promised them.</li>
+<li><strong>Not going around you.</strong> We will not market to your members on the back of</li>
+</ul>
+<p>  your introduction, and we will not use your community's name as a reference   without asking you first.</p>
+<h2>6. Your name and your intellectual property</h2>
+<p>Your community's name, brand and material stay yours. We use them only where you have said we can, and hosting a rock is not permission to put you on a website.</p>
+<p><strong>Anything you or your members put on a mineral is not ours and we will not use it.</strong> If you publish your own playbook to your community's minerals, we do not read it, copy it, or fold it into the product.</p>
+<p>If you want our name in something you publish, ask, and the answer is almost certainly yes.</p>
+<h2>7. Money, during the beta</h2>
+<p><strong>Nothing is charged.</strong> Cohort one is a free beta and there is no hosting fee, no per-seat fee and no setup fee. Prices shown in the app or the docs are indicative and are not an offer.</p>
+<p>On <strong>26 September 2026</strong> pricing gets settled in the open. You will see what is proposed before anything is charged, and declining costs you nothing and takes nothing away from your members.</p>
+<p>We are not registered for GST, so no GST is charged.</p>
+<h2>8. Ending it</h2>
+<p><strong>You, at any time and without a reason.</strong> Your members keep their minerals. What stops is your curation, your published pages and your payment for anchored boxes; what does not stop is any member's own mineral.</p>
+<p><strong>Us, with thirty days' notice</strong>, except for unlawful use or a live security problem.</p>
+<p>Either way, no member loses their brain because the arrangement between you and us ended. That is the whole reason ownership sits where it does.</p>
+<h2>9. What we cannot promise you</h2>
+<p>You are putting your name to this in front of people who trust you, so you should have the risks in writing rather than in a conversation.</p>
+<ul>
+<li><strong>We are one person.</strong> No support rota, no runway, no board.</li>
+<li><strong>No uptime guarantee</strong> during the beta.</li>
+<li><strong>The software will have bugs</strong>, and your members will find some of them. Every</li>
+</ul>
+<p>  fix ships with a test that pins it, which is the honest version of a guarantee.</p>
+<ul>
+<li><strong>If we wind down</strong>, the commitments in the continuity page apply: notice with a</li>
+</ul>
+<p>  date, ownership transferred to your members first, backups verified, and the   software handed over. Those commitments are part of this agreement.</p>
+<h2>10. Law</h2>
+<p>New South Wales, Australia. Talk to us first.</p>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">crads-<span class="accent">ai</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div><a href="/book">Book a 30-minute call →</a></div>
+  <div><a href="/account/login">Sign in</a></div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+</body>
+</html>

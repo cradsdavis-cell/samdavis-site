@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who edits what · Crads AI docs</title>
+<meta name="description" content="Three layers on every mineral: the machinery we maintain, the infrastructure you own, and the pages you build.">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+
+<style>
+  .docs-page { max-width: 46rem; }
+  .docs-page .docs-eyebrow { font-family: var(--sans); font-size: 13px; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: var(--space-1); }
+  .docs-page h1 { margin-top: 0; }
+  .docs-page .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
+    margin: 0 0 var(--space-4); }
+  .docs-page table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
+    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
+  .docs-page th, .docs-page td { text-align: left; padding: 8px 12px 8px 0;
+    border-bottom: 1px solid var(--rule, #e5e2dc); vertical-align: top; }
+  .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
+    overflow-x: auto; font-size: 13.5px; }
+  .docs-page figure.shot { margin: var(--space-4) 0; }
+  .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
+    border: 1px solid var(--rule, #e5e2dc); }
+  .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 8px; }
+  .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
+  .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
+    margin-bottom: var(--space-3); }
+  .docs-index-groups { display: grid; gap: var(--space-4); }
+  .docs-index-groups h2 { margin-bottom: var(--space-1); }
+  .docs-index-groups ul { list-style: none; padding: 0; margin: 0; }
+  .docs-index-groups li { padding: 10px 0; border-bottom: 1px solid var(--rule, #e5e2dc); }
+  .docs-index-groups a { font-weight: 600; }
+  .docs-index-groups .d { display: block; font-family: var(--sans); font-size: 14px;
+    color: var(--ink-faint); margin-top: 2px; }
+</style>
+<link rel="canonical" href="https://crads-ai.com/docs/the-three-layers">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:url" content="https://crads-ai.com/docs/the-three-layers">
+<meta property="og:title" content="Who edits what">
+<meta property="og:description" content="Three layers on every mineral: the machinery we maintain, the infrastructure you own, and the pages you build.">
+<meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Who edits what">
+<meta name="twitter:description" content="Three layers on every mineral: the machinery we maintain, the infrastructure you own, and the pages you build.">
+<meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
+</head>
+<body>
+
+<nav class="site-nav-bar" aria-label="Primary">
+  <a href="/" class="brand" aria-label="crads-ai home">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
+  </a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav-links" aria-label="Open menu">
+    <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+  </button>
+  <div class="nav-links" id="site-nav-links">
+    <div class="nav-group" data-open="false" data-group="system">
+      <a href="/system" class="nav-trigger">The System</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The System pages">▾</button>
+      <div class="nav-menu">
+        <a href="/system" class="nav-menu-hub">The system, in one place →</a>
+        <a href="/overview">What it does</a>
+        <a href="/anatomy">Anatomy of an AI-OS</a>
+        <a href="/dashboard">See it live</a>
+      </div>
+    </div>
+    <div class="nav-group" data-open="false" data-group="coaching">
+      <a href="/coaching" class="nav-trigger">Coaching</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Coaching pages">▾</button>
+      <div class="nav-menu">
+        <a href="/coaching" class="nav-menu-hub">How we work together →</a>
+        <a href="/how-it-works">How it works</a>
+        <a href="/offer">Pricing</a>
+      </div>
+    </div>
+    <a href="/docs" class="nav-simple current">Docs</a>
+    <a href="/about" class="nav-simple">About</a>
+    <a href="/book" class="nav-simple nav-book">Book →</a>
+    <a href="/account/login" class="nav-account">Sign in</a>
+  </div>
+</nav>
+<main class="docs-page wrap ">
+<a class="docs-back" href="/docs">← All docs</a>
+<p class="docs-eyebrow">Explained</p>
+<h1>Who edits what</h1>
+<p>Every part of your mineral belongs to exactly one of three layers, and each layer has one editor. Knowing which is which answers most &quot;can I change this&quot; questions before you have to ask.</p>
+<h2>Layer 1: the machinery. We maintain it.</h2>
+<p>The container image, the engine, the desktop app, the skill runner, the scheduler and its run history, the system pages, and a handful of protected jobs.</p>
+<p>You do not edit these, and you also do not have to maintain them. They arrive by a nightly restart onto the software your community has published, and there is an Update button when you do not want to wait.</p>
+<p>The trade is honest: you give up the ability to change the engine, and in return the engine is somebody else's problem.</p>
+<h2>Layer 2: the infrastructure. You own it.</h2>
+<p>Which skills exist on your mineral, what runs on a schedule and when, which outside services are wired up and with whose tokens, and the machine itself.</p>
+<p><strong>Owner is a recorded fact, not a vibe.</strong> A file on your mineral says whether this layer is held by you or by your community, it is visible in the app, and it can move in either direction with your sign-in. For a member of a community using their own box, the answer is you.</p>
+<p>This is the layer where the product is actually yours. Installing a recipe, changing a cadence from daily to twice a week, connecting a service, disconnecting one: all yours, no permission needed.</p>
+<h2>Layer 3: your pages. You build them.</h2>
+<p>The dashboard pages your app renders. Ask your assistant for a page that shows the thing you check every morning, and it builds it.</p>
+<p>Two things follow from these being <em>your</em> files. Updates may add new template pages, but an update will never overwrite a page you have edited. And a page you build is sandboxed when it renders, with no access to the rest of the app, which is why you can be careless with them.</p>
+<h2>The part people get wrong</h2>
+<p><strong>Your brain is not a schema.</strong> The eight layers a fresh mineral starts with (north star, philosophy, self, network, past, goals, tasks, workflow) are a <em>starting template</em>, not a structure the software depends on. Rearrange them, rename them, throw half of them away, invent your own: nothing breaks.</p>
+<p>That is a deliberate constraint on us rather than a permission for you. No update, system page or engine feature is allowed to assume your brain looks a particular way, which is why the brain graph draws whatever is actually there rather than what a template expected.</p>
+<figure class="shot"><a href="/docs/shots/member-brain.png" target="_blank" rel="noopener"><img src="/docs/shots/member-brain.png" alt="Your brain, drawn from whatever is actually on disk" loading="lazy"></a><figcaption>Your brain, drawn from whatever is actually on disk</figcaption></figure>
+<h2>System pages and your pages are different in kind</h2>
+<p>Some pages in the app are not files at all. The brain graph, the setup state, the skills list, the scheduled jobs, the connections: those are <strong>live views</strong>, built from your mineral's state every time you open them. They are always present, never editable, and never stale, because there is nothing cached to go stale.</p>
+<p>That is why an expired token shows up as an expired token on the connections page rather than being discovered six weeks later when you notice the morning brief stopped arriving.</p>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">crads-<span class="accent">ai</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div><a href="/book">Book a 30-minute call →</a></div>
+  <div><a href="/account/login">Sign in</a></div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+</body>
+</html>

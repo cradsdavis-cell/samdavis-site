@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docs · Crads AI docs</title>
+<meta name="description" content="How Crads AI works: getting a mineral, connecting it, what your community can see, and the legal detail.">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+
+<style>
+  .docs-page { max-width: 46rem; }
+  .docs-page .docs-eyebrow { font-family: var(--sans); font-size: 13px; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: var(--space-1); }
+  .docs-page h1 { margin-top: 0; }
+  .docs-page .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
+    margin: 0 0 var(--space-4); }
+  .docs-page table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
+    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
+  .docs-page th, .docs-page td { text-align: left; padding: 8px 12px 8px 0;
+    border-bottom: 1px solid var(--rule, #e5e2dc); vertical-align: top; }
+  .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
+    overflow-x: auto; font-size: 13.5px; }
+  .docs-page figure.shot { margin: var(--space-4) 0; }
+  .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
+    border: 1px solid var(--rule, #e5e2dc); }
+  .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 8px; }
+  .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
+  .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
+    margin-bottom: var(--space-3); }
+  .docs-index-groups { display: grid; gap: var(--space-4); }
+  .docs-index-groups h2 { margin-bottom: var(--space-1); }
+  .docs-index-groups ul { list-style: none; padding: 0; margin: 0; }
+  .docs-index-groups li { padding: 10px 0; border-bottom: 1px solid var(--rule, #e5e2dc); }
+  .docs-index-groups a { font-weight: 600; }
+  .docs-index-groups .d { display: block; font-family: var(--sans); font-size: 14px;
+    color: var(--ink-faint); margin-top: 2px; }
+</style>
+<link rel="canonical" href="https://crads-ai.com/docs">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:url" content="https://crads-ai.com/docs">
+<meta property="og:title" content="Docs">
+<meta property="og:description" content="How Crads AI works: getting a mineral, connecting it, what your community can see, and the legal detail.">
+<meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Docs">
+<meta name="twitter:description" content="How Crads AI works: getting a mineral, connecting it, what your community can see, and the legal detail.">
+<meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
+</head>
+<body>
+
+<nav class="site-nav-bar" aria-label="Primary">
+  <a href="/" class="brand" aria-label="crads-ai home">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
+  </a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav-links" aria-label="Open menu">
+    <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+  </button>
+  <div class="nav-links" id="site-nav-links">
+    <div class="nav-group" data-open="false" data-group="system">
+      <a href="/system" class="nav-trigger">The System</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The System pages">▾</button>
+      <div class="nav-menu">
+        <a href="/system" class="nav-menu-hub">The system, in one place →</a>
+        <a href="/overview">What it does</a>
+        <a href="/anatomy">Anatomy of an AI-OS</a>
+        <a href="/dashboard">See it live</a>
+      </div>
+    </div>
+    <div class="nav-group" data-open="false" data-group="coaching">
+      <a href="/coaching" class="nav-trigger">Coaching</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Coaching pages">▾</button>
+      <div class="nav-menu">
+        <a href="/coaching" class="nav-menu-hub">How we work together →</a>
+        <a href="/how-it-works">How it works</a>
+        <a href="/offer">Pricing</a>
+      </div>
+    </div>
+    <a href="/docs" class="nav-simple current">Docs</a>
+    <a href="/about" class="nav-simple">About</a>
+    <a href="/book" class="nav-simple nav-book">Book →</a>
+    <a href="/account/login" class="nav-account">Sign in</a>
+  </div>
+</nav>
+<main class="docs-page wrap docs-index">
+<h1>Docs</h1>
+<p>Everything about how Crads AI works, in the open. The whole product manual is public: what a mineral is, how you get one, how to connect things to it, what your community can and cannot see, and what happens if we go away.</p>
+<p>The deeper usage craft, the recipe library and the hosting playbook, ships inside the product itself, where your assistant can read it alongside everything else it knows about you.</p>
+<div class="docs-index-groups">
+    <section>
+      <h2>Explained</h2>
+      <p class="docs-summary">What this is and why it is shaped this way.</p>
+      <ul>
+      <li><a href="/docs/rocks-and-pebbles">Rocks and pebbles</a><span class="d">Why the thing you get is a private box of your own, and what a community hosting them is for.</span></li>
+      <li><a href="/docs/continuity">What happens if Crads AI goes away</a><span class="d">The honest answer to "what if you pick up another job", and the mechanisms that make it survivable.</span></li>
+      <li><a href="/docs/what-your-community-can-see">What your community can see</a><span class="d">Field by field, what a rock learns about your mineral, and the two switches that control most of it.</span></li>
+      <li><a href="/docs/the-three-layers">Who edits what</a><span class="d">Three layers on every mineral: the machinery we maintain, the infrastructure you own, and the pages you build.</span></li>
+      <li><a href="/docs/how-updates-reach-you">How updates reach you</a><span class="d">Your mineral restarts nightly onto new software, what that does and does not touch, and how to tell what you are running.</span></li>
+      </ul>
+    </section>
+    <section>
+      <h2>Walkthrough</h2>
+      <p class="docs-summary">Start here if you have just been given a mineral.</p>
+      <ul>
+      <li><a href="/docs/first-hour">Your first hour</a><span class="d">From opening the app to an assistant that is awake, in about an hour.</span></li>
+      </ul>
+    </section>
+    <section>
+      <h2>How to</h2>
+      <p class="docs-summary">One task, start to finish.</p>
+      <ul>
+      <li><a href="/docs/connect-google">Connect Google, with your own key</a><span class="d">Five console visits, one file, one sign-in. Your Google key never touches our infrastructure, and here is why we made you do it the hard way.</span></li>
+      <li><a href="/docs/become-a-rock">Turn your mineral into a rock</a><span class="d">The upgrade that lets your mineral host other people's, what it changes, and what nobody has to approve.</span></li>
+      <li><a href="/docs/manage-members">Invite and manage members</a><span class="d">How someone joins your rock, the two kinds of membership, and how anyone leaves without losing anything.</span></li>
+      <li><a href="/docs/fix-a-broken-connection">Fix a connection that has stopped working</a><span class="d">What an expired token looks like, why it happens, and the one place that tells you the truth.</span></li>
+      <li><a href="/docs/back-up-and-restore">Back up your mineral, and get it back</a><span class="d">What is already backed up, the one thing you have to do yourself, and why the passphrase matters more than the backup.</span></li>
+      <li><a href="/docs/claude-code-on-your-mineral">Use Claude Code on your mineral</a><span class="d">The fuller way in, for people who want a terminal and their whole brain in one session.</span></li>
+      </ul>
+    </section>
+    <section>
+      <h2>Reference</h2>
+      <p class="docs-summary">Generated from the software itself, so it cannot drift.</p>
+      <ul>
+      <li><a href="/docs/skills">Every skill your mineral ships with</a><span class="d">The 10 engine skills present on every mineral, with what each one does.</span></li>
+      <li><a href="/docs/connections">What you can connect</a><span class="d">The 62 services in the curated connections catalogue, and how each one signs in.</span></li>
+      <li><a href="/docs/machinery-jobs">The jobs your mineral runs by itself</a><span class="d">The 17 machinery jobs Crads AI maintains on every mineral, and what each one is for.</span></li>
+      </ul>
+    </section>
+    <section>
+      <h2>Legal</h2>
+      <p class="docs-summary">The written detail. Version-stamped, and it changes only with the version.</p>
+      <ul>
+      <li><a href="/docs/privacy-policy">Privacy policy</a><span class="d">What is stored, where it runs, what leaves your mineral, and how to take your data and go.</span></li>
+      <li><a href="/docs/terms">Terms of service</a><span class="d">What you get, what it costs, what we each promise, and how either of us ends it.</span></li>
+      <li><a href="/docs/hosting-a-rock">Hosting a rock</a><span class="d">What a community host is responsible for, what it is not, and why paying for a box does not put you in the data chain.</span></li>
+      <li><a href="/docs/acceptable-use">Acceptable use</a><span class="d">The short list of things you cannot do with a mineral, and what happens if you do.</span></li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">crads-<span class="accent">ai</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div><a href="/book">Book a 30-minute call →</a></div>
+  <div><a href="/account/login">Sign in</a></div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+</body>
+</html>

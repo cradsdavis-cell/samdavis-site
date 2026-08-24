@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Every skill your mineral ships with · Crads AI docs</title>
+<meta name="description" content="The 10 engine skills present on every mineral, with what each one does.">
+<link rel="stylesheet" href="/lib/site.css">
+<script defer src="/lib/site.js"></script>
+
+<style>
+  .docs-page { max-width: 46rem; }
+  .docs-page .docs-eyebrow { font-family: var(--sans); font-size: 13px; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: var(--space-1); }
+  .docs-page h1 { margin-top: 0; }
+  .docs-page .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
+    margin: 0 0 var(--space-4); }
+  .docs-page table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
+    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
+  .docs-page th, .docs-page td { text-align: left; padding: 8px 12px 8px 0;
+    border-bottom: 1px solid var(--rule, #e5e2dc); vertical-align: top; }
+  .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
+    overflow-x: auto; font-size: 13.5px; }
+  .docs-page figure.shot { margin: var(--space-4) 0; }
+  .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
+    border: 1px solid var(--rule, #e5e2dc); }
+  .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
+    color: var(--ink-faint); margin-top: 8px; }
+  .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
+  .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
+    margin-bottom: var(--space-3); }
+  .docs-index-groups { display: grid; gap: var(--space-4); }
+  .docs-index-groups h2 { margin-bottom: var(--space-1); }
+  .docs-index-groups ul { list-style: none; padding: 0; margin: 0; }
+  .docs-index-groups li { padding: 10px 0; border-bottom: 1px solid var(--rule, #e5e2dc); }
+  .docs-index-groups a { font-weight: 600; }
+  .docs-index-groups .d { display: block; font-family: var(--sans); font-size: 14px;
+    color: var(--ink-faint); margin-top: 2px; }
+</style>
+<link rel="canonical" href="https://crads-ai.com/docs/skills">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:url" content="https://crads-ai.com/docs/skills">
+<meta property="og:title" content="Every skill your mineral ships with">
+<meta property="og:description" content="The 10 engine skills present on every mineral, with what each one does.">
+<meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Every skill your mineral ships with">
+<meta name="twitter:description" content="The 10 engine skills present on every mineral, with what each one does.">
+<meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
+</head>
+<body>
+
+<nav class="site-nav-bar" aria-label="Primary">
+  <a href="/" class="brand" aria-label="crads-ai home">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
+  </a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav-links" aria-label="Open menu">
+    <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+  </button>
+  <div class="nav-links" id="site-nav-links">
+    <div class="nav-group" data-open="false" data-group="system">
+      <a href="/system" class="nav-trigger">The System</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The System pages">▾</button>
+      <div class="nav-menu">
+        <a href="/system" class="nav-menu-hub">The system, in one place →</a>
+        <a href="/overview">What it does</a>
+        <a href="/anatomy">Anatomy of an AI-OS</a>
+        <a href="/dashboard">See it live</a>
+      </div>
+    </div>
+    <div class="nav-group" data-open="false" data-group="coaching">
+      <a href="/coaching" class="nav-trigger">Coaching</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Coaching pages">▾</button>
+      <div class="nav-menu">
+        <a href="/coaching" class="nav-menu-hub">How we work together →</a>
+        <a href="/how-it-works">How it works</a>
+        <a href="/offer">Pricing</a>
+      </div>
+    </div>
+    <a href="/docs" class="nav-simple current">Docs</a>
+    <a href="/about" class="nav-simple">About</a>
+    <a href="/book" class="nav-simple nav-book">Book →</a>
+    <a href="/account/login" class="nav-account">Sign in</a>
+  </div>
+</nav>
+<main class="docs-page wrap ">
+<a class="docs-back" href="/docs">← All docs</a>
+<p class="docs-eyebrow">Reference</p>
+<h1>Every skill your mineral ships with</h1>
+<blockquote><p>Generated from the code by docs/product/pipeline/generate.mjs. Do not edit by hand: run the generator.</p></blockquote>
+<p>Every mineral ships with these 10 skills. They are the engine set: the skill library itself ships empty, so anything beyond this list is something you or your rock added.</p>
+<h2>box</h2>
+<table><thead><tr><th>Skill</th><th>What it does</th></tr></thead><tbody><tr><td><strong>Connect a service</strong> (<code>/connect</code>)</td><td>Connect an outside service (Notion, Linear, a calendar, anything with an MCP server) so this mineral can use it, including in scheduled jobs. Triggers on /connect and natural asks like &quot;connect me to Notion&quot;, &quot;hook up my calendar&quot;, &quot;add the Linear MCP&quot;, &quot;can you talk to my email&quot;, &quot;set up an integration&quot;.</td></tr><tr><td><strong>Build pages &amp; cards</strong> (<code>/dashboard</code>)</td><td>Build or change the member's own app pages and dashboard cards, the box-hosted surface their companion app renders. &quot;Build me a page that shows X&quot;, &quot;change my dashboard&quot;, &quot;add a card for Y&quot;.</td></tr><tr><td><strong>Explain this system</strong> (<code>/explain</code>)</td><td>Explain this AI system to the person using it and answer any question they have about how it works. Read-only, it inspects the mineral to give live, accurate answers (what is connected, where the data lives, whether backups are on) but never changes anything. Triggers on /explain and on natural questions like &quot;how does this work&quot;, &quot;what is this&quot;, &quot;what am I connected to&quot;, &quot;where is my data&quot;, &quot;how do I back this up&quot;, &quot;is this secure&quot;.</td></tr><tr><td><strong>Onboarding interview</strong> (<code>/onboard</code>)</td><td>The deep interview that builds a brain from nothing on the 8-layer context spine (North Star, Philosophy, Self, Network, Past, Goals, Tasks, Workflow). Two scopes, auto-detected: PERSON (a member's own brain) or ORG (a rock/org brain). Adaptive, one question at a time, resumable, two-pass (capture → synthesise → review).</td></tr></tbody></table>
+<h2>briefing</h2>
+<table><thead><tr><th>Skill</th><th>What it does</th></tr></thead><tbody><tr><td><strong>Daily brief</strong> (<code>/daily</code>)</td><td>Morning prioritisation brief. Pulls today's tasks + calendar, classifies events from the client's profile, picks the top 3, surfaces what's at risk.</td></tr><tr><td><strong>Plan your week</strong> (<code>/plan-week</code>)</td><td>Monday goal-setter. SETS this week's 3 to 5 concrete outcomes (Mon to Fri) and writes them to wiki/this-week.md, the surface the daily brief reads and the close-of-day checks against. The planning yang to /weekly's review yin. Run at the start of the week.</td></tr><tr><td><strong>Weekly review</strong> (<code>/weekly</code>)</td><td>Weekly review. Summarises the week's log, checks project health across active projects, flags stale actions + decisions, sets next week's focus. Run Sunday evening or Monday morning.</td></tr></tbody></table>
+<h2>capture</h2>
+<table><thead><tr><th>Skill</th><th>What it does</th></tr></thead><tbody><tr><td><strong>Capture the session</strong> (<code>/capture</code>)</td><td>End-of-session sweep. Scans the conversation AND any configured capture sources (meetings, comms), diffs against the client's brain + tasks + calendar, proposes the updates that should have been written but weren't, confirms, writes.</td></tr></tbody></table>
+<h2>comms</h2>
+<table><thead><tr><th>Skill</th><th>What it does</th></tr></thead><tbody><tr><td><strong>Follow-ups</strong> (<code>/followup</code>)</td><td>Scan for open loops (overdue tasks, unanswered messages from key contacts, stale project actions, pending commitments) and surface what's slipping before it becomes a problem. Read-only; surfacing, not acting.</td></tr><tr><td><strong>Inbox triage</strong> (<code>/inbox</code>)</td><td>Triage unread inbox into buckets: open-loop (reply/FYI, leave unread) / mark-read (legit, no action) / archive (junk). Read-only on open-loops; bulk-confirm before any label writes.</td></tr></tbody></table>
+</main>
+
+<footer class="site-footer wrap">
+  <span class="wordmark">crads-<span class="accent">ai</span></span>
+  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+  <div>+61 0493 302 154</div>
+  <div><a href="/book">Book a 30-minute call →</a></div>
+  <div><a href="/account/login">Sign in</a></div>
+  <div class="location">Coogee, Sydney.</div>
+</footer>
+</body>
+</html>
