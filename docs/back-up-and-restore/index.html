@@ -92,6 +92,7 @@
 <p class="docs-eyebrow">How to</p>
 <h1>Back up your mineral, and get it back</h1>
 <p>Two different things get backed up, by two different mechanisms, and the second one has a step only you can do.</p>
+<p><strong>This page describes a pebble.</strong> A rock does not run either of the nightly jobs below: no encrypted snapshot, no scheduled brain push. If you host a rock, read the last section, because the difference matters and it is not a setting you have switched off.</p>
 <h2>Your brain backs itself up</h2>
 <p>Your brain is a git repository. Connect GitHub and it pushes to a <strong>private repository in your own account</strong>, on its own, from then on.</p>
 <p>That is the important half. It means the pages your assistant has written about your world exist somewhere that is not this machine and is not ours, in a format you can read in any text editor, on infrastructure we cannot reach.</p>
@@ -110,6 +111,10 @@
 <h2>What is not backed up</h2>
 <p>Anything you never told your assistant, and anything you deleted before the last run. Backups are nightly, not continuous.</p>
 <p>If you are about to do something drastic to your brain, the safe move is to let a night pass first, or push your brain manually before you start.</p>
+<h2>If you host a rock</h2>
+<p>A rock runs a much smaller set of jobs than a pebble, and two of the ones it does not run are the two on this page. <strong>Neither the nightly encrypted snapshot nor the nightly brain push happens on a rock.</strong></p>
+<p>The push that runs when you turn a mineral into a rock is a one-time step inside that upgrade. It is not the beginning of a nightly habit, and it is easy to read it as one, because the Custody card afterwards says your brain backs up to a repository and does not say how long ago.</p>
+<p>So if you host a rock, treat its backup as <strong>something you do</strong>, not something that happens. Push it deliberately before anything significant: before you change what the rock publishes, before an update, before you invite a cohort.</p>
 </main>
 
 <footer class="site-footer wrap">
