@@ -24,10 +24,37 @@
   .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
     overflow-x: auto; font-size: 13.5px; }
   .docs-page figure.shot { margin: var(--space-4) 0; }
+  .docs-page .shot-frame { position: relative; display: block; line-height: 0; }
   .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
     border: 1px solid var(--rule, #e5e2dc); }
   .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
     color: var(--ink-faint); margin-top: 8px; }
+
+  /* Annotations. The marker outlines the real control and carries its number at
+     the corner, so the eye goes box -> number -> legend line. Positioned in
+     percentages by the capture rig, never by hand. */
+  .docs-page .shot-mark { position: absolute; box-sizing: border-box;
+    border: 2px solid var(--accent, #b4531f); border-radius: 6px;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.55); pointer-events: none; }
+  .docs-page .shot-mark b { position: absolute; left: -11px; top: -11px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent, #b4531f); color: #fff;
+    font-family: var(--sans); font-size: 12.5px; font-weight: 700;
+    line-height: 22px; text-align: center; letter-spacing: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,.28); }
+  .docs-page .shot-legend { list-style: none; counter-reset: mark;
+    margin: 12px 0 0; padding: 0; font-family: var(--sans); font-size: 14px;
+    color: var(--ink-deep); }
+  .docs-page .shot-legend li { counter-increment: mark; position: relative;
+    padding: 4px 0 4px 30px; line-height: 1.55; }
+  .docs-page .shot-legend li::before { content: counter(mark);
+    position: absolute; left: 0; top: 4px; width: 20px; height: 20px;
+    border-radius: 50%; background: var(--accent, #b4531f); color: #fff;
+    font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
+  @media (max-width: 640px) {
+    .docs-page .shot-mark b { width: 18px; height: 18px; line-height: 18px;
+      font-size: 11px; left: -9px; top: -9px; }
+  }
   .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
   .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
     margin-bottom: var(--space-3); }
@@ -103,7 +130,7 @@
 <li>It registers itself so people can be invited to it.</li>
 </ol>
 <p>Your brain, your pages, your skills and your cadence all survive. You are adding capability, not starting over.</p>
-<figure class="shot"><a href="/docs/shots/rock-overview.png" target="_blank" rel="noopener"><img src="/docs/shots/rock-overview.png" alt="A rock's home, once it has members" loading="lazy"></a><figcaption>A rock's home, once it has members</figcaption></figure>
+<figure class="shot marked"><span class="shot-frame"><a href="/docs/shots/rock-overview.png" target="_blank" rel="noopener"><img src="/docs/shots/rock-overview.png" alt="A rock's home, once it has members" loading="lazy"></a><span class="shot-mark" style="left:20.94%;top:11.48%;width:76.25%;height:9.33%"><b aria-hidden="true">1</b></span><span class="shot-mark" style="left:46.72%;top:23.72%;width:11.8%;height:13.85%"><b aria-hidden="true">2</b></span><span class="shot-mark" style="left:59.61%;top:23.72%;width:11.8%;height:13.85%"><b aria-hidden="true">3</b></span><span class="shot-mark" style="left:20.94%;top:38.89%;width:76.25%;height:43.24%"><b aria-hidden="true">4</b></span><span class="shot-mark" style="left:85.39%;top:23.72%;width:11.8%;height:13.85%"><b aria-hidden="true">5</b></span></span><figcaption>A rock's home, once it has members</figcaption><ol class="shot-legend"><li>The rock, by its one name. A rock's assistant answers to the same name.</li><li>Who is in your community, how many are waiting on you, and who has gone quiet.</li><li>Anything that needs your answer before it can move.</li><li>What your rock can do. Anything blocking pebble creation is hoisted to the front.</li><li>Indicative only. Nothing is charged during the beta.</li></ol></figure>
 <p>The figure on the Billing card in that screenshot is <strong>indicative</strong>. Nothing is charged during the beta, no payment method is required, and what hosting will cost gets settled in the open on 26 September. Becoming a rock does not sign you up to anything.</p>
 <h2>What you get</h2>
 <p>The panel grows a set of pages your mineral did not have:</p>

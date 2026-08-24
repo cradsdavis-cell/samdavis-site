@@ -24,10 +24,37 @@
   .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
     overflow-x: auto; font-size: 13.5px; }
   .docs-page figure.shot { margin: var(--space-4) 0; }
+  .docs-page .shot-frame { position: relative; display: block; line-height: 0; }
   .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
     border: 1px solid var(--rule, #e5e2dc); }
   .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
     color: var(--ink-faint); margin-top: 8px; }
+
+  /* Annotations. The marker outlines the real control and carries its number at
+     the corner, so the eye goes box -> number -> legend line. Positioned in
+     percentages by the capture rig, never by hand. */
+  .docs-page .shot-mark { position: absolute; box-sizing: border-box;
+    border: 2px solid var(--accent, #b4531f); border-radius: 6px;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.55); pointer-events: none; }
+  .docs-page .shot-mark b { position: absolute; left: -11px; top: -11px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent, #b4531f); color: #fff;
+    font-family: var(--sans); font-size: 12.5px; font-weight: 700;
+    line-height: 22px; text-align: center; letter-spacing: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,.28); }
+  .docs-page .shot-legend { list-style: none; counter-reset: mark;
+    margin: 12px 0 0; padding: 0; font-family: var(--sans); font-size: 14px;
+    color: var(--ink-deep); }
+  .docs-page .shot-legend li { counter-increment: mark; position: relative;
+    padding: 4px 0 4px 30px; line-height: 1.55; }
+  .docs-page .shot-legend li::before { content: counter(mark);
+    position: absolute; left: 0; top: 4px; width: 20px; height: 20px;
+    border-radius: 50%; background: var(--accent, #b4531f); color: #fff;
+    font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
+  @media (max-width: 640px) {
+    .docs-page .shot-mark b { width: 18px; height: 18px; line-height: 18px;
+      font-size: 11px; left: -9px; top: -9px; }
+  }
   .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
   .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
     margin-bottom: var(--space-3); }
@@ -100,7 +127,7 @@
 <table><thead><tr><th>Field</th><th>What it means</th></tr></thead><tbody><tr><td>whether onboarding is done</td><td>whether the interview finished</td></tr><tr><td>how full the disk is</td><td>so somebody notices before it fills</td></tr><tr><td>when you were last active</td><td>a rough liveness signal</td></tr></tbody></table>
 <p><strong>Sent only if you switch on &quot;engagement&quot;</strong></p>
 <table><thead><tr><th>Field</th><th>What it means</th></tr></thead><tbody><tr><td>which skills are installed</td><td>the list, not the contents</td></tr><tr><td>which are enabled on a schedule</td><td>ditto</td></tr><tr><td>when skills ran, and which succeeded</td><td>timestamps and outcomes</td></tr></tbody></table>
-<figure class="shot"><a href="/docs/shots/member-sharing.png" target="_blank" rel="noopener"><img src="/docs/shots/member-sharing.png" alt="What you have chosen to share, and with whom" loading="lazy"></a><figcaption>What you have chosen to share, and with whom</figcaption></figure>
+<figure class="shot"><span class="shot-frame"><a href="/docs/shots/member-sharing.png" target="_blank" rel="noopener"><img src="/docs/shots/member-sharing.png" alt="What you have chosen to share, and with whom" loading="lazy"></a></span><figcaption>What you have chosen to share, and with whom</figcaption></figure>
 <h2>What is not in it, at all</h2>
 <p>No page. No note. No sentence from your brain. No email, no message, no calendar entry, no contact, no name, no file. Not redacted, not summarised: <strong>not collected</strong>. There is no field in the record that could carry it.</p>
 <p>Your mineral also writes a much fuller version of that status file for itself, locally, so you can see what it knows. That one is never sent anywhere. The two files sit next to each other on your disk with different names, which is a slightly graceless design that makes the boundary impossible to blur.</p>

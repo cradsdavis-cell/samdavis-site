@@ -24,10 +24,37 @@
   .docs-page pre { background: #f6f5f2; padding: 14px 16px; border-radius: 8px;
     overflow-x: auto; font-size: 13.5px; }
   .docs-page figure.shot { margin: var(--space-4) 0; }
+  .docs-page .shot-frame { position: relative; display: block; line-height: 0; }
   .docs-page figure.shot img { width: 100%; height: auto; border-radius: 10px;
     border: 1px solid var(--rule, #e5e2dc); }
   .docs-page figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
     color: var(--ink-faint); margin-top: 8px; }
+
+  /* Annotations. The marker outlines the real control and carries its number at
+     the corner, so the eye goes box -> number -> legend line. Positioned in
+     percentages by the capture rig, never by hand. */
+  .docs-page .shot-mark { position: absolute; box-sizing: border-box;
+    border: 2px solid var(--accent, #b4531f); border-radius: 6px;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.55); pointer-events: none; }
+  .docs-page .shot-mark b { position: absolute; left: -11px; top: -11px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent, #b4531f); color: #fff;
+    font-family: var(--sans); font-size: 12.5px; font-weight: 700;
+    line-height: 22px; text-align: center; letter-spacing: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,.28); }
+  .docs-page .shot-legend { list-style: none; counter-reset: mark;
+    margin: 12px 0 0; padding: 0; font-family: var(--sans); font-size: 14px;
+    color: var(--ink-deep); }
+  .docs-page .shot-legend li { counter-increment: mark; position: relative;
+    padding: 4px 0 4px 30px; line-height: 1.55; }
+  .docs-page .shot-legend li::before { content: counter(mark);
+    position: absolute; left: 0; top: 4px; width: 20px; height: 20px;
+    border-radius: 50%; background: var(--accent, #b4531f); color: #fff;
+    font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
+  @media (max-width: 640px) {
+    .docs-page .shot-mark b { width: 18px; height: 18px; line-height: 18px;
+      font-size: 11px; left: -9px; top: -9px; }
+  }
   .docs-page .legal-stamp { font-family: var(--sans); font-size: 13.5px; color: var(--ink-faint); }
   .docs-page .docs-back { font-family: var(--sans); font-size: 14px; display: inline-block;
     margin-bottom: var(--space-3); }
@@ -95,9 +122,9 @@
 <p>You need the Crads AI app, and the email address your invitation went to.</p>
 <h2>1. Open the door</h2>
 <p>The first screen is the door. It asks which mineral you are opening.</p>
-<figure class="shot"><a href="/docs/shots/door-identity-chooser.png" target="_blank" rel="noopener"><img src="/docs/shots/door-identity-chooser.png" alt="The door, listing the minerals this machine can open" loading="lazy"></a><figcaption>The door, listing the minerals this machine can open</figcaption></figure>
+<figure class="shot"><span class="shot-frame"><a href="/docs/shots/door-identity-chooser.png" target="_blank" rel="noopener"><img src="/docs/shots/door-identity-chooser.png" alt="The door, listing the minerals this machine can open" loading="lazy"></a></span><figcaption>The door, listing the minerals this machine can open</figcaption></figure>
 <p>On a machine that has never opened one, the list is empty and the door offers to claim your invitation instead.</p>
-<figure class="shot"><a href="/docs/shots/door-empty.png" target="_blank" rel="noopener"><img src="/docs/shots/door-empty.png" alt="The door on a machine with nothing on it yet" loading="lazy"></a><figcaption>The door on a machine with nothing on it yet</figcaption></figure>
+<figure class="shot"><span class="shot-frame"><a href="/docs/shots/door-empty.png" target="_blank" rel="noopener"><img src="/docs/shots/door-empty.png" alt="The door on a machine with nothing on it yet" loading="lazy"></a></span><figcaption>The door on a machine with nothing on it yet</figcaption></figure>
 <p>Click your invitation, sign in with the account it was sent to, and the door hands you the mineral. Two things are worth knowing about that sign-in:</p>
 <ul>
 <li><strong>The invitation is only a door.</strong> Once you have signed in, your account holds</li>
@@ -109,11 +136,11 @@
 <p>  claim someone else's mineral, by design.</p>
 <h2>2. Sign Claude in</h2>
 <p>Your mineral is inert until you sign Claude in on it. This is deliberate: it is your assistant, running on your box, using your Claude account.</p>
-<figure class="shot"><a href="/docs/shots/connect-onboarding.png" target="_blank" rel="noopener"><img src="/docs/shots/connect-onboarding.png" alt="The connect screen, where the assistant is signed in" loading="lazy"></a><figcaption>The connect screen, where the assistant is signed in</figcaption></figure>
+<figure class="shot"><span class="shot-frame"><a href="/docs/shots/connect-onboarding.png" target="_blank" rel="noopener"><img src="/docs/shots/connect-onboarding.png" alt="The connect screen, where the assistant is signed in" loading="lazy"></a></span><figcaption>The connect screen, where the assistant is signed in</figcaption></figure>
 <p>Follow the prompt, approve the code, and come back. Nothing else in this tutorial works until this step is done.</p>
 <h2>3. Look around an empty mineral</h2>
 <p>Now the app opens on your mineral. It looks sparse, because it is: nothing knows anything about you yet.</p>
-<figure class="shot"><a href="/docs/shots/member-empty.png" target="_blank" rel="noopener"><img src="/docs/shots/member-empty.png" alt="A mineral before onboarding" loading="lazy"></a><figcaption>A mineral before onboarding</figcaption></figure>
+<figure class="shot"><span class="shot-frame"><a href="/docs/shots/member-empty.png" target="_blank" rel="noopener"><img src="/docs/shots/member-empty.png" alt="A mineral before onboarding" loading="lazy"></a></span><figcaption>A mineral before onboarding</figcaption></figure>
 <p>The sidebar is worth naming now, because the rest of the documentation assumes it. Two of these are single pages and three are groups you open:</p>
 <ul>
 <li><strong>Overview</strong> is home: <em>what your assistant knows and how it is doing</em>. The</li>
@@ -146,7 +173,7 @@
 <p>It runs as a conversation, one question at a time, and it is resumable. Nobody answers all of it in one sitting, and it is designed for you not to. Leave it and come back; it picks up where it stopped.</p>
 <p>When it has enough, it writes your brain as a set of linked pages you own and can read. That is the thing everything else reads from.</p>
 <h2>Where you land</h2>
-<figure class="shot"><a href="/docs/shots/member-overview.png" target="_blank" rel="noopener"><img src="/docs/shots/member-overview.png" alt="The assistant home, once the brain has something in it" loading="lazy"></a><figcaption>The assistant home, once the brain has something in it</figcaption></figure>
+<figure class="shot marked"><span class="shot-frame"><a href="/docs/shots/member-overview.png" target="_blank" rel="noopener"><img src="/docs/shots/member-overview.png" alt="The assistant home, once the brain has something in it" loading="lazy"></a><span class="shot-mark" style="left:20.94%;top:12.5%;width:76.25%;height:10.16%"><b aria-hidden="true">1</b></span><span class="shot-mark" style="left:20.94%;top:24.25%;width:15.63%;height:12.03%"><b aria-hidden="true">2</b></span><span class="shot-mark" style="left:37.66%;top:24.25%;width:15.63%;height:12.03%"><b aria-hidden="true">3</b></span><span class="shot-mark" style="left:20.94%;top:37.7%;width:76.25%;height:42.82%"><b aria-hidden="true">4</b></span><span class="shot-mark" style="left:20.94%;top:81.95%;width:24.48%;height:12.98%"><b aria-hidden="true">5</b></span></span><figcaption>The assistant home, once the brain has something in it</figcaption><ol class="shot-legend"><li>Your assistant, by the name you gave it. &quot;Talk to it&quot; opens a conversation.</li><li>How much of the interview is done. Until this completes, every answer your assistant gives is generic.</li><li>How many pages your brain holds. This is what your assistant reads before it answers anything.</li><li>What your pebble can do, and what is still switched off. Each row links to the way in.</li><li>The jobs your mineral runs by itself. Expand it to see each one and when it last ran.</li></ol></figure>
 <p>Prices shown in these screenshots are indicative and not a quote.</p>
 <p>That is the whole setup. From here, the how-to guides each add one habit: a sorted inbox before you get up, a brief each morning, a nudge when someone owes you a reply.</p>
 </main>
