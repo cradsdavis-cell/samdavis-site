@@ -5,8 +5,8 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Back up your mineral, and get it back · Crads AI docs</title>
-<meta name="description" content="What is already backed up, the one thing you have to do yourself, and why the passphrase matters more than the backup.">
+<title>When something looks wrong · Crads AI docs</title>
+<meta name="description" content="The short list of symptoms, what each usually means, and where to look before you worry.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 
@@ -171,16 +171,16 @@
     });
   });
 </script>
-<link rel="canonical" href="https://crads-ai.com/docs/back-up-and-restore">
+<link rel="canonical" href="https://crads-ai.com/docs/when-something-looks-wrong">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Sam Davis — Crads AI">
-<meta property="og:url" content="https://crads-ai.com/docs/back-up-and-restore">
-<meta property="og:title" content="Back up your mineral, and get it back">
-<meta property="og:description" content="What is already backed up, the one thing you have to do yourself, and why the passphrase matters more than the backup.">
+<meta property="og:url" content="https://crads-ai.com/docs/when-something-looks-wrong">
+<meta property="og:title" content="When something looks wrong">
+<meta property="og:description" content="The short list of symptoms, what each usually means, and where to look before you worry.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Back up your mineral, and get it back">
-<meta name="twitter:description" content="What is already backed up, the one thing you have to do yourself, and why the passphrase matters more than the backup.">
+<meta name="twitter:title" content="When something looks wrong">
+<meta name="twitter:description" content="The short list of symptoms, what each usually means, and where to look before you worry.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body>
@@ -243,11 +243,11 @@
       <li><a href="/docs/become-a-rock">Turn your mineral into a rock</a></li>
       <li><a href="/docs/manage-members">Invite and manage members</a></li>
       <li><a href="/docs/fix-a-broken-connection">Fix a connection that has stopped working</a></li>
-      <li><a href="/docs/back-up-and-restore" aria-current="page">Back up your mineral, and get it back</a></li>
+      <li><a href="/docs/back-up-and-restore">Back up your mineral, and get it back</a></li>
       <li><a href="/docs/claude-code-on-your-mineral">Use Claude Code on your mineral</a></li>
       <li><a href="/docs/connect-telegram">Connect Telegram</a></li>
       <li><a href="/docs/devices-and-access">Machines that can open your mineral</a></li>
-      <li><a href="/docs/when-something-looks-wrong">When something looks wrong</a></li>
+      <li><a href="/docs/when-something-looks-wrong" aria-current="page">When something looks wrong</a></li>
     </ul>
     <h2>Reference</h2>
     <ul>
@@ -275,41 +275,38 @@
 </details></aside>
 <article class="docs-article">
 <p class="docs-eyebrow">How to</p>
-<h1>Back up your mineral, and get it back</h1>
-<p>Two different things get backed up, by two different mechanisms, and the second one has a step only you can do.</p>
-<p><strong>This page describes a pebble.</strong> A rock does not run either of the nightly jobs below: no encrypted snapshot, no scheduled brain push. If you host a rock, read the last section, because the difference matters and it is not a setting you have switched off.</p>
-<h2 id="your-brain-backs-itself-up">Your brain backs itself up<a class="anchor" href="#your-brain-backs-itself-up" aria-label="Link to this section">#</a></h2>
-<p>Your brain is a git repository. Connect GitHub and it pushes to a <strong>private repository in your own account</strong>, on its own, from then on.</p>
-<p>That is the important half. It means the pages your assistant has written about your world exist somewhere that is not this machine and is not ours, in a format you can read in any text editor, on infrastructure we cannot reach.</p>
-<p><strong>If you do nothing else on this page, connect GitHub.</strong> A mineral with no repository connected is a mineral whose brain exists in exactly one place.</p>
-<h2 id="everything-else-backs-up-encrypted">Everything else backs up encrypted<a class="anchor" href="#everything-else-backs-up-encrypted" aria-label="Link to this section">#</a></h2>
-<p>Some things cannot live in a git repository: your Claude sign-in, your service tokens, your bot token, your scheduled jobs, your connection wiring. Those are deliberately excluded from your brain repo, because a repository that carried your credentials would be a repository you could not safely share or clone.</p>
-<p>So once a night your mineral tars them up, <strong>encrypts them on your machine</strong> with a passphrase generated on your machine, and pushes the encrypted blob to the same repository. The repository only ever sees ciphertext. We never hold the passphrase.</p>
-<h2 id="the-step-only-you-can-do">The step only you can do<a class="anchor" href="#the-step-only-you-can-do" aria-label="Link to this section">#</a></h2>
-<p>Here is the catch, and it is a real one rather than a formality.</p>
-<p>The passphrase is generated on your mineral on the first backup run, and printed once, on that run. <strong>Its only other copy is inside the backup it encrypts.</strong></p>
-<p>Which means: if your machine dies and the passphrase lived only on that machine, you have an encrypted blob that nobody, including us, can open. That is not a backup. It is a souvenir.</p>
-<p>So take the passphrase off the box, once, into wherever you keep things like that. Your mineral tracks whether you have done this and reports itself as <strong>not recoverable</strong> until you have. That is not nagging, it is the honest state.</p>
-<h2 id="getting-it-back">Getting it back<a class="anchor" href="#getting-it-back" aria-label="Link to this section">#</a></h2>
-<p>Restoring is a real, tested procedure rather than a hope. It needs the encrypted blob, which is in your repository, and the passphrase, which is with you.</p>
-<p>Ask us and we walk it with you. There is a written runbook we follow rather than improvising, and part of our wind-down commitment is that restores get verified before anything is switched off, because a backup nobody has tested is not a backup.</p>
-<h2 id="what-is-not-backed-up">What is not backed up<a class="anchor" href="#what-is-not-backed-up" aria-label="Link to this section">#</a></h2>
-<p>Anything you never told your assistant, and anything you deleted before the last run. Backups are nightly, not continuous.</p>
-<p>If you are about to do something drastic to your brain, the safe move is to let a night pass first, or push your brain manually before you start.</p>
-<h2 id="if-you-host-a-rock">If you host a rock<a class="anchor" href="#if-you-host-a-rock" aria-label="Link to this section">#</a></h2>
-<p>A rock runs a much smaller set of jobs than a pebble, and two of the ones it does not run are the two on this page. <strong>Neither the nightly encrypted snapshot nor the nightly brain push happens on a rock.</strong></p>
-<p>The push that runs when you turn a mineral into a rock is a one-time step inside that upgrade. It is not the beginning of a nightly habit, and it is easy to read it as one, because the Custody card afterwards says your brain backs up to a repository and does not say how long ago.</p>
-<p>So if you host a rock, treat its backup as <strong>something you do</strong>, not something that happens. Push it deliberately before anything significant: before you change what the rock publishes, before an update, before you invite a cohort.</p>
-<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/fix-a-broken-connection"><span class="dir">Previous</span>Fix a connection that has stopped working</a><a class="next" href="/docs/claude-code-on-your-mineral"><span class="dir">Next</span>Use Claude Code on your mineral</a></nav>
+<h1>When something looks wrong</h1>
+<p>Most problems on a mineral present as one of about eight symptoms, and most have a one-line cause. This page is the list, ordered by how often each actually happens rather than by how alarming it feels.</p>
+<h2 id="the-morning-brief-did-not-arrive">The morning brief did not arrive<a class="anchor" href="#the-morning-brief-did-not-arrive" aria-label="Link to this section">#</a></h2>
+<p><strong>Look at <a href="/docs/connections-page">Connections</a> first.</strong> A scheduled job that needed a dead connection fails rather than pretending, so a missing brief usually means an expired sign-in, and the row will say so.</p>
+<p>If Connections is green, check the schedule itself on <a href="/docs/skills-page">Skills</a>: a malformed schedule is refused rather than guessed at, and the page says so.</p>
+<h2 id="my-assistant-answers-like-it-knows-nothing-about-me">My assistant answers like it knows nothing about me<a class="anchor" href="#my-assistant-answers-like-it-knows-nothing-about-me" aria-label="Link to this section">#</a></h2>
+<p>It probably does not. Check the Onboarding card on <a href="/docs/overview-page">Overview</a>: until <a href="/docs/the-interview">the interview</a> is finished, every answer is generic. That is the cause almost every time this is reported.</p>
+<h2 id="the-app-says-software-unknown-for-my-mineral">The app says &quot;software unknown&quot; for my mineral<a class="anchor" href="#the-app-says-software-unknown-for-my-mineral" aria-label="Link to this section">#</a></h2>
+<p>The mineral is running a build too old to report which build it is. The fix is an update: press <strong>Refresh</strong> (under Help), and when it comes back it will be current and say so. A host seeing this across a fleet should read <a href="/docs/how-updates-reach-you">how updates reach you</a>.</p>
+<h2 id="my-invite-link-says-it-has-expired">My invite link says it has expired<a class="anchor" href="#my-invite-link-says-it-has-expired" aria-label="Link to this section">#</a></h2>
+<p>Invitations are good for <strong>48 hours</strong>, and an expired one is refused loudly rather than half-working. Ask whoever invited you for a fresh link; nothing is lost, and the mineral built for you is unaffected.</p>
+<h2 id="google-shows-a-scary-unverified-app-screen">Google shows a scary &quot;unverified app&quot; screen<a class="anchor" href="#google-shows-a-scary-unverified-app-screen" aria-label="Link to this section">#</a></h2>
+<p>That screen is correct and expected: the app is <strong>yours</strong>, you created it minutes ago, and nobody was asked to verify it. Click <strong>Advanced</strong>, then <em>Go to</em> your app's name. The whole story is in <a href="/docs/connect-google">connect Google</a>.</p>
+<h2 id="there-is-a-machine-on-my-roster-i-do-not-recognise">There is a machine on my roster I do not recognise<a class="anchor" href="#there-is-a-machine-on-my-roster-i-do-not-recognise" aria-label="Link to this section">#</a></h2>
+<p>If it is named <strong>&quot;Crads-AI setup access (not your computer)&quot;</strong>, that is the setup key a community-built mineral is born with: named as ours, removed at handover, and removable by you. See <a href="/docs/devices-and-access">machines that can open your mineral</a>.</p>
+<p>If it is anything else you do not recognise, remove it and tell us. That is what the roster is for.</p>
+<h2 id="the-mineral-is-unreachable">The mineral is unreachable<a class="anchor" href="#the-mineral-is-unreachable" aria-label="Link to this section">#</a></h2>
+<p>Sometimes it is genuinely the machine, and sometimes it is between you and it. Give it a minute, then use <strong>Refresh</strong> under Help, which restarts the mineral's software without touching anything of yours. If it stays unreachable, tell us: that one is ours to look at, with your permission.</p>
+<h2 id="something-else">Something else<a class="anchor" href="#something-else" aria-label="Link to this section">#</a></h2>
+<p>Tell us, and say what you saw rather than what you concluded: &quot;the brief had no calendar section&quot; finds the cause faster than &quot;the assistant is broken&quot;. Every report gets a person, not a queue, and when a fix lands the app's version notes say so in plain words.</p>
+<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/devices-and-access"><span class="dir">Previous</span>Machines that can open your mineral</a><a class="next" href="/docs/skills"><span class="dir">Next</span>Every skill your mineral ships with</a></nav>
 </article>
 <nav class="docs-toc" aria-label="On this page"><h2>On this page</h2>
 <ul>
-  <li><a href="#your-brain-backs-itself-up">Your brain backs itself up</a></li>
-  <li><a href="#everything-else-backs-up-encrypted">Everything else backs up encrypted</a></li>
-  <li><a href="#the-step-only-you-can-do">The step only you can do</a></li>
-  <li><a href="#getting-it-back">Getting it back</a></li>
-  <li><a href="#what-is-not-backed-up">What is not backed up</a></li>
-  <li><a href="#if-you-host-a-rock">If you host a rock</a></li>
+  <li><a href="#the-morning-brief-did-not-arrive">The morning brief did not arrive</a></li>
+  <li><a href="#my-assistant-answers-like-it-knows-nothing-about-me">My assistant answers like it knows nothing about me</a></li>
+  <li><a href="#the-app-says-software-unknown-for-my-mineral">The app says &quot;software unknown&quot; for my mineral</a></li>
+  <li><a href="#my-invite-link-says-it-has-expired">My invite link says it has expired</a></li>
+  <li><a href="#google-shows-a-scary-unverified-app-screen">Google shows a scary &quot;unverified app&quot; screen</a></li>
+  <li><a href="#there-is-a-machine-on-my-roster-i-do-not-recognise">There is a machine on my roster I do not recognise</a></li>
+  <li><a href="#the-mineral-is-unreachable">The mineral is unreachable</a></li>
+  <li><a href="#something-else">Something else</a></li>
 </ul></nav>
 </div>
 </main>
