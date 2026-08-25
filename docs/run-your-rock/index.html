@@ -5,8 +5,8 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Skills · Crads AI docs</title>
-<meta name="description" content="What your assistant can do, and when it runs.">
+<title>Running your rock · Crads AI docs</title>
+<meta name="description" content="The host's operations page: the backup that is yours to do, the update that is yours to press, the interview that gates everything, and the weekly look.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 
@@ -363,16 +363,16 @@
     if (btn) btn.addEventListener('click', open);
   });
 </script>
-<link rel="canonical" href="https://crads-ai.com/docs/skills-page">
+<link rel="canonical" href="https://crads-ai.com/docs/run-your-rock">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Sam Davis — Crads AI">
-<meta property="og:url" content="https://crads-ai.com/docs/skills-page">
-<meta property="og:title" content="Skills">
-<meta property="og:description" content="What your assistant can do, and when it runs.">
+<meta property="og:url" content="https://crads-ai.com/docs/run-your-rock">
+<meta property="og:title" content="Running your rock">
+<meta property="og:description" content="The host's operations page: the backup that is yours to do, the update that is yours to press, the interview that gates everything, and the weekly look.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Skills">
-<meta name="twitter:description" content="What your assistant can do, and when it runs.">
+<meta name="twitter:title" content="Running your rock">
+<meta name="twitter:description" content="The host's operations page: the backup that is yours to do, the update that is yours to press, the interview that gates everything, and the weekly look.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body>
@@ -443,7 +443,7 @@
       <li><a href="/docs/map-page">Map</a></li>
       <li><a href="/docs/organisations-page">Organisations</a></li>
       <li><a href="/docs/brain-page">Brain</a></li>
-      <li><a href="/docs/skills-page" aria-current="page">Skills</a></li>
+      <li><a href="/docs/skills-page">Skills</a></li>
       <li><a href="/docs/connections-page">Connections</a></li>
       <li><a href="/docs/secrets-page">Secrets</a></li>
       <li><a href="/docs/what-your-community-can-see">What your community can see</a></li>
@@ -469,7 +469,7 @@
       <ul>
       <li><a href="/docs/become-a-rock">Turn your mineral into a rock<span class="docs-badge">Hosts</span></a></li>
       <li><a href="/docs/manage-members">Invite and manage members<span class="docs-badge">Hosts</span></a></li>
-      <li><a href="/docs/run-your-rock">Running your rock<span class="docs-badge">Hosts</span></a></li>
+      <li><a href="/docs/run-your-rock" aria-current="page">Running your rock<span class="docs-badge">Hosts</span></a></li>
       <li><a href="/docs/decisions-page">Decisions<span class="docs-badge">Hosts</span></a></li>
       </ul>
     </details>
@@ -492,38 +492,44 @@
     </details>
 </details></aside>
 <article class="docs-article">
-<nav class="docs-crumbs" aria-label="Breadcrumb"><a href="/docs">Docs</a><span class="sep">/</span><span class="here">Every page of the app</span></nav>
-<h1>Skills</h1>
-<p><em>What your assistant can do, and when it runs.</em></p>
-<p>Two things on one page, deliberately: the list of skills, and the schedule each one runs on. They belong together because a skill nobody scheduled is a skill you have to remember to ask for.</p>
-<figure class="shot"><span class="shot-frame"><a href="/docs/shots/member-skills.png" target="_blank" rel="noopener"><img src="/docs/shots/member-skills.png" alt="Skills" loading="lazy"></a></span><figcaption>Skills</figcaption></figure>
-<h2 id="the-list">The list<a class="anchor" href="#the-list" aria-label="Link to this section">#</a></h2>
-<p>Every mineral ships with the engine skills, listed in <a href="/docs/skills">every skill your mineral ships with</a>. Anything beyond those arrived one of two ways: your community published it to you, or you wrote it.</p>
-<p>Each row carries the skill's name, where it came from, its schedule, and a switch for whether it runs. Open a row for what it does and the detail.</p>
-<h2 id="the-schedule">The schedule<a class="anchor" href="#the-schedule" aria-label="Link to this section">#</a></h2>
-<p>This page is also where cadence lives. There is no separate Cron page: you set when a skill runs here, and <strong>Save schedules</strong> writes it.</p>
-<p>A schedule is a small piece of JSON, and the shape is worth recognising because it is the same everywhere:</p>
-<pre><code>{
-  &quot;inbox&quot;: {
-    &quot;enabled&quot;: true,
-    &quot;deliver&quot;: true,
-    &quot;schedule&quot;: { &quot;kind&quot;: &quot;times&quot;, &quot;days&quot;: [], &quot;times&quot;: [&quot;07:00&quot;] }
-  }
-}</code></pre>
-<p><code>deliver: true</code> sends the result to your Telegram. An empty <code>days</code> list means every day. A malformed schedule is <strong>refused rather than guessed at</strong>, and the page says so instead of failing quietly at 07:00.</p>
-<h2 id="machinery-is-not-on-this-page">Machinery is not on this page<a class="anchor" href="#machinery-is-not-on-this-page" aria-label="Link to this section">#</a></h2>
-<p>The jobs your mineral runs to look after itself (backups, updates, the heartbeat) are not skills and are not yours to schedule. They report on the Health card on your Overview, and they are listed in <a href="/docs/machinery-jobs">the jobs your mineral runs by itself</a>.</p>
-<h2 id="getting-more-out-of-it">Getting more out of it<a class="anchor" href="#getting-more-out-of-it" aria-label="Link to this section">#</a></h2>
-<p>The recipes in the pebble library each set up a skill and its schedule together, with the reasoning for the timing rather than just the timing: inbox triage before you get up, a brief before the day starts, a chase for the people who owe you a reply, and the plan-the-week and close-the-week pair. Each has its own guide in the library on your mineral, beside the recipe it installs.</p>
-<p>Start with the triage and the weekly review. Add the rest when you miss them.</p>
-<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/brain-page"><span class="dir">Previous</span>Brain</a><a class="next" href="/docs/connections-page"><span class="dir">Next</span>Connections</a></nav>
+<nav class="docs-crumbs" aria-label="Breadcrumb"><a href="/docs">Docs</a><span class="sep">/</span><span class="here">Hosting a community</span><span class="docs-badge lg">For hosts</span></nav>
+<h1>Running your rock</h1>
+<p>A rock does not look after itself the way a pebble does, and that is by design: your members' minerals update and back themselves up nightly, while the machine your community depends on changes only when you change it. This page is the whole of what &quot;looking after it&quot; means: four habits, none of them daily.</p>
+<p>If you have not made a rock yet, start at <a href="/docs/become-a-rock">turn your mineral into a rock</a>. For the roster, invitations and codes, see <a href="/docs/manage-members">invite and manage members</a>.</p>
+<h2 id="why-your-rock-is-different">Why your rock is different<a class="anchor" href="#why-your-rock-is-different" aria-label="Link to this section">#</a></h2>
+<p>A pebble runs the full set of <a href="/docs/machinery-jobs">machinery jobs</a>; a rock runs five of them. The two missing ones that matter are the nightly backup and the nightly software update, and each of the sections below exists because of one of them.</p>
+<figure class="shot"><span class="shot-frame"><a href="/docs/shots/rock-yourrock.png" target="_blank" rel="noopener"><img src="/docs/shots/rock-yourrock.png" alt="Your rock, custody and backup" loading="lazy"></a></span><figcaption>Your rock, custody and backup</figcaption></figure>
+<p>Any price visible in that screenshot is <strong>indicative</strong> and not a quote: nothing is charged during the beta, and pricing is settled in the open on 26 September.</p>
+<h2 id="1-back-it-up-deliberately">1. Back it up, deliberately<a class="anchor" href="#1-back-it-up-deliberately" aria-label="Link to this section">#</a></h2>
+<p>Your rock's brain (the community context every member inherits, your catalogue, your published pages) does not push itself nightly. <strong>Its backup is something you do</strong>, on the <strong>Custody &amp; backup</strong> card on <strong>Your rock</strong>:</p>
+<ul>
+<li>If no repository is connected yet, press <strong>Connect GitHub</strong>. You approve a one-time code on github.com, and the box creates a private repository your organisation owns.</li>
+<li>Once connected, the button reads <strong>Back it up now</strong>. It checks the repository is really yours, copies the brain to it, and tells you if it could not.</li>
+</ul>
+<p>The card shows when the last push happened. A &quot;last push&quot; date that keeps getting older is the tell, so make the habit event-shaped: push before you change what the rock publishes, before an update, before you invite a cohort.</p>
+<h2 id="2-update-it-deliberately">2. Update it, deliberately<a class="anchor" href="#2-update-it-deliberately" aria-label="Link to this section">#</a></h2>
+<p>A rock stays on the software it has until you restart it. The control is under <strong>Help</strong>, in <strong>Mineral software</strong>: tick the acknowledgement and press <strong>Update and restart this mineral</strong>. About a minute; everyone connected reconnects on their own.</p>
+<p>Two habits, from <a href="/docs/how-updates-reach-you">how updates reach you</a>: update when you are told a fix is out, and update <strong>before you build pebbles</strong>, because a rock hands its own host scripts to the minerals it builds, so a stale rock builds stale pebbles.</p>
+<h2 id="3-keep-its-brain-ahead-of-its-members">3. Keep its brain ahead of its members<a class="anchor" href="#3-keep-its-brain-ahead-of-its-members" aria-label="Link to this section">#</a></h2>
+<p>Your rock's own <a href="/docs/the-interview">interview</a> is not optional context; it is the gate. A rock cannot build minerals for members until its own brain is onboarded, and everything your members' assistants inherit about the community comes from those answers. Do it before the first invite, and revisit it when the community's shape changes: members whose brains point at your shared context get your updates, not stale copies.</p>
+<h2 id="4-look-at-two-numbers-a-week">4. Look at two numbers a week<a class="anchor" href="#4-look-at-two-numbers-a-week" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>How many members finished the interview.</strong> Not sign-ups. A member who never met their assistant has nothing to come back for. The roster on <a href="/docs/manage-members">Members</a> shows where each person is.</li>
+<li><strong>What waits on you.</strong> <a href="/docs/decisions-page">Decisions</a> holds everything that needs your answer, and only that; if it is empty, nothing is waiting.</li>
+</ul>
+<p>The craft of hosting (running a cohort session, curating a catalogue that gets used, the three failure modes that kill communities) ships on your rock itself, in its library, where your own assistant can walk you through it.</p>
+<h2 id="what-you-never-have-to-do">What you never have to do<a class="anchor" href="#what-you-never-have-to-do" aria-label="Link to this section">#</a></h2>
+<p>You do not maintain the software (that is ours), you do not approve member devices by hand (the door checks them itself), and you cannot read member brains, so there is nothing to be careful <em>about</em> there: the <a href="/docs/hosting-a-rock">hosting agreement</a> sets out the whole split of responsibilities.</p>
+<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/manage-members"><span class="dir">Previous</span>Invite and manage members</a><a class="next" href="/docs/decisions-page"><span class="dir">Next</span>Decisions</a></nav>
 </article>
 <nav class="docs-toc" aria-label="On this page"><h2>On this page</h2>
 <ul>
-  <li><a href="#the-list">The list</a></li>
-  <li><a href="#the-schedule">The schedule</a></li>
-  <li><a href="#machinery-is-not-on-this-page">Machinery is not on this page</a></li>
-  <li><a href="#getting-more-out-of-it">Getting more out of it</a></li>
+  <li><a href="#why-your-rock-is-different">Why your rock is different</a></li>
+  <li><a href="#1-back-it-up-deliberately">1. Back it up, deliberately</a></li>
+  <li><a href="#2-update-it-deliberately">2. Update it, deliberately</a></li>
+  <li><a href="#3-keep-its-brain-ahead-of-its-members">3. Keep its brain ahead of its members</a></li>
+  <li><a href="#4-look-at-two-numbers-a-week">4. Look at two numbers a week</a></li>
+  <li><a href="#what-you-never-have-to-do">What you never have to do</a></li>
 </ul></nav>
 </div>
 </main>
