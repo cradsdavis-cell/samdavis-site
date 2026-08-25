@@ -53,20 +53,24 @@
      runs to four lines and an h2 outweighs the paragraph it introduces. Same
      family, same colour, same weight, smaller steps and a longer measure. */
   .docs-article { max-width: var(--read-col); }
-  .docs-article h1 { font-size: clamp(30px, 3.4vw, 40px); line-height: 1.12; margin-bottom: var(--space-1); }
-  .docs-article h2 { font-size: clamp(21px, 2.1vw, 25px); line-height: 1.22;
-    margin: var(--space-4) 0 var(--space-1); }
-  .docs-article h3 { font-size: clamp(17px, 1.6vw, 19px); line-height: 1.3;
-    margin: var(--space-3) 0 var(--space-1); }
-  .docs-article p, .docs-article li { font-size: 16.5px; line-height: 1.62; }
+  /* Type pass 2026-08-25 (Sam: "type and spacing"): one step smaller and one
+     step tighter across the whole scale. The landing-page-descended sizes read
+     as a blog; a manual wants quieter headings, a 16px body, and section gaps
+     that group rather than strand. */
+  .docs-article h1 { font-size: clamp(26px, 2.8vw, 32px); line-height: 1.15; margin-bottom: var(--space-1); }
+  .docs-article h2 { font-size: clamp(19px, 1.8vw, 22px); line-height: 1.25;
+    margin: 32px 0 var(--space-1); }
+  .docs-article h3 { font-size: clamp(16.5px, 1.5vw, 18px); line-height: 1.3;
+    margin: 22px 0 6px; }
+  .docs-article p, .docs-article li { font-size: 16px; line-height: 1.58; }
   .docs-article ul, .docs-article ol { padding-left: 22px; }
-  .docs-article li { margin: 4px 0; }
-  .docs-article li > ul, .docs-article li > ol { margin-top: 4px; }
+  .docs-article li { margin: 3px 0; }
+  .docs-article li > ul, .docs-article li > ol { margin-top: 3px; }
   .docs-article .docs-eyebrow { font-family: var(--sans); font-size: 12px; letter-spacing: .07em;
     text-transform: uppercase; color: var(--accent-deep); margin: 0 0 var(--space-1); font-weight: 650; }
   .docs-article h1 { margin-top: 0; }
-  .docs-article .docs-summary { font-family: var(--sans); font-size: 17px; color: var(--ink-faint);
-    margin: 0 0 var(--space-4); line-height: 1.5; }
+  .docs-article .docs-summary { font-family: var(--sans); font-size: 16px; color: var(--ink-faint);
+    margin: 0 0 var(--space-3); line-height: 1.5; }
   .docs-article h2, .docs-article h3 { scroll-margin-top: var(--space-3); }
   .docs-article h2 .anchor, .docs-article h3 .anchor { opacity: 0; text-decoration: none;
     color: var(--ink-faint); font-weight: 400; margin-left: 8px; }
@@ -94,7 +98,7 @@
   .docs-article blockquote.warn { border-left-color: var(--accent-deep); background: var(--accent-glow); }
 
   /* ---- screenshots + annotations ---------------------------------------- */
-  .docs-article figure.shot { margin: var(--space-4) 0; }
+  .docs-article figure.shot { margin: 28px 0; }
   .docs-article .shot-frame { position: relative; display: block; line-height: 0; }
   .docs-article figure.shot img { width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--rule); }
   .docs-article figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
@@ -115,7 +119,7 @@
   @media (max-width: 640px) { .docs-article .shot-mark b { width: 18px; height: 18px; line-height: 18px; font-size: 11px; left: -9px; top: -9px; } }
 
   /* ---- diagrams ---------------------------------------------------------- */
-  .docs-article figure.diagram { margin: var(--space-4) 0; }
+  .docs-article figure.diagram { margin: 28px 0; }
   .docs-article figure.diagram svg.dgm { width: 100%; height: auto; display: block; }
   .docs-article figure.diagram figcaption { font-family: var(--sans); font-size: 13.5px;
     color: var(--ink-faint); margin-top: 10px; }
@@ -141,6 +145,21 @@
     text-transform: uppercase; color: var(--ink-faint); margin-bottom: 3px; }
   .docs-nextprev .next { text-align: right; }
   @media (max-width: 560px) { .docs-nextprev { grid-template-columns: 1fr; } }
+
+  /* ---- the two doors ------------------------------------------------------- */
+  .docs-doors { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);
+    margin: var(--space-3) 0 var(--space-4); font-family: var(--sans); }
+  .docs-doors .door { border: 1px solid var(--rule); border-radius: 12px;
+    padding: 18px 20px; background: var(--bg-soft); }
+  .docs-doors h2 { font-size: 18px; margin: 0 0 4px; }
+  .docs-doors .lead { font-size: 14px; color: var(--ink-faint); margin: 0 0 12px; line-height: 1.5; }
+  .docs-doors ol { list-style: none; margin: 0; padding: 0; }
+  .docs-doors li { display: flex; align-items: center; gap: 10px; padding: 5px 0; }
+  .docs-doors .n { flex: none; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 11.5px; font-weight: 700;
+    line-height: 20px; text-align: center; }
+  .docs-doors a { font-weight: 600; text-decoration: none; }
+  @media (max-width: 640px) { .docs-doors { grid-template-columns: 1fr; } }
 
   /* ---- index page ---------------------------------------------------------- */
   .docs-index-groups { display: grid; gap: var(--space-4); }
@@ -224,50 +243,56 @@
 <aside class="docs-side"><details>
   <summary>All docs</summary>
   <p style="margin:0 0 var(--space-2)"><a href="/docs">Docs home</a></p>
-    <h2>Explained</h2>
+    <h2>Start here</h2>
     <ul>
-      <li><a href="/docs/faq">Questions, answered straight</a></li>
       <li><a href="/docs/what-an-ai-ea-is">What an AI EA actually is</a></li>
+      <li><a href="/docs/faq">Questions, answered straight</a></li>
       <li><a href="/docs/rocks-and-pebbles">Rocks and pebbles</a></li>
-      <li><a href="/docs/continuity">What happens if Crads AI goes away</a></li>
-      <li><a href="/docs/what-your-community-can-see">What your community can see</a></li>
-      <li><a href="/docs/the-three-layers">Who edits what</a></li>
-      <li><a href="/docs/how-updates-reach-you">How updates reach you</a></li>
     </ul>
-    <h2>Walkthrough</h2>
+    <h2>Getting set up</h2>
     <ul>
       <li><a href="/docs/first-hour">Your first hour</a></li>
       <li><a href="/docs/the-interview">The interview</a></li>
       <li><a href="/docs/your-first-week">Your first week</a></li>
-    </ul>
-    <h2>How to</h2>
-    <ul>
       <li><a href="/docs/connect-google">Connect Google, with your own key</a></li>
-      <li><a href="/docs/become-a-rock">Turn your mineral into a rock</a></li>
-      <li><a href="/docs/manage-members">Invite and manage members</a></li>
-      <li><a href="/docs/fix-a-broken-connection">Fix a connection that has stopped working</a></li>
-      <li><a href="/docs/back-up-and-restore">Back up your mineral, and get it back</a></li>
-      <li><a href="/docs/claude-code-on-your-mineral">Use Claude Code on your mineral</a></li>
       <li><a href="/docs/connect-telegram">Connect Telegram</a></li>
+    </ul>
+    <h2>Every page of the app</h2>
+    <ul>
+      <li><a href="/docs/overview-page">Overview</a></li>
+      <li><a href="/docs/your-pebble-page">Your pebble</a></li>
+      <li><a href="/docs/map-page">Map</a></li>
+      <li><a href="/docs/organisations-page">Organisations</a></li>
+      <li><a href="/docs/brain-page">Brain</a></li>
+      <li><a href="/docs/skills-page">Skills</a></li>
+      <li><a href="/docs/connections-page">Connections</a></li>
+      <li><a href="/docs/secrets-page">Secrets</a></li>
+      <li><a href="/docs/what-your-community-can-see">What your community can see</a></li>
+      <li><a href="/docs/terminal-page">Terminal</a></li>
+    </ul>
+    <h2>Living with it</h2>
+    <ul>
+      <li><a href="/docs/back-up-and-restore">Back up your mineral, and get it back</a></li>
+      <li><a href="/docs/fix-a-broken-connection">Fix a connection that has stopped working</a></li>
       <li><a href="/docs/devices-and-access">Machines that can open your mineral</a></li>
       <li><a href="/docs/when-something-looks-wrong" aria-current="page">When something looks wrong</a></li>
+      <li><a href="/docs/how-updates-reach-you">How updates reach you</a></li>
       <li><a href="/docs/grant-support-access">Let us look at your mineral</a></li>
+      <li><a href="/docs/claude-code-on-your-mineral">Use Claude Code on your mineral</a></li>
+      <li><a href="/docs/the-three-layers">Who edits what</a></li>
+      <li><a href="/docs/continuity">What happens if Crads AI goes away</a></li>
+    </ul>
+    <h2>Hosting a community</h2>
+    <ul>
+      <li><a href="/docs/become-a-rock">Turn your mineral into a rock</a></li>
+      <li><a href="/docs/manage-members">Invite and manage members</a></li>
+      <li><a href="/docs/decisions-page">Decisions</a></li>
     </ul>
     <h2>Reference</h2>
     <ul>
       <li><a href="/docs/skills">Every skill your mineral ships with</a></li>
       <li><a href="/docs/connections">What you can connect</a></li>
       <li><a href="/docs/machinery-jobs">The jobs your mineral runs by itself</a></li>
-      <li><a href="/docs/overview-page">Overview</a></li>
-      <li><a href="/docs/your-pebble-page">Your pebble</a></li>
-      <li><a href="/docs/map-page">Map</a></li>
-      <li><a href="/docs/secrets-page">Secrets</a></li>
-      <li><a href="/docs/terminal-page">Terminal</a></li>
-      <li><a href="/docs/organisations-page">Organisations</a></li>
-      <li><a href="/docs/brain-page">Brain</a></li>
-      <li><a href="/docs/skills-page">Skills</a></li>
-      <li><a href="/docs/connections-page">Connections</a></li>
-      <li><a href="/docs/decisions-page">Decisions</a></li>
     </ul>
     <h2>Legal</h2>
     <ul>
@@ -278,7 +303,7 @@
     </ul>
 </details></aside>
 <article class="docs-article">
-<p class="docs-eyebrow">How to</p>
+<p class="docs-eyebrow">Living with it</p>
 <h1>When something looks wrong</h1>
 <p>Most problems on a mineral present as one of about eight symptoms, and most have a one-line cause. This page is the list, ordered by how often each actually happens rather than by how alarming it feels.</p>
 <h2 id="the-morning-brief-did-not-arrive">The morning brief did not arrive<a class="anchor" href="#the-morning-brief-did-not-arrive" aria-label="Link to this section">#</a></h2>
@@ -299,7 +324,7 @@
 <p>Sometimes it is genuinely the machine, and sometimes it is between you and it. Give it a minute, then open <strong>Help</strong> and run <strong>Update and restart this mineral</strong> (under <strong>Mineral software</strong>), which restarts the mineral's software without touching anything of yours. If it stays unreachable, tell us: that one is ours to look at, <a href="/docs/grant-support-access">with your permission</a>.</p>
 <h2 id="something-else">Something else<a class="anchor" href="#something-else" aria-label="Link to this section">#</a></h2>
 <p>Tell us, and say what you saw rather than what you concluded: &quot;the brief had no calendar section&quot; finds the cause faster than &quot;the assistant is broken&quot;. Every report gets a person, not a queue, and when a fix lands the app's version notes say so in plain words.</p>
-<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/devices-and-access"><span class="dir">Previous</span>Machines that can open your mineral</a><a class="next" href="/docs/grant-support-access"><span class="dir">Next</span>Let us look at your mineral</a></nav>
+<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/devices-and-access"><span class="dir">Previous</span>Machines that can open your mineral</a><a class="next" href="/docs/how-updates-reach-you"><span class="dir">Next</span>How updates reach you</a></nav>
 </article>
 <nav class="docs-toc" aria-label="On this page"><h2>On this page</h2>
 <ul>
