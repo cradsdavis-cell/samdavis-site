@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Open your box - Crads-AI</title>
+<title>Open your mineral - Crads-AI</title>
 <style>
   :root{--paper:#F7F5EF;--card:#FFF;--line:#E3E1D6;--ink:#1F2D24;--soft:#5C6B60;--accent:#A4582C;color-scheme:light}
   @media (prefers-color-scheme:dark){:root{--paper:#161A16;--card:#1D231E;--line:#2E362F;--ink:#E9ECE6;--soft:#9AA69B;--accent:#D08A52;color-scheme:dark}}
@@ -21,7 +21,7 @@
 <body>
 <div class="wrap">
   <div class="card">
-    <h1>Opening your box&hellip;</h1>
+    <h1>Opening your mineral&hellip;</h1>
     <p id="msg">If the Crads-AI app is installed, it should be opening now.</p>
     <p id="dl" style="display:none">
       <a class="btn" href="https://github.com/cradsdavis-cell/crads-ai-app/releases/latest">Download the app</a><br><br>
@@ -36,7 +36,8 @@
   function go(){ if (deep) location.href = deep; }
   document.getElementById('again').onclick = function(e){ e.preventDefault(); go(); };
   if (!slug) {
-    document.getElementById('msg').textContent = 'This link is missing which box to open. Use the link from your email, or open the Crads-AI app directly.';
+    document.getElementById('again').parentElement.style.display = 'none';
+    document.getElementById('msg').textContent = 'This link does not say which mineral to open. Use the link from your email, or just open the Crads-AI app.';
   } else {
     document.getElementById('which').textContent = slug;
     go();
