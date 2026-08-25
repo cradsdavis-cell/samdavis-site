@@ -23,6 +23,8 @@ const { defaultKv } = require('../../lib/kv');
 const { renderAppShell, escapeHtml } = require('../../lib/appShell');
 const { directoryFor } = require('../../lib/directory');
 const { billingView } = require('../../lib/appBilling');
+const { cradsPortalUrl } = require('../../lib/cradsPortal');
+const Stripe = require('stripe');
 const { priceTable } = require('../../lib/pricing');
 
 function parseBody(req) {
@@ -167,6 +169,30 @@ module.exports = async function handler(req, res) {
       ? `What this account would pay at the indicative rates, pro-rated by the days each mineral existed this period. Crads-AI is in beta: no card is charged and no invoice is sent until pricing is switched on, and you will be told first.`
       : `Launch pricing is $0 while Crads-AI is in beta. When prices are set, your figures appear here first and your invoice follows.`}</div>
 </div>`;
+
+  // THE CARD AND THE INVOICES. Stripe hosts all of it; this is the door to it.
+  // Shown only when a platform customer actually exists, because a button that
+  // opens an error is worse than no button. Silent when Stripe cannot be read:
+  // the figures above are what this page is for.
+  {
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    const portal = stripeKey
+      ? await cradsPortalUrl({
+          stripe: new Stripe(stripeKey),
+          email: user.email,
+          returnUrl: `${process.env.BASE_URL || 'https://crads-ai.com'}/app/billing`,
+        })
+      : { url: null, why: 'not configured' };
+    if (portal.url) {
+      main += `<div class="card" style="margin-top:1.2em">
+  <h2 class="cardh2">Payment method and invoices</h2>
+  <div class="note">${view.charging
+    ? 'Your card, your invoices and your receipts, all held by Stripe.'
+    : 'Nothing is charged yet, so there are no invoices to read. You can still put a card on file now, and it will be the one used when pricing is switched on.'}</div>
+  <p style="margin:.9em 0 0"><a class="act" href="${escapeHtml(portal.url)}" target="_blank" rel="noopener">Manage in Stripe</a></p>
+</div>`;
+    }
+  }
 
   // THE LINES
   if (minR.ok) {
