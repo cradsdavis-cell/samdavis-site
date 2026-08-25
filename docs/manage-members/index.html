@@ -11,97 +11,148 @@
 <script defer src="/lib/site.js"></script>
 
 <style>
-  /* ---- layout: sidebar | article | on-page contents ------------------- */
-  .docs-shell { display: grid; grid-template-columns: 232px minmax(0,1fr) 200px;
-    gap: var(--space-4); align-items: start; max-width: var(--wrap-max); }
+  /* ================= docs chrome, enterprise pass (2026-08-25) ============
+     Sam: "mirror state of the art enterprise level software documentation."
+     The reference class is Stripe / Linear / Vercel: sans type throughout,
+     a dense collapsible sidebar with an active rail, breadcrumbs, a
+     scroll-spied on-page rail, admonition callouts, chip-styled inline code,
+     card landings and command-K search. Everything below is hand-rolled and
+     inline because this pipeline ships zero dependencies, and every colour
+     is one of the site's own tokens so the docs stay the site's docs. */
+
   .docs-page { max-width: none; }
-  @media (max-width: 1080px) { .docs-shell { grid-template-columns: 214px minmax(0,1fr); } .docs-toc { display: none; } }
+  .docs-shell { display: grid; grid-template-columns: 240px minmax(0,1fr) 200px;
+    gap: var(--space-4); align-items: start; max-width: var(--wrap-max); }
+  @media (max-width: 1080px) { .docs-shell { grid-template-columns: 224px minmax(0,1fr); } .docs-toc { display: none; } }
   @media (max-width: 820px)  { .docs-shell { grid-template-columns: minmax(0,1fr); gap: var(--space-3); } }
 
-  /* ---- sidebar --------------------------------------------------------- */
+  /* ---- sidebar ---------------------------------------------------------- */
   .docs-side { position: sticky; top: var(--space-3); font-family: var(--sans);
-    font-size: 14px; max-height: calc(100vh - var(--space-4)); overflow-y: auto; }
-  /* DESKTOP ONLY: no disclosure, and the tree shows whether or not the element
-     is open. Scoped to a min-width because unscoped it also forced the tree
-     open on mobile, which is the exact thing the closed default exists to
-     avoid. Verified in a browser at both widths rather than reasoned about. */
+    font-size: 13.5px; max-height: calc(100vh - var(--space-4)); overflow-y: auto;
+    scrollbar-width: thin; padding-right: 6px; }
+  /* DESKTOP ONLY: the OUTER wrapper has no disclosure and shows its tree
+     whether or not it is open; the INNER group details stay real toggles.
+     Scoped to a min-width because unscoped it also forced the tree open on
+     mobile, which is the exact thing the closed default exists to avoid.
+     Verified in a browser at both widths rather than reasoned about. */
   @media (min-width: 821px) {
     .docs-side > details > summary { display: none; }
     .docs-side > details > *:not(summary) { display: revert; }
     .docs-side > details::details-content { content-visibility: visible; display: revert; block-size: auto; }
   }
-  .docs-side h2 { font-family: var(--sans); font-size: 11.5px; letter-spacing: .07em;
-    text-transform: uppercase; color: var(--ink-faint); margin: var(--space-3) 0 6px; font-weight: 650; }
-  .docs-side h2:first-child { margin-top: 0; }
-  .docs-side ul { list-style: none; margin: 0; padding: 0; }
-  .docs-side a { display: block; padding: 5px 10px; margin-left: -10px; border-radius: 7px;
-    color: var(--ink-soft); text-decoration: none; line-height: 1.4; }
-  .docs-side a:hover { background: var(--bg-soft); color: var(--ink-deep); }
-  .docs-side a[aria-current="page"] { background: var(--bg-card); color: var(--ink-deep); font-weight: 600; }
+  .docs-search-btn { display: flex; align-items: center; gap: 8px; width: 100%;
+    font-family: var(--sans); font-size: 13px; color: var(--ink-faint);
+    background: var(--bg-main); border: 1px solid var(--rule); border-radius: 8px;
+    padding: 7px 10px; cursor: pointer; margin: 0 0 var(--space-2); text-align: left; }
+  .docs-search-btn:hover { border-color: var(--ink-faint); color: var(--ink-soft); }
+  .docs-search-btn .k { margin-left: auto; }
+  .docs-kbd { font-family: var(--sans); font-size: 10.5px; font-weight: 600;
+    color: var(--ink-faint); border: 1px solid var(--rule); border-bottom-width: 2px;
+    border-radius: 5px; padding: 1px 5px; background: var(--bg-soft); }
+  .docs-side .navhome { display: block; font-size: 13px; font-weight: 600;
+    color: var(--ink-soft); text-decoration: none; padding: 4px 0 10px; }
+  .docs-side .navhome:hover { color: var(--accent-deep); }
+  .docs-side details.navgrp { margin: 0 0 2px; }
+  .docs-side details.navgrp > summary { display: flex; align-items: center;
+    cursor: pointer; list-style: none; font-size: 12.5px; font-weight: 650;
+    color: var(--ink-deep); padding: 7px 4px 5px; border-radius: 6px; user-select: none; }
+  .docs-side details.navgrp > summary::-webkit-details-marker { display: none; }
+  .docs-side details.navgrp > summary::after { content: ""; width: 7px; height: 7px;
+    margin-left: auto; border-right: 1.6px solid var(--ink-faint);
+    border-bottom: 1.6px solid var(--ink-faint); transform: rotate(-45deg);
+    transition: transform .12s; }
+  .docs-side details.navgrp[open] > summary::after { transform: rotate(45deg); }
+  .docs-side details.navgrp > summary:hover { background: var(--bg-soft); }
+  .docs-side ul { list-style: none; margin: 0 0 6px; padding: 0 0 0 2px; }
+  .docs-side ul a { display: block; padding: 4.5px 10px; border-left: 2px solid var(--rule);
+    border-radius: 0 6px 6px 0; color: var(--ink-soft); text-decoration: none;
+    line-height: 1.35; }
+  .docs-side ul a:hover { background: var(--bg-soft); color: var(--ink-deep); }
+  .docs-side ul a[aria-current="page"] { border-left-color: var(--accent-deep);
+    background: var(--accent-glow); color: var(--accent-deep); font-weight: 600; }
   @media (max-width: 820px) {
     .docs-side { position: static; max-height: none; border-bottom: 1px solid var(--rule);
       padding-bottom: var(--space-2); margin-bottom: var(--space-2); }
     .docs-side > details > summary { display: block; cursor: pointer; font-family: var(--sans);
       font-weight: 600; color: var(--ink-deep); list-style: none; padding: 6px 0; }
     .docs-side details > summary::-webkit-details-marker { display: none; }
-    .docs-side details > summary::before { content: "\2630"; margin-right: 8px; color: var(--ink-faint); }
+    .docs-side > details > summary::before { content: "\2630"; margin-right: 8px; color: var(--ink-faint); }
   }
 
-  /* ---- article --------------------------------------------------------- */
-  /* A DOCS TYPE SCALE. The site's headings clamp to 72px (h1) and 48px (h2),
-     which is right for a landing page and wrong here: at that size a docs title
-     runs to four lines and an h2 outweighs the paragraph it introduces. Same
-     family, same colour, same weight, smaller steps and a longer measure. */
-  .docs-article { max-width: var(--read-col); }
-  /* Type pass 2026-08-25 (Sam: "type and spacing"): one step smaller and one
-     step tighter across the whole scale. The landing-page-descended sizes read
-     as a blog; a manual wants quieter headings, a 16px body, and section gaps
-     that group rather than strand. */
-  .docs-article h1 { font-size: clamp(26px, 2.8vw, 32px); line-height: 1.15; margin-bottom: var(--space-1); }
-  .docs-article h2 { font-size: clamp(19px, 1.8vw, 22px); line-height: 1.25;
-    margin: 32px 0 var(--space-1); }
-  .docs-article h3 { font-size: clamp(16.5px, 1.5vw, 18px); line-height: 1.3;
-    margin: 22px 0 6px; }
-  .docs-article p, .docs-article li { font-size: 16px; line-height: 1.58; }
-  .docs-article ul, .docs-article ol { padding-left: 22px; }
-  .docs-article li { margin: 3px 0; }
-  .docs-article li > ul, .docs-article li > ol { margin-top: 3px; }
-  .docs-article .docs-eyebrow { font-family: var(--sans); font-size: 12px; letter-spacing: .07em;
-    text-transform: uppercase; color: var(--accent-deep); margin: 0 0 var(--space-1); font-weight: 650; }
-  .docs-article h1 { margin-top: 0; }
-  .docs-article .docs-summary { font-family: var(--sans); font-size: 16px; color: var(--ink-faint);
-    margin: 0 0 var(--space-3); line-height: 1.5; }
+  /* ---- breadcrumbs ------------------------------------------------------- */
+  .docs-crumbs { font-family: var(--sans); font-size: 12.5px; color: var(--ink-faint);
+    margin: 0 0 var(--space-2); display: flex; gap: 7px; align-items: center; }
+  .docs-crumbs a { color: var(--ink-faint); text-decoration: none; }
+  .docs-crumbs a:hover { color: var(--accent-deep); }
+  .docs-crumbs .sep { color: var(--rule); }
+  .docs-crumbs .here { color: var(--ink-soft); font-weight: 550; }
+
+  /* ---- article type ------------------------------------------------------ */
+  /* Sans throughout: the site's Palatino display headings are right for the
+     landing pages and read as a blog here. Enterprise documentation is one
+     family, tight tracking, quiet weights. */
+  .docs-article { max-width: 660px; }
+  .docs-article h1, .docs-article h2, .docs-article h3, .docs-article h4 {
+    font-family: var(--sans); color: var(--ink-deep); letter-spacing: -0.015em; }
+  .docs-article h1 { font-size: 27px; line-height: 1.2; font-weight: 700; margin: 0 0 var(--space-1); }
+  .docs-article h2 { font-size: 19px; line-height: 1.3; font-weight: 650; margin: 34px 0 10px; }
+  .docs-article h3 { font-size: 16px; line-height: 1.35; font-weight: 650; margin: 24px 0 6px; }
+  .docs-article p, .docs-article li { font-family: var(--sans); font-size: 15px; line-height: 1.65; color: var(--ink-soft); }
+  .docs-article strong, .docs-article b { color: var(--ink-deep); font-weight: 620; }
+  .docs-article ul, .docs-article ol { padding-left: 24px; margin: 10px 0; }
+  .docs-article li { margin: 4px 0; }
+  .docs-article li > ul, .docs-article li > ol { margin: 4px 0; }
+  .docs-article a { color: var(--accent-deep); text-decoration: none;
+    border-bottom: 1px solid transparent; }
+  .docs-article a:hover { border-bottom-color: var(--accent-deep); }
+  .docs-article .docs-summary { font-family: var(--sans); font-size: 15.5px; color: var(--ink-faint);
+    margin: 0 0 var(--space-3); line-height: 1.55; }
+  .docs-article em { color: inherit; }
   .docs-article h2, .docs-article h3 { scroll-margin-top: var(--space-3); }
   .docs-article h2 .anchor, .docs-article h3 .anchor { opacity: 0; text-decoration: none;
-    color: var(--ink-faint); font-weight: 400; margin-left: 8px; }
+    border: 0; margin-left: 8px; color: var(--ink-faint); font-weight: 400; }
   .docs-article h2:hover .anchor, .docs-article h3:hover .anchor { opacity: 1; }
-  .docs-article table { width: 100%; border-collapse: collapse; margin: var(--space-3) 0;
-    font-family: var(--sans); font-size: 14.5px; display: block; overflow-x: auto; }
-  .docs-article th, .docs-article td { text-align: left; padding: 9px 14px 9px 0;
-    border-bottom: 1px solid var(--rule); vertical-align: top; }
-  .docs-article th { font-weight: 650; color: var(--ink-deep); }
+  .docs-article code { font-family: var(--mono); font-size: 13px; background: var(--bg-soft);
+    border: 1px solid var(--rule); border-radius: 5px; padding: 1px 5px; color: var(--ink-deep); }
+  .docs-article pre code { background: none; border: 0; padding: 0; font-size: 13px; }
 
-  /* ---- code, with a copy button ---------------------------------------- */
-  .docs-article .codewrap { position: relative; margin: var(--space-3) 0; }
+  /* ---- tables ------------------------------------------------------------ */
+  .docs-article table { width: 100%; border-collapse: collapse; margin: var(--space-2) 0 var(--space-3);
+    font-family: var(--sans); font-size: 13.5px; display: block; overflow-x: auto; }
+  .docs-article th { text-align: left; font-size: 12px; font-weight: 650;
+    letter-spacing: .04em; text-transform: uppercase; color: var(--ink-faint);
+    padding: 8px 16px 8px 0; border-bottom: 1.5px solid var(--rule); }
+  .docs-article td { text-align: left; padding: 9px 16px 9px 0;
+    border-bottom: 1px solid var(--rule); vertical-align: top; color: var(--ink-soft); }
+  .docs-article tbody tr:hover td { background: var(--bg-soft); }
+
+  /* ---- code blocks ------------------------------------------------------- */
+  .docs-article .codewrap { position: relative; margin: var(--space-2) 0 var(--space-3); }
   .docs-article pre { background: var(--bg-soft); border: 1px solid var(--rule);
-    padding: 16px 18px; border-radius: 10px; overflow-x: auto; font-size: 13.5px; margin: 0; }
+    padding: 14px 16px; border-radius: 9px; overflow-x: auto; font-size: 13px;
+    line-height: 1.6; margin: 0; }
   .docs-article .copy { position: absolute; top: 8px; right: 8px; font-family: var(--sans);
-    font-size: 12px; padding: 4px 10px; border: 1px solid var(--rule); border-radius: 6px;
-    background: var(--bg-main); color: var(--ink-faint); cursor: pointer; opacity: 0; transition: opacity .12s; }
+    font-size: 11.5px; font-weight: 600; padding: 4px 10px; border: 1px solid var(--rule);
+    border-radius: 6px; background: var(--bg-main); color: var(--ink-faint);
+    cursor: pointer; opacity: 0; transition: opacity .12s; }
   .docs-article .codewrap:hover .copy, .docs-article .copy:focus { opacity: 1; }
 
-  /* ---- callouts -------------------------------------------------------- */
-  .docs-article blockquote { margin: var(--space-3) 0; padding: 14px 18px;
-    border-left: 3px solid var(--rule); background: var(--bg-soft); border-radius: 0 8px 8px 0; }
-  .docs-article blockquote p { margin: 0; font-size: 16px; }
-  .docs-article blockquote.note { border-left-color: var(--accent); }
-  .docs-article blockquote.warn { border-left-color: var(--accent-deep); background: var(--accent-glow); }
+  /* ---- callouts ---------------------------------------------------------- */
+  .docs-article blockquote { margin: var(--space-2) 0 var(--space-3); padding: 12px 16px 12px 14px;
+    border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+    background: var(--bg-soft); border-radius: 8px; }
+  .docs-article blockquote::before { content: "Note"; display: block; font-family: var(--sans);
+    font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+    color: var(--accent-deep); margin-bottom: 4px; }
+  .docs-article blockquote p { margin: 0; font-size: 14.5px; }
 
-  /* ---- screenshots + annotations ---------------------------------------- */
-  .docs-article figure.shot { margin: 28px 0; }
-  .docs-article .shot-frame { position: relative; display: block; line-height: 0; }
-  .docs-article figure.shot img { width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--rule); }
-  .docs-article figure.shot figcaption { font-family: var(--sans); font-size: 13.5px;
+  /* ---- screenshots + annotations ----------------------------------------- */
+  .docs-article figure.shot { margin: var(--space-3) 0; }
+  .docs-article .shot-frame { position: relative; display: block; line-height: 0;
+    border: 1px solid var(--rule); border-radius: 10px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+  .docs-article figure.shot img { width: 100%; height: auto; display: block; }
+  .docs-article figure.shot figcaption { font-family: var(--sans); font-size: 12.5px;
     color: var(--ink-faint); margin-top: 8px; }
   .docs-article .shot-mark { position: absolute; box-sizing: border-box;
     border: 2px solid var(--accent); border-radius: 6px;
@@ -111,69 +162,100 @@
     font-size: 12.5px; font-weight: 700; line-height: 22px; text-align: center;
     box-shadow: 0 1px 3px rgba(0,0,0,.28); }
   .docs-article .shot-legend { list-style: none; counter-reset: mark; margin: 12px 0 0; padding: 0;
-    font-family: var(--sans); font-size: 14px; color: var(--ink-soft); }
+    font-family: var(--sans); font-size: 13.5px; color: var(--ink-soft); }
   .docs-article .shot-legend li { counter-increment: mark; position: relative; padding: 4px 0 4px 30px; line-height: 1.55; }
   .docs-article .shot-legend li::before { content: counter(mark); position: absolute; left: 0; top: 4px;
     width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: #fff;
     font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
   @media (max-width: 640px) { .docs-article .shot-mark b { width: 18px; height: 18px; line-height: 18px; font-size: 11px; left: -9px; top: -9px; } }
 
-  /* ---- diagrams ---------------------------------------------------------- */
-  .docs-article figure.diagram { margin: 28px 0; }
+  /* ---- diagrams ----------------------------------------------------------- */
+  .docs-article figure.diagram { margin: var(--space-3) 0; }
   .docs-article figure.diagram svg.dgm { width: 100%; height: auto; display: block; }
-  .docs-article figure.diagram figcaption { font-family: var(--sans); font-size: 13.5px;
+  .docs-article figure.diagram figcaption { font-family: var(--sans); font-size: 12.5px;
     color: var(--ink-faint); margin-top: 10px; }
   .docs-article figure.diagram text { font-family: var(--sans); }
 
-  /* ---- on-page contents -------------------------------------------------- */
-  .docs-toc { position: sticky; top: var(--space-3); font-family: var(--sans); font-size: 13px; }
-  .docs-toc h2 { font-size: 11.5px; letter-spacing: .07em; text-transform: uppercase;
-    color: var(--ink-faint); margin: 0 0 8px; font-weight: 650; }
-  .docs-toc ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--rule); }
-  .docs-toc a { display: block; padding: 4px 0 4px 12px; margin-left: -1px;
-    border-left: 2px solid transparent; color: var(--ink-faint); text-decoration: none; line-height: 1.45; }
-  .docs-toc a:hover { color: var(--ink-deep); border-left-color: var(--rule); }
+  /* ---- on-page rail, scroll-spied ------------------------------------------ */
+  .docs-toc { position: sticky; top: var(--space-3); font-family: var(--sans); font-size: 12.5px; }
+  .docs-toc h2 { font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 0 0 8px; font-weight: 650; font-family: var(--sans); }
+  .docs-toc ul { list-style: none; margin: 0; padding: 0; }
+  .docs-toc a { display: block; padding: 4px 0 4px 12px; border-left: 2px solid var(--rule);
+    color: var(--ink-faint); text-decoration: none; line-height: 1.45; }
+  .docs-toc a:hover { color: var(--ink-deep); }
+  .docs-toc a.on { color: var(--accent-deep); border-left-color: var(--accent-deep); font-weight: 600; }
 
-  /* ---- prev / next --------------------------------------------------------- */
+  /* ---- prev / next ---------------------------------------------------------- */
   .docs-nextprev { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);
     margin-top: var(--space-5); padding-top: var(--space-3); border-top: 1px solid var(--rule);
     font-family: var(--sans); }
   .docs-nextprev a { display: block; padding: 12px 16px; border: 1px solid var(--rule);
-    border-radius: 10px; text-decoration: none; color: var(--ink-deep); }
-  .docs-nextprev a:hover { background: var(--bg-soft); }
-  .docs-nextprev .dir { display: block; font-size: 11.5px; letter-spacing: .06em;
+    border-radius: 10px; text-decoration: none; color: var(--ink-deep); font-size: 14.5px;
+    font-weight: 600; transition: border-color .12s; }
+  .docs-nextprev a:hover { border-color: var(--accent-deep); }
+  .docs-nextprev .dir { display: block; font-size: 10.5px; letter-spacing: .06em; font-weight: 650;
     text-transform: uppercase; color: var(--ink-faint); margin-bottom: 3px; }
   .docs-nextprev .next { text-align: right; }
   @media (max-width: 560px) { .docs-nextprev { grid-template-columns: 1fr; } }
 
-  /* ---- the two doors ------------------------------------------------------- */
+  /* ---- landing: doors + card grids ------------------------------------------ */
   .docs-doors { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2);
     margin: var(--space-3) 0 var(--space-4); font-family: var(--sans); }
   .docs-doors .door { border: 1px solid var(--rule); border-radius: 12px;
     padding: 18px 20px; background: var(--bg-soft); }
-  .docs-doors h2 { font-size: 18px; margin: 0 0 4px; }
-  .docs-doors .lead { font-size: 14px; color: var(--ink-faint); margin: 0 0 12px; line-height: 1.5; }
+  .docs-doors h2 { font-family: var(--sans); font-size: 16.5px; letter-spacing: -0.01em; margin: 0 0 4px; }
+  .docs-doors .lead { font-size: 13.5px; color: var(--ink-faint); margin: 0 0 12px; line-height: 1.5; }
   .docs-doors ol { list-style: none; margin: 0; padding: 0; }
   .docs-doors li { display: flex; align-items: center; gap: 10px; padding: 5px 0; }
   .docs-doors .n { flex: none; width: 20px; height: 20px; border-radius: 50%;
     background: var(--accent); color: #fff; font-size: 11.5px; font-weight: 700;
     line-height: 20px; text-align: center; }
-  .docs-doors a { font-weight: 600; text-decoration: none; }
+  .docs-doors a { font-weight: 600; text-decoration: none; font-size: 14px; }
   @media (max-width: 640px) { .docs-doors { grid-template-columns: 1fr; } }
+  .docs-index-groups { display: grid; gap: var(--space-4); font-family: var(--sans); }
+  .docs-index-groups h2 { font-family: var(--sans); font-size: 18px; letter-spacing: -0.01em;
+    margin: 0 0 2px; }
+  .docs-index-groups .docs-summary { margin-bottom: var(--space-2); font-size: 14px; }
+  .docs-index-groups .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 700px) { .docs-index-groups .cards { grid-template-columns: 1fr; } }
+  .docs-index-groups .card { display: block; border: 1px solid var(--rule); border-radius: 10px;
+    padding: 12px 14px; text-decoration: none; transition: border-color .12s; }
+  .docs-index-groups .card:hover { border-color: var(--accent-deep); }
+  .docs-index-groups .card b { display: block; font-size: 14px; font-weight: 650;
+    color: var(--ink-deep); letter-spacing: -0.005em; margin-bottom: 2px; }
+  .docs-index-groups .card span { display: block; font-size: 13px; color: var(--ink-faint);
+    line-height: 1.5; }
 
-  /* ---- index page ---------------------------------------------------------- */
-  .docs-index-groups { display: grid; gap: var(--space-4); }
-  .docs-index-groups h2 { margin-bottom: var(--space-1); }
-  .docs-index-groups ul { list-style: none; padding: 0; margin: 0; }
-  .docs-index-groups li { padding: 11px 0; border-bottom: 1px solid var(--rule); }
-  .docs-index-groups a { font-weight: 600; }
-  .docs-index-groups .d { display: block; font-family: var(--sans); font-size: 14px;
-    color: var(--ink-faint); margin-top: 3px; line-height: 1.5; }
+  /* ---- search ---------------------------------------------------------------- */
+  .docs-search-veil { position: fixed; inset: 0; background: rgba(30,26,20,.35);
+    display: none; z-index: 90; }
+  .docs-search-veil.open { display: block; }
+  .docs-search-box { position: fixed; z-index: 91; left: 50%; top: 14vh;
+    transform: translateX(-50%); width: min(560px, calc(100vw - 32px));
+    background: var(--bg-main); border: 1px solid var(--rule); border-radius: 12px;
+    box-shadow: 0 18px 50px rgba(0,0,0,.22); display: none; overflow: hidden;
+    font-family: var(--sans); }
+  .docs-search-box.open { display: block; }
+  .docs-search-box input { width: 100%; border: 0; outline: none; background: transparent;
+    font: 15px/1.4 var(--sans); color: var(--ink-deep); padding: 14px 16px;
+    border-bottom: 1px solid var(--rule); }
+  .docs-search-box .res { max-height: 46vh; overflow-y: auto; padding: 6px; }
+  .docs-search-box .r { display: block; padding: 9px 10px; border-radius: 8px;
+    text-decoration: none; cursor: pointer; }
+  .docs-search-box .r b { display: block; font-size: 14px; font-weight: 600; color: var(--ink-deep); }
+  .docs-search-box .r span { display: block; font-size: 12.5px; color: var(--ink-faint);
+    line-height: 1.45; margin-top: 1px; }
+  .docs-search-box .r .g { display: inline-block; font-size: 10.5px; font-weight: 650;
+    letter-spacing: .04em; text-transform: uppercase; color: var(--accent-deep);
+    margin-bottom: 2px; }
+  .docs-search-box .r.on, .docs-search-box .r:hover { background: var(--bg-soft); }
+  .docs-search-box .none { padding: 16px; font-size: 13.5px; color: var(--ink-faint); }
 </style>
 <script>
-  // Copy button per code block. Written here rather than in a bundle because the
-  // docs are static files and one inline listener beats a build step.
   document.addEventListener('DOMContentLoaded', function () {
+    // Copy button per code block. Inline rather than bundled: the docs are
+    // static files and one listener beats a build step.
     document.querySelectorAll('.docs-article pre').forEach(function (pre) {
       var wrap = document.createElement('div');
       wrap.className = 'codewrap';
@@ -188,6 +270,88 @@
       });
       wrap.appendChild(b);
     });
+
+    // Scroll-spy for the on-page rail: the heading nearest the top of the
+    // viewport lights its rail entry. IntersectionObserver, no scroll math.
+    var tocLinks = Array.prototype.slice.call(document.querySelectorAll('.docs-toc a'));
+    if (tocLinks.length) {
+      var byId = {};
+      tocLinks.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+      var current = null;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          if (current) current.classList.remove('on');
+          current = byId[e.target.id];
+          if (current) current.classList.add('on');
+        });
+      }, { rootMargin: '0px 0px -70% 0px' });
+      Object.keys(byId).forEach(function (id) {
+        var h = document.getElementById(id);
+        if (h) io.observe(h);
+      });
+    }
+
+    // Search: the index ships with the page (window.__DOCS_INDEX__, built at
+    // publish time), so this is a filter over data already here, not a request.
+    var IDX = window.__DOCS_INDEX__ || [];
+    if (!IDX.length) return;
+    var veil = document.createElement('div'); veil.className = 'docs-search-veil';
+    var box = document.createElement('div'); box.className = 'docs-search-box';
+    box.innerHTML = '<input type="search" placeholder="Search the docs..." aria-label="Search the docs">'
+      + '<div class="res"></div>';
+    document.body.appendChild(veil); document.body.appendChild(box);
+    var input = box.querySelector('input'), res = box.querySelector('.res');
+    var sel = 0, hits = [];
+    function close() { veil.classList.remove('open'); box.classList.remove('open'); }
+    function open() { veil.classList.add('open'); box.classList.add('open'); input.value = ''; render(''); input.focus(); }
+    function render(q) {
+      q = q.trim().toLowerCase();
+      hits = [];
+      if (q) {
+        IDX.forEach(function (p) {
+          var t = p.t.toLowerCase(), s = (p.s || '').toLowerCase();
+          var inHead = (p.h || []).some(function (h) { return h.toLowerCase().indexOf(q) >= 0; });
+          var rank = t.indexOf(q) >= 0 ? 0 : inHead ? 1 : s.indexOf(q) >= 0 ? 2 : -1;
+          if (rank >= 0) hits.push({ p: p, rank: rank });
+        });
+        hits.sort(function (a, b) { return a.rank - b.rank; });
+        hits = hits.slice(0, 10);
+      } else {
+        hits = IDX.slice(0, 8).map(function (p) { return { p: p, rank: 0 }; });
+      }
+      sel = 0;
+      res.innerHTML = hits.length
+        ? hits.map(function (h, i) {
+            return '<a class="r' + (i === 0 ? ' on' : '') + '" href="/docs/' + h.p.u + '">'
+              + '<span class="g">' + h.p.g + '</span>'
+              + '<b>' + h.p.t + '</b><span>' + h.p.s + '</span></a>';
+          }).join('')
+        : '<div class="none">Nothing matches. The sidebar lists every page.</div>';
+    }
+    function move(d) {
+      var rows = res.querySelectorAll('.r');
+      if (!rows.length) return;
+      rows[sel] && rows[sel].classList.remove('on');
+      sel = (sel + d + rows.length) % rows.length;
+      rows[sel].classList.add('on');
+      rows[sel].scrollIntoView({ block: 'nearest' });
+    }
+    input.addEventListener('input', function () { render(input.value); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+      else if (e.key === 'Enter') { var r = res.querySelectorAll('.r')[sel]; if (r) location.href = r.getAttribute('href'); }
+      else if (e.key === 'Escape') close();
+    });
+    veil.addEventListener('click', close);
+    document.addEventListener('keydown', function (e) {
+      var typing = /^(INPUT|TEXTAREA|SELECT)$/.test((e.target || {}).tagName || '');
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); open(); }
+      else if (e.key === '/' && !typing && !box.classList.contains('open')) { e.preventDefault(); open(); }
+    });
+    var btn = document.querySelector('.docs-search-btn');
+    if (btn) btn.addEventListener('click', open);
   });
 </script>
 <link rel="canonical" href="https://crads-ai.com/docs/manage-members">
@@ -242,23 +406,29 @@
 <div class="docs-shell">
 <aside class="docs-side"><details>
   <summary>All docs</summary>
-  <p style="margin:0 0 var(--space-2)"><a href="/docs">Docs home</a></p>
-    <h2>Start here</h2>
-    <ul>
+    <button type="button" class="docs-search-btn">Search the docs<span class="k docs-kbd">⌘K</span></button>
+    <a class="navhome" href="/docs">Docs home</a>
+    <details class="navgrp" open>
+      <summary>Start here</summary>
+      <ul>
       <li><a href="/docs/what-an-ai-ea-is">What an AI EA actually is</a></li>
       <li><a href="/docs/faq">Questions, answered straight</a></li>
       <li><a href="/docs/rocks-and-pebbles">Rocks and pebbles</a></li>
-    </ul>
-    <h2>Getting set up</h2>
-    <ul>
+      </ul>
+    </details>
+    <details class="navgrp" open>
+      <summary>Getting set up</summary>
+      <ul>
       <li><a href="/docs/first-hour">Your first hour</a></li>
       <li><a href="/docs/the-interview">The interview</a></li>
       <li><a href="/docs/your-first-week">Your first week</a></li>
       <li><a href="/docs/connect-google">Connect Google, with your own key</a></li>
       <li><a href="/docs/connect-telegram">Connect Telegram</a></li>
-    </ul>
-    <h2>Every page of the app</h2>
-    <ul>
+      </ul>
+    </details>
+    <details class="navgrp" open>
+      <summary>Every page of the app</summary>
+      <ul>
       <li><a href="/docs/overview-page">Overview</a></li>
       <li><a href="/docs/your-pebble-page">Your pebble</a></li>
       <li><a href="/docs/map-page">Map</a></li>
@@ -269,9 +439,11 @@
       <li><a href="/docs/secrets-page">Secrets</a></li>
       <li><a href="/docs/what-your-community-can-see">What your community can see</a></li>
       <li><a href="/docs/terminal-page">Terminal</a></li>
-    </ul>
-    <h2>Living with it</h2>
-    <ul>
+      </ul>
+    </details>
+    <details class="navgrp" open>
+      <summary>Living with it</summary>
+      <ul>
       <li><a href="/docs/back-up-and-restore">Back up your mineral, and get it back</a></li>
       <li><a href="/docs/fix-a-broken-connection">Fix a connection that has stopped working</a></li>
       <li><a href="/docs/devices-and-access">Machines that can open your mineral</a></li>
@@ -281,29 +453,36 @@
       <li><a href="/docs/claude-code-on-your-mineral">Use Claude Code on your mineral</a></li>
       <li><a href="/docs/the-three-layers">Who edits what</a></li>
       <li><a href="/docs/continuity">What happens if Crads AI goes away</a></li>
-    </ul>
-    <h2>Hosting a community</h2>
-    <ul>
+      </ul>
+    </details>
+    <details class="navgrp" open>
+      <summary>Hosting a community</summary>
+      <ul>
       <li><a href="/docs/become-a-rock">Turn your mineral into a rock</a></li>
       <li><a href="/docs/manage-members" aria-current="page">Invite and manage members</a></li>
       <li><a href="/docs/decisions-page">Decisions</a></li>
-    </ul>
-    <h2>Reference</h2>
-    <ul>
+      </ul>
+    </details>
+    <details class="navgrp" open>
+      <summary>Reference</summary>
+      <ul>
       <li><a href="/docs/skills">Every skill your mineral ships with</a></li>
       <li><a href="/docs/connections">What you can connect</a></li>
       <li><a href="/docs/machinery-jobs">The jobs your mineral runs by itself</a></li>
-    </ul>
-    <h2>Legal</h2>
-    <ul>
+      </ul>
+    </details>
+    <details class="navgrp" open>
+      <summary>Legal</summary>
+      <ul>
       <li><a href="/docs/privacy-policy">Privacy policy</a></li>
       <li><a href="/docs/terms">Terms of service</a></li>
       <li><a href="/docs/hosting-a-rock">Hosting a rock</a></li>
       <li><a href="/docs/acceptable-use">Acceptable use</a></li>
-    </ul>
+      </ul>
+    </details>
 </details></aside>
 <article class="docs-article">
-<p class="docs-eyebrow">Hosting a community</p>
+<nav class="docs-crumbs" aria-label="Breadcrumb"><a href="/docs">Docs</a><span class="sep">/</span><span class="here">Hosting a community</span></nav>
 <h1>Invite and manage members</h1>
 <p>Everything a host does with members happens on the <strong>Members</strong> page. (New to the words rock and pebble? <a href="/docs/rocks-and-pebbles">Rocks and pebbles</a> defines them once, plainly.)</p>
 <figure class="shot"><span class="shot-frame"><a href="/docs/shots/rock-pebbles.png" target="_blank" rel="noopener"><img src="/docs/shots/rock-pebbles.png" alt="The roster: who is here, how they are tied, and what each mineral runs" loading="lazy"></a></span><figcaption>The roster: who is here, how they are tied, and what each mineral runs</figcaption></figure>
@@ -363,6 +542,7 @@
 </ul></nav>
 </div>
 </main>
+<script>window.__DOCS_INDEX__ = [{"u":"what-an-ai-ea-is","t":"What an AI EA actually is","g":"Start here","s":"The category, explained without the hype: what changes about your week, who it is for, and what it is not.","h":["The test that separates it from a chatbot","What changes about a week, concretely","Who this is actually for","What it is not","The honest prerequisites"]},{"u":"faq","t":"Questions, answered straight","g":"Start here","s":"The questions people actually ask before and after getting a mineral, each answered in a few sentences with the deep page beside it.","h":["What actually is this?","Can you read my stuff?","Can my community leader read my stuff?","What does it cost?","Do I need to be technical?","Do I need a Claude account?","Where is my data kept?","What happens if Crads AI disappears?","Can I leave? What do I keep?","What is the interview, and do I have to do it in one go?","The brief got something wrong. Is that it?","Something looks broken. Where do I start?","How is this different from just using ChatGPT?","Who owns what I write? Do you train on it?"]},{"u":"rocks-and-pebbles","t":"Rocks and pebbles","g":"Start here","s":"Why the thing you get is a private box of your own, and what a community hosting them is for.","h":["A pebble is yours","A rock is a community that hosts them","Why a box each, and not one system with accounts","What the words mean, once"]},{"u":"first-hour","t":"Your first hour","g":"Getting set up","s":"From opening the app to an assistant that is awake, one small step at a time, with what you should see at each one.","h":["Step 1. Open the app","Step 2. Claim your invitation","Step 3. Look around, briefly","Step 4. Wake your assistant","Step 5. Do the interview","Step 6. Two switches worth flipping today","Where you land"]},{"u":"the-interview","t":"The interview","g":"Getting set up","s":"The hour that turns a blank machine into an assistant that knows your world, and what it asks about.","h":["Starting it","The first question is what to call it","The eight layers","How it actually feels","You can stop whenever you like","What happens at the end","If your community already answered some of it","If you are setting up a rock","What it will not do"]},{"u":"your-first-week","t":"Your first week","g":"Getting set up","s":"Seven days from a finished setup to an assistant you would miss: what to switch on, what to correct, and what to ask.","h":["Day one. Turn on the first schedule","Day two. Read the first brief, then correct it","Day three. Connect the thing you live in","Day four. Put it in your pocket","Day five. Ask it something real","Day six. Look at your brain","Day seven. Close the week, and let it plan the next","Where you are after a week"]},{"u":"connect-google","t":"Connect Google, with your own key","g":"Getting set up","s":"Five console visits, one file, one sign-in. Your Google key never touches our infrastructure, and here is why we made you do it the hard way.","h":["Why this one is different","Step 1: create your key","Step 2: drop the file","Step 3: sign in, and choose what to share","After it works","If you tick nothing","What we hold, at the end of all this"]},{"u":"connect-telegram","t":"Connect Telegram","g":"Getting set up","s":"Your assistant in your pocket, step by step: your own private bot, made in about two minutes, that drafts and never sends.","h":["Why your own bot","Before you start","Step 1. Make your bot (about a minute)","Step 2. Prove the bot is yours","What your assistant will and will not do there","Scheduled output lands here","Disconnecting"]},{"u":"overview-page","t":"Overview","g":"Every page of the app","s":"The page your mineral opens on: what your assistant knows, and how it is doing.","h":["The cards","What to look at, and when","What this page is not"]},{"u":"your-pebble-page","t":"Your pebble","g":"Every page of the app","s":"Who owns this mineral, where its backup goes, and anything waiting on your answer.","h":["What it tells you","The part worth knowing before you need it"]},{"u":"map-page","t":"Map","g":"Every page of the app","s":"The rocks above your mineral and the pebbles under it.","h":["What it draws","What a tie means here","If the picture looks wrong"]},{"u":"organisations-page","t":"Organisations","g":"Every page of the app","s":"The rocks your mineral is tied to, and the rocks that have opened their door.","h":["The communities you are in","The communities you could join","What joining a community gives them"]},{"u":"brain-page","t":"Brain","g":"Every page of the app","s":"Everything your assistant knows, drawn from the files actually on your mineral.","h":["Why it cannot be stale","Your structure is yours","What to do with it"]},{"u":"skills-page","t":"Skills","g":"Every page of the app","s":"What your assistant can do, and when it runs.","h":["The list","The schedule","Machinery is not on this page","Getting more out of it"]},{"u":"connections-page","t":"Connections","g":"Every page of the app","s":"What your assistant can reach, and whether each one is still working.","h":["Adding one","When one stops working","Why this page matters more than it looks"]},{"u":"secrets-page","t":"Secrets","g":"Every page of the app","s":"Every password, token and key this mineral holds, and what each one is for.","h":["The two tiers, and the choice they represent","Why it is read-only"]},{"u":"what-your-community-can-see","t":"What your community can see","g":"Every page of the app","s":"Field by field, what a rock learns about your mineral, and the two switches that control most of it.","h":["The list","What is not in it, at all","Why the switches default the way they do","What a host cannot do, structurally","Changing your mind"]},{"u":"terminal-page","t":"Terminal","g":"Every page of the app","s":"Talking to your assistant directly, and when that is the right way in.","h":["What it is for","When to use something else","What it is not"]},{"u":"back-up-and-restore","t":"Back up your mineral, and get it back","g":"Living with it","s":"What is already backed up, the one thing you have to do yourself, and why the passphrase matters more than the backup.","h":["Your brain backs itself up","Everything else backs up encrypted","The step only you can do","Getting it back","What is not backed up","If you host a rock"]},{"u":"fix-a-broken-connection","t":"Fix a connection that has stopped working","g":"Living with it","s":"What an expired token looks like, why it happens, and the one place that tells you the truth.","h":["Where to look","The usual cause","Fixing it","When a scheduled job was relying on it","When it is not you","What never expires"]},{"u":"devices-and-access","t":"Machines that can open your mineral","g":"Living with it","s":"The roster, the safety code, letting a new computer in, and the one key your mineral may be born with.","h":["Letting a new computer in","Removing one","The key your mineral may be born with","Renaming"]},{"u":"when-something-looks-wrong","t":"When something looks wrong","g":"Living with it","s":"The short list of symptoms, what each usually means, and where to look before you worry.","h":["The morning brief did not arrive","My assistant answers like it knows nothing about me","The app says \"software unknown\" for my mineral","My invite link says it has expired","Google shows a scary \"unverified app\" screen","There is a machine on my roster I do not recognise","The mineral is unreachable","Something else"]},{"u":"how-updates-reach-you","t":"How updates reach you","g":"Living with it","s":"Your mineral restarts nightly onto new software, what that does and does not touch, and how to tell what you are running.","h":["What happens on a pebble","Knowing what you are running","Turning it off","A rock does not update itself","What we will not do"]},{"u":"grant-support-access","t":"Let us look at your mineral","g":"Living with it","s":"Granting support access: what it opens, when it closes, and how to end it early.","h":["What a grant is","What it opens, honestly","Ending it early","What we do inside a grant"]},{"u":"claude-code-on-your-mineral","t":"Use Claude Code on your mineral","g":"Living with it","s":"The fuller way in, for people who want a terminal and their whole brain in one session.","h":["When this is worth it","Getting connected","What is different on a mineral","The terminal in the app","Two cautions"]},{"u":"the-three-layers","t":"Who edits what","g":"Living with it","s":"Three layers on every mineral: the machinery we maintain, the infrastructure you own, and the pages you build.","h":["Layer 1: the machinery. We maintain it.","Layer 2: the infrastructure. You own it.","Layer 3: your pages. You build them.","The part people get wrong","System pages and your pages are different in kind"]},{"u":"continuity","t":"What happens if Crads AI goes away","g":"Living with it","s":"The honest answer to \"what if you pick up another job\", and the mechanisms that make it survivable.","h":["What I am","Three reasons this survives me","What you would actually lose","What I will do if I stop","What I cannot promise"]},{"u":"become-a-rock","t":"Turn your mineral into a rock","g":"Hosting a community","s":"The upgrade that lets your mineral host other people's, walked step by step, and the one sentence you have to mean.","h":["The one thing to understand first","Before you press it","Step by step","What you get","The first thing to do as a rock","Private by default","What being a rock does not give you","Next"]},{"u":"manage-members","t":"Invite and manage members","g":"Hosting a community","s":"Building someone's mineral, sending the invite, letting their device in, and how anyone leaves without losing anything.","h":["The two kinds of membership","Building a mineral for someone, step by step","When their app asks for a code","Watching them arrive","Approving people who ask to join","Removing someone","Handing a mineral over"]},{"u":"decisions-page","t":"Decisions","g":"Hosting a community","s":"For a host: only what waits on your answer.","h":["What lands here","Why it is deliberately narrow","Approving joins"]},{"u":"skills","t":"Every skill your mineral ships with","g":"Reference","s":"The 10 engine skills present on every mineral, with what each one does.","h":["Your mineral","Briefings","Capture","Email and messages"]},{"u":"connections","t":"What you can connect","g":"Reference","s":"The 62 services in the curated connections catalogue, and how each one signs in.","h":["Design","Dev","Docs","Comms","Data","Meetings","Payments","Web","AI"]},{"u":"machinery-jobs","t":"The jobs your mineral runs by itself","g":"Reference","s":"The 17 machinery jobs Crads AI maintains on every mineral, and what each one is for.","h":["If you host a rock"]},{"u":"privacy-policy","t":"Privacy policy","g":"Legal","s":"What is stored, where it runs, what leaves your mineral, and how to take your data and go.","h":["Who this is","The short version","Where your mineral runs","What lives on your mineral, and stays there","What leaves your mineral","Services you connect","When we can reach your mineral","What a support session can see","What your community can and cannot see","Taking your data, and deletion","Sub-processors","Breaches","Complaints"]},{"u":"terms","t":"Terms of service","g":"Legal","s":"What you get, what it costs, what we each promise, and how either of us ends it.","h":["1. What you are getting","2. The beta, and what it costs","3. Your account and your responsibility","4. What we promise","5. What we do not promise","6. What we may do to your mineral","7. Ending it","8. When we can act immediately","9. Liability, stated honestly","10. Your content, and ours","11. Changes","12. Law, and complaints"]},{"u":"hosting-a-rock","t":"Hosting a rock","g":"Legal","s":"What a community host is responsible for, what it is not, and why paying for a box does not put you in the data chain.","h":["1. What a rock is, legally","2. What you cannot see, and why it is not a promise","3. Paying for boxes does not put you in the data chain","4. What you are responsible for","5. What we are responsible for","6. Your name and your intellectual property","7. Money, during the beta","8. Ending it","9. What we cannot promise you","10. Law"]},{"u":"acceptable-use","t":"Acceptable use","g":"Legal","s":"The short list of things you cannot do with a mineral, and what happens if you do.","h":["Do not","Some judgement, honestly","Security research","If you break this"]}];</script>
 
 <footer class="site-footer wrap">
   <span class="wordmark">crads-<span class="accent">ai</span></span>
