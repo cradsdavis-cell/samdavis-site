@@ -322,7 +322,7 @@
 <p>The card also offers <strong>Download a copy now</strong> at any time, which saves your whole brain to the computer you are sitting at. Connected or not, that button is always yours.</p>
 <h2 id="everything-else-backs-up-encrypted">Everything else backs up encrypted<a class="anchor" href="#everything-else-backs-up-encrypted" aria-label="Link to this section">#</a></h2>
 <p>Some things cannot live in a git repository: your Claude sign-in, your service tokens, your bot token, your scheduled jobs, your connection wiring. Those are deliberately excluded from your brain repo, because a repository that carried your credentials would be a repository you could not safely share or clone.</p>
-<p>So once a night your mineral tars them up, <strong>encrypts them on your machine</strong> with a passphrase generated on your machine, and pushes the encrypted blob to the same repository. The repository only ever sees ciphertext. We never hold the passphrase.</p>
+<p>So once a night your mineral tars them up, <strong>encrypts them on your machine</strong> with a passphrase generated on your machine, and pushes the encrypted blob to the same repository. Of that snapshot, the repository only ever sees ciphertext; your brain pages ride the same repository as readable files you own. We never hold the passphrase.</p>
 <h2 id="the-step-only-you-can-do">The step only you can do<a class="anchor" href="#the-step-only-you-can-do" aria-label="Link to this section">#</a></h2>
 <p>Here is the catch, and it is a real one rather than a formality.</p>
 <p>The passphrase is generated on your mineral on the first backup run, and printed once, on that run. <strong>Its only other copy is inside the backup it encrypts.</strong></p>
