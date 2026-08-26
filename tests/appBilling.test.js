@@ -219,3 +219,17 @@ test('the hosting line says mineral, not box', () => {
   assert.match(v.lines[0].parts[0].label, /1 mineral/);
   assert.doesNotMatch(v.lines[0].parts[0].label, /box/);
 });
+
+// ENABLED IS THE CARD, NOT THE RETIRED RADIO (2026-08-26). Found on Sam's own
+// live record: billing_enabled:true sitting next to has_card:false, left behind
+// by a radio click before the switch was retired. billingView still read the old
+// field, so its `enabled` said ON for an account the chip and the app token both
+// said was OFF. Nothing rendered it today, which is exactly why it could rot.
+test('billingView.enabled follows the card on file, not the retired billing_enabled', () => {
+  const { billingView } = require('../lib/appBilling');
+  const stale = billingView({ user: { billing_enabled: true, has_card: false } });
+  assert.equal(stale.enabled, false, 'a stale billing_enabled must not claim billing is on');
+
+  const real = billingView({ user: { billing_enabled: false, has_card: true } });
+  assert.equal(real.enabled, true, 'a card on file is billing on, whatever the old field says');
+});
