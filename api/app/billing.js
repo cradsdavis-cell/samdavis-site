@@ -103,6 +103,12 @@ module.exports = async function handler(req, res) {
     typeof dir.events === 'function' ? dir.events(400).catch(() => ({ ok: false })) : { ok: false },
   ]);
   const view = billingView({
+    // THE OPERATOR IS NEVER BILLED, and the page has to know that. cockpit's draw
+    // exempts every box the operator owns (billing-sync-lib isOperatorBox), so it
+    // charges Sam $0 for ever, while this page happily quoted him $128.00 a month
+    // for boxes he will never be invoiced for. isAdmin is the same identity the
+    // rest of the site already trusts for operator-only surfaces.
+    exempt: isAdmin(user.email),
     user, prices: priceTable(),
     minerals: minR.ok ? minR.minerals : [],
     events: evR.ok ? evR.events : [],
@@ -203,13 +209,17 @@ module.exports = async function handler(req, res) {
     ${armed
       ? `<div><b>${money(bal.accruedCents)}</b><span>run up so far this month</span></div>
     <div><b>${money(bal.perDayCents)}</b><span>per day at what you hold now</span></div>`
-      : `<div><b>${money(view.soFar)}</b><span>so far this period</span></div>
-    <div><b>${money(view.monthly)}</b><span>per month at what you hold now</span></div>`}
+      // ONE NUMBER WHILE DISARMED (Sam, 2026-08-26: "there shouldn't be a 'so far
+      // this period' bit in there"). He is right. Nothing has been run up, so a
+      // pro-rated "so far" is a forecast wearing the costume of a bill, and it sat
+      // directly above a ledger figure of $0.00 answering the same question. The
+      // running total earns its place the day it reports real accrued money.
+      : `<div><b>${money(view.monthly)}</b><span>per month at what you hold now</span></div>`}
   </div>
   <div class="note">${armed
     ? `Charged to your card on ${escapeHtml(when)}, for the days that actually existed. A shorter month costs less.`
     : view.priced
-      ? `What this account would pay at the indicative rates, pro-rated by the days each mineral existed this period. Nothing has been run up: Crads-AI is in beta, no card is charged and no invoice is sent until pricing is switched on, and you will be told first. When it is, you are billed on the 1st for the month just gone.`
+      ? `What this account would pay at the indicative rates for what it holds today. Nothing has been run up yet: Crads-AI is in beta, no card is charged and no invoice is sent until pricing is switched on, and you will be told first. When it is, you are billed on the 1st for the month just gone, for the days each mineral actually existed.`
       : `Launch pricing is $0 while Crads-AI is in beta. When prices are set, your figures appear here first and your invoice follows.`}</div>
   ${bal.lastSettledMonth ? `<div class="note" style="margin-top:.5em">Last charged ${money(bal.lastSettledCents)} for ${escapeHtml(bal.lastSettledMonth)}.</div>` : ''}
   ${bal.arrearsCents > 0 ? `<div class="problem" style="margin-top:.6em"><b>${money(bal.arrearsCents)} is still owed.</b><div class="note">A payment did not go through. Update your card below and it will be retried; access is only ever paused, never removed.</div></div>` : ''}

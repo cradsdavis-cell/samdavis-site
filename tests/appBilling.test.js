@@ -266,3 +266,27 @@ test('tiesFor: rebuilt metal is a seat again, and a tie with no box event surviv
   const legacy = tiesFor([{ type: 'member-join', at: 1, org: 'acme', e: 'c', slug: 'old', rel: 'anchored' }]);
   assert.equal(legacy.get('acme').seats, 1, 'unknown liveness must never drop a real customer');
 });
+
+// THE OPERATOR IS NEVER BILLED (Sam, 2026-08-26). cockpit's draw exempts every
+// box the operator owns, so it charges him $0 for ever, while this page quoted
+// him $128.00 a month for boxes he will never be invoiced for. A billing page
+// inventing a bill the machine will never send is the same class of error as
+// telling someone a bill is not theirs when it is.
+test('billingView: an exempt account is quoted nothing, on every line and in the total', () => {
+  const { billingView } = require('../lib/appBilling');
+  const prices = { hosting: 3900, direct: 5900, tierFee: () => 20900, bands: { 'crads-rock-tier-1': { seats: 3 } } };
+  const minerals = [{ tier: 'pebble', slug: 'p', label: 'P', anchor: 'crads-ai', held_by: 'you' }];
+
+  const normal = billingView({ user: {}, minerals, prices });
+  assert.equal(normal.monthly, 5900, 'an ordinary account is quoted the real rate');
+
+  const operator = billingView({ user: {}, minerals, prices, exempt: true });
+  assert.equal(operator.monthly, 0, 'the operator is quoted nothing');
+  assert.equal(operator.soFar, 0, 'including the running figure');
+  assert.equal(operator.exempt, true, 'and the view says why');
+  // zeroed at the SOURCE, so no line can disagree with the headline
+  for (const l of operator.lines || []) {
+    assert.equal(l.monthly || 0, 0, `line ${l.label} must agree with the headline`);
+    for (const pt of l.parts || []) assert.equal(pt.amount || 0, 0, 'and so must every part of it');
+  }
+});

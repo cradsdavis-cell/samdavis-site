@@ -165,3 +165,16 @@ test('an account never drawn from still gets exactly one card', async () => {
   const html = await run({ user: { has_card: false }, bal: { ok: true, none: true } });
   assert.equal(moneyCards(html), 1, 'no ledger row is not a reason to show none, or two');
 });
+
+// ONE NUMBER WHILE DISARMED (Sam, 2026-08-26, on his own billing page: "there
+// shouldn't be a 'so far this period' bit in there. Really, should there be?").
+// He is right. Nothing has been run up, so a pro-rated "so far" is a forecast
+// wearing the costume of a bill. It earns its place the day it reports real
+// accrued money, and not before.
+test('a disarmed account is shown the monthly rate and no running total at all', async () => {
+  const html = await run({ user: { has_card: false }, bal: { ok: true, none: true } });
+  assert.ok(html.includes('per month at what you hold now'), 'the monthly rate is the one number');
+  assert.ok(!html.includes('so far this period'), 'no forecast dressed as a running bill');
+  assert.ok(!html.includes('run up so far this month'), 'and no ledger figure either, there is none');
+  assert.equal(moneyCards(html), 1, 'still exactly one money card');
+});
