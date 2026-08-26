@@ -116,8 +116,8 @@ test('the indicative rate card (pricing v3, 23 Aug) prices the page without char
   assert.equal(v.charging, false);
   const rock = v.lines[0];
   assert.equal(rock.tier, 'crads-rock-tier-1', '2 seats sits in the 3-seat tier; bands come from the card');
-  assert.equal(rock.monthly, 8900 + 4900 * 1, '$89 tier (own box folded in) + 1 × $49 hosting for the anchored member');
-  assert.equal(v.lines[1].monthly, 7900, 'a direct pebble at $79');
+  assert.equal(rock.monthly, 8900 + 3900 * 1, '$89 tier (own box folded in) + 1 x $39 for the anchored member');
+  assert.equal(v.lines[1].monthly, 5900, 'a direct pebble at $59, dearer than an anchored member');
   assert.match(src, /Indicative pricing/, 'the page says the numbers are indicative');
   assert.match(src, /no card is charged and no invoice is sent/, 'and that nothing is collected');
 });
@@ -156,8 +156,8 @@ test('GET /api/pricing publishes the rate card, CORS-open, so the box card reads
   assert.equal(headers['Access-Control-Allow-Origin'], '*');
   const j = JSON.parse(body);
   assert.equal(j.charging, false);
-  assert.equal(j.direct, 7900);
-  assert.equal(j.hosting, 4900);
+  assert.equal(j.direct, 5900);
+  assert.equal(j.hosting, 3900);
   assert.equal(j.tiers.length, 7);
   assert.equal(j.tiers[0].fee, 8900);
   assert.equal(j.tiers[6].seats, null, 'the top tier is open-ended');
