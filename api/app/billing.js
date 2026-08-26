@@ -170,6 +170,33 @@ module.exports = async function handler(req, res) {
       : `Launch pricing is $0 while Crads-AI is in beta. When prices are set, your figures appear here first and your invoice follows.`}</div>
 </div>`;
 
+  // THE BALANCE. Under the balance model (spec ai-os 2026-08-26-balance-billing)
+  // this is the number that matters: what is in the account, what it burns a
+  // day, and how long that lasts. Shown only when the cockpit has published a
+  // row, so the page is unchanged for an account that has never been drawn
+  // from, and unchanged entirely while the balance path is unarmed.
+  {
+    const bal = await dir.balance().catch(() => ({ ok: false }));
+    if (bal.ok && !bal.none) {
+      const runway = bal.runwayDays;
+      // A runway that cannot be computed (nothing is being drawn) is NOT zero.
+      // Those two mean opposite things and a billing page must not confuse them.
+      const runwayText = bal.burnCents <= 0
+        ? 'nothing is being drawn at the moment'
+        : runway === null ? 'runway unknown'
+        : `about ${runway} day${runway === 1 ? '' : 's'} at this rate`;
+      const low = bal.burnCents > 0 && runway !== null && runway <= 7;
+      main += `<div class="card" style="margin-top:1.2em">
+  <div class="chips"><span class="chip">${low ? 'Running low' : 'Balance'}</span></div>
+  <div class="bstat">
+    <div><b>${money(bal.balanceCents)}</b><span>in your account</span></div>
+    <div><b>${money(bal.burnCents)}</b><span>per day at what you hold now</span></div>
+  </div>
+  <div class="note">${escapeHtml(runwayText)}.${low ? ' Your card is charged automatically before it runs out.' : ''}</div>
+</div>`;
+    }
+  }
+
   // THE CARD AND THE INVOICES. Stripe hosts all of it; this is the door to it.
   // Shown only when a platform customer actually exists, because a button that
   // opens an error is worse than no button. Silent when Stripe cannot be read:
