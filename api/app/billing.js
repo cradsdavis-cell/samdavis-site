@@ -24,6 +24,7 @@ const { renderAppShell, escapeHtml } = require('../../lib/appShell');
 const { directoryFor } = require('../../lib/directory');
 const { billingView } = require('../../lib/appBilling');
 const { cradsPortalUrl } = require('../../lib/cradsPortal');
+const { refreshCardOnFile } = require('../../lib/cardOnFile');
 const Stripe = require('stripe');
 const { priceTable } = require('../../lib/pricing');
 
@@ -49,10 +50,11 @@ module.exports = async function handler(req, res) {
   // a state its own click has not yet written.
   if (req.method === 'POST') {
     const body = await parseBody(req);
-    const on = String(body.billing_enabled || '') === 'on';
+    // THE RADIO IS GONE (2026-08-26). billing_enabled is read from Stripe now,
+    // so a POST that claims to set it is answering a question the page no longer
+    // asks. Kept as a no-op rather than a 404 so an old browser tab with the old
+    // form in it lands somewhere sane instead of erroring at someone.
     const rec = (await kv.getUser(user.email)) || user;
-    rec.billing_enabled = on;
-    rec.billing_enabled_at = on ? Date.now() : (rec.billing_enabled_at || null);
     await kv.setUser(user.email, rec);
     // every rock this account HOLDS learns the new state: the worker's gate for
     // acts that grow a rock's hosting line reads licence:<org>, not the member's
@@ -69,13 +71,22 @@ module.exports = async function handler(req, res) {
     return res.status(303).end();
   }
 
+  // BILLING_ENABLED IS A FACT NOW, not a radio (Sam, 2026-08-26). Refreshed from
+  // Stripe on every render of this page, which is the only page where a card is
+  // added, so it can never be more stale than the visit that changed it.
+  // A Stripe outage leaves the last known value alone rather than flipping
+  // anyone off; hasSavedCard itself fails closed for a first-time check.
+  if (process.env.STRIPE_SECRET_KEY) {
+    user = await refreshCardOnFile({ stripe: new Stripe(process.env.STRIPE_SECRET_KEY), kv, user });
+  }
+
   const dir = directoryFor(user);
   // THE PAGE IS THE MIRROR. The signing key lives only on Vercel (env pull
   // redacts it), so no script off the platform can mint the manage token the
   // mirror needs, and the backfill could not. Every visit with billing on
   // re-writes licence:<org> for each rock this account holds: idempotent,
   // self-healing, and exactly the state the worker's gate reads.
-  if (user.billing_enabled) {
+  if (user.has_card) {
     const held = await dir.minerals().catch(() => ({ ok: false }));
     if (held.ok) {
       for (const m of held.minerals) {
@@ -142,18 +153,20 @@ module.exports = async function handler(req, res) {
 <h1>Billing</h1>
 <p class="lead">One account, one bill, for everything it holds.</p>`;
 
-  // STATUS: the switch and its consequence, one line, not a card
+  // STATUS: the FACT and its consequence. There is no switch any more: billing
+  // is on when Stripe holds a card and off when it does not, so the page cannot
+  // claim a state the gate disagrees with. Turning it "off" means removing the
+  // card, which is done in Stripe, not here.
+  const cardLine = user.has_card
+    ? `Card on file: ${escapeHtml(String(user.card_brand || 'card'))} ending ${escapeHtml(String(user.card_last4 || '****'))}.`
+    : 'No card on file yet.';
   main += `<div class="bstatus">
   <div class="l">
-    <span class="chip ${view.enabled ? 'on' : 'off'}">Billing ${view.enabled ? 'on' : 'off'}</span>
-    <span class="sub" style="margin:0">${view.enabled
+    <span class="chip ${user.has_card ? 'on' : 'off'}">Billing ${user.has_card ? 'on' : 'off'}</span>
+    <span class="sub" style="margin:0">${escapeHtml(cardLine)} ${user.has_card
       ? 'You can create minerals, promote a pebble, anchor to a rock and receive a transfer.'
-      : 'Turn billing on to create minerals, promote a pebble, anchor to a rock or receive a transfer. Leaving, downgrading and removing always work.'}</span>
+      : 'Add a card to create minerals, promote a pebble, anchor to a rock or receive a transfer. Leaving, downgrading and removing always work, card or no card.'}</span>
   </div>
-  <form method="POST" action="/app/billing"${view.enabled ? ` onsubmit="return confirm('Turn billing off?\\n\\nYou keep everything you hold. Until it is back on, this account cannot create a mineral, promote, anchor to a rock or receive a transfer.')"` : ''}>
-    <input type="hidden" name="billing_enabled" value="${view.enabled ? 'off' : 'on'}">
-    <button class="act${view.enabled ? ' quiet' : ''}" type="submit">${view.enabled ? 'Turn off' : 'Turn billing on'}</button>
-  </form>
 </div>`;
 
   // THE STATEMENT: the two figures are the page

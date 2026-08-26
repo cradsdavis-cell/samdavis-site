@@ -65,15 +65,18 @@ test('billingView with prices: a rock is TIER + HOSTING, seats are never money, 
   assert.equal(v.monthly, 15000);
 });
 
-test('the page carries the switch, gates the four growing acts, and never gates a reducing one', () => {
-  assert.match(src, /billing_enabled/, 'the switch is the user-record field');
-  assert.match(src, /req\.method === 'POST'/, 'the user flips it');
+test('the page reports the FACT and gates the four growing acts, never a reducing one', () => {
+  // SUPERSEDED 2026-08-26. This used to assert a user-flipped switch and its
+  // confirm dialog. billing_enabled is now read from Stripe, so the page cannot
+  // claim a state the gate disagrees with, and "turning it off" means removing
+  // the card in Stripe rather than clicking here.
+  assert.match(src, /refreshCardOnFile/, 'the fact is refreshed from Stripe on render');
+  assert.match(src, /user\.has_card/, 'and the page reads that fact');
+  assert.ok(!/name="billing_enabled" value=/.test(src), 'the radio is gone');
   assert.match(src, /create minerals, promote a pebble, anchor to a rock (and|or) receive a transfer/, 'the four gated acts are named');
   assert.match(src, /Leaving, downgrading and removing always work/, 'and the never-gated ones');
-  assert.match(src, /Nothing is charged today/);
-  assert.match(src, /onsubmit="return confirm\(/, 'turning billing OFF asks first and says what it blocks');
   assert.match(src, /Nothing is being charged either way/, 'an unreadable mineral list still cannot cost money');
-  assert.ok(!/billingPortal/.test(src) && !/engagement/i.test(src), 'coaching stays out of the product page');
+  assert.ok(!/engagement/i.test(src), 'coaching stays out of the product page');
 });
 
 test('the app token carries the billing claim, and absent means false', () => {
@@ -81,8 +84,11 @@ test('the app token carries the billing claim, and absent means false', () => {
   for (const f of ['lib/appHandoff.js', 'lib/invitationPage.js', 'lib/directory.js']) {
     const s = fs.readFileSync(path.join(__dirname, '..', f), 'utf8');
     const mints = (s.match(/mintAppToken\(\{/g) || []).length;
-    const withClaim = (s.match(/billingEnabled: !!user\.billing_enabled/g) || []).length;
+    // has_card, not billing_enabled: the thing the gate reads and the thing a
+    // customer can actually be charged with must be the same fact.
+    const withClaim = (s.match(/billingEnabled: !!user\.has_card/g) || []).length;
     assert.equal(withClaim, mints, `${f}: every mint passes the claim`);
+    assert.ok(!/billingEnabled: !!user\.billing_enabled/.test(s), `${f}: no mint still carries the retired radio`);
   }
 });
 
