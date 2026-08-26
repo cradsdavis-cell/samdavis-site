@@ -18,13 +18,14 @@ const USER = { email: 'Person@Example.com', id: 'acc_1', state_version: 1 };
 const dirWith = (impl) => directoryFor(USER, { fetcher: impl, baseUrl: 'https://d' });
 const jsonRes = (body, status = 200) => ({ ok: status < 400, status, json: async () => body });
 
-test('a published balance comes back in cents, with runway', async () => {
+test('what has been run up this month comes back in cents', async () => {
   const d = dirWith(async (url) => {
     assert.match(url, /\/my-balance$/);
-    return jsonRes({ ok: true, balance_cents: 22794, burn_cents: 786, runway_days: 29, at: 123 });
+    return jsonRes({ ok: true, month: '2026-09', accrued_cents: 2305, per_day_cents: 494, last_settled_month: '2026-08', last_settled_cents: 1900, arrears_cents: 0, charging: true, at: 123 });
   });
   const b = await d.balance();
-  assert.deepEqual([b.ok, b.balanceCents, b.burnCents, b.runwayDays], [true, 22794, 786, 29]);
+  assert.deepEqual([b.ok, b.month, b.accruedCents, b.perDayCents], [true, '2026-09', 2305, 494]);
+  assert.deepEqual([b.lastSettledMonth, b.lastSettledCents, b.arrearsCents, b.charging], ['2026-08', 1900, 0, true]);
 });
 
 test('an account never drawn from has NO row, and that is not an error', async () => {
@@ -49,16 +50,23 @@ test('a rejected token is reported as a token problem, not as a zero balance', a
   assert.match(b.reason, /did not accept/);
 });
 
-test('an unknowable runway stays null, because null and zero mean opposite things', async () => {
-  const d = dirWith(async () => jsonRes({ ok: true, balance_cents: 5000, burn_cents: 0, runway_days: null }));
+test('never settled is null, not a month-shaped empty string', async () => {
+  // "we have never charged this account" and "we charged it for the month
+  // called empty-string" are different facts and the page renders them
+  // differently.
+  const d = dirWith(async () => jsonRes({ ok: true, month: '2026-09', accrued_cents: 500, last_settled_month: null }));
   const b = await d.balance();
-  assert.equal(b.runwayDays, null);
-  assert.notEqual(b.runwayDays, 0);
+  assert.equal(b.lastSettledMonth, null);
+});
+
+test('arrears is surfaced, because a month already delivered is owed', async () => {
+  const d = dirWith(async () => jsonRes({ ok: true, month: '2026-10', accrued_cents: 100, arrears_cents: 2305 }));
+  assert.equal((await d.balance()).arrearsCents, 2305);
 });
 
 test('junk numbers coerce to zero rather than rendering NaN at someone', async () => {
-  const d = dirWith(async () => jsonRes({ ok: true, balance_cents: 'lots', burn_cents: undefined }));
+  const d = dirWith(async () => jsonRes({ ok: true, accrued_cents: 'lots', per_day_cents: undefined }));
   const b = await d.balance();
-  assert.equal(b.balanceCents, 0);
-  assert.equal(b.burnCents, 0);
+  assert.equal(b.accruedCents, 0);
+  assert.equal(b.perDayCents, 0);
 });

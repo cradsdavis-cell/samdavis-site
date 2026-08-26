@@ -183,29 +183,30 @@ module.exports = async function handler(req, res) {
       : `Launch pricing is $0 while Crads-AI is in beta. When prices are set, your figures appear here first and your invoice follows.`}</div>
 </div>`;
 
-  // THE BALANCE. Under the balance model (spec ai-os 2026-08-26-balance-billing)
-  // this is the number that matters: what is in the account, what it burns a
-  // day, and how long that lasts. Shown only when the cockpit has published a
-  // row, so the page is unchanged for an account that has never been drawn
-  // from, and unchanged entirely while the balance path is unarmed.
+  // WHAT YOU HAVE RUN UP, AND WHEN IT IS CHARGED. Arrears: an account accrues a
+  // month and is charged for it on the 1st, so this is a running total of days
+  // that have already happened, not an estimate of a month ahead. Shown only
+  // once the cockpit has published a row, so the page is unchanged for an
+  // account that has never been drawn from, which is every account today.
   {
     const bal = await dir.balance().catch(() => ({ ok: false }));
     if (bal.ok && !bal.none) {
-      const runway = bal.runwayDays;
-      // A runway that cannot be computed (nothing is being drawn) is NOT zero.
-      // Those two mean opposite things and a billing page must not confuse them.
-      const runwayText = bal.burnCents <= 0
-        ? 'nothing is being drawn at the moment'
-        : runway === null ? 'runway unknown'
-        : `about ${runway} day${runway === 1 ? '' : 's'} at this rate`;
-      const low = bal.burnCents > 0 && runway !== null && runway <= 7;
+      const [y, mo] = String(bal.month || '').split('-').map(Number);
+      const nextCharge = y && mo ? new Date(Date.UTC(y, mo, 1)) : null;
+      const when = nextCharge
+        ? nextCharge.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', timeZone: 'UTC' })
+        : 'the 1st of next month';
       main += `<div class="card" style="margin-top:1.2em">
-  <div class="chips"><span class="chip">${low ? 'Running low' : 'Balance'}</span></div>
+  <div class="chips"><span class="chip">${bal.arrearsCents > 0 ? 'Payment overdue' : escapeHtml(String(bal.month || 'This month'))}</span></div>
   <div class="bstat">
-    <div><b>${money(bal.balanceCents)}</b><span>in your account</span></div>
-    <div><b>${money(bal.burnCents)}</b><span>per day at what you hold now</span></div>
+    <div><b>${money(bal.accruedCents)}</b><span>run up so far this month</span></div>
+    <div><b>${money(bal.perDayCents)}</b><span>per day at what you hold now</span></div>
   </div>
-  <div class="note">${escapeHtml(runwayText)}.${low ? ' Your card is charged automatically before it runs out.' : ''}</div>
+  <div class="note">${bal.charging
+    ? `Charged to your card on ${escapeHtml(when)}, for the days that actually existed. A shorter month costs less.`
+    : `Nothing is charged yet. When pricing is switched on you will be billed on the 1st for the month just gone, for the days that actually existed.`}</div>
+  ${bal.lastSettledMonth ? `<div class="note" style="margin-top:.5em">Last charged ${money(bal.lastSettledCents)} for ${escapeHtml(bal.lastSettledMonth)}.</div>` : ''}
+  ${bal.arrearsCents > 0 ? `<div class="problem" style="margin-top:.6em"><b>${money(bal.arrearsCents)} is still owed.</b><div class="note">A payment did not go through. Update your card below and it will be retried; access is only ever paused, never removed.</div></div>` : ''}
 </div>`;
     }
   }
