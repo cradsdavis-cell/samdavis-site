@@ -233,3 +233,36 @@ test('billingView.enabled follows the card on file, not the retired billing_enab
   const real = billingView({ user: { billing_enabled: false, has_card: true } });
   assert.equal(real.enabled, true, 'a card on file is billing on, whatever the old field says');
 });
+
+// A TORN-DOWN BOX IS NOT A SEAT (2026-08-26). Found on the live directory:
+// test-billing and test-billing-2 were both torn down and both still counted as
+// ties, because box-torn-down is logged and member-left is not. The draw refused
+// to CHARGE for them (no live metal, so they never reach the index), but SEATS
+// PICK THE TIER BAND, so a phantom seat can push a rock up a rung and bill its
+// owner more for a box nobody has. Three copies of this replay existed and all
+// three had the hole.
+test('tiesFor: a torn-down box stops being a seat and stops being hosting', () => {
+  const { tiesFor } = require('../lib/appBilling');
+  const t = tiesFor([
+    { type: 'member-join', at: 1, org: 'acme', e: 'a', slug: 'stays', rel: 'anchored' },
+    { type: 'member-join', at: 2, org: 'acme', e: 'b', slug: 'goes', rel: 'anchored' },
+    { type: 'box-built', at: 2, id: 'i1', slug: 'goes' },
+    { type: 'box-torn-down', at: 3, id: 'i1' },   // id only, as the worker often writes it
+  ]);
+  assert.equal(t.get('acme').seats, 1, 'a dead box must not press the tier band');
+  assert.equal(t.get('acme').anchored, 1, 'nor be shown as a hosting unit');
+});
+
+test('tiesFor: rebuilt metal is a seat again, and a tie with no box event survives', () => {
+  const { tiesFor } = require('../lib/appBilling');
+  const rebuilt = tiesFor([
+    { type: 'member-join', at: 1, org: 'acme', e: 'b', slug: 'again', rel: 'anchored' },
+    { type: 'box-built', at: 2, id: 'i1', slug: 'again' },
+    { type: 'box-torn-down', at: 3, id: 'i1', slug: 'again' },
+    { type: 'box-built', at: 4, id: 'i2', slug: 'again' },
+  ]);
+  assert.equal(rebuilt.get('acme').seats, 1, 'a rebuilt box bills again');
+
+  const legacy = tiesFor([{ type: 'member-join', at: 1, org: 'acme', e: 'c', slug: 'old', rel: 'anchored' }]);
+  assert.equal(legacy.get('acme').seats, 1, 'unknown liveness must never drop a real customer');
+});
