@@ -116,3 +116,52 @@ test('signed out is the auth wall, not a crash and not a page', async () => {
   await handler(mockReq(''), res);
   assert.ok(res.statusCode === 302 || res.statusCode === 401, `got ${res.statusCode}`);
 });
+
+// ONE MONEY CARD, NEVER TWO (Sam, 2026-08-26, from a screenshot of his own
+// billing page: "why are there two different pricing sections here"). The page
+// showed an INDICATIVE forecast reading $128.00 a month directly above a LEDGER
+// accrual reading $0.00, both answering "what does this cost". Two numbers for
+// one question is the bug, whichever one of them is right.
+const run = async ({ user, bal }) => {
+  card = { ...USER, ...user };
+  balance = bal;
+  const res = mockRes();
+  await handler(signedIn(), res);
+  return res.body;
+};
+const moneyCards = (html) => (html.match(/class="bstat"/g) || []).length;
+
+test('a disarmed account sees the forecast alone, never a $0.00 ledger card beside it', async () => {
+  const html = await run({
+    user: { has_card: false },
+    bal: { ok: true, none: false, month: '2026-08', accruedCents: 0, perDayCents: 0, arrearsCents: 0, charging: false },
+  });
+  assert.ok(html.includes('per month at what you hold now'), 'the forecast is what a disarmed account gets');
+  assert.ok(!html.includes('run up so far this month'),
+    'the ledger card must not sit beside the forecast contradicting it');
+  assert.equal(moneyCards(html), 1, 'exactly one money card');
+});
+
+test('an armed account sees the ledger alone, because then it is the answer', async () => {
+  const html = await run({
+    user: { has_card: true, card_brand: 'visa', card_last4: '4242' },
+    bal: { ok: true, none: false, month: '2026-08', accruedCents: 4321, perDayCents: 149, arrearsCents: 0, charging: true },
+  });
+  assert.ok(html.includes('run up so far this month'), 'armed means the ledger is the headline');
+  assert.ok(!html.includes('per month at what you hold now'), 'the forecast is redundant once real money accrues');
+  assert.equal(moneyCards(html), 1, 'still exactly one money card');
+  assert.ok(html.includes('$43.21'), 'and it shows what was actually run up');
+});
+
+test('arrears show whatever the arming state, because money owed is not a forecast', async () => {
+  const html = await run({
+    user: { has_card: true },
+    bal: { ok: true, none: false, month: '2026-08', accruedCents: 0, perDayCents: 0, arrearsCents: 9900, charging: false },
+  });
+  assert.ok(html.includes('$99.00 is still owed'), 'an unpaid month must never be hidden by the arming switch');
+});
+
+test('an account never drawn from still gets exactly one card', async () => {
+  const html = await run({ user: { has_card: false }, bal: { ok: true, none: true } });
+  assert.equal(moneyCards(html), 1, 'no ledger row is not a reason to show none, or two');
+});

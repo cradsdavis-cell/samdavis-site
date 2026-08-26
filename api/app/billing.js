@@ -173,47 +173,47 @@ module.exports = async function handler(req, res) {
   </div>
 </div>`;
 
-  // THE STATEMENT: the two figures are the page
-  main += `<div class="card">
-  <div class="chips"><span class="chip">${view.charging ? escapeHtml(view.period) : (view.priced ? 'Indicative pricing · nothing is charged yet' : 'Nothing is charged today')}</span></div>
-  <div class="bstat">
-    <div><b>${money(view.soFar)}</b><span>so far this period</span></div>
-    <div><b>${money(view.monthly)}</b><span>per month at what you hold now</span></div>
-  </div>
-  <div class="note">${view.charging
-    ? `Pro-rated by the days each mineral existed this period. Your Stripe invoice is the record; this is the running view.`
-    : view.priced
-      ? `What this account would pay at the indicative rates, pro-rated by the days each mineral existed this period. Crads-AI is in beta: no card is charged and no invoice is sent until pricing is switched on, and you will be told first.`
-      : `Launch pricing is $0 while Crads-AI is in beta. When prices are set, your figures appear here first and your invoice follows.`}</div>
-</div>`;
+  // ONE MONEY CARD, NEVER TWO (Sam, 2026-08-26: "why are there two different
+  // pricing sections here"). There were: an INDICATIVE card computing a
+  // pro-rated forecast from the rate card, and an ACCRUAL card reading the
+  // ledger row the cockpit publishes. Both were true and they read as a
+  // contradiction, because on a disarmed account the forecast says $128.00 a
+  // month and the ledger says $0.00 to the same question. Two numbers for one
+  // question is the failure, whichever is "right".
+  //
+  // So: the ledger card appears only once billing is ARMED, at which point it IS
+  // the answer and the forecast is redundant. Until then the forecast stands
+  // alone and says plainly that nothing has been run up. Arrears are separate
+  // and always shown, because money already owed is not a forecast.
+  const bal = await dir.balance().catch(() => ({ ok: false }));
+  const armed = !!(bal.ok && !bal.none && bal.charging);
+  const [by, bmo] = String((bal && bal.month) || '').split('-').map(Number);
+  const nextCharge = by && bmo ? new Date(Date.UTC(by, bmo, 1)) : null;
+  const when = nextCharge
+    ? nextCharge.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', timeZone: 'UTC' })
+    : 'the 1st of next month';
 
-  // WHAT YOU HAVE RUN UP, AND WHEN IT IS CHARGED. Arrears: an account accrues a
-  // month and is charged for it on the 1st, so this is a running total of days
-  // that have already happened, not an estimate of a month ahead. Shown only
-  // once the cockpit has published a row, so the page is unchanged for an
-  // account that has never been drawn from, which is every account today.
-  {
-    const bal = await dir.balance().catch(() => ({ ok: false }));
-    if (bal.ok && !bal.none) {
-      const [y, mo] = String(bal.month || '').split('-').map(Number);
-      const nextCharge = y && mo ? new Date(Date.UTC(y, mo, 1)) : null;
-      const when = nextCharge
-        ? nextCharge.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', timeZone: 'UTC' })
-        : 'the 1st of next month';
-      main += `<div class="card" style="margin-top:1.2em">
-  <div class="chips"><span class="chip">${bal.arrearsCents > 0 ? 'Payment overdue' : escapeHtml(String(bal.month || 'This month'))}</span></div>
+  main += `<div class="card">
+  <div class="chips"><span class="chip">${bal.arrearsCents > 0
+    ? 'Payment overdue'
+    : armed
+      ? escapeHtml(String(bal.month || 'This month'))
+      : (view.priced ? 'Indicative pricing &middot; nothing is charged yet' : 'Nothing is charged today')}</span></div>
   <div class="bstat">
-    <div><b>${money(bal.accruedCents)}</b><span>run up so far this month</span></div>
-    <div><b>${money(bal.perDayCents)}</b><span>per day at what you hold now</span></div>
+    ${armed
+      ? `<div><b>${money(bal.accruedCents)}</b><span>run up so far this month</span></div>
+    <div><b>${money(bal.perDayCents)}</b><span>per day at what you hold now</span></div>`
+      : `<div><b>${money(view.soFar)}</b><span>so far this period</span></div>
+    <div><b>${money(view.monthly)}</b><span>per month at what you hold now</span></div>`}
   </div>
-  <div class="note">${bal.charging
+  <div class="note">${armed
     ? `Charged to your card on ${escapeHtml(when)}, for the days that actually existed. A shorter month costs less.`
-    : `Nothing is charged yet. When pricing is switched on you will be billed on the 1st for the month just gone, for the days that actually existed.`}</div>
+    : view.priced
+      ? `What this account would pay at the indicative rates, pro-rated by the days each mineral existed this period. Nothing has been run up: Crads-AI is in beta, no card is charged and no invoice is sent until pricing is switched on, and you will be told first. When it is, you are billed on the 1st for the month just gone.`
+      : `Launch pricing is $0 while Crads-AI is in beta. When prices are set, your figures appear here first and your invoice follows.`}</div>
   ${bal.lastSettledMonth ? `<div class="note" style="margin-top:.5em">Last charged ${money(bal.lastSettledCents)} for ${escapeHtml(bal.lastSettledMonth)}.</div>` : ''}
   ${bal.arrearsCents > 0 ? `<div class="problem" style="margin-top:.6em"><b>${money(bal.arrearsCents)} is still owed.</b><div class="note">A payment did not go through. Update your card below and it will be retried; access is only ever paused, never removed.</div></div>` : ''}
 </div>`;
-    }
-  }
 
   // THE CARD AND THE INVOICES. Stripe hosts all of it; this is the door to it.
   // Shown only when a platform customer actually exists, because a button that
