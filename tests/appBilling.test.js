@@ -101,7 +101,7 @@ test('every line carries its breakdown: component × quantity = amount, and the 
     ['Hosting, 1 anchored member', 2000, 1, 2000],
   ]);
   assert.equal(rock.parts.reduce((s, p) => s + p.amount, 0), rock.monthly, 'the parts sum to the line');
-  assert.deepEqual(v.lines[1].parts, [{ label: 'Hosting, 1 box', unit: 3000, qty: 1, amount: 3000 }]);
+  assert.deepEqual(v.lines[1].parts, [{ label: 'Hosting, 1 mineral', unit: 3000, qty: 1, amount: 3000 }]);
   const anchored = v.lines[2].parts[0];
   assert.equal(anchored.carried, 2000, 'what the rock pays for this box');
   assert.equal(anchored.amount, 0, 'and nothing lands on this account');
@@ -161,4 +161,55 @@ test('GET /api/pricing publishes the rate card, CORS-open, so the box card reads
   assert.equal(j.tiers.length, 7);
   assert.equal(j.tiers[0].fee, 8900);
   assert.equal(j.tiers[6].seats, null, 'the top tier is open-ended');
+});
+
+// ---- Mountain-anchored is DIRECT (2026-08-26, seen live) --------------------
+// Every pebble is seeded anchor:'crads-ai' at birth, whatever it was built for,
+// so "not yet wired" and "standalone" are the same bytes. 'crads-ai' is the
+// PLATFORM's reserved handle that no org may register. Read as an ordinary
+// anchor it inverted the sentence: a direct pebble Sam had personally paid $50
+// for rendered as "crads-ai pays for this pebble ... nothing to you".
+
+test('a pebble anchored to the PLATFORM handle bills its owner, not nobody', () => {
+  const v = billingView({
+    user: { email: 'a@b.co' },
+    minerals: [{ mineral_id: 'm1', label: 'Test Billing 2', host: 'test-billing-2.crads-ai.com', tier: 'pebble', anchor: 'crads-ai', held_by: 'you' }],
+    prices: { direct: 4900, hosting: 4900, tier: [0, 0, 0] },
+  });
+  const line = v.lines[0];
+  assert.equal(line.kind, 'pebble-direct', 'crads-ai is the platform, not a paying customer');
+  assert.equal(line.monthly, 4900, 'the owner pays; a billing page must never say a bill is not theirs');
+  assert.equal(line.anchor, undefined);
+});
+
+test('a pebble with NO anchor is direct, as it always was', () => {
+  const v = billingView({
+    user: { email: 'a@b.co' },
+    minerals: [{ mineral_id: 'm1', label: 'Solo', host: 'solo.crads-ai.com', tier: 'pebble', held_by: 'you' }],
+    prices: { direct: 4900, hosting: 4900, tier: [0, 0, 0] },
+  });
+  assert.equal(v.lines[0].kind, 'pebble-direct');
+});
+
+test('a pebble anchored to a REAL rock still says that rock carries it', () => {
+  // The fix must not swallow the genuine case it was written around.
+  const v = billingView({
+    user: { email: 'a@b.co' },
+    minerals: [{ mineral_id: 'm1', label: 'Susie', host: 'susie.crads-ai.com', tier: 'pebble', anchor: 'collab-ea', held_by: 'you' }],
+    prices: { direct: 4900, hosting: 4900, tier: [0, 0, 0] },
+  });
+  const line = v.lines[0];
+  assert.equal(line.kind, 'pebble-anchored');
+  assert.equal(line.anchor, 'collab-ea');
+  assert.equal(line.monthly, 0, 'the member owes nothing; their rock carries it');
+});
+
+test('the hosting line says mineral, not box', () => {
+  const v = billingView({
+    user: { email: 'a@b.co' },
+    minerals: [{ mineral_id: 'm1', label: 'Solo', host: 'solo.crads-ai.com', tier: 'pebble', held_by: 'you' }],
+    prices: { direct: 4900, hosting: 4900, tier: [0, 0, 0] },
+  });
+  assert.match(v.lines[0].parts[0].label, /1 mineral/);
+  assert.doesNotMatch(v.lines[0].parts[0].label, /box/);
 });
