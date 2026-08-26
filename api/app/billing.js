@@ -43,7 +43,11 @@ const money = (cents) => `$${(cents / 100).toFixed(2)}`;
 
 module.exports = async function handler(req, res) {
   const kv = defaultKv();
-  const user = await requireAuth({ kv, req, res });
+  // `let`, not const: the card-on-file refresh below rebinds this. It was a
+  // const and the reassignment threw "Assignment to constant variable" on EVERY
+  // request, which node --check cannot see because it is a runtime error, not a
+  // syntax one.
+  let user = await requireAuth({ kv, req, res });
   if (!user) return;
 
   // THE SWITCH. A POST flips it and redirects back (PRG); the page never shows
