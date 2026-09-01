@@ -46,14 +46,6 @@
   ],
   "rewrites": [
     {
-      "source": "/account/app-login",
-      "destination": "/api/account/app-login"
-    },
-    {
-      "source": "/.well-known/crads-app-jwks.json",
-      "destination": "/api/auth/app-jwks"
-    },
-    {
       "source": "/account/login",
       "destination": "/account/login.html"
     },

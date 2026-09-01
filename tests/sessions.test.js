@@ -111,7 +111,9 @@ test('the app session is labelled as the app; ua families read like humans wrote
 test('every login flow issues a REGISTERED session (no sign-in the Devices page cannot see)', () => {
   const { readFileSync } = require('fs');
   const { join } = require('path');
-  const files = ['lib/passwordAuth.js', 'lib/authVerifyToken.js', 'api/auth/google/callback.js', 'lib/appHandoff.js'];
+  // lib/appHandoff.js left this list 2026-09-01: the desktop app no longer
+  // signs in through the site (account system retired with the self-host pivot).
+  const files = ['lib/passwordAuth.js', 'lib/authVerifyToken.js', 'api/auth/google/callback.js'];
   for (const f of files) {
     const src = readFileSync(join(__dirname, '..', f), 'utf8');
     assert.ok(src.includes('issueSession'), `${f} still issues an unregistered session`);
