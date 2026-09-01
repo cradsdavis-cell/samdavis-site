@@ -42,50 +42,9 @@
       "source": "/favicon.ico",
       "destination": "/lib/img/favicon.ico",
       "permanent": true
-    },
-    {
-      "source": "/app/devices",
-      "destination": "/app/access",
-      "permanent": false
     }
   ],
   "rewrites": [
-    {
-      "source": "/access",
-      "destination": "/api/app/access"
-    },
-    {
-      "source": "/app",
-      "destination": "/api/app"
-    },
-    {
-      "source": "/app/",
-      "destination": "/api/app"
-    },
-    {
-      "source": "/app/minerals",
-      "destination": "/api/app/minerals"
-    },
-    {
-      "source": "/app/access",
-      "destination": "/api/app/access"
-    },
-    {
-      "source": "/app/activity",
-      "destination": "/api/app/activity"
-    },
-    {
-      "source": "/app/billing",
-      "destination": "/api/app/billing"
-    },
-    {
-      "source": "/app/account",
-      "destination": "/api/app/account"
-    },
-    {
-      "source": "/app/admin",
-      "destination": "/api/app/admin"
-    },
     {
       "source": "/account/app-login",
       "destination": "/api/account/app-login"
