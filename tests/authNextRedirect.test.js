@@ -87,15 +87,15 @@ test('password login refuses to redirect off-origin and falls back to /app', asy
       method: 'POST', headers: {},
       body: { email: 'a@b.com', password: 'correct-horse-battery', next: hostile },
     }, res);
-    assert.strictEqual(res.body.redirect, '/app', `should not honour ${hostile}`);
+    assert.strictEqual(res.body.redirect, '/account', `should not honour ${hostile}`);
   }
 });
 
-test('password login with no next still lands on /app', async () => {
+test('password login with no next still lands on /account', async () => {
   const kv = fakeKv({ 'a@b.com': userWithPassword('a@b.com', 'correct-horse-battery') });
   const res = fakeRes();
   await makeLoginHandler({ kv })({
     method: 'POST', headers: {}, body: { email: 'a@b.com', password: 'correct-horse-battery' },
   }, res);
-  assert.strictEqual(res.body.redirect, '/app');
+  assert.strictEqual(res.body.redirect, '/account');
 });
