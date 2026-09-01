@@ -1,8 +1,8 @@
 'use strict';
 // tests/appLogin.test.js — arc A5. Signing in is a product moment: the card
-// speaks the app's language, and EVERY auth entry point lands in /app rather
-// than the coaching dashboard. The failure this prevents is a member signing
-// in from the Crads-AI app and landing in "Book a session / Packs".
+// speaks the app's language. Since the 2026-09-01 self-host pivot removed the
+// hosted /app control plane, every auth entry point falls back to /account,
+// the one signed-in surface left on the site.
 process.env.SESSION_SECRET = 'test-secret-do-not-use-in-prod-32-chars-min';
 
 const test = require('node:test');
@@ -30,22 +30,23 @@ test('all three ruled methods survive, against the same endpoints', () => {
   assert.ok(/error=google/.test(LOGIN), 'the Google failure path still surfaces');
 });
 
-test('EVERY auth entry point lands in /app by default', () => {
-  // Was a hardcoded '/app' at each site. QA finding 46 made the destination
-  // caller-supplied (an invitation must survive the sign-in it forces), so what
-  // this pins now is that /app is still the FALLBACK everywhere, and that the
-  // failure it was written for — landing a member in the coaching dashboard —
-  // is still impossible. The behavioural half lives in authNextRedirect.test.js.
+test('EVERY auth entry point lands on /account by default', () => {
+  // Was a hardcoded '/app' at each site while the hosted control plane existed.
+  // The 2026-09-01 self-host pivot removed /app, so the fallback is now the
+  // account page — the only signed-in surface left. QA finding 46 still holds:
+  // the destination stays caller-supplied (an invitation must survive the
+  // sign-in it forces); what this pins is that /account is the FALLBACK
+  // everywhere and no route 404s a fresh sign-in. The behavioural half lives
+  // in authNextRedirect.test.js.
   const pw = read('lib/passwordAuth.js');
   assert.equal((pw.match(/redirect: landing\(req\)/g) || []).length, 3, 'register, login and set-password');
-  assert.match(pw, /safeNext\(req && req\.body && req\.body\.next\) \|\| '\/app'/, 'and landing() falls back to /app');
-  assert.ok(!/redirect: '\/account\/'/.test(pw), 'none of them still points at the coaching dashboard');
+  assert.match(pw, /safeNext\(req && req\.body && req\.body\.next\) \|\| '\/account'/, 'and landing() falls back to /account');
   // the magic-link consumer
-  assert.match(read('lib/authVerifyToken.js'), /safeNext\(req\.query && req\.query\.next\) \|\| '\/app'/);
+  assert.match(read('lib/authVerifyToken.js'), /safeNext\(req\.query && req\.query\.next\) \|\| '\/account'/);
   // Google
-  assert.match(read('api/auth/google/callback.js'), /nextFrom\(req\) \|\| '\/app'/);
+  assert.match(read('api/auth/google/callback.js'), /nextFrom\(req\) \|\| '\/account'/);
   // and the page's own fallback if a response ever arrives without one
-  assert.match(LOGIN, /\|\| '\/app'\)/, 'the client fallback agrees');
+  assert.match(LOGIN, /\|\| '\/account'\)/, 'the client fallback agrees');
 });
 
 test('no auth entry point can be pointed off-origin', () => {

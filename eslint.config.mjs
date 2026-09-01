@@ -19,7 +19,7 @@ import globals from 'globals';
 export default [
   {
     files: ['**/*.js', '**/*.mjs'],
-    ignores: ['node_modules/**', '.next/**', 'public/vendor/**', 'coverage/**'],
+    ignores: ['node_modules/**', '.next/**', 'public/vendor/**', 'coverage/**', 'archive/**'],
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: 'commonjs',

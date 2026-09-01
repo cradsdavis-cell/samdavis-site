@@ -146,7 +146,7 @@
         var path = mode === 'register' ? '/api/auth/register' : '/api/auth/login';
         var res = await post(path, { email: email, password: password, next: NEXT });
         if (res.ok) {
-          window.location.assign((res.data && res.data.redirect) || '/app');
+          window.location.assign((res.data && res.data.redirect) || '/account');
         } else if (res.status === 409) {
           show('That email already has an account — try “Sign in”, or the sign-in link below.', true);
         } else if (res.status === 429) {
