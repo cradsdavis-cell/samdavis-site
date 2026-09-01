@@ -11,10 +11,10 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "googleapis": "~144.0.0",
+    "google-auth-library": "^11.0.2",
     "ioredis": "^5.11.0",
     "jsonwebtoken": "^9.0.3",
-    "resend": "~3.0.0",
+    "resend": "^6.25.0",
     "stripe": "~14.0.0"
   },
   "devDependencies": {
