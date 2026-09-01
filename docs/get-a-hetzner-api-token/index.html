@@ -5,8 +5,8 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How updates reach you · Crads AI docs</title>
-<meta name="description" content="Your mineral restarts nightly onto new software, what that does and does not touch, and how to tell what you are running.">
+<title>Get a Hetzner API token · Crads AI docs</title>
+<meta name="description" content="The five-minute walk from no account to the token the setup wizard asks for, and what that token actually is.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 
@@ -363,16 +363,16 @@
     if (btn) btn.addEventListener('click', open);
   });
 </script>
-<link rel="canonical" href="https://crads-ai.com/docs/how-updates-reach-you">
+<link rel="canonical" href="https://crads-ai.com/docs/get-a-hetzner-api-token">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Sam Davis — Crads AI">
-<meta property="og:url" content="https://crads-ai.com/docs/how-updates-reach-you">
-<meta property="og:title" content="How updates reach you">
-<meta property="og:description" content="Your mineral restarts nightly onto new software, what that does and does not touch, and how to tell what you are running.">
+<meta property="og:url" content="https://crads-ai.com/docs/get-a-hetzner-api-token">
+<meta property="og:title" content="Get a Hetzner API token">
+<meta property="og:description" content="The five-minute walk from no account to the token the setup wizard asks for, and what that token actually is.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="How updates reach you">
-<meta name="twitter:description" content="Your mineral restarts nightly onto new software, what that does and does not touch, and how to tell what you are running.">
+<meta name="twitter:title" content="Get a Hetzner API token">
+<meta name="twitter:description" content="The five-minute walk from no account to the token the setup wizard asks for, and what that token actually is.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body>
@@ -428,7 +428,7 @@
     <details class="navgrp" open>
       <summary>Getting set up</summary>
       <ul>
-      <li><a href="/docs/get-a-hetzner-api-token">Get a Hetzner API token</a></li>
+      <li><a href="/docs/get-a-hetzner-api-token" aria-current="page">Get a Hetzner API token</a></li>
       <li><a href="/docs/first-hour">Your first hour</a></li>
       <li><a href="/docs/the-interview">The interview</a></li>
       <li><a href="/docs/your-first-week">Your first week</a></li>
@@ -458,7 +458,7 @@
       <li><a href="/docs/fix-a-broken-connection">Fix a connection that has stopped working</a></li>
       <li><a href="/docs/devices-and-access">Machines that can open your mineral</a></li>
       <li><a href="/docs/when-something-looks-wrong">When something looks wrong</a></li>
-      <li><a href="/docs/how-updates-reach-you" aria-current="page">How updates reach you</a></li>
+      <li><a href="/docs/how-updates-reach-you">How updates reach you</a></li>
       <li><a href="/docs/grant-support-access">Let us look at your mineral</a></li>
       <li><a href="/docs/claude-code-on-your-mineral">Use Claude Code on your mineral</a></li>
       <li><a href="/docs/the-three-layers">Who edits what</a></li>
@@ -493,47 +493,31 @@
     </details>
 </details></aside>
 <article class="docs-article">
-<nav class="docs-crumbs" aria-label="Breadcrumb"><a href="/docs">Docs</a><span class="sep">/</span><span class="here">Living with it</span></nav>
-<h1>How updates reach you</h1>
-<p>Software arrives on your mineral by itself. Worth understanding, because it is the one thing that changes your machine without you asking.</p>
-<p><strong>A pebble does this by itself. A rock does not.</strong> The nightly restart is one of the jobs a rock is built without, so if you host one, the section at the end is the part that applies to you.</p>
-<h2 id="what-happens-on-a-pebble">What happens on a pebble<a class="anchor" href="#what-happens-on-a-pebble" aria-label="Link to this section">#</a></h2>
-<p>Once a night your mineral restarts onto the software your community has published for it. The restart takes about a minute.</p>
-<p>When, exactly: at 04:10 mineral time, plus an offset of up to half an hour that is stable per box, so yours restarts at the same minute every night but a hundred minerals in a fleet do not all hit the software registry in the same minute. The ordering around it is deliberate: the encrypted snapshot runs at 03:40 and the brain push at 03:50, so the night's backup has left the box before the restart touches anything.</p>
-<p>Mechanically, an update <em>is</em> a restart. On every start the box re-pulls the image tag its community has published, so what arrives is bounded by that tag: a member mineral can never leapfrog what its rock has published, and there is no second path by which different software could arrive.</p>
-<p><strong>What that changes:</strong> the machinery. The engine, the app, the scheduler, the system pages.</p>
-<p><strong>What it does not touch:</strong> your brain, your pages, your skills, your cadence, your connected services, your files. All of it is exactly as you left it.</p>
-<p>If you were told an update is out and you do not want to wait for tonight, there is a button: <strong>Update and restart</strong>, on the Claude Code tab. Same restart, same minute, same nothing-of-yours-moves. Its one oddity is that the connection dropping moments after the restart is scheduled is the success path, not a failure: the box has to go down to come back new. Give it a minute; everything reconnects on its own.</p>
-<h2 id="knowing-what-you-are-running">Knowing what you are running<a class="anchor" href="#knowing-what-you-are-running" aria-label="Link to this section">#</a></h2>
-<p>The app shows the build your mineral is on. Every face of the app carries a small version chip, and the chip opens into a what's-new fold that lists what changed, in plain words. This matters more than it sounds: until late August 2026 a mineral could not report which engine it ran, so the answer to &quot;have you got the fix?&quot; was guesswork for everybody including us.</p>
-<p>If you host a rock, the Members page answers the same question per member, judged against the rock's own build, in one of three states: <strong>software current</strong> (the same build this rock runs), <strong>older software</strong> (a different build; restarting that mineral picks up whatever the rock has published), and <strong>software unknown</strong> (the mineral has not reported a build, which usually means an image from before builds were reported, and is itself the answer). The unknown state is never dressed up as good news.</p>
-<p>When a fix lands that you reported, the version notes in that what's-new fold say so in plain words. That is the loop closing: you told us something was broken, and the app tells you when it stopped being broken.</p>
-<h2 id="turning-it-off">Turning it off<a class="anchor" href="#turning-it-off" aria-label="Link to this section">#</a></h2>
-<p>You can, though not from a settings screen: there is deliberately no switch for this in the app. The opt-out is a flag on your mineral, and your assistant sets it when you ask. That is on purpose. Whether your machine receives software is a considered decision about its lifecycle, not a toggle to fidget with, so setting it takes a sentence to your assistant rather than a click in passing.</p>
-<p>The honest consequence: you keep the software you have, including its bugs, and you stop receiving fixes for the connectors that break when Google or Microsoft change something on their end. That is a reasonable trade for a week while you finish something, and a bad one as a permanent state.</p>
-<h2 id="updates-never-touch-your-schedules">Updates never touch your schedules<a class="anchor" href="#updates-never-touch-your-schedules" aria-label="Link to this section">#</a></h2>
-<p>Your cadence and the machinery are separate engines. The nightly restart is the machinery's own job; the schedules you set for your skills live in your own state, and an update never rewrites them. The separation runs the other way too: when you edit a schedule, the change takes effect within a minute, with no restart involved. Nothing about when <em>your</em> things run is ever waiting on a software update, and no software update ever changes when your things run.</p>
-<h2 id="a-rock-does-not-update-itself">A rock does not update itself<a class="anchor" href="#a-rock-does-not-update-itself" aria-label="Link to this section">#</a></h2>
-<p>A rock's scheduler deliberately skips the self-maintenance jobs a pebble gets, and <code>auto-update</code> is not among them. A rock stays on the software it has until somebody restarts it.</p>
-<p>That somebody is you, in <strong>Help</strong> under <strong>Mineral software</strong>: the button reads <strong>Update and restart this mineral</strong>. Two habits worth forming if you host one (both part of <a href="/docs/run-your-rock">running your rock</a>):</p>
-<ul>
-<li><strong>Update when you are told a fix is out.</strong> Nothing else will.</li>
-<li><strong>Update before you build pebbles.</strong> A rock hands its own host scripts and templates to the minerals it builds, so a stale rock builds stale pebbles. Fix first, then build.</li>
-</ul>
-<p>The pebbles you host are unaffected by this: each of them updates itself nightly, whatever state its rock is in.</p>
-<h2 id="what-we-will-not-do">What we will not do<a class="anchor" href="#what-we-will-not-do" aria-label="Link to this section">#</a></h2>
-<p>We do not push software to your mineral outside this channel, and we do not use the update path to look at anything. An update is a restart onto a published image; it is not a door.</p>
-<p>The one way anybody reaches your mineral other than through the software it already has is a support session you granted, and that is set out in the privacy policy.</p>
-<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/when-something-looks-wrong"><span class="dir">Previous</span>When something looks wrong</a><a class="next" href="/docs/grant-support-access"><span class="dir">Next</span>Let us look at your mineral</a></nav>
+<nav class="docs-crumbs" aria-label="Breadcrumb"><a href="/docs">Docs</a><span class="sep">/</span><span class="here">Getting set up</span></nav>
+<h1>Get a Hetzner API token</h1>
+<p>Crads-AI is self-hosted: your assistant runs on a server in your own hosting account, at Hetzner, a German hosting company. The setup wizard builds that server for you, and to do it on your account it needs an API token from you. This page gets you from nothing to that token.</p>
+<p>The token is the key to your hosting project. It stays on your computer, the app sends it only to Hetzner's own API, and you can revoke it at any time. Treat it like a password all the same.</p>
+<h2 id="1-make-a-hetzner-account">1. Make a Hetzner account<a class="anchor" href="#1-make-a-hetzner-account" aria-label="Link to this section">#</a></h2>
+<p>Go to <strong>console.hetzner.com</strong> and sign up with your email. Confirm the email, then add a payment method: the server is billed to you by Hetzner directly, roughly ten to twenty five dollars a month depending on the size you pick in the wizard, and nothing is charged until a server actually exists.</p>
+<p>Hetzner sometimes asks new accounts to verify identity before they can create servers. That check is theirs, not ours; if it appears, complete it and come back. It can take from minutes to a day.</p>
+<h2 id="2-create-a-project">2. Create a project<a class="anchor" href="#2-create-a-project" aria-label="Link to this section">#</a></h2>
+<p>On the Cloud console's start screen choose <strong>New project</strong> and give it any name; &quot;my-brain&quot; is fine. If your account already shows a default project, that one works too. A project is just Hetzner's box for grouping servers, and your mineral will live inside whichever project the token belongs to.</p>
+<h2 id="3-generate-the-token">3. Generate the token<a class="anchor" href="#3-generate-the-token" aria-label="Link to this section">#</a></h2>
+<p>Open the project. In the left sidebar choose <strong>Security</strong>, then the <strong>API tokens</strong> tab, then <strong>Generate API token</strong>.</p>
+<p>Name it something you will recognise later (&quot;crads-ai&quot; is fine), and set the permissions to <strong>Read &amp; Write</strong>. This matters: a read-only token can look at your project but cannot build anything in it, and the wizard will refuse it.</p>
+<h2 id="4-copy-it-straight-away">4. Copy it straight away<a class="anchor" href="#4-copy-it-straight-away" aria-label="Link to this section">#</a></h2>
+<p>Hetzner shows a token exactly once, at the moment it is generated. Copy it before closing the dialog and paste it into the wizard. If you lose it, do not hunt for it; generate a fresh one and delete the old from the same screen.</p>
+<h2 id="what-the-wizard-does-with-it">What the wizard does with it<a class="anchor" href="#what-the-wizard-does-with-it" aria-label="Link to this section">#</a></h2>
+<p>The app checks the token against Hetzner with a read-only call before offering to build, shows you the real locations and machine sizes your account offers, and then creates one server with your own SSH key as its only key. The token is held in the app's memory for that run and is never written to disk or sent anywhere except api.hetzner.cloud. If you ever want to withdraw it, revoke the token in the Hetzner console; the server it built keeps running regardless, because the server is yours, not the token's.</p>
+<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/rocks-and-pebbles"><span class="dir">Previous</span>Rocks and pebbles</a><a class="next" href="/docs/first-hour"><span class="dir">Next</span>Your first hour</a></nav>
 </article>
 <nav class="docs-toc" aria-label="On this page"><h2>On this page</h2>
 <ul>
-  <li><a href="#what-happens-on-a-pebble">What happens on a pebble</a></li>
-  <li><a href="#knowing-what-you-are-running">Knowing what you are running</a></li>
-  <li><a href="#turning-it-off">Turning it off</a></li>
-  <li><a href="#updates-never-touch-your-schedules">Updates never touch your schedules</a></li>
-  <li><a href="#a-rock-does-not-update-itself">A rock does not update itself</a></li>
-  <li><a href="#what-we-will-not-do">What we will not do</a></li>
+  <li><a href="#1-make-a-hetzner-account">1. Make a Hetzner account</a></li>
+  <li><a href="#2-create-a-project">2. Create a project</a></li>
+  <li><a href="#3-generate-the-token">3. Generate the token</a></li>
+  <li><a href="#4-copy-it-straight-away">4. Copy it straight away</a></li>
+  <li><a href="#what-the-wizard-does-with-it">What the wizard does with it</a></li>
 </ul></nav>
 </div>
 </main>
