@@ -3,9 +3,8 @@
 // copy is the no-JS fallback; site.js swaps it at runtime, and because both
 // come from navHTML() the swap is invisible. Regenerate with `npm run nav`.
 //
-// Docs pages (docs/**) are generated in the app repo; they are checked once
-// their generator emits the same markup (plan Phase 4 E). Until then the
-// runtime replacement keeps them correct and INCLUDE_DOCS stays false.
+// Docs pages (docs/**) are generated in the app repo; its shell copies
+// navHTML('/docs') verbatim, so they are checked here too.
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert');
@@ -14,7 +13,7 @@ const path = require('path');
 const { ROOT, servedHtml, urlOf } = require('../scripts/served.js');
 const { NAV_ITEMS, navHTML, normalisePath } = require('../lib/site.js');
 
-const INCLUDE_DOCS = false;
+const INCLUDE_DOCS = true;   // flipped 2026-09-09: the app repo's shell emits navHTML() verbatim
 const NAV_RE = /<nav class="site-nav-bar"[^>]*>[\s\S]*?<\/nav>/g;
 
 function pages() {
