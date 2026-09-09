@@ -1,8 +1,10 @@
 'use strict';
-// QA finding 46: /access?org=<handle> bounced an unauthenticated visitor to
-// /account/login and dropped the org, so an emailed invitation died at the
-// sign-in it forced. These pin the whole return-to path, including the part
-// that matters more than the feature: that it cannot be pointed off-origin.
+// QA finding 46 (2026-08): /access?org=<handle> bounced an unauthenticated
+// visitor to /account/login and dropped the org, so an emailed invitation died
+// at the sign-in it forced. /access and invitations were retired with the
+// self-host pivot (2026-09-01); the return-to path itself still serves the
+// coaching portal, and the part that matters more than any feature stays
+// pinned here: ?next cannot be pointed off-origin.
 const test = require('node:test');
 const assert = require('node:assert');
 process.env.SESSION_SECRET = 'test-secret-do-not-use-in-prod-32-chars-min';

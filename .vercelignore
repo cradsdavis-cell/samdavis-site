@@ -3,26 +3,17 @@ node_modules/
 .git/
 README.md
 
-# UI audit loop internals — never serve publicly (ledger notes internal strategy)
-docs/audit/
-
-# Engineering docs: never serve publicly. Found live on 2026-08-24, all 200:
-# prepaid-booking.md names a real client and the problems she hit, and the
-# superpowers plans/reviews/specs carry internal design history. Same intent as
-# docs/audit/ above, which was already excluded. docs/<slug>/index.html (the
-# public manual, generated from ai-os) is NOT affected: these are file and
-# directory paths, not the whole docs tree.
-docs/superpowers/
-docs/prepaid-booking.md
-UI-AUDIT.md
-scratchpad/
-scripts/audit-shots.mjs
-
-# Brand kit source — internal (carries gap notes + contact details)
-brand/
+# Retired code, engineering docs (design specs, plans, reviews, the UI-audit
+# loop, prepaid-booking which names a real client) kept as the paper trail.
+# README inside. Never served. docs/<slug>/index.html (the public manual,
+# generated from the app repo) is NOT affected: this is one directory.
+archive/
 
 # Build/maintenance scripts: never runtime, never public
 scripts/
 
-# Retired code kept as the paper trail (README inside). Never served.
-archive/
+# Local scratch renders
+scratchpad/
+
+# Brand kit source — internal (carries gap notes + contact details)
+brand/
