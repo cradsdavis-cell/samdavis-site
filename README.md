@@ -64,13 +64,13 @@ The software is free. Two SKUs are purchasable (`lib/skus.js`):
 
 Retired that day and never purchasable again: the Coaching Block (4 × 90), Single Session, Continuation Retainer (subscription), pay-in-4, Group Block, EA Basic Build. Their Cal event types survive in `LEGACY_SKU_DEFS` so a client mid-engagement can still book from the portal.
 
-Live Stripe price IDs are in `lib/skus.js` (they are not secrets); `STRIPE_PRICE_GUIDED_SETUP` / `STRIPE_PRICE_WORKING_SESSION` override them if set.
+Live Stripe price IDs and the two Cal event type IDs are in `lib/skus.js` (neither is a secret); `STRIPE_PRICE_*` and `CAL_EVENT_TYPE_GUIDED_SETUP` / `CAL_EVENT_TYPE_WORKING_SESSION` override them if set.
 
 ## Env vars (Vercel Production)
 
 Auth and portal: `SESSION_SECRET` (32+ chars), `REDIS_URL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET` (redirect URI `https://crads-ai.com/api/auth/google/callback`), `CRON_SECRET` / `CRON_SECRET_2` (admin API bearer).
 
-Money and booking: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `CAL_API_KEY`, `CAL_EVENT_TYPE_DISCOVERY` (30 min, free), `CAL_EVENT_TYPE_SINGLE` (90 min, working session), `CAL_EVENT_TYPE_GUIDED_SETUP` (60 min, guided setup), `CAL_EVENT_TYPE_BLOCK` (legacy portal bookings only), `BASE_URL`.
+Money and booking: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `CAL_API_KEY`, `CAL_EVENT_TYPE_DISCOVERY` (30 min, free), `CAL_EVENT_TYPE_GUIDED_SETUP` and `CAL_EVENT_TYPE_WORKING_SESSION` (optional overrides; the v4 event type IDs are hard-coded in `lib/skus.js`, 60 and 90 min), `CAL_EVENT_TYPE_SINGLE` and `CAL_EVENT_TYPE_BLOCK` (legacy portal bookings only), `BASE_URL`.
 
 Changing env vars requires a redeploy.
 

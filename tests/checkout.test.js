@@ -9,6 +9,7 @@ process.env.STRIPE_PRICE_WORKING_SESSION = 'price_test_working';
 delete process.env.STRIPE_PRICE_GUIDED_SETUP;
 process.env.CAL_EVENT_TYPE_SINGLE = '101';
 process.env.CAL_EVENT_TYPE_GUIDED_SETUP = '106';
+process.env.CAL_EVENT_TYPE_WORKING_SESSION = '109';
 process.env.CAL_EVENT_TYPE_DISCOVERY = '100';
 
 // Stub lib/stripe + lib/cal BEFORE requiring handler.
