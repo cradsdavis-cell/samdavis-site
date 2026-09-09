@@ -118,3 +118,7 @@ body {
 }
 .slot-loading { text-align: center; color: var(--ink-soft); padding: 2rem; }
 .slot-error { color: #8B2A1F; padding: 1rem; background: #F4E4DE; border-radius: 4px; }
+
+/* v4 booking pages: the paragraph block under the header line */
+.book-blurb { margin: 0 0 var(--space-3); }
+.book-blurb p { font-size: 1rem; line-height: 1.6; color: var(--ink-soft); margin: 0 0 0.6em; max-width: 62ch; }

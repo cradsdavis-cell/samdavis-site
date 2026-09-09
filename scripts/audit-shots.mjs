@@ -22,13 +22,21 @@ const OUT = process.env.OUT || join(ROOT, 'scratchpad', 'shots');
 const PORT = 8199;
 let BASE = process.env.BASE || `http://localhost:${PORT}`;
 
-// The five public marketing pages. cleanUrls in prod → serve the /index.html here.
+// The public pages (v4, 2026-09-09). cleanUrls in prod -> serve the /index.html
+// here; /download is a function, so it only renders when BASE points at a
+// deployment (BASE=https://<preview>.vercel.app).
 const PAGES = [
   ['home', '/index.html'],
-  ['about', '/about/index.html'],
+  ['download', '/download'],
+  ['docs', '/docs/index.html'],
+  ['docs-first-hour', '/docs/first-hour/index.html'],
   ['how-it-works', '/how-it-works/index.html'],
   ['offer', '/offer/index.html'],
-  ['overview', '/overview/index.html'],
+  ['about', '/about/index.html'],
+  ['book', '/book/index.html'],
+  ['book-guided-setup', '/book/guided-setup.html'],
+  ['404', '/404.html'],
+  ['thanks', '/thanks.html'],
 ];
 const VIEWPORTS = [['desktop', 1440, 900], ['mobile', 390, 844]];
 
@@ -96,6 +104,8 @@ const browser = await pw.chromium.launch({ executablePath: exe, headless: true }
 for (const [vp, w, h] of VIEWPORTS) {
   const ctx = await browser.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce' });
   const page = await ctx.newPage();
+  // A protected preview: SHARE=<url with _vercel_share=...> primes the auth cookie first.
+  if (process.env.SHARE) { try { await page.goto(process.env.SHARE, { waitUntil: 'load', timeout: 20000 }); } catch {} }
   for (const [name, path] of PAGES) {
     try {
       await page.goto(BASE + path, { waitUntil: 'load', timeout: 20000 });
