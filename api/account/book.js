@@ -14,8 +14,8 @@ const { requireAuth, renderShell } = require('../../lib/account');
 const { isAdmin } = require('../../lib/auth');
 const { defaultKv } = require('../../lib/kv');
 const calLib = require('../../lib/cal');
-const { getSku } = require('../../lib/skus');
-const { computeBalance, engagementBalance } = require('../../lib/sessionBalance');
+const { calEventTypeIdFor } = require('../../lib/skus');
+const { computeBalance, engagementBalance, minGapMsFor } = require('../../lib/sessionBalance');
 const { nextBlockStage } = require('../../lib/autoAdvance');
 const { fetchNextSession } = require('../../lib/calBookings');
 
@@ -24,9 +24,21 @@ const MAX_BOOKING_WINDOW_MS = 60 * 86400000; // 60 days, mirrors api/checkout.js
 
 // Which SKU's Cal event-type + availability a client's next booking uses.
 function bookingSkuFor(balance) {
-  if (balance.activeBlock) return balance.activeBlock.type;       // coaching-block(-pay4)
-  if (balance.isRetainer) return 'continuation-retainer';
+  if (balance.activeBlock) return balance.activeBlock.type;       // guided-setup, or a legacy coaching-block
+  if (balance.isRetainer) return 'continuation-retainer';         // legacy state, retired SKU
   return null;
+}
+
+// The guided setup's session 2 sits at least a day after session 1 (the
+// onboarding homework lives in that gap). Session 1's slot is stamped on the
+// engagement by the Stripe webhook; records without it (admin-created) are
+// not gated. Returns the earliest allowed ms, or null when no gap applies.
+function earliestAllowedMs(engagement) {
+  if (!engagement) return null;
+  const gap = minGapMsFor(engagement.type);
+  if (!gap || !engagement.first_slot_iso) return null;
+  const first = Date.parse(engagement.first_slot_iso);
+  return Number.isNaN(first) ? null : first + gap;
 }
 
 // Pure-ish booking core. Returns { ok, status, error?, booking? }. Mutates `user`
@@ -41,9 +53,13 @@ async function bookSession({ kv, cal, skus, user, slotIso, now = Date.now() }) {
   if (Number.isNaN(slotMs)) return { ok: false, status: 400, error: 'invalid_slot_iso' };
   if (slotMs < now) return { ok: false, status: 400, error: 'slot_in_past' };
   if (slotMs > now + MAX_BOOKING_WINDOW_MS) return { ok: false, status: 400, error: 'slot_too_far_in_future' };
+  const earliest = earliestAllowedMs(balance.activeBlock);
+  if (earliest !== null && slotMs < earliest) {
+    return { ok: false, status: 400, error: 'too_soon', earliest_iso: new Date(earliest).toISOString() };
+  }
 
-  let cfg;
-  try { cfg = skus.getSku(sku); } catch { return { ok: false, status: 500, error: 'sku_misconfigured' }; }
+  let eventTypeId;
+  try { eventTypeId = skus.calEventTypeIdFor(sku); } catch { return { ok: false, status: 500, error: 'sku_misconfigured' }; }
 
   // Dedupe a double-submit / refresh on the same slot. Synthetic id mirrors the
   // discovery path's convention so the same Cal-metadata backstop works.
@@ -57,7 +73,7 @@ async function bookSession({ kv, cal, skus, user, slotIso, now = Date.now() }) {
 
   const name = (user.name && String(user.name).trim()) || user.email.split('@')[0];
   const booking = await cal.createBooking({
-    eventTypeId: cfg.cal_event_type_id, slotIso, name, email: user.email, stripeSessionId: synthId, sku,
+    eventTypeId, slotIso, name, email: user.email, stripeSessionId: synthId, sku,
   });
   if (!booking || !booking.ok) {
     if (booking && booking.status === 409) return { ok: false, status: 409, error: 'slot_unavailable' };
@@ -92,16 +108,20 @@ function parseJsonBody(req) {
 function renderBookPage({ balance, sku, nextSession }) {
   if (!balance.bookable || !sku) {
     const msg = balance.hasBlock
-      ? `You've used all the sessions in your block. Want to keep going? <a href="/account/subscription">Talk to Sam about a Retainer</a>, or <a href="/book/coaching-block">book another block</a>.`
-      : `You don't have a session to book right now. <a href="/book/coaching-block">See the coaching options</a> or <a href="mailto:cradsdavis@gmail.com">email Sam</a>.`;
+      ? `You've used all the sessions you paid for. Want more time? <a href="/book/working-session">Book a working session</a>, or <a href="mailto:cradsdavis@gmail.com">email Sam</a> about hourly support.`
+      : `You don't have a session to book right now. <a href="/offer">See setup and support</a> or <a href="mailto:cradsdavis@gmail.com">email Sam</a>.`;
     return `
       <h1 class="serif">Book a session</h1>
       <section class="panel"><div class="panel-content">${msg}</div></section>`;
   }
 
+  const isGuided = !!(balance.activeBlock && balance.activeBlock.type === 'guided-setup');
+  const earliest = earliestAllowedMs(balance.activeBlock);
   const balanceLine = balance.isRetainer
-    ? `Retainer active — book your next session below.`
-    : `You have <strong>${balance.remaining}</strong> session${balance.remaining === 1 ? '' : 's'} left in your block (${balance.used} of ${balance.total} used).`;
+    ? `Retainer active: book your next session below.`
+    : isGuided
+      ? `Your second guided setup session. Pick a time at least a day after your first one${earliest ? ` (from ${escapeHtml(new Date(earliest).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Australia/Sydney' }))})` : ''}, so the homework between them has room.`
+      : `You have <strong>${balance.remaining}</strong> session${balance.remaining === 1 ? '' : 's'} left in your block (${balance.used} of ${balance.total} used).`;
   const nextLine = nextSession
     ? `<p class="subtitle">Next booked: ${escapeHtml(new Date(nextSession.date).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Australia/Sydney' }))}.</p>`
     : '';
@@ -157,7 +177,7 @@ function renderBookPage({ balance, sku, nextSession }) {
           var sb=document.getElementById('sb');sb.disabled=true;sb.textContent='Booking…';
           fetch('/api/account/book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slot_iso:iso})})
             .then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j};});})
-            .then(function(res){if(!res.ok)throw new Error(res.j.message||res.j.error||'failed');window.location.href='/account/sessions?booked=1';})
+            .then(function(res){if(!res.ok)throw new Error(res.j.error==='too_soon'?'that is too close to your first session; pick a slot at least a day later':(res.j.message||res.j.error||'failed'));window.location.href='/account/sessions?booked=1';})
             .catch(function(err){er.textContent='Could not book: '+err.message+'. Pick another time or email cradsdavis@gmail.com.';er.style.display='block';sb.disabled=false;sb.textContent='Book this session →';});
         });
       }
@@ -177,8 +197,8 @@ module.exports = async function handler(req, res) {
 
   if (req.method === 'POST') {
     const body = parseJsonBody(req);
-    const result = await bookSession({ kv, cal: calLib, skus: { getSku }, user, slotIso: String(body.slot_iso || '') });
-    return res.status(result.status).json(result.ok ? { booked: true } : { error: result.error });
+    const result = await bookSession({ kv, cal: calLib, skus: { calEventTypeIdFor }, user, slotIso: String(body.slot_iso || '') });
+    return res.status(result.status).json(result.ok ? { booked: true } : { error: result.error, earliest_iso: result.earliest_iso });
   }
 
   if (req.method !== 'GET') return res.status(405).json({ error: 'method_not_allowed' });
@@ -200,3 +220,4 @@ module.exports = async function handler(req, res) {
 // Exported for tests.
 module.exports.bookSession = bookSession;
 module.exports.bookingSkuFor = bookingSkuFor;
+module.exports.earliestAllowedMs = earliestAllowedMs;

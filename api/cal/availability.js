@@ -2,7 +2,7 @@
 'use strict';
 
 const { getAvailableSlots } = require('../../lib/cal');
-const { getSku, DISCOVERY_EVENT_TYPE_ID } = require('../../lib/skus');
+const { calEventTypeIdFor, DISCOVERY_EVENT_TYPE_ID } = require('../../lib/skus');
 
 const MAX_WINDOW_MS = 31 * 86400000; // 31 days
 const PAST_TOLERANCE_MS = 5 * 60 * 1000; // accept startDate up to 5 min in the past (clock skew)
@@ -51,7 +51,8 @@ module.exports = async (req, res) => {
     if (sku === 'discovery') {
       eventTypeId = DISCOVERY_EVENT_TYPE_ID();
     } else {
-      eventTypeId = getSku(sku).cal_event_type_id;
+      // purchasable or legacy: a mid-engagement client's portal picker uses this too
+      eventTypeId = calEventTypeIdFor(sku);
     }
   } catch (e) {
     res.status(400).json({ error: 'unknown_sku' });

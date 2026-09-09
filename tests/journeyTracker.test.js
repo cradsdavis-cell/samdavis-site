@@ -34,11 +34,12 @@ test('between-s3-s4 hero unlocks Pack 3', () => {
   assert.match(html, /Pack 3/);
 });
 
-test('post-s4-decision hero offers retainer', () => {
+test('post-s4-decision hero offers a working session (the retainer is retired, v4)', () => {
   const user = { state: 'post-s4-decision', email: 'a@b.com' };
   const html = renderHeroCard({ user, nextSession: null });
-  assert.match(html, /Retainer|retainer/);
-  assert.match(html, /\$650/);
+  assert.match(html, /working session/i);
+  assert.match(html, /href="\/book\/working-session"/);
+  assert.doesNotMatch(html, /\$650|Retainer/);
 });
 
 test('retainer-active hero shows monthly cadence', () => {
@@ -48,10 +49,25 @@ test('retainer-active hero shows monthly cadence', () => {
   assert.match(html, /Retainer active|retainer/i);
 });
 
-test('graduated hero offers Single Session CTA', () => {
+test('graduated hero offers a working session', () => {
   const user = { state: 'graduated', email: 'a@b.com' };
   const html = renderHeroCard({ user, nextSession: null });
   assert.match(html, /Alumni|alumni/);
-  assert.match(html, /Single Session/);
+  assert.match(html, /href="\/book\/working-session"/);
+});
+
+test('guided-setup client sees the two-session hero, not pack copy', () => {
+  const user = { state: 'pre-s1', email: 'g@b.com',
+    engagements: [{ type: 'guided-setup', sessions_total: 2, sessions_used: 1, first_slot_iso: '2026-10-01T10:00:00+10:00' }] };
+  const balance = { hasBlock: true, remaining: 1, used: 1, total: 2, activeBlock: user.engagements[0], isRetainer: false, bookable: true };
+  const html = renderHeroCard({ user, nextSession: { date: '2026-10-01T10:00:00+10:00', label: 'Guided setup session' }, balance });
+  assert.match(html, /Session 1 of 2/);
+  assert.match(html, /1 Oct|Oct 1/);
+  assert.match(html, /href="\/account\/book"/);
+  assert.doesNotMatch(html, /Pack 1|sandbox/);
+  const done = renderHeroCard({ user: { ...user, state: 'between-s1-s2', engagements: [{ type: 'guided-setup', sessions_total: 2, sessions_used: 2 }] },
+    nextSession: null, balance: { ...balance, remaining: 0, used: 2, activeBlock: null } });
+  assert.match(done, /Both sessions booked/);
+  assert.match(done, /href="\/book\/working-session"/);
 });
 

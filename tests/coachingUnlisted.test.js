@@ -38,9 +38,13 @@ test('every coaching route still EXISTS and is still gated — unlisted is not d
   }
 });
 
+// 2026-09-09 (v4): api/cron/graduate-check.js left this list. It advanced
+// post-s4 clients to "graduated" after the retainer window; the retainer is
+// retired and the cron entry went with it in the same commit (a cron pointing
+// at a missing function fails the Vercel build).
 test('the money and booking plumbing is untouched', () => {
   for (const f of ['api/checkout.js', 'api/stripe/webhook.js', 'api/cal/availability.js',
-                   'api/booking-status.js', 'api/cron/graduate-check.js']) {
+                   'api/booking-status.js']) {
     assert.ok(existsSync(join(ROOT, f)), `${f} was deleted`);
   }
   // the webhook is what creates client records at all; it must stay raw-body
@@ -55,9 +59,16 @@ test('the URLs clients already hold still resolve: rewrites and static pages sur
   for (const url of ['/account/book', '/account/sessions', '/account/packs', '/account/subscription']) {
     assert.ok(sources.has(url), `${url} lost its rewrite — a client's link would 404`);
   }
-  for (const page of ['book/index.html', 'book/single-session.html', 'book/coaching-block.html',
-                      'book/continuation-retainer.html', 'thanks.html']) {
+  // 2026-09-09 (v4): the three coaching-era booking pages became redirects
+  // (single-session -> working-session, coaching-block -> guided-setup,
+  // continuation-retainer -> /offer), so a held link still lands somewhere
+  // true. The pages that must exist are the v4 ones.
+  for (const page of ['book/index.html', 'book/guided-setup.html', 'book/working-session.html', 'thanks.html']) {
     assert.ok(existsSync(join(ROOT, page)), `${page} was deleted`);
+  }
+  const redirected = new Set(cfg.redirects.map((r) => r.source));
+  for (const url of ['/book/single-session', '/book/coaching-block', '/book/continuation-retainer']) {
+    assert.ok(redirected.has(url), `${url} neither exists nor redirects: a client's link would 404`);
   }
 });
 

@@ -31,7 +31,7 @@ async function safeAlert(subject, body) {
 
 // Best-effort user-record create/update + welcome magic link send. Never fails the webhook —
 // Stripe must still 200 even if KV write or welcome-email send fails (Sam can recover manually).
-async function safeCreateOrUpdateUser({ session, sku, customerEmail }) {
+async function safeCreateOrUpdateUser({ session, sku, customerEmail, slotIso }) {
   try {
     await createOrUpdateUser({
       kv: defaultKv(),
@@ -42,6 +42,7 @@ async function safeCreateOrUpdateUser({ session, sku, customerEmail }) {
       sku,
       stripeSessionId: session.id,
       stripeSubscriptionId: session.subscription || null,
+      slotIso: slotIso || null,
     });
   } catch (userErr) {
     console.error('createOrUpdateUser failed:', userErr && userErr.message);
@@ -80,15 +81,11 @@ module.exports = async (req, res) => {
   // Prefer customer_details.email (Stripe collects this during Checkout itself).
   const customerEmail = session.customer_details?.email || session.customer_email;
 
-  // H4: required metadata defensive — bad metadata won't succeed on Stripe retries either,
-  // so acknowledge (200) to stop retry storm + alert Sam for manual recovery.
-  // SKIP-CAL SKU (retainer): cal_event_type_id is the sentinel 0;
-  // slot_iso is allowed empty. Short-circuit before Cal logic — Sam manages
-  // the retainer ad-hoc out of band.
+  // H4: required metadata defensive: bad metadata won't succeed on Stripe retries either,
+  // so acknowledge (200) to stop the retry storm + alert Sam for manual recovery.
+  // Every paid SKU books a Cal slot (v4: the sentinel-0 no-Cal retainer path is gone).
   const eventTypeIdInt = parseInt(cal_event_type_id, 10);
-  const skipCal = eventTypeIdInt === 0;
-  const requiresSlot = !skipCal;
-  if (!sku || !name || !customerEmail || Number.isNaN(eventTypeIdInt) || (requiresSlot && !slot_iso)) {
+  if (!sku || !name || !customerEmail || !(eventTypeIdInt > 0) || !slot_iso) {
     await safeAlert(
       `webhook payload missing required fields for ${stripeSessionId}`,
       `One or more required fields missing/invalid: sku=${sku} slot_iso=${slot_iso} name=${name} email=${customerEmail} eventTypeId=${cal_event_type_id}. Manual recovery required.`,
@@ -96,18 +93,6 @@ module.exports = async (req, res) => {
     res.status(200).json({ received: true, error: 'invalid_metadata' });
     return;
   }
-  if (skipCal) {
-    // No Cal booking; payment captured, downstream (retainer kickoff)
-    // handled by Sam manually for now. Alert as audit trail.
-    await safeAlert(
-      `Stripe payment landed (no-Cal SKU) — ${sku}`,
-      `Customer ${customerEmail} (${name}) paid for ${sku}. Stripe session: ${stripeSessionId}. No Cal booking created (retainer flow). Confirm onboarding manually.`,
-    );
-    await safeCreateOrUpdateUser({ session, sku, customerEmail });
-    res.status(200).json({ received: true, skipped_cal: true });
-    return;
-  }
-
   // C1/C2: Idempotency check via PaymentIntent metadata first (O(1), unbounded retention)
   if (paymentIntentId) {
     try {
@@ -149,7 +134,7 @@ module.exports = async (req, res) => {
     if (paymentIntentId && bookingId) {
       try { await updatePaymentIntentMetadata(paymentIntentId, { cal_booking_id: String(bookingId) }); } catch (_) {}
     }
-    await safeCreateOrUpdateUser({ session, sku, customerEmail });
+    await safeCreateOrUpdateUser({ session, sku, customerEmail, slotIso: slot_iso });
     res.status(200).json({ received: true, booked: true });
     return;
   }

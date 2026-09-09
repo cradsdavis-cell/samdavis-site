@@ -2,15 +2,13 @@
 const test = require('node:test');
 const assert = require('node:assert');
 
-// Mock env (v2 SKU env-var names per 2026-06-02 coaching co-primary spec)
+// Mock env (v4 SKU names, 2026-09-09). Price IDs default from lib/skus.js;
+// STRIPE_PRICE_WORKING_SESSION is set here to prove the env override wins.
 process.env.BASE_URL = 'https://crads-ai.com';
-process.env.STRIPE_PRICE_SINGLE_V2 = 'price_test_single';
-process.env.STRIPE_PRICE_BLOCK_V2_FULL = 'price_test_block';
-process.env.STRIPE_PRICE_BLOCK_V2_PAY4_FIRST = 'price_test_block_pay4';
-process.env.STRIPE_PRICE_RETAINER = 'price_test_retainer';
+process.env.STRIPE_PRICE_WORKING_SESSION = 'price_test_working';
+delete process.env.STRIPE_PRICE_GUIDED_SETUP;
 process.env.CAL_EVENT_TYPE_SINGLE = '101';
-process.env.CAL_EVENT_TYPE_BLOCK = '102';
-process.env.CAL_EVENT_TYPE_RETAINER = '104';
+process.env.CAL_EVENT_TYPE_GUIDED_SETUP = '106';
 process.env.CAL_EVENT_TYPE_DISCOVERY = '100';
 
 // Stub lib/stripe + lib/cal BEFORE requiring handler.
@@ -62,13 +60,13 @@ test('returns 400 if sku missing', async () => {
 
 test('returns 400 if slot_iso missing', async () => {
   const res = mockRes();
-  await handler(mockReq({ sku: 'single-session', email: 'a@b.com', name: 'X' }), res);
+  await handler(mockReq({ sku: 'working-session', email: 'a@b.com', name: 'X' }), res);
   assert.strictEqual(res.statusCode, 400);
 });
 
 test('returns 400 if email malformed', async () => {
   const res = mockRes();
-  await handler(mockReq({ sku: 'single-session', slot_iso: FUTURE_SLOT, email: 'not-an-email', name: 'X' }), res);
+  await handler(mockReq({ sku: 'working-session', slot_iso: FUTURE_SLOT, email: 'not-an-email', name: 'X' }), res);
   assert.strictEqual(res.statusCode, 400);
   assert.strictEqual(res.body.error, 'invalid_email');
 });
@@ -76,7 +74,7 @@ test('returns 400 if email malformed', async () => {
 test('returns 400 if slot_iso in past', async () => {
   const res = mockRes();
   const pastSlot = new Date(Date.now() - 86400000).toISOString();
-  await handler(mockReq({ sku: 'single-session', slot_iso: pastSlot, email: 'a@b.com', name: 'X' }), res);
+  await handler(mockReq({ sku: 'working-session', slot_iso: pastSlot, email: 'a@b.com', name: 'X' }), res);
   assert.strictEqual(res.statusCode, 400);
   assert.strictEqual(res.body.error, 'slot_in_past');
 });
@@ -91,7 +89,7 @@ test('OPTIONS preflight returns 204 with CORS headers', async () => {
 test('creates Stripe session and returns checkout_url', async () => {
   const res = mockRes();
   await handler(mockReq({
-    sku: 'single-session',
+    sku: 'working-session',
     slot_iso: FUTURE_SLOT,
     email: 'alex@example.com',
     name: 'Alex Mills',
@@ -138,49 +136,59 @@ test('name sanitization strips URLs', async () => {
   assert.ok(!/https?:/.test(captured.name), `name "${captured.name}" should have URL stripped`);
 });
 
-// --- Continuation Retainer (no-Cal / subscription SKU) ---
+// --- v4 SKUs (2026-09-09) ---
 
-test('continuation-retainer: returns 200 with subscription mode, no Cal call', async () => {
+test('guided-setup: payment mode, slot required, default price id, 60-min Cal type', async () => {
   resetStripeCalls(); resetCalCalls();
   const res = mockRes();
-  await handler(mockReq({
-    sku: 'continuation-retainer',
-    email: 'retainer@example.com',
-    name: 'Retainer Client',
-  }), res);
+  await handler(mockReq({ sku: 'guided-setup', slot_iso: FUTURE_SLOT, email: 'g@example.com', name: 'G' }), res);
   assert.strictEqual(res.statusCode, 200);
   assert.strictEqual(STRIPE_CALLS.length, 1);
   const args = STRIPE_CALLS[0];
-  assert.strictEqual(args.sku, 'continuation-retainer');
-  assert.strictEqual(args.priceId, 'price_test_retainer');
-  assert.strictEqual(args.mode, 'subscription', 'retainer must use Stripe subscription mode');
-  assert.strictEqual(CAL_CALLS.length, 0, 'Cal.createBooking should NOT be called for retainer');
-});
-
-test('single-session: still uses payment mode + requires slot_iso (regression)', async () => {
-  resetStripeCalls();
-  const res = mockRes();
-  await handler(mockReq({
-    sku: 'single-session',
-    slot_iso: FUTURE_SLOT,
-    email: 'alex@example.com',
-    name: 'Alex',
-  }), res);
-  assert.strictEqual(res.statusCode, 200);
-  assert.strictEqual(STRIPE_CALLS.length, 1);
-  const args = STRIPE_CALLS[0];
-  assert.strictEqual(args.mode, 'payment');
+  assert.strictEqual(args.sku, 'guided-setup');
+  assert.strictEqual(args.priceId, 'price_1UDZF62MeTK4rlQYWqYrGVnJ', 'live price id is the in-code default');
+  assert.strictEqual(args.calEventTypeId, 106);
   assert.strictEqual(args.slotIso, FUTURE_SLOT);
+  assert.ok(!('mode' in args) || args.mode === undefined || args.mode === 'payment', 'no subscription mode survives');
+  assert.strictEqual(CAL_CALLS.length, 0, 'Cal is booked by the webhook, never at checkout');
 });
 
-test('single-session: still rejects missing slot_iso (regression — non-NO_CAL SKU)', async () => {
-  resetStripeCalls();
+test('guided-setup: rejects a missing slot (no out-of-band SKU survives)', async () => {
   const res = mockRes();
-  await handler(mockReq({
-    sku: 'single-session',
-    email: 'alex@example.com',
-    name: 'Alex',
-  }), res);
+  await handler(mockReq({ sku: 'guided-setup', email: 'g@example.com', name: 'G' }), res);
   assert.strictEqual(res.statusCode, 400);
   assert.strictEqual(res.body.error, 'invalid_slot_iso');
+});
+
+test('working-session: env override wins over the default price id, 90-min Cal type', async () => {
+  resetStripeCalls();
+  const res = mockRes();
+  await handler(mockReq({ sku: 'working-session', slot_iso: FUTURE_SLOT, email: 'w@example.com', name: 'W' }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(STRIPE_CALLS[0].priceId, 'price_test_working');
+  assert.strictEqual(STRIPE_CALLS[0].calEventTypeId, 101);
+});
+
+test('retired SKUs cannot be bought: coaching-block, single-session, continuation-retainer are unknown_sku', async () => {
+  for (const sku of ['coaching-block', 'coaching-block-pay4', 'single-session', 'continuation-retainer']) {
+    resetStripeCalls();
+    const res = mockRes();
+    await handler(mockReq({ sku, slot_iso: FUTURE_SLOT, email: 'x@example.com', name: 'X' }), res);
+    assert.strictEqual(res.statusCode, 400, sku);
+    assert.strictEqual(res.body.error, 'unknown_sku', sku);
+    assert.strictEqual(STRIPE_CALLS.length, 0, `${sku} reached Stripe`);
+  }
+});
+
+test('lib/skus: calEventTypeIdFor still resolves legacy slugs for the portal', () => {
+  process.env.CAL_EVENT_TYPE_BLOCK = '102';
+  const { calEventTypeIdFor, isPurchasable, getSku } = require('../lib/skus');
+  assert.strictEqual(calEventTypeIdFor('coaching-block'), 102);
+  assert.strictEqual(calEventTypeIdFor('guided-setup'), 106);
+  assert.strictEqual(isPurchasable('coaching-block'), false);
+  assert.strictEqual(isPurchasable('guided-setup'), true);
+  assert.throws(() => getSku('coaching-block'), /Unknown SKU/);
+  assert.strictEqual(getSku('guided-setup').sessions, 2);
+  assert.strictEqual(getSku('guided-setup').price_aud, 700);
+  assert.strictEqual(getSku('working-session').price_aud, 350);
 });
