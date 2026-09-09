@@ -167,7 +167,7 @@ test('working-session: env override wins over the default price id, 90-min Cal t
   await handler(mockReq({ sku: 'working-session', slot_iso: FUTURE_SLOT, email: 'w@example.com', name: 'W' }), res);
   assert.strictEqual(res.statusCode, 200);
   assert.strictEqual(STRIPE_CALLS[0].priceId, 'price_test_working');
-  assert.strictEqual(STRIPE_CALLS[0].calEventTypeId, 101);
+  assert.strictEqual(STRIPE_CALLS[0].calEventTypeId, 109);
 });
 
 test('retired SKUs cannot be bought: coaching-block, single-session, continuation-retainer are unknown_sku', async () => {
