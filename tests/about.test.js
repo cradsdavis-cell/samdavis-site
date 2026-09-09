@@ -14,7 +14,7 @@ function readAbout() {
 
 test('about page has the canonical head', () => {
   const html = readAbout();
-  assert.ok(html.includes('<title>Meet Sam — AI coach for founders</title>'),
+  assert.ok(html.includes('<title>About Sam · Crads-AI</title>'),
     'expected canonical title');
   assert.ok(html.includes('href="/lib/site.css"'),
     'expected shared CSS link');
@@ -48,7 +48,7 @@ test('about page has identity rail with name', () => {
 
 test('about page has the four main section headings + intro heading', () => {
   const html = readAbout();
-  assert.ok(html.includes('>Hi — I\'m Sam.<'), 'expected intro heading');
+  assert.ok(html.includes('>Hi, I\'m Sam.<'), 'expected intro heading');
   assert.ok(html.includes('>Experience<'), 'expected Experience heading');
   assert.match(html, /<h2[^>]*>Education</, 'expected Education H2 heading');
   assert.ok(html.includes('>Side practice<'), 'expected Side practice heading');
@@ -64,7 +64,7 @@ test('about page renders the canonical site-footer', () => {
 test('identity rail renders Skills and Recognition blocks (Education now in main column)', () => {
   const html = readAbout();
   assert.ok(html.includes('class="about-sidebar"'), 'expected sidebar');
-  assert.ok(html.includes('AI coach · Builder · Translator'), 'expected role line');
+  assert.ok(html.includes('Builder · Teacher · Translator'), 'expected role line');
   assert.match(html, />What I'm good at</, 'expected skills heading');
   assert.match(html, />Recognition</, 'expected Recognition heading');
   // Real photo, not the placeholder illustration
@@ -122,7 +122,7 @@ test('about page renders the real-testimonials proof strip anchor', () => {
 test('experience renders 9 accordion rows in reverse-chronological order', () => {
   const h = readAbout();
   const roleMarkers = [
-    'Independent AI coach',
+    'Building Crads-AI',
     'SEAF / UWA',
     'AMME, USYD',
     'DARE ARC',

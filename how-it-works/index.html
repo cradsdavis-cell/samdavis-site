@@ -210,7 +210,7 @@
   .fc-layers-grid .num { font-family: var(--serif); color: var(--accent); margin-right: 0.5em; }
   .fc-layers-grid .gloss { color: var(--ink-faint); }
 
-  /* SVG classes — one visual grammar for all four stages */
+  /* SVG classes: one visual grammar for all four stages */
   .fc-ring  { fill: none; stroke: var(--good); stroke-width: 2; }
   .fc-spoke { stroke: var(--good); stroke-width: 2; }
   .fc-node  { fill: var(--bg-soft); stroke: var(--good); stroke-width: 1.5; }
@@ -265,19 +265,22 @@
     .fourc-row .fc-img { order: 2; }
     .fc-layers-grid { grid-template-columns: 1fr; }
   }
+  .lives-list { list-style: none; padding: 0; margin: var(--space-3) 0 0; display: grid; gap: 12px; }
+  .lives-list li { padding-left: 22px; position: relative; line-height: 1.55; }
+  .lives-list li::before { content: ""; position: absolute; left: 0; top: 10px; width: 10px; height: 10px; border-radius: 50%; background: var(--good); }
 </style>
 <!-- SEO: canonical + social cards -->
 <link rel="canonical" href="https://crads-ai.com/how-it-works">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:site_name" content="Crads-AI">
 <meta property="og:url" content="https://crads-ai.com/how-it-works">
-<meta property="og:title" content="How it works — Sam Davis">
+<meta property="og:title" content="How it works · Crads-AI">
 <meta property="og:description" content="What a Crads-AI assistant is made of: four layers, Context, Connections, Capabilities and Cadence, and how the app builds them with you.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="How it works — Sam Davis">
+<meta name="twitter:title" content="How it works · Crads-AI">
 <meta name="twitter:description" content="What a Crads-AI assistant is made of: four layers, Context, Connections, Capabilities and Cadence, and how the app builds them with you.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
@@ -328,16 +331,16 @@
         <p class="fc-gloss">What it knows about you.</p>
         <p>Plain files, organised in layers. Mine has eight:</p>
         <div class="fc-layers-grid">
-          <div><span class="num">1</span>North Star <span class="gloss">— why</span></div>
-          <div><span class="num">2</span>Philosophy <span class="gloss">— how you think</span></div>
-          <div><span class="num">3</span>Self <span class="gloss">— who you are</span></div>
-          <div><span class="num">4</span>Network <span class="gloss">— your people</span></div>
-          <div><span class="num">5</span>Past <span class="gloss">— where you've been</span></div>
-          <div><span class="num">6</span>Goals <span class="gloss">— where you're going</span></div>
-          <div><span class="num">7</span>Tasks <span class="gloss">— what's on now</span></div>
-          <div><span class="num">8</span>Workflow <span class="gloss">— how your week runs</span></div>
+          <div><span class="num">1</span>North Star <span class="gloss">: why</span></div>
+          <div><span class="num">2</span>Philosophy <span class="gloss">: how you think</span></div>
+          <div><span class="num">3</span>Self <span class="gloss">: who you are</span></div>
+          <div><span class="num">4</span>Network <span class="gloss">: your people</span></div>
+          <div><span class="num">5</span>Past <span class="gloss">: where you've been</span></div>
+          <div><span class="num">6</span>Goals <span class="gloss">: where you're going</span></div>
+          <div><span class="num">7</span>Tasks <span class="gloss">: what's on now</span></div>
+          <div><span class="num">8</span>Workflow <span class="gloss">: how your week runs</span></div>
         </div>
-        <p>Written down once — never explained twice.</p>
+        <p>Written down once, never explained twice.</p>
       </div>
       <div class="fc-img">
         <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Eight concentric rings of context around you at the core.">
@@ -372,7 +375,7 @@
         <p>Each one is a doorway you open once.</p>
       </div>
       <div class="fc-img">
-        <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The context rings recede as six tools — email, calendar, tasks, WhatsApp, docs and CRM — connect to you by spokes.">
+        <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The context rings recede as six tools, email, calendar, tasks, WhatsApp, docs and CRM, connect to you by spokes.">
           <g opacity=".38">
             <circle class="fc-ring" cx="320" cy="260" r="52"  opacity=".80"/>
             <circle class="fc-ring" cx="320" cy="260" r="76"  opacity=".66"/>
@@ -412,7 +415,7 @@
         <p class="cnum">C3</p>
         <h3>Capabilities</h3>
         <p class="fc-gloss">Blueprints for your workflows.</p>
-        <p>A capability is a written recipe — the steps you'd give a new hire, saved so it runs the same way every time:</p>
+        <p>A capability is a written recipe: the steps you'd give a new hire, saved so it runs the same way every time:</p>
         <div class="fc-chips">
           <span class="chip alt">Morning brief</span><span class="chip alt">Inbox sweep</span>
           <span class="chip alt">Client debrief</span><span class="chip alt">Weekly review</span>
@@ -420,7 +423,7 @@
         <p>Describe the workflow once. Now it's a button.</p>
       </div>
       <div class="fc-img">
-        <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Dashed blueprint routes appear across the connected tools — morning brief, inbox sweep, client debrief, weekly review.">
+        <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Dashed blueprint routes appear across the connected tools, morning brief, inbox sweep, client debrief, weekly review.">
           <g opacity=".25">
             <circle class="fc-ring" cx="320" cy="260" r="52"  opacity=".80"/>
             <circle class="fc-ring" cx="320" cy="260" r="76"  opacity=".66"/>
@@ -475,7 +478,7 @@
         <p class="cnum">C4</p>
         <h3>Cadence</h3>
         <p class="fc-gloss">The heartbeat.</p>
-        <p>Jobs that run on a schedule without being asked — the morning brief is waiting before you sit down.</p>
+        <p>Jobs that run on a schedule without being asked: the morning brief is waiting before you sit down.</p>
         <p>You've hired an executive assistant. Give it feedback, and let go of the reins a little more each week.</p>
       </div>
       <div class="fc-img">
@@ -526,6 +529,17 @@
   </section>
 
   <section class="section section-tight wrap how-it-works">
+
+    <!-- Where it lives -->
+    <div class="sub-block reveal-on-scroll" id="where-it-lives">
+      <h2>Where it lives</h2>
+      <p>Three places, all yours. Nothing sits with Crads-AI, because there is nothing central to sit with.</p>
+      <ul class="lives-list">
+        <li><strong>The app, on your laptop.</strong> Windows or Mac. It builds the server, then it is how you open and steer your assistant every day.</li>
+        <li><strong>The mineral, on your server.</strong> A small machine in your own hosting account, built by the app with your own API token, holding only your computer's key. This is where the assistant runs and where its scheduled jobs happen while you sleep.</li>
+        <li><strong>The brain, on your GitHub.</strong> Everything it knows about you, as plain files in a private repository you own, pushed there every night. Lose the server and you lose nothing.</li>
+      </ul>
+    </div>
 
     <!-- After -->
     <div class="sub-block reveal-on-scroll">

@@ -49,11 +49,15 @@ test('the v4 prices are the only prices on the offer and book pages', () => {
   }
 });
 
-// Em dashes: zero in every page rewritten for v4 and in the shared JS. The
-// list grows as pages are rewritten; a page is added the commit it is cleaned.
-const NO_EM_DASH = ['offer/index.html', 'book/index.html', 'book/guided-setup.html', 'book/working-session.html', 'lib/site.js', 'lib/downloadPage.js', 'README.md', 'archive/README.md'];
-test('rewritten pages carry no em dashes', () => {
-  for (const rel of NO_EM_DASH) {
+// Em dashes: zero on every served site-owned page and in the shared JS
+// (standing rule 2026-07-06; the last pages were swept 2026-09-09). Docs pages
+// are gated in the app repo; lib/content/ is a client deliverable, not copy.
+const NO_EM_DASH = () => [
+  ...servedFiles().filter((f) => /\.html$/.test(f) && !f.startsWith('docs/') && !f.startsWith('account/') && !f.startsWith('lib/content/')),
+  'lib/site.js', 'lib/downloadPage.js', 'README.md', 'archive/README.md',
+];
+test('served pages carry no em dashes', () => {
+  for (const rel of NO_EM_DASH()) {
     const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');
     const i = src.indexOf('—');
     assert.strictEqual(i, -1, `${rel} has an em dash near: ${src.slice(Math.max(0, i - 40), i + 40)}`);

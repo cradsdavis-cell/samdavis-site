@@ -46,6 +46,7 @@ test('how-it-works page keeps the four layers and drops the coaching arc', () =>
     assert.ok(html.includes(h), `expected layer heading ${h}`);
   }
   assert.ok(html.includes('id="the-four-layers"'), 'expected the four-layers section');
+  assert.match(html, />Where it lives</, 'expected the where-it-lives section');
   assert.match(html, />What you have once it is running</, 'expected the after section');
   assert.match(html, />Free to run\. Paid when you want a hand\.</, 'expected the where-Sam-comes-in card');
   for (const gone of ['The 4-session arc', 'Everything you get', 'Pack 0', 'Pack 1', 'Pack 2', 'Pack 3', 'private dashboard', 'Continuation Retainer', 'Coaching Block']) {
