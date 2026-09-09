@@ -20,3 +20,9 @@ scripts/audit-shots.mjs
 
 # Brand kit source — internal (carries gap notes + contact details)
 brand/
+
+# Build/maintenance scripts: never runtime, never public
+scripts/
+
+# Retired code kept as the paper trail (README inside). Never served.
+archive/

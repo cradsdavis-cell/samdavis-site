@@ -11,22 +11,23 @@
   <link rel="stylesheet" href="/book/_styles.css">
 </head>
 <body>
-  <nav class="site-nav-bar">
-    <a href="/" class="brand">
-      <img src="/lib/img/sam-illustration-sm.png" alt="">
-      <span class="wordmark">crads-<span class="accent">ai</span></span>
-    </a>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/overview">Overview</a>
-      <a href="/dashboard">Dashboard</a>
-      <a href="/about">About</a>
-      <a href="/how-it-works">How it works</a>
-      <a href="/offer">Offer</a>
-      <a href="/book" class="current">Book →</a>
-      <a href="/account/login" class="nav-account">Sign in</a>
-    </div>
-  </nav>
+  <nav class="site-nav-bar" aria-label="Primary">
+  <a href="/" class="brand" aria-label="crads-ai home">
+    <img src="/lib/img/sam-illustration-sm.png" alt="">
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
+  </a>
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav-links" aria-label="Open menu">
+    <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
+  </button>
+  <div class="nav-links" id="site-nav-links">
+    <a href="/docs" class="nav-simple">Docs</a>
+    <a href="/how-it-works" class="nav-simple">How it works</a>
+    <a href="/offer" class="nav-simple">Setup and support</a>
+    <a href="/about" class="nav-simple">About</a>
+    <a href="/book" class="nav-simple nav-book current">Book a call</a>
+    <a href="/download" class="nav-simple nav-cta">Download</a>
+  </div>
+</nav>
   <div class="book-container">
     <div class="book-header">
       <h1>Single Coaching Session</h1>

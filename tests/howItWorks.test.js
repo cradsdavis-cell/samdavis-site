@@ -3,6 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
+const { NAV_ITEMS } = require('../lib/site.js');
 
 function readHIW() {
   return fs.readFileSync(
@@ -31,7 +32,7 @@ test('how-it-works page renders the canonical nav with How it works marked curre
     'expected canonical site-nav-bar');
   assert.match(html, /<a[^>]*href="\/how-it-works"[^>]*class="[^"]*\bcurrent\b[^"]*"[^>]*>How it works<\/a>/,
     'expected How it works link marked current (tolerates a class list)');
-  for (const href of ['/', '/overview', '/about', '/offer', '/book']) {
+  for (const href of ['/', ...NAV_ITEMS.map((i) => i.href)]) {
     assert.ok(html.includes(`href="${href}"`), `expected nav link to ${href}`);
   }
 });
@@ -73,35 +74,4 @@ test('how-it-works page renders the canonical site-footer', () => {
     'expected canonical site-footer');
 });
 
-const NAV_PAGES = [
-  'index.html',
-  'overview/index.html',
-  'about/index.html',
-  'offer/index.html',
-  'thanks.html',
-  'booking-failed.html',
-  'book/index.html',
-  'book/coaching-block.html',
-  'book/discovery.html',
-  'book/ea-basic-build.html',
-  'book/single-session.html',
-];
-
-// 2026-08-16: was "How it works between About and Offer". In the grouped nav
-// /how-it-works sits inside the Coaching menu and /about is a top-level link
-// after it, so the ordering inverted and this could never pass again. The
-// destination check is in tests/about.test.js; here we keep the pairing that
-// still means something, that /how-it-works ships alongside /offer wherever the
-// Coaching menu exists.
-test('every nav-bearing page carries /how-it-works next to /offer', () => {
-  for (const rel of NAV_PAGES) {
-    const fp = path.join(__dirname, '..', rel);
-    const src = fs.readFileSync(fp, 'utf8');
-    assert.ok(src.includes('<a href="/how-it-works"'), `${rel}: missing How it works link`);
-    assert.ok(src.includes('<a href="/offer"'), `${rel}: missing Offer link`);
-    const coaching = src.match(/<div class="nav-group"[^>]*data-group="coaching"[^>]*>[\s\S]*?<\/div>\s*<\/div>/);
-    if (!coaching) continue;
-    assert.ok(coaching[0].includes('/how-it-works'),
-      `${rel}: /how-it-works must sit in the Coaching group`);
-  }
-});
+// 2026-09-09: the per-page nav loop moved to tests/navConsistency.test.js.
