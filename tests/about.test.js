@@ -3,6 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert');
 const fs = require('fs');
 const path = require('path');
+const { NAV_ITEMS } = require('../lib/site.js');
 
 function readAbout() {
   return fs.readFileSync(
@@ -13,7 +14,7 @@ function readAbout() {
 
 test('about page has the canonical head', () => {
   const html = readAbout();
-  assert.ok(html.includes('<title>Meet Sam — AI coach for founders</title>'),
+  assert.ok(html.includes('<title>About Sam · Crads-AI</title>'),
     'expected canonical title');
   assert.ok(html.includes('href="/lib/site.css"'),
     'expected shared CSS link');
@@ -34,7 +35,7 @@ test('about page renders the canonical nav with About marked current', () => {
     'expected canonical site-nav-bar');
   assert.match(html, /<a[^>]*href="\/about"[^>]*class="[^"]*\bcurrent\b[^"]*"[^>]*>About<\/a>/,
     'expected About link marked current (tolerates a class list)');
-  for (const href of ['/', '/overview', '/offer', '/book']) {
+  for (const href of ['/', ...NAV_ITEMS.map((i) => i.href)]) {
     assert.ok(html.includes(`href="${href}"`), `expected nav link to ${href}`);
   }
 });
@@ -47,7 +48,7 @@ test('about page has identity rail with name', () => {
 
 test('about page has the four main section headings + intro heading', () => {
   const html = readAbout();
-  assert.ok(html.includes('>Hi — I\'m Sam.<'), 'expected intro heading');
+  assert.ok(html.includes('>Hi, I\'m Sam.<'), 'expected intro heading');
   assert.ok(html.includes('>Experience<'), 'expected Experience heading');
   assert.match(html, /<h2[^>]*>Education</, 'expected Education H2 heading');
   assert.ok(html.includes('>Side practice<'), 'expected Side practice heading');
@@ -63,7 +64,7 @@ test('about page renders the canonical site-footer', () => {
 test('identity rail renders Skills and Recognition blocks (Education now in main column)', () => {
   const html = readAbout();
   assert.ok(html.includes('class="about-sidebar"'), 'expected sidebar');
-  assert.ok(html.includes('AI coach · Builder · Translator'), 'expected role line');
+  assert.ok(html.includes('Builder · Teacher · Translator'), 'expected role line');
   assert.match(html, />What I'm good at</, 'expected skills heading');
   assert.match(html, />Recognition</, 'expected Recognition heading');
   // Real photo, not the placeholder illustration
@@ -103,7 +104,6 @@ test('about page intro section renders with sibling-page pointers', () => {
     'expected the Welsh identity line');
   assert.match(h, /teacher before I'm a technologist/,
     'expected the teacher-first positioning line');
-  assert.match(h, /href="\/overview"/, 'expected /overview sibling link');
   assert.match(h, /href="\/offer"/, 'expected /offer sibling link');
 });
 
@@ -115,49 +115,14 @@ test('about page renders the real-testimonials proof strip anchor', () => {
     'expected shared testimonials renderer script');
 });
 
-const NAV_PAGES = [
-  'index.html',
-  'overview/index.html',
-  'offer/index.html',
-  'thanks.html',
-  'booking-failed.html',
-  'book/index.html',
-  'book/coaching-block.html',
-  'book/discovery.html',
-  'book/ea-basic-build.html',
-  'book/single-session.html',
-];
-
-// 2026-08-16: was "About between Overview and Offer", which described the
-// retired flat nav. In the grouped nav /overview sits in the System menu and
-// /about is a top-level link AFTER /offer, so the ordering assertion could
-// never pass again, and four book/ pages still carry the old flat nav, so no
-// single ordering is true site-wide. What it was really protecting is that no
-// page silently loses a nav destination. That is what it asserts now, plus the
-// grouping where the grouped nav is present.
-test('every nav-bearing page keeps all four nav destinations', () => {
-  for (const rel of NAV_PAGES) {
-    const fp = path.join(__dirname, '..', rel);
-    const src = fs.readFileSync(fp, 'utf8');
-    for (const href of ['/overview', '/about', '/how-it-works', '/offer']) {
-      assert.ok(src.includes(`<a href="${href}"`), `${rel}: missing ${href} link`);
-    }
-    // Grouped nav only: /overview belongs to the System menu, /how-it-works and
-    // /offer to the Coaching menu. The legacy flat nav (book/*) has no groups.
-    const coaching = src.match(/<div class="nav-group"[^>]*data-group="coaching"[^>]*>[\s\S]*?<\/div>\s*<\/div>/);
-    if (!coaching) continue;
-    const system = src.match(/<div class="nav-group"[^>]*data-group="system"[^>]*>[\s\S]*?<\/div>\s*<\/div>/);
-    assert.ok(system && system[0].includes('/overview'),
-      `${rel}: /overview must sit in the System group`);
-    assert.ok(coaching[0].includes('/how-it-works') && coaching[0].includes('/offer'),
-      `${rel}: /how-it-works and /offer must sit in the Coaching group`);
-  }
-});
+// 2026-09-09: the per-page nav-destination loop that lived here moved to
+// tests/navConsistency.test.js, which pins every served page's static nav to
+// lib/site.js navHTML() byte for byte (NAV_ITEMS is the one list).
 
 test('experience renders 9 accordion rows in reverse-chronological order', () => {
   const h = readAbout();
   const roleMarkers = [
-    'Independent AI coach',
+    'Building Crads-AI',
     'SEAF / UWA',
     'AMME, USYD',
     'DARE ARC',

@@ -4,24 +4,20 @@
 // The beta gate lived in lib/downloadGate.js; archived with its test.
 //
 // Routes (wired in vercel.json):
-//   GET  /download          the page
+//   GET  /download          the page (sizes read from the GitHub release, cached)
 //   GET  /download/windows  302 to the exe
 //   GET  /download/mac      302 to the zip
 //   POST /download          303 back to /download (old bookmarked password forms)
 'use strict';
 
-const { PAGE_HTML } = require('../lib/downloadPage');
+const { renderDownloadPage } = require('../lib/downloadPage');
+const { releaseAssets } = require('../lib/releaseAssets');
 
 const REL = 'https://github.com/cradsdavis-cell/crads-ai-app/releases/download/wizard-app';
 const ASSETS = { windows: `${REL}/crads-ai.exe`, mac: `${REL}/crads-ai-mac.zip` };
 
-function noStore(res) {
-  res.setHeader('Cache-Control', 'no-store, max-age=0');
-  res.setHeader('Referrer-Policy', 'no-referrer');
-}
-
 module.exports = async (req, res) => {
-  noStore(res);
+  res.setHeader('Referrer-Policy', 'no-referrer');
   const asset = String((req.query && req.query.asset) || '').toLowerCase();
 
   if (req.method === 'POST') { res.redirect(303, '/download'); return; }
@@ -31,10 +27,14 @@ module.exports = async (req, res) => {
     return;
   }
   if (asset) {
+    // the 302s stay uncached so a re-cut release is picked up at once
+    res.setHeader('Cache-Control', 'no-store, max-age=0');
     if (!ASSETS[asset]) { res.status(404).end(); return; }
     res.redirect(302, ASSETS[asset]);
     return;
   }
+  const assets = await releaseAssets();
+  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  res.status(200).send(PAGE_HTML);
+  res.status(200).send(renderDownloadPage({ assets }));
 };

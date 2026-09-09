@@ -4,7 +4,7 @@ process.env.SESSION_SECRET = 'test-secret-32-chars-minimum-ok-yes';
 process.env.BASE_URL = 'https://crads-ai.com';
 const test = require('node:test');
 const assert = require('node:assert');
-const { bookSession, bookingSkuFor } = require('../api/account/book');
+const { bookSession, bookingSkuFor, earliestAllowedMs } = require('../api/account/book');
 
 const NOW = Date.parse('2026-06-23T00:00:00Z');
 const FUTURE = '2026-06-25T14:00:00+10:00';
@@ -17,7 +17,7 @@ function fakes(overrides = {}) {
     findBookingByStripeSession: overrides.findBooking || (async () => ({ ok: true, body: { data: [] } })),
     createBooking: overrides.createBooking || (async (args) => { calls.createBooking.push(args); return { ok: true, status: 200, body: { id: 'bk_1' } }; }),
   };
-  const skus = { getSku: () => ({ cal_event_type_id: 777 }) };
+  const skus = { calEventTypeIdFor: () => 777 };
   return { kv, cal, skus, calls };
 }
 
@@ -101,4 +101,53 @@ test('bookingSkuFor prefers the active block, falls back to retainer', () => {
   assert.strictEqual(bookingSkuFor({ activeBlock: { type: 'coaching-block' } }), 'coaching-block');
   assert.strictEqual(bookingSkuFor({ activeBlock: null, isRetainer: true }), 'continuation-retainer');
   assert.strictEqual(bookingSkuFor({ activeBlock: null, isRetainer: false }), null);
+});
+
+// --- v4 guided setup (2026-09-09): two sessions, at least a day apart ---
+
+function guidedUser(firstSlot = '2026-06-24T10:00:00+10:00') {
+  return { email: 'g@y.com', name: 'G', state: 'pre-s1',
+    engagements: [{ type: 'guided-setup', sessions_total: 2, sessions_used: 1, first_slot_iso: firstSlot }] };
+}
+
+test('guided setup: session 2 books from the portal and completes the balance', async () => {
+  const { kv, cal, skus, calls } = fakes();
+  const user = guidedUser('2026-06-24T10:00:00+10:00');
+  const r = await bookSession({ kv, cal, skus, user, slotIso: '2026-06-26T10:00:00+10:00', now: NOW });
+  assert.strictEqual(r.ok, true);
+  assert.strictEqual(r.sku, 'guided-setup');
+  assert.strictEqual(calls.createBooking.length, 1);
+  assert.strictEqual(user.engagements[0].sessions_used, 2);
+  assert.strictEqual(user.state, 'between-s1-s2');
+});
+
+test('guided setup: session 2 inside 24h of session 1 is refused as too_soon, Cal untouched', async () => {
+  const { kv, cal, skus, calls } = fakes();
+  const user = guidedUser('2026-06-24T10:00:00+10:00');
+  const r = await bookSession({ kv, cal, skus, user, slotIso: '2026-06-25T09:00:00+10:00', now: NOW });
+  assert.strictEqual(r.ok, false);
+  assert.strictEqual(r.status, 400);
+  assert.strictEqual(r.error, 'too_soon');
+  assert.strictEqual(r.earliest_iso, new Date(Date.parse('2026-06-24T10:00:00+10:00') + 86400000).toISOString());
+  assert.strictEqual(calls.createBooking.length, 0);
+  assert.strictEqual(user.engagements[0].sessions_used, 1);
+});
+
+test('guided setup: exactly 24h later is allowed; no first slot on record means no gate', async () => {
+  const { kv, cal, skus } = fakes();
+  const ok = await bookSession({ kv, cal, skus, user: guidedUser('2026-06-24T10:00:00+10:00'), slotIso: '2026-06-25T10:00:00+10:00', now: NOW });
+  assert.strictEqual(ok.ok, true);
+  const { kv: kv2, cal: cal2, skus: skus2 } = fakes();
+  const u = guidedUser(); delete u.engagements[0].first_slot_iso;
+  const ungated = await bookSession({ kv: kv2, cal: cal2, skus: skus2, user: u, slotIso: '2026-06-24T10:30:00+10:00', now: NOW });
+  assert.strictEqual(ungated.ok, true);
+  assert.strictEqual(earliestAllowedMs({ type: 'coaching-block', first_slot_iso: '2026-06-24T10:00:00+10:00' }), null, 'only the guided setup carries a gap');
+});
+
+test('guided setup: after both sessions nothing is left to book', async () => {
+  const { kv, cal, skus, calls } = fakes();
+  const user = { email: 'g@y.com', state: 'between-s1-s2', engagements: [{ type: 'guided-setup', sessions_total: 2, sessions_used: 2 }] };
+  const r = await bookSession({ kv, cal, skus, user, slotIso: FUTURE, now: NOW });
+  assert.strictEqual(r.status, 403);
+  assert.strictEqual(calls.createBooking.length, 0);
 });

@@ -5,15 +5,32 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sam Davis — AI coaching for founders</title>
-<meta name="description" content="I coach founders to build their own AI executive assistant — so the admin handles itself and your best hours go to the work that matters. Four sessions, and you own it.">
+<title>Crads-AI · A free, self-hosted AI assistant that knows you</title>
+<meta name="description" content="Crads-AI is a free, open-source AI assistant that runs on a server you own. It learns your voice, your people and your week, then does the admin. Download it, follow the first hour in the docs, and it is yours.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://crads-ai.com/#crads-ai",
+  "name": "Crads-AI",
+  "url": "https://crads-ai.com",
+  "downloadUrl": "https://crads-ai.com/download",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Windows, macOS",
+  "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "AUD" },
+  "description": "A free, open-source AI assistant that runs on a server you own. It learns your voice, your people and your week, then does the admin.",
+  "author": { "@id": "https://crads-ai.com/#sam-davis" }
+}
+</script>
 <script defer src="/lib/testimonialsRender.js"></script>
 <style>
   .hero {
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: 0.95fr 1.05fr;
     align-items: center;
     gap: var(--space-5);
     padding: var(--space-7) var(--space-6);
@@ -22,8 +39,39 @@
     border-radius: 20px;
   }
   .hero-copy { order: 1; }
-  .hero-illustration { order: 2; display: flex; justify-content: center; }
-  .hero-illustration img { width: 100%; max-width: 280px; height: auto; }
+  .hero-shot { order: 2; margin-right: calc(-1 * var(--space-4)); }
+  .hero-shot img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--rule);
+    box-shadow: 0 18px 50px rgba(23, 61, 42, .16); background: #F6F3EA; }
+
+  /* Product screenshots with numbered callouts. Same grammar as the docs
+     (shell.mjs in the app repo): boxes are percentages of the image, resolved
+     by the rig from the live page, so a callout follows its control. */
+  .shot-figure { max-width: 900px; margin: var(--space-4) auto 0; }
+  .shot-frame { position: relative; display: block; line-height: 0; border: 1px solid var(--rule); border-radius: 12px;
+    overflow: hidden; box-shadow: 0 10px 40px rgba(30, 41, 30, .12); background: #F6F3EA; }
+  .shot-frame img { width: 100%; height: auto; display: block; }
+  .shot-mark { position: absolute; box-sizing: border-box; border: 2px solid var(--accent); border-radius: 6px;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, .55); pointer-events: none; }
+  .shot-mark b { position: absolute; left: -11px; top: -11px; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-family: var(--sans); font-size: 12.5px; font-weight: 700;
+    line-height: 22px; text-align: center; box-shadow: 0 1px 3px rgba(0, 0, 0, .28); }
+  .shot-legend { list-style: none; counter-reset: mark; margin: var(--space-2) auto 0; padding: 0; font-family: var(--sans);
+    font-size: 14px; color: var(--ink-soft); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 4px 24px; }
+  .shot-legend li { counter-increment: mark; position: relative; padding: 4px 0 4px 30px; line-height: 1.5; }
+  .shot-legend li::before { content: counter(mark); position: absolute; left: 0; top: 5px; width: 20px; height: 20px;
+    border-radius: 50%; background: var(--accent); color: #fff; font-size: 11.5px; font-weight: 700; line-height: 20px; text-align: center; }
+  .shot-figure figcaption { text-align: center; font-size: 14.5px; font-style: italic; color: var(--ink-soft); margin-top: var(--space-2); }
+
+  .steps-grid { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+  .steps-grid li { background: var(--bg-card); border-radius: 14px; padding: var(--space-3); }
+  .steps-grid .step-n { display: inline-block; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff;
+    font-weight: 700; text-align: center; line-height: 30px; font-family: var(--sans); margin-bottom: var(--space-2); }
+  .steps-grid h3 { margin: 0 0 8px; font-size: 20px; }
+  .steps-grid p { margin: 0 0 12px; font-size: 15px; line-height: 1.55; color: var(--ink-soft); }
+  .steps-grid a { font-weight: 600; }
+  .free-list { list-style: none; padding: 0; margin: var(--space-3) 0; display: grid; gap: 12px; }
+  .free-list li { padding-left: 22px; position: relative; font-size: 16px; line-height: 1.55; }
+  .free-list li::before { content: ""; position: absolute; left: 0; top: 10px; width: 10px; height: 10px; border-radius: 50%; background: var(--good); }
   .hero-copy h1 { margin: var(--space-3) 0; }
   .hero-copy .lede { margin-bottom: var(--space-4); }
   .hero-ctas { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); flex-wrap: wrap; }
@@ -142,7 +190,8 @@
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; padding: var(--space-5) var(--space-4); gap: var(--space-4); background: linear-gradient(165deg, var(--bg-main) 0%, var(--bg-main) 50%, var(--grad-1) 72%, var(--grad-3) 100%); }
     .hero-copy { order: 1; }
-    .hero-illustration { order: 2; max-width: 170px; margin: 0 auto; }
+    .hero-shot { order: 2; margin-right: 0; }
+    .steps-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 600px) {
     .hero-ctas { flex-direction: column; align-items: stretch; }
@@ -152,16 +201,16 @@
 <!-- SEO: canonical + social cards -->
 <link rel="canonical" href="https://crads-ai.com/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:site_name" content="Crads-AI">
 <meta property="og:url" content="https://crads-ai.com/">
-<meta property="og:title" content="Sam Davis — AI coaching for founders">
-<meta property="og:description" content="I coach founders to build their own AI executive assistant — so the admin handles itself and your best hours go to the work that matters. Four sessions, and you own it.">
+<meta property="og:title" content="Crads-AI · A free, self-hosted AI assistant that knows you">
+<meta property="og:description" content="A free, open-source AI assistant on a server you own. It learns your voice, your people and your week, then does the admin.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Sam Davis — AI coaching for founders">
-<meta name="twitter:description" content="I coach founders to build their own AI executive assistant — so the admin handles itself and your best hours go to the work that matters. Four sessions, and you own it.">
+<meta name="twitter:title" content="Crads-AI · A free, self-hosted AI assistant that knows you">
+<meta name="twitter:description" content="A free, open-source AI assistant on a server you own. It learns your voice, your people and your week, then does the admin.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 <script type="application/ld+json">
 {
@@ -172,7 +221,7 @@
   "alternateName": ["Sam Davis", "Crads"],
   "url": "https://crads-ai.com",
   "image": "https://crads-ai.com/lib/img/sam-illustration.png",
-  "jobTitle": "AI systems builder, data scientist & coach",
+  "jobTitle": "AI systems builder and data scientist",
   "homeLocation": { "@type": "Place", "name": "Coogee, Sydney, NSW, Australia" },
   "alumniOf": [
     { "@type": "CollegeOrUniversity", "name": "University of Manchester" },
@@ -197,46 +246,30 @@
     <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
   </button>
   <div class="nav-links" id="site-nav-links">
-    <div class="nav-group" data-open="false" data-group="system">
-      <a href="/system" class="nav-trigger">The System</a>
-      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The System pages">▾</button>
-      <div class="nav-menu">
-        <a href="/system" class="nav-menu-hub">The system, in one place →</a>
-        <a href="/overview">What it does</a>
-        <a href="/anatomy">Anatomy of an AI-OS</a>
-        <a href="/dashboard">See it live</a>
-      </div>
-    </div>
-    <div class="nav-group" data-open="false" data-group="coaching">
-      <a href="/coaching" class="nav-trigger">Coaching</a>
-      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Coaching pages">▾</button>
-      <div class="nav-menu">
-        <a href="/coaching" class="nav-menu-hub">How we work together →</a>
-        <a href="/how-it-works">How it works</a>
-        <a href="/offer">Pricing</a>
-      </div>
-    </div>
+    <a href="/docs" class="nav-simple">Docs</a>
+    <a href="/how-it-works" class="nav-simple">How it works</a>
+    <a href="/offer" class="nav-simple">Setup and support</a>
     <a href="/about" class="nav-simple">About</a>
-    <a href="/book" class="nav-simple nav-book">Book →</a>
-    <a href="/account/login" class="nav-account">Sign in</a>
+    <a href="/book" class="nav-simple nav-book">Book a call</a>
+    <a href="/download" class="nav-simple nav-cta">Download</a>
   </div>
 </nav>
 
 <main>
   <!-- Hero -->
   <section class="hero wrap">
-    <div class="hero-illustration">
-      <img src="/lib/img/sam-illustration.png" srcset="/lib/img/sam-illustration-sm.png 320w, /lib/img/sam-illustration.png 1200w" sizes="(max-width: 900px) 160px, 480px" alt="Sam Davis — illustration of a person holding a small tech-and-leaves icon" class="float-gentle">
-    </div>
     <div class="hero-copy">
-      <p class="eyebrow">AI COACHING FOR FOUNDERS · BUILD A SECOND BRAIN THAT THINKS LIKE YOU</p>
-      <h1>Get your time back for the work that <span class="italic-morph" data-phrases="only you can do.|actually matters.|is really yours.">only you can do.</span></h1>
-      <p class="lede">Most AI is a stranger you brief every morning. Yours won't be. It learns your voice, your people and your week, and takes the admin off your plate so your best hours go where they matter. I teach you to build it over four sessions, and you walk away owning it.</p>
+      <p class="eyebrow">FREE · OPEN SOURCE · SELF-HOSTED</p>
+      <h1>An AI assistant on your own server that <span class="italic-morph" data-phrases="actually knows you.|writes like you.|runs while you sleep.">actually knows you.</span></h1>
+      <p class="lede">Most AI is a stranger you brief every morning. Crads-AI learns your voice, your people and your week, then does the admin: the morning brief, the inbox sweep, the follow-up you forgot. It runs on a server you own, keeps its memory in a GitHub repository you own, and thinks with your own Claude account. Nothing is stored with anyone else.</p>
       <div class="hero-ctas">
-        <a class="cta-primary" href="/book/discovery">Book a free 30-minute call</a>
-        <a class="cta-secondary" href="/how-it-works">How it works →</a>
+        <a class="cta-primary" href="/download">Download the app</a>
+        <a class="cta-secondary" href="/docs/first-hour">Read the first hour →</a>
       </div>
-      <p class="hero-proof"><em>You don't need to code. That's the whole point of coaching it. Coaching means you build it with me and keep it: you leave owning the system and the skill, and most people never need me again.</em></p>
+      <p class="hero-proof"><em>You do not need to code. Download it, follow the first hour in the docs, and it is yours. The software is free and open source; the only thing that costs money is a person in the room, if you want one.</em></p>
+    </div>
+    <div class="hero-shot">
+      <img src="/lib/img/shots/overview.png" width="1280" height="1036" alt="The Crads-AI app on its Overview page: the assistant by name, the interview progress, the size of its brain, what it can do, and the jobs it runs by itself" class="float-gentle">
     </div>
   </section>
 
@@ -258,9 +291,9 @@
       <h2 class="reveal-on-scroll">AI looks like a wave. <em>Most owners are bracing for it.</em></h2>
       <p class="reveal-on-scroll prose-lead" style="margin-top: var(--space-3);">Most business owners I talk to are doing quiet maths on AI. It can write your emails and plan your week, so what's left for the person who built the business? Some are overwhelmed by the tools. Plenty are just looking away and hoping it passes.</p>
       <p class="reveal-on-scroll prose-lead">It isn't going to pass. But you can ride it rather than get bowled over by it.</p>
-      <p class="reveal-on-scroll prose-lead"><strong>I teach you to build your own AI assistant, one that knows your business and does your admin. You steer. It paddles.</strong></p>
+      <p class="reveal-on-scroll prose-lead"><strong>Crads-AI is your own AI assistant, one that knows your business and does your admin. You steer. It paddles.</strong></p>
     </div>
-    <figure class="wave-fig reveal-on-scroll" aria-label="Hand-drawn scene, two vignettes: on the left a wave crashes over a figure, legs sticking out of the whitewater, briefcase and papers flying — labelled bowled over. On the right the same figure rides the wave on a surfboard, briefcase in hand, the board labelled your AI assistant — labelled riding it.">
+    <figure class="wave-fig reveal-on-scroll" aria-label="Hand-drawn scene, two vignettes: on the left a wave crashes over a figure, legs sticking out of the whitewater, briefcase and papers flying, labelled bowled over. On the right the same figure rides the wave on a surfboard, briefcase in hand, the board labelled your AI assistant, labelled riding it.">
       <svg viewBox="0 0 900 340" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
         <!-- shoreline -->
         <path class="wv-ground" d="M 40 284 Q 200 280 420 283 T 870 283"/>
@@ -326,14 +359,14 @@
         <text class="wv-label wv-callout-t" x="746" y="211" text-anchor="start"><tspan x="746" dy="0">your AI</tspan><tspan x="746" dy="1.3em">assistant</tspan></text>
         <text class="wv-label" x="660" y="322" text-anchor="middle">riding it</text>
       </svg>
-      <figcaption>Same wave. The one on the board still owns the business — he just stopped doing his own admin.</figcaption>
+      <figcaption>Same wave. The one on the board still owns the business. He just stopped doing his own admin.</figcaption>
     </figure>
   </section>
 
   <!-- What you'll build -->
   <section class="section wrap" id="capabilities">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll">What you'll build</p>
+      <p class="eyebrow reveal-on-scroll">What it is made of</p>
       <h2 class="reveal-on-scroll">An assistant that <em>actually knows you.</em></h2>
     </div>
     <figure class="fourc-strip-wrap reveal-on-scroll" aria-label="The four layers of the assistant, building up left to right: context rings, tool connections, workflow blueprints, and a scheduled heartbeat.">
@@ -449,21 +482,83 @@
           <p class="p-label"><span class="c">C4</span><span class="n">Cadence</span><span class="g">when it acts, unasked</span></p>
         </div>
       </div>
-      <figcaption>Four layers, built up in four sessions · <a href="/how-it-works#the-four-layers">see how each layer works →</a></figcaption>
+      <figcaption>Four layers, built up through the interview and daily use · <a href="/how-it-works#the-four-layers">see how each layer works →</a></figcaption>
     </figure>
     <div class="interlude callout-grid stagger-grid">
       <div class="callout">
         <div class="big">Drafts in your voice.</div>
-        <div class="small">Your phrasing, your rhythms, your signature moves — so the replies read like you actually wrote them.</div>
+        <div class="small">Your phrasing, your rhythms, your signature moves, so the replies read like you actually wrote them.</div>
       </div>
       <div class="callout">
         <div class="big">Knows your people.</div>
-        <div class="small">Every client, partner and lead has a page. It pulls the relationship history before you reply — tiered by closeness.</div>
+        <div class="small">Every client, partner and lead has a page. It pulls the relationship history before you reply, tiered by closeness.</div>
       </div>
       <div class="callout">
         <div class="big">Catches what's slipping.</div>
-        <div class="small">It surfaces the follow-up you forgot, the loop you left open, the thread going cold — so nothing falls through.</div>
+        <div class="small">It surfaces the follow-up you forgot, the loop you left open, the thread going cold, so nothing falls through.</div>
       </div>
+    </div>
+  </section>
+
+  <!-- A look inside -->
+  <section class="section wrap" id="inside">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll">A look inside</p>
+      <h2 class="reveal-on-scroll">One app on your laptop. <em>One page that tells you where it is at.</em></h2>
+      <p class="reveal-on-scroll prose-lead">The app opens on the Overview: how much of the interview is done, how much your assistant knows, what it can do yet, and what it ran while you were away. Everything else is one click down the sidebar: its brain, its skills, the tools it can reach, and a terminal where you talk to it.</p>
+    </div>
+    <figure class="shot-figure reveal-on-scroll">
+      <span class="shot-frame"><img src="/lib/img/shots/overview.png" width="1280" height="1036" alt="The Overview page of the Crads-AI app, annotated" loading="eager"><span class="shot-mark" style="left:20.94%;top:15.24%;width:76.25%;height:12.39%"><b>1</b></span><span class="shot-mark" style="left:20.94%;top:29.57%;width:15.63%;height:14.66%"><b>2</b></span><span class="shot-mark" style="left:37.66%;top:29.57%;width:15.63%;height:14.66%"><b>3</b></span><span class="shot-mark" style="left:20.94%;top:45.96%;width:76.25%;height:30.32%"><b>4</b></span><span class="shot-mark" style="left:20.94%;top:78.02%;width:24.48%;height:15.83%"><b>5</b></span></span>
+      <ol class="shot-legend"><li>Your assistant, by the name you gave it. "Talk to it" opens a conversation.</li><li>How much of the interview is done. Until this completes, every answer your assistant gives is generic.</li><li>How many pages your brain holds. This is what your assistant reads before it answers anything.</li><li>What your pebble can do, and what is still switched off. Each row links to the way in.</li><li>The jobs your mineral runs by itself. Expand it to see each one and when it last ran.</li></ol>
+      <figcaption>The Overview page: what your assistant knows and how it is doing. Every page in the app is documented like this in <a href="/docs">the docs</a>.</figcaption>
+    </figure>
+  </section>
+
+  <!-- How you get it -->
+  <section class="section wrap" id="get-it">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll">How you get it</p>
+      <h2 class="reveal-on-scroll">Fifteen minutes to a server that is yours. <em>An hour to an assistant that knows you.</em></h2>
+    </div>
+    <ol class="steps-grid stagger-grid">
+      <li>
+        <span class="step-n">1</span>
+        <h3>Download the app</h3>
+        <p>Windows or Mac. It is the door to everything else: the setup wizard first, then the assistant itself.</p>
+        <a href="/download">Download →</a>
+      </li>
+      <li>
+        <span class="step-n">2</span>
+        <h3>Build your mineral</h3>
+        <p>The wizard shows the whole bill first, then builds a small server in your own account at Hetzner (the cheaper, from about €4 a month) or DigitalOcean (which has a Sydney location, from about $24), with your own API token. Billed to you by them. Nothing to Crads-AI, ever.</p>
+        <a href="/docs/first-hour">The first hour, step by step →</a>
+      </li>
+      <li>
+        <span class="step-n">3</span>
+        <h3>Wake it up and do the interview</h3>
+        <p>Sign in with your own Claude subscription, then answer its questions. Out of that conversation it builds a brain: who you are, what you are trying to do, who is in your world, what to never touch.</p>
+        <a href="/docs/the-interview">What the interview asks →</a>
+      </li>
+    </ol>
+    <figure class="shot-figure reveal-on-scroll">
+      <span class="shot-frame"><img src="/lib/img/shots/door-catalogue.png" width="1280" height="900" alt="The setup wizard after the token check: a location list and three size cards with their real machines and monthly prices" loading="eager"><span class="shot-mark" style="left:29.69%;top:47.13%;width:40.63%;height:4.56%"><b>1</b></span><span class="shot-mark" style="left:29.69%;top:56.14%;width:40.63%;height:32.22%"><b>2</b></span><span class="shot-mark" style="left:29.69%;top:90.14%;width:40.63%;height:4.44%"><b>3</b></span></span>
+      <ol class="shot-legend"><li>Only the locations your account can actually build in.</li><li>Three plain sizes. The fine print names the real machine and its monthly price where you chose.</li><li>Build it. From here the wizard creates the server on your own account.</li></ol>
+      <figcaption>Step 2 in the app. The prices are indicative: Hetzner's list prices on the day this was taken, in euros. The wizard reads the live list when you run it.</figcaption>
+    </figure>
+  </section>
+
+  <!-- Free and yours -->
+  <section class="section wrap" id="free">
+    <div class="read-col">
+      <p class="eyebrow reveal-on-scroll">Free and yours</p>
+      <h2 class="reveal-on-scroll">No subscription. No hosted box. <em>Nothing central.</em></h2>
+      <p class="reveal-on-scroll prose-lead">Crads-AI used to be a hosted product. In September 2026 that ended, on purpose: the subscriptions and the hosted boxes were retired and the whole thing became free, open source and self-hosted. There is no account with Crads-AI, no server of mine in the chain, and no way for anyone but you to read what your assistant knows.</p>
+      <ul class="free-list reveal-on-scroll">
+        <li><strong>Your server.</strong> Built in your own hosting account and billed to you by the host. The only key on it is your computer's.</li>
+        <li><strong>Your brain repo.</strong> Everything it knows about you lives in a private GitHub repository you own, backed up there every night.</li>
+        <li><strong>Your Claude.</strong> It thinks with your own Claude subscription. Anthropic bills you; nobody else does.</li>
+      </ul>
+      <p class="reveal-on-scroll prose-lead">If you ever want out, <a href="/docs/continuity">everything you need to leave is written down</a>, and the code is open source under the AGPL-3.0, so the assistant cannot be taken away from you.</p>
     </div>
   </section>
 
@@ -475,61 +570,62 @@
       <ul class="who-list reveal-on-scroll">
         <li><strong>Solo founders and small-business owners</strong> drowning in admin, who want their best hours back.</li>
         <li><strong>Coaches, consultants and service providers</strong> whose business runs on relationships and follow-through.</li>
-        <li><strong>People who are curious about AI but not technical</strong> — there's no code anywhere in this. You describe the work; it learns the work.</li>
-        <li><strong>Owners who've been putting AI off</strong> — overwhelmed by the tools, quietly wondering if it's coming for them. This is the on-ramp.</li>
+        <li><strong>People who are curious about AI but not technical.</strong> There's no code anywhere in this. You describe the work; it learns the work.</li>
+        <li><strong>Owners who've been putting AI off,</strong> overwhelmed by the tools, quietly wondering if it's coming for them. This is the on-ramp.</li>
       </ul>
-      <p class="reveal-on-scroll prose-lead" style="margin-top: var(--space-3);">It started with eight business owners I coached through Impact Collab's Expert Pod in late 2025. They didn't want another tool — they wanted to learn to build their own. That's still the offer.</p>
+      <p class="reveal-on-scroll prose-lead" style="margin-top: var(--space-3);">It started with eight business owners I coached through Impact Collab's Expert Pod in late 2025. They didn't want another tool. They wanted something that knew their business, and that they owned. That is what this became.</p>
     </div>
   </section>
 
-  <!-- Proof strip — real client quotes (lib/testimonialsRender.js). Hidden until 1+ exist. -->
+  <!-- Proof strip: real client quotes (lib/testimonialsRender.js). Hidden until 1+ exist. -->
   <section class="testimonials-strip wrap" id="proof" data-testimonials data-heading="What clients say" hidden></section>
 
-  <!-- The ladder -->
+  <!-- Setup and support -->
   <section class="section wrap" id="how">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll">Ways in</p>
-      <h2 class="reveal-on-scroll">Start small, or go deep. <em>Free call first.</em></h2>
+      <p class="eyebrow reveal-on-scroll">When you want a hand</p>
+      <h2 class="reveal-on-scroll">The software is free. <em>My time is not.</em></h2>
     </div>
     <div class="interlude-bare rung-ladder stagger-grid" style="margin-top: var(--space-3);">
-      <a class="rung-card" href="/book/single-session">
-        <p class="r-name">Single Session</p>
-        <p class="r-meta">90 min · 1:1</p>
-        <p class="r-price">A$300</p>
-        <p class="r-pitch">One pain, one working piece. Try before the block.</p>
+      <a class="rung-card hero" href="/book/guided-setup">
+        <span class="badge">Where most people start</span>
+        <p class="r-name">Guided setup</p>
+        <p class="r-meta">2 × 60 min · 1:1</p>
+        <p class="r-price">A$700</p>
+        <p class="r-pitch">Your own server, brain repo, Claude signed in, first workflows. Written docs you keep.</p>
         <span class="r-cta">Book →</span>
       </a>
-      <a class="rung-card hero" href="/book/coaching-block">
-        <span class="badge">★ The standard way in</span>
-        <p class="r-name">Coaching Block</p>
-        <p class="r-meta">4 × 90 min · 1:1</p>
-        <p class="r-price">A$1,000</p>
-        <p class="r-pitch">Four sessions, full pack between each. The standard way in.</p>
+      <a class="rung-card" href="/book/working-session">
+        <p class="r-name">Working session</p>
+        <p class="r-meta">90 min · 1:1</p>
+        <p class="r-price">A$350</p>
+        <p class="r-pitch">One question, worked on live. Recorded, notes after.</p>
         <span class="r-cta">Book →</span>
       </a>
     </div>
-    <p class="reveal-on-scroll" style="text-align: center; margin-top: var(--space-3);"><a class="cta-secondary" href="/offer">See the full offer, including the Continuation Retainer →</a></p>
+    <p class="reveal-on-scroll prose-lead" style="text-align: center; margin: var(--space-3) auto 0;">After setup, support is by the hour, on request. Nothing ongoing, nothing you have to cancel.</p>
+    <p class="reveal-on-scroll" style="text-align: center; margin-top: var(--space-2);"><a class="cta-secondary" href="/offer">Setup and support, in full →</a></p>
   </section>
 
   <!-- Proof -->
   <section class="section wrap" id="work">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll">Why learn it from me</p>
+      <p class="eyebrow reveal-on-scroll">Who built it</p>
       <h2 class="reveal-on-scroll">I built one that runs my whole life.</h2>
-      <p class="reveal-on-scroll prose-lead">Seven AI systems in twelve months — and the one I use every day is the executive assistant I'll teach you to build. This is the method my own days run on, not a theory.</p>
+      <p class="reveal-on-scroll prose-lead">Seven AI systems in twelve months, and the one I use every day is the assistant you can download here. This is the method my own days run on, not a theory. <a href="/about">More about me →</a></p>
     </div>
     <div class="interlude work-cards stagger-grid">
       <div class="work">
         <span class="glyph">◆</span>
         <h3>This system</h3>
         <p class="stat">Runs my days</p>
-        <p>The executive assistant that drafts this site, tracks every conversation, plans my week and writes in my voice. The live blueprint for what you'll build.</p>
+        <p>The executive assistant that drafts this site, tracks every conversation, plans my week and writes in my voice. The live blueprint for what you download.</p>
       </div>
       <div class="work">
         <span class="glyph">🌿</span>
         <h3>Derwen</h3>
         <p class="stat">Built in 2 weeks</p>
-        <p>An AI biodiversity assistant — reads a habitat, recommends species, surfaces the peer-reviewed evidence.</p>
+        <p>An AI biodiversity assistant: reads a habitat, recommends species, surfaces the peer-reviewed evidence.</p>
       </div>
       <div class="work">
         <span class="glyph">⏱</span>
@@ -555,10 +651,10 @@
   <!-- Final CTA -->
   <section class="section section-tight wrap" id="final-cta">
     <div class="read-col">
-      <h2 class="reveal-on-scroll">If you want an AI that actually gets you —</h2>
-      <p class="lede reveal-on-scroll">Book a free thirty-minute call. We'll work out what yours would look like. No pitch.</p>
-      <a class="cta-primary reveal-on-scroll" href="/book/discovery">Book a free 30-minute call</a>
-      <p class="reveal-on-scroll" style="margin-top: var(--space-2);"><a class="cta-secondary" href="/book">Already know what you want? Book a session →</a></p>
+      <h2 class="reveal-on-scroll">If you want an AI that actually gets you</h2>
+      <p class="lede reveal-on-scroll">Download it and follow the first hour. If you would rather have a person in the room, book a free thirty-minute call and we will work out what yours would look like. No pitch.</p>
+      <a class="cta-primary reveal-on-scroll" href="/download">Download the app</a>
+      <p class="reveal-on-scroll" style="margin-top: var(--space-2);"><a class="cta-secondary" href="/book/discovery">Book a free 30-minute call →</a></p>
     </div>
   </section>
 </main>
@@ -568,7 +664,6 @@
   <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
   <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
   <div>+61 0493 302 154</div>
-  <div><a href="/account/login">Sign in</a></div>
   <div class="location">Coogee, Sydney.</div>
 </footer>
 

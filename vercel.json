@@ -1,12 +1,6 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "crons": [
-    {
-      "path": "/api/cron/graduate-check",
-      "schedule": "0 23 * * *"
-    }
-  ],
   "redirects": [
     {
       "source": "/book/ea-basic-build",
@@ -41,6 +35,46 @@
     {
       "source": "/favicon.ico",
       "destination": "/lib/img/favicon.ico",
+      "permanent": true
+    },
+    {
+      "source": "/book/single-session",
+      "destination": "/book/working-session",
+      "permanent": true
+    },
+    {
+      "source": "/book/coaching-block",
+      "destination": "/book/guided-setup",
+      "permanent": true
+    },
+    {
+      "source": "/book/continuation-retainer",
+      "destination": "/offer",
+      "permanent": true
+    },
+    {
+      "source": "/system",
+      "destination": "/how-it-works",
+      "permanent": true
+    },
+    {
+      "source": "/overview",
+      "destination": "/how-it-works",
+      "permanent": true
+    },
+    {
+      "source": "/anatomy",
+      "destination": "/how-it-works",
+      "permanent": true
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/download",
+      "permanent": true
+    },
+    {
+      "source": "/coaching",
+      "destination": "/offer",
       "permanent": true
     }
   ],

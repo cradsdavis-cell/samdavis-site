@@ -5,8 +5,8 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How it works — Sam Davis</title>
-<meta name="description" content="The four layers of an AI executive assistant — Context, Connections, Capabilities, Cadence — and the 4-session coaching arc that builds them with you.">
+<title>How it works · Crads-AI</title>
+<meta name="description" content="What a Crads-AI assistant is made of: four layers, Context, Connections, Capabilities and Cadence, and how the app builds them with you.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 <style>
@@ -210,7 +210,7 @@
   .fc-layers-grid .num { font-family: var(--serif); color: var(--accent); margin-right: 0.5em; }
   .fc-layers-grid .gloss { color: var(--ink-faint); }
 
-  /* SVG classes — one visual grammar for all four stages */
+  /* SVG classes: one visual grammar for all four stages */
   .fc-ring  { fill: none; stroke: var(--good); stroke-width: 2; }
   .fc-spoke { stroke: var(--good); stroke-width: 2; }
   .fc-node  { fill: var(--bg-soft); stroke: var(--good); stroke-width: 1.5; }
@@ -265,20 +265,23 @@
     .fourc-row .fc-img { order: 2; }
     .fc-layers-grid { grid-template-columns: 1fr; }
   }
+  .lives-list { list-style: none; padding: 0; margin: var(--space-3) 0 0; display: grid; gap: 12px; }
+  .lives-list li { padding-left: 22px; position: relative; line-height: 1.55; }
+  .lives-list li::before { content: ""; position: absolute; left: 0; top: 10px; width: 10px; height: 10px; border-radius: 50%; background: var(--good); }
 </style>
 <!-- SEO: canonical + social cards -->
 <link rel="canonical" href="https://crads-ai.com/how-it-works">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:site_name" content="Crads-AI">
 <meta property="og:url" content="https://crads-ai.com/how-it-works">
-<meta property="og:title" content="How it works — Sam Davis">
-<meta property="og:description" content="The four layers of an AI executive assistant — Context, Connections, Capabilities, Cadence — and the 4-session coaching arc that builds them with you.">
+<meta property="og:title" content="How it works · Crads-AI">
+<meta property="og:description" content="What a Crads-AI assistant is made of: four layers, Context, Connections, Capabilities and Cadence, and how the app builds them with you.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="How it works — Sam Davis">
-<meta name="twitter:description" content="The four layers of an AI executive assistant — Context, Connections, Capabilities, Cadence — and the 4-session coaching arc that builds them with you.">
+<meta name="twitter:title" content="How it works · Crads-AI">
+<meta name="twitter:description" content="What a Crads-AI assistant is made of: four layers, Context, Connections, Capabilities and Cadence, and how the app builds them with you.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body>
@@ -292,28 +295,12 @@
     <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
   </button>
   <div class="nav-links" id="site-nav-links">
-    <div class="nav-group" data-open="false" data-group="system">
-      <a href="/system" class="nav-trigger">The System</a>
-      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The System pages">▾</button>
-      <div class="nav-menu">
-        <a href="/system" class="nav-menu-hub">The system, in one place →</a>
-        <a href="/overview">What it does</a>
-        <a href="/anatomy">Anatomy of an AI-OS</a>
-        <a href="/dashboard">See it live</a>
-      </div>
-    </div>
-    <div class="nav-group" data-open="false" data-group="coaching">
-      <a href="/coaching" class="nav-trigger current">Coaching</a>
-      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Coaching pages">▾</button>
-      <div class="nav-menu">
-        <a href="/coaching" class="nav-menu-hub">How we work together →</a>
-        <a href="/how-it-works" class="current">How it works</a>
-        <a href="/offer">Pricing</a>
-      </div>
-    </div>
+    <a href="/docs" class="nav-simple">Docs</a>
+    <a href="/how-it-works" class="nav-simple current">How it works</a>
+    <a href="/offer" class="nav-simple">Setup and support</a>
     <a href="/about" class="nav-simple">About</a>
-    <a href="/book" class="nav-simple nav-book">Book →</a>
-    <a href="/account/login" class="nav-account">Sign in</a>
+    <a href="/book" class="nav-simple nav-book">Book a call</a>
+    <a href="/download" class="nav-simple nav-cta">Download</a>
   </div>
 </nav>
 
@@ -323,17 +310,17 @@
     <img src="/lib/img/sam-illustration.png" alt="" class="float-gentle">
     <div>
       <p class="eyebrow">How it works</p>
-      <h1>We don't build it for you. <em>We teach you to build it.</em></h1>
-      <p class="lead">Here's what an AI executive assistant is actually made of — four layers — and the real shape of the Coaching Block that builds them with you.</p>
+      <h1>It is not a chatbot. <em>It is a system that accumulates you.</em></h1>
+      <p class="lead">Here is what a Crads-AI assistant is actually made of, four layers, and how the app builds them with you through the interview and daily use.</p>
     </div>
   </section>
 
   <!-- The four layers -->
   <section class="section section-tight wrap how-it-works" id="the-four-layers">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll">What we build</p>
+      <p class="eyebrow reveal-on-scroll">What it is made of</p>
       <h2 class="reveal-on-scroll">A chatbot forgets you. <em>An assistant accumulates you.</em></h2>
-      <p class="fourc-intro reveal-on-scroll" style="margin-top: var(--space-2);">The difference is a folder of plain files it reads every time it wakes up. That folder is what we build together — four layers, each one making the assistant more yours. This page is about how yours gets built; my finished one is walked through in <a href="/overview">the overview</a>.</p>
+      <p class="fourc-intro reveal-on-scroll" style="margin-top: var(--space-2);">The difference is a folder of plain files it reads every time it wakes up. That folder is what the app builds with you: four layers, each one making the assistant more yours. This page is about how yours gets built; the <a href="/docs">docs</a> walk every part of a finished one.</p>
     </div>
 
     <!-- C1 · Context -->
@@ -344,16 +331,16 @@
         <p class="fc-gloss">What it knows about you.</p>
         <p>Plain files, organised in layers. Mine has eight:</p>
         <div class="fc-layers-grid">
-          <div><span class="num">1</span>North Star <span class="gloss">— why</span></div>
-          <div><span class="num">2</span>Philosophy <span class="gloss">— how you think</span></div>
-          <div><span class="num">3</span>Self <span class="gloss">— who you are</span></div>
-          <div><span class="num">4</span>Network <span class="gloss">— your people</span></div>
-          <div><span class="num">5</span>Past <span class="gloss">— where you've been</span></div>
-          <div><span class="num">6</span>Goals <span class="gloss">— where you're going</span></div>
-          <div><span class="num">7</span>Tasks <span class="gloss">— what's on now</span></div>
-          <div><span class="num">8</span>Workflow <span class="gloss">— how your week runs</span></div>
+          <div><span class="num">1</span>North Star <span class="gloss">: why</span></div>
+          <div><span class="num">2</span>Philosophy <span class="gloss">: how you think</span></div>
+          <div><span class="num">3</span>Self <span class="gloss">: who you are</span></div>
+          <div><span class="num">4</span>Network <span class="gloss">: your people</span></div>
+          <div><span class="num">5</span>Past <span class="gloss">: where you've been</span></div>
+          <div><span class="num">6</span>Goals <span class="gloss">: where you're going</span></div>
+          <div><span class="num">7</span>Tasks <span class="gloss">: what's on now</span></div>
+          <div><span class="num">8</span>Workflow <span class="gloss">: how your week runs</span></div>
         </div>
-        <p>Written down once — never explained twice.</p>
+        <p>Written down once, never explained twice.</p>
       </div>
       <div class="fc-img">
         <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Eight concentric rings of context around you at the core.">
@@ -388,7 +375,7 @@
         <p>Each one is a doorway you open once.</p>
       </div>
       <div class="fc-img">
-        <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The context rings recede as six tools — email, calendar, tasks, WhatsApp, docs and CRM — connect to you by spokes.">
+        <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The context rings recede as six tools, email, calendar, tasks, WhatsApp, docs and CRM, connect to you by spokes.">
           <g opacity=".38">
             <circle class="fc-ring" cx="320" cy="260" r="52"  opacity=".80"/>
             <circle class="fc-ring" cx="320" cy="260" r="76"  opacity=".66"/>
@@ -428,7 +415,7 @@
         <p class="cnum">C3</p>
         <h3>Capabilities</h3>
         <p class="fc-gloss">Blueprints for your workflows.</p>
-        <p>A capability is a written recipe — the steps you'd give a new hire, saved so it runs the same way every time:</p>
+        <p>A capability is a written recipe: the steps you'd give a new hire, saved so it runs the same way every time:</p>
         <div class="fc-chips">
           <span class="chip alt">Morning brief</span><span class="chip alt">Inbox sweep</span>
           <span class="chip alt">Client debrief</span><span class="chip alt">Weekly review</span>
@@ -436,7 +423,7 @@
         <p>Describe the workflow once. Now it's a button.</p>
       </div>
       <div class="fc-img">
-        <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Dashed blueprint routes appear across the connected tools — morning brief, inbox sweep, client debrief, weekly review.">
+        <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Dashed blueprint routes appear across the connected tools, morning brief, inbox sweep, client debrief, weekly review.">
           <g opacity=".25">
             <circle class="fc-ring" cx="320" cy="260" r="52"  opacity=".80"/>
             <circle class="fc-ring" cx="320" cy="260" r="76"  opacity=".66"/>
@@ -491,7 +478,7 @@
         <p class="cnum">C4</p>
         <h3>Cadence</h3>
         <p class="fc-gloss">The heartbeat.</p>
-        <p>Jobs that run on a schedule without being asked — the morning brief is waiting before you sit down.</p>
+        <p>Jobs that run on a schedule without being asked: the morning brief is waiting before you sit down.</p>
         <p>You've hired an executive assistant. Give it feedback, and let go of the reins a little more each week.</p>
       </div>
       <div class="fc-img">
@@ -538,177 +525,37 @@
       </div>
     </div>
 
-    <p class="fc-bridge reveal-on-scroll">The four sessions below climb this ladder — Context first, then the doorways, then the blueprints, then the heartbeat.</p>
+    <p class="fc-bridge reveal-on-scroll">The app climbs this ladder with you: Context first (the interview), then the doorways, then the blueprints, then the heartbeat.</p>
   </section>
 
   <section class="section section-tight wrap how-it-works">
 
-    <!-- The journey diagram -->
-    <figure class="diagram reveal-on-scroll" aria-labelledby="arc-caption">
-      <svg viewBox="0 0 1000 360" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The four-session coaching arc: Session 1, get up and running and build a sandbox, then you play in it; Session 2, teach it who you are, then you finish mapping yourself out; Session 3, plug it into your day, then you work through Pack 3; Session 4, go solo.">
-        <defs>
-          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/>
-          </marker>
-          <style>
-            .node { fill: var(--bg-card); stroke: var(--ink-deep); stroke-width: 1.6; }
-            .node-dot { fill: var(--accent); }
-            .s-tag { font-family: var(--mono); font-size: 11px; letter-spacing: 1.4px; fill: var(--accent); font-weight: 600; }
-            .s-title { font-family: var(--serif); font-size: 16px; fill: var(--ink-deep); font-weight: 700; }
-            .gap-cap { font-family: var(--sans); font-size: 12px; fill: var(--ink-soft); font-style: italic; }
-            .gap-who { font-family: var(--mono); font-size: 10px; letter-spacing: 1px; fill: var(--accent); }
-            .pack { font-family: var(--mono); font-size: 11px; fill: var(--ink-deep); font-weight: 600; }
-            .pack-pill { fill: var(--bg-main); stroke: var(--accent); stroke-width: 1.5; }
-            .link { stroke: var(--ink-faint); stroke-width: 2; stroke-dasharray: 2 7; stroke-linecap: round; }
-          </style>
-        </defs>
-
-        <!-- connecting hand-drawn path through the four sessions -->
-        <path d="M150 95 C 250 70, 290 120, 380 95 S 560 70, 630 95 S 800 120, 855 95" class="link" fill="none"/>
-
-        <!-- Session nodes -->
-        <!-- S1 -->
-        <rect x="20" y="58" width="150" height="74" rx="14" class="node" transform="rotate(-0.6 95 95)"/>
-        <circle cx="40" cy="78" r="3.5" class="node-dot"/>
-        <text x="95" y="86" text-anchor="middle" class="s-tag">SESSION 1</text>
-        <text x="95" y="108" text-anchor="middle" class="s-title">Up and running</text>
-        <!-- S2 -->
-        <rect x="305" y="58" width="150" height="74" rx="14" class="node" transform="rotate(0.5 380 95)"/>
-        <circle cx="325" cy="78" r="3.5" class="node-dot"/>
-        <text x="380" y="86" text-anchor="middle" class="s-tag">SESSION 2</text>
-        <text x="380" y="108" text-anchor="middle" class="s-title">Teach it about you</text>
-        <!-- S3 -->
-        <rect x="555" y="58" width="150" height="74" rx="14" class="node" transform="rotate(-0.5 630 95)"/>
-        <circle cx="575" cy="78" r="3.5" class="node-dot"/>
-        <text x="630" y="86" text-anchor="middle" class="s-tag">SESSION 3</text>
-        <text x="630" y="108" text-anchor="middle" class="s-title">Into your day</text>
-        <!-- S4 -->
-        <rect x="830" y="58" width="150" height="74" rx="14" class="node" transform="rotate(0.6 905 95)"/>
-        <circle cx="850" cy="78" r="3.5" class="node-dot"/>
-        <text x="905" y="86" text-anchor="middle" class="s-tag">SESSION 4</text>
-        <text x="905" y="108" text-anchor="middle" class="s-title">Run it solo</text>
-
-        <!-- Between-session lanes -->
-        <!-- gap 1 -->
-        <line x1="195" y1="220" x2="280" y2="220" class="link" marker-end="url(#arrow)"/>
-        <text x="237" y="200" text-anchor="middle" class="gap-who">YOU</text>
-        <text x="237" y="245" text-anchor="middle" class="gap-cap">play in the</text>
-        <text x="237" y="261" text-anchor="middle" class="gap-cap">sandbox</text>
-        <rect x="200" y="278" width="74" height="22" rx="11" class="pack-pill"/>
-        <text x="237" y="293" text-anchor="middle" class="pack">Pack 1</text>
-
-        <!-- gap 2 -->
-        <line x1="448" y1="220" x2="533" y2="220" class="link" marker-end="url(#arrow)"/>
-        <text x="490" y="200" text-anchor="middle" class="gap-who">YOU</text>
-        <text x="490" y="245" text-anchor="middle" class="gap-cap">finish your map</text>
-        <text x="490" y="261" text-anchor="middle" class="gap-cap">+ rest of Pack 2</text>
-        <rect x="453" y="278" width="74" height="22" rx="11" class="pack-pill"/>
-        <text x="490" y="293" text-anchor="middle" class="pack">Pack 2</text>
-
-        <!-- gap 3 -->
-        <line x1="700" y1="220" x2="785" y2="220" class="link" marker-end="url(#arrow)"/>
-        <text x="742" y="200" text-anchor="middle" class="gap-who">YOU</text>
-        <text x="742" y="245" text-anchor="middle" class="gap-cap">work through</text>
-        <text x="742" y="261" text-anchor="middle" class="gap-cap">Pack 3</text>
-        <rect x="705" y="278" width="74" height="22" rx="11" class="pack-pill"/>
-        <text x="742" y="293" text-anchor="middle" class="pack">Pack 3</text>
-
-        <!-- little down-ticks from each session into its between-lane -->
-        <path d="M95 132 L95 170 L237 170 L237 188" class="link" fill="none" marker-end="url(#arrow)"/>
-        <path d="M380 132 L380 170 L490 170 L490 188" class="link" fill="none" marker-end="url(#arrow)"/>
-        <path d="M630 132 L630 170 L742 170 L742 188" class="link" fill="none" marker-end="url(#arrow)"/>
-      </svg>
-      <figcaption id="arc-caption">Four sessions with Sam · three stretches of self-paced building in between</figcaption>
-    </figure>
-
-    <!-- The 4-session arc -->
-    <div class="sub-block">
-      <h2>The 4-session arc</h2>
-      <p class="arc-intro">Most people come in through a Coaching Block — four 1:1 sessions, with real building of your own between each one. The sessions teach the method; the between-session work is where it lands.</p>
-      <p class="arc-intro">You set the pace — all four inside a fortnight, or spread across the four weeks to let it settle. Either way the block runs over about four weeks, with Slack support throughout. If you want me on call after that, the Continuation Retainer keeps the line open.</p>
-
-      <div class="session-block reveal-on-scroll">
-        <span class="s-tag">Session 1 · with Sam<span class="layer-tag">foundations</span></span>
-        <h3>Up and running — and no longer scared of it</h3>
-        <p>By the end of the first session you've got a working assistant on your own machine, and the nerves are gone. We get Claude Code installed, fire off your first prompts together, and set up a safe space — your sandbox — where you can poke around without breaking anything.</p>
-        <p>You leave with something that works, and somewhere to play.</p>
-      </div>
-      <p class="between"><strong>Between 1 and 2 —</strong> you play in the sandbox. Have ten real conversations with it. The goal isn't to get anything right — it's to stop being nervous about the tool.<span class="pack-tag">Pack 1</span></p>
-
-      <div class="session-block reveal-on-scroll">
-        <span class="s-tag">Session 2 · with Sam<span class="layer-tag">C1 · context</span></span>
-        <h3>Teach it who you are</h3>
-        <p>Now you're comfortable, we turn the setup into a real executive assistant — one that actually knows you. We start by mapping who you are, what you do and what matters most, so it has a real model of you to work from. You walk me through your world too, so I understand the business we're building this around.</p>
-      </div>
-      <p class="between"><strong>Between 2 and 3 —</strong> you finish mapping yourself out and work through the rest of Pack 2 at your own pace. Slack's open for questions.<span class="pack-tag">Pack 2</span></p>
-
-      <div class="session-block reveal-on-scroll">
-        <span class="s-tag">Session 3 · with Sam<span class="layer-tag">C2 · connections</span><span class="layer-tag">C3 · capabilities</span></span>
-        <h3>Plug it into your actual day</h3>
-        <p>We connect the assistant to the tools you already live in — your email, your calendar, your docs. Now it can do things for you, not just talk: read your inbox, pull up a client's history, draft the reply. Then I push you to keep experimenting on your own — this is where most people find the one workflow that changes their week.</p>
-      </div>
-      <p class="between"><strong>Between 3 and 4 —</strong> you work through Pack 3: deeper connections, your people layer, and the moves that make it feel like it really knows you.<span class="pack-tag">Pack 3</span></p>
-
-      <div class="session-block reveal-on-scroll">
-        <span class="s-tag">Session 4 · with Sam<span class="layer-tag">C4 · cadence</span></span>
-        <h3>Running your week — without me</h3>
-        <p>We review what's running, connect anything else you want, and map what you'd build next. The point of this session is confidence: you leave knowing how to keep growing it yourself, without me.</p>
-        <p>If you'd rather keep a hand on your shoulder after the four weeks, the <strong>Continuation Retainer</strong> keeps the line open — but most people don't need it. That's the goal.</p>
-      </div>
-    </div>
-
-    <!-- All the materials -->
-    <div class="sub-block">
-      <h2>Everything you get</h2>
-      <p>It's not just the four calls. Your materials unlock in your private dashboard on this site as you move through the arc — so you're never handed everything at once, only the next piece when you're ready for it.</p>
-      <div class="materials-grid stagger-grid">
-        <div class="material reveal-on-scroll">
-          <span class="when">On payment</span>
-          <h3>Pack 0 — Setup &amp; Install</h3>
-          <p>An install doc, two short intro videos, and a one-page map of the whole arc — so you arrive at Session 1 ready.</p>
-        </div>
-        <div class="material reveal-on-scroll">
-          <span class="when">Session 1</span>
-          <h3>Pack 1 — Starter Prompts</h3>
-          <p>The starter prompts we fire together in Session 1, then yours to replay in the sandbox between sessions.</p>
-        </div>
-        <div class="material reveal-on-scroll">
-          <span class="when">After Session 2</span>
-          <h3>Pack 2 — Make it you</h3>
-          <p>The full restructure of your setup into a real EA, plus a guided exercise to map who you are. Self-paced, personalised to you.</p>
-        </div>
-        <div class="material reveal-on-scroll">
-          <span class="when">After Session 3</span>
-          <h3>Pack 3 — Connect it</h3>
-          <p>Your people layer, deeper tool connections, and the moves that make the system feel like it really knows you.</p>
-        </div>
-        <div class="material reveal-on-scroll">
-          <span class="when">Throughout</span>
-          <h3>Async Slack support</h3>
-          <p>A direct line to Sam between every session. Stuck on a prompt at 9pm? Drop a message or a voice memo.</p>
-        </div>
-        <div class="material reveal-on-scroll">
-          <span class="when">Throughout</span>
-          <h3>Your private dashboard</h3>
-          <p>A login on this site that tracks where you are in the arc, holds your packs, and shows your next session.</p>
-        </div>
-      </div>
+    <!-- Where it lives -->
+    <div class="sub-block reveal-on-scroll" id="where-it-lives">
+      <h2>Where it lives</h2>
+      <p>Three places, all yours. Nothing sits with Crads-AI, because there is nothing central to sit with.</p>
+      <ul class="lives-list">
+        <li><strong>The app, on your laptop.</strong> Windows or Mac. It builds the server, then it is how you open and steer your assistant every day.</li>
+        <li><strong>The mineral, on your server.</strong> A small machine in your own hosting account, built by the app with your own API token, holding only your computer's key. This is where the assistant runs and where its scheduled jobs happen while you sleep.</li>
+        <li><strong>The brain, on your GitHub.</strong> Everything it knows about you, as plain files in a private repository you own, pushed there every night. Lose the server and you lose nothing.</li>
+      </ul>
     </div>
 
     <!-- After -->
     <div class="sub-block reveal-on-scroll">
-      <h2>What you'll have by the end</h2>
-      <p>Claude Code installed and running, an executive assistant set up around a real model of you, your tools connected, a couple of workflows you actually use — and the method to keep building. The system isn't "finished" at Session 4; roughly a third of it is built, and the rest compounds through daily use over the months that follow. That's the point of teaching you to build it: it keeps growing after I step back.</p>
+      <h2>What you have once it is running</h2>
+      <p>The app on your laptop, your assistant (we call it a mineral) on a server you own, and a brain repo on your GitHub that holds everything it knows about you. Your tools connected, a couple of workflows you actually use, and the method to keep building. It is not "finished" on day one; roughly a third of it is built, and the rest compounds through daily use over the months that follow. The <a href="/docs/the-three-layers">docs</a> walk each part.</p>
     </div>
 
-    <!-- Ready -->
+    <!-- Where Sam comes in -->
     <div class="ready-card reveal-on-scroll">
-      <p class="eyebrow">Ready?</p>
-      <h2>Two ways in.</h2>
-      <p>See the full pricing ladder, or book a free 30-minute Discovery call and we'll work out whether this is the right shape for you.</p>
+      <p class="eyebrow">Where I come in</p>
+      <h2>Free to run. Paid when you want a hand.</h2>
+      <p>Most people get there with the <a href="/docs/first-hour">first hour</a> in the docs. If you would rather have someone in the room, a guided setup is two 1-hour sessions and a working session is 90 minutes on one question.</p>
       <div class="ctas">
-        <a class="cta-primary" href="/book/discovery">Book a Discovery call</a>
-        <a class="cta-secondary" href="/offer">See pricing →</a>
+        <a class="cta-primary" href="/download">Download</a>
+        <a class="cta-secondary" href="/offer">Setup and support →</a>
+        <a class="cta-secondary" href="/book/discovery">Book a discovery call</a>
       </div>
     </div>
 
@@ -720,7 +567,6 @@
   <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
   <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
   <div>+61 0493 302 154</div>
-  <div><a href="/account/login">Sign in</a></div>
   <div class="location">Coogee, Sydney.</div>
 </footer>
 

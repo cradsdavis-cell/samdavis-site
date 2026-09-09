@@ -1,7 +1,7 @@
 // api/checkout.js — POST creates Stripe Checkout (paid) OR direct Cal booking (Discovery)
 'use strict';
 
-const { getSku, DISCOVERY_EVENT_TYPE_ID } = require('../lib/skus');
+const { getSku, isPurchasable, DISCOVERY_EVENT_TYPE_ID } = require('../lib/skus');
 const { createCheckoutSession } = require('../lib/stripe');
 const { createBooking, findBookingByStripeSession } = require('../lib/cal');
 
@@ -9,12 +9,6 @@ const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:?\d{2})
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NAME_MAX = 80;
 const MAX_BOOKING_WINDOW_MS = 60 * 86400000; // 60 days
-
-// SKUs that skip per-session Cal booking entirely:
-//   - continuation-retainer: recurring subscription, no Cal booking on
-//     checkout; sessions scheduled ad-hoc out of band. slot_iso optional.
-const NO_CAL_SKUS = new Set(['continuation-retainer']);
-const SUBSCRIPTION_SKUS = new Set(['continuation-retainer']);
 
 function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', process.env.BASE_URL || 'https://crads-ai.com');
@@ -35,9 +29,8 @@ function validateBody({ sku, slot_iso, email, name }) {
   if (!sku || typeof sku !== 'string') return 'missing_sku';
   if (!email || !EMAIL_RE.test(email) || email.length > 254) return 'invalid_email';
   if (!name || typeof name !== 'string') return 'missing_name';
-  // SKUs that don't book a per-customer Cal slot don't need slot_iso validation.
-  // The retainer is scheduled out of band.
-  if (NO_CAL_SKUS.has(sku)) return null;
+  // Every paid SKU books its first Cal slot at checkout (v4: the retainer, the
+  // one SKU that did not, is retired).
   if (!slot_iso || !ISO_RE.test(slot_iso)) return 'invalid_slot_iso';
   const slotMs = Date.parse(slot_iso);
   if (Number.isNaN(slotMs)) return 'invalid_slot_iso';
@@ -110,21 +103,22 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // Paid path
+  // Paid path. Retired slugs (coaching-block, single-session, the retainer)
+  // are unknown here on purpose: a client mid-engagement books through
+  // /account/book, never through a fresh checkout.
+  if (!isPurchasable(sku)) { res.status(400).json({ error: 'unknown_sku' }); return; }
   let cfg;
   try { cfg = getSku(sku); }
-  catch { res.status(400).json({ error: 'unknown_sku' }); return; }
-
-  // Skip Cal booking entirely for the retainer SKU (scheduled out of band). Webhook
-  // reads cal_event_type_id from session metadata and short-circuits when it's 0.
-  // Subscription mode for recurring SKUs (retainer); one-time payment for the rest.
-  const stripeMode = SUBSCRIPTION_SKUS.has(sku) ? 'subscription' : 'payment';
+  catch (err) {
+    console.error('[checkout] SKU misconfigured', sku, err && err.message);
+    res.status(500).json({ error: 'sku_misconfigured' });
+    return;
+  }
 
   try {
     const session = await createCheckoutSession({
-      sku, priceId: cfg.stripe_price_id, slotIso: slot_iso || '', name, email,
+      sku, priceId: cfg.stripe_price_id, slotIso: slot_iso, name, email,
       calEventTypeId: cfg.cal_event_type_id, baseUrl: process.env.BASE_URL,
-      mode: stripeMode,
     });
     res.status(200).json({ checkout_url: session.url, session_id: session.id });
   } catch (err) {

@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert');
-const { computeBalance, engagementBalance, sessionsForSku, initialSessionsUsed } = require('../lib/sessionBalance');
+const { computeBalance, engagementBalance, sessionsForSku, initialSessionsUsed, minGapMsFor } = require('../lib/sessionBalance');
 
 test('sessionsForSku + initialSessionsUsed per SKU', () => {
   assert.strictEqual(sessionsForSku('coaching-block'), 4);
@@ -75,4 +75,26 @@ test('single-session is not a portal-bookable block', () => {
   const single = computeBalance({ state: 'pre-s1', engagements: [{ type: 'single-session', sessions_total: 1, sessions_used: 1 }] });
   assert.strictEqual(single.hasBlock, false);
   assert.strictEqual(single.bookable, false);
+});
+
+// --- v4 (2026-09-09) ---
+
+test('guided-setup: 2 sessions, session 1 used at checkout, 1 left, portal-bookable, 24h gap', () => {
+  assert.strictEqual(sessionsForSku('guided-setup'), 2);
+  assert.strictEqual(sessionsForSku('working-session'), 1);
+  assert.strictEqual(initialSessionsUsed('guided-setup'), 1);
+  assert.strictEqual(initialSessionsUsed('working-session'), 1);
+  assert.strictEqual(initialSessionsUsed('continuation-retainer'), 0);
+  assert.strictEqual(minGapMsFor('guided-setup'), 86400000);
+  assert.strictEqual(minGapMsFor('coaching-block'), 0);
+  const b = computeBalance({ state: 'pre-s1', engagements: [{ type: 'guided-setup', sessions_total: 2, sessions_used: 1 }] });
+  assert.strictEqual(b.remaining, 1);
+  assert.strictEqual(b.bookable, true);
+  assert.strictEqual(b.activeBlock.type, 'guided-setup');
+});
+
+test('working-session is not portal-bookable (its one slot is booked at checkout)', () => {
+  const b = computeBalance({ state: 'pre-s1', engagements: [{ type: 'working-session', sessions_total: 1, sessions_used: 1 }] });
+  assert.strictEqual(b.hasBlock, false);
+  assert.strictEqual(b.bookable, false);
 });

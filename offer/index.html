@@ -5,8 +5,8 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How we work together — Sam Davis</title>
-<meta name="description" content="Three ways in: Single Session, Coaching Block, Continuation Retainer. Plus a free Discovery call to scope.">
+<title>Setup and support · Crads-AI</title>
+<meta name="description" content="Crads-AI is free. Sam's time is not: a guided setup (two 1-hour sessions, A$700), a working session (90 min, A$350), hourly support on request. Free discovery call first.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 <script defer src="/lib/testimonialsRender.js"></script>
@@ -22,7 +22,7 @@
   .offer-hero img { width: 140px; height: auto; }
   .prose-lead { max-width: var(--read-col); margin-bottom: var(--space-3); }
 
-  /* Decision helper — "Which one's right for you?" */
+  /* Decision helper: "Which one's right for you?" */
   .decision-helper {
     background: var(--bg-soft);
     border-left: 4px solid var(--accent);
@@ -103,7 +103,7 @@
   }
   .payment-toggle .active { color: var(--ink-deep); font-weight: 600; }
 
-  /* Pricing grid — 4 SKUs */
+  /* Pricing grid: 4 SKUs */
   .pricing-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -233,16 +233,16 @@
 <!-- SEO: canonical + social cards -->
 <link rel="canonical" href="https://crads-ai.com/offer">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Sam Davis — Crads AI">
+<meta property="og:site_name" content="Crads-AI">
 <meta property="og:url" content="https://crads-ai.com/offer">
-<meta property="og:title" content="How we work together — Sam Davis">
-<meta property="og:description" content="Three ways in: Single Session, Coaching Block, Continuation Retainer. Plus a free Discovery call to scope.">
+<meta property="og:title" content="Setup and support · Crads-AI">
+<meta property="og:description" content="The software is free. A guided setup is two 1-hour sessions (A$700); a working session is 90 minutes on one question (A$350); hourly support after setup on request.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="How we work together — Sam Davis">
-<meta name="twitter:description" content="Three ways in: Single Session, Coaching Block, Continuation Retainer. Plus a free Discovery call to scope.">
+<meta name="twitter:title" content="Setup and support · Crads-AI">
+<meta name="twitter:description" content="The software is free. A guided setup is two 1-hour sessions (A$700); a working session is 90 minutes on one question (A$350); hourly support after setup on request.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body>
@@ -256,28 +256,12 @@
     <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
   </button>
   <div class="nav-links" id="site-nav-links">
-    <div class="nav-group" data-open="false" data-group="system">
-      <a href="/system" class="nav-trigger">The System</a>
-      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The System pages">▾</button>
-      <div class="nav-menu">
-        <a href="/system" class="nav-menu-hub">The system, in one place →</a>
-        <a href="/overview">What it does</a>
-        <a href="/anatomy">Anatomy of an AI-OS</a>
-        <a href="/dashboard">See it live</a>
-      </div>
-    </div>
-    <div class="nav-group" data-open="false" data-group="coaching">
-      <a href="/coaching" class="nav-trigger current">Coaching</a>
-      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Coaching pages">▾</button>
-      <div class="nav-menu">
-        <a href="/coaching" class="nav-menu-hub">How we work together →</a>
-        <a href="/how-it-works">How it works</a>
-        <a href="/offer" class="current">Pricing</a>
-      </div>
-    </div>
+    <a href="/docs" class="nav-simple">Docs</a>
+    <a href="/how-it-works" class="nav-simple">How it works</a>
+    <a href="/offer" class="nav-simple current">Setup and support</a>
     <a href="/about" class="nav-simple">About</a>
-    <a href="/book" class="nav-simple nav-book">Book →</a>
-    <a href="/account/login" class="nav-account">Sign in</a>
+    <a href="/book" class="nav-simple nav-book">Book a call</a>
+    <a href="/download" class="nav-simple nav-cta">Download</a>
   </div>
 </nav>
 
@@ -286,8 +270,9 @@
   <section class="offer-hero wrap">
     <img src="/lib/img/sam-illustration.png" alt="" class="float-gentle">
     <div>
-      <p class="eyebrow">Offer</p>
-      <h1>How we <em class="nowrap">work together.</em></h1>
+      <p class="eyebrow">Setup and support</p>
+      <h1>The software is free. <em class="nowrap">My time is not.</em></h1>
+      <p class="lead">Crads-AI is free, open source and self-hosted; the <a href="/docs">docs</a> get most people there on their own. When you would rather have a person in the room, this is what that costs.</p>
     </div>
   </section>
 
@@ -295,58 +280,43 @@
 
     <!-- Decision helper -->
     <div class="decision-helper reveal-on-scroll">
-      <h2>Which one's you?</h2>
+      <h2>Which one is you?</h2>
       <ul>
-        <li><strong>“I just want to fix one thing that's eating my week”</strong> — Single Session.</li>
-        <li><strong>“I want the whole assistant — built with me, and mine to keep”</strong> — Coaching Block. Start here.</li>
-        <li><strong>“I'm already a client and I want to keep going”</strong> — Continuation Retainer.</li>
+        <li><strong>"I want it set up properly, with someone who has done it before."</strong> Guided setup.</li>
+        <li><strong>"It is running. I have one question."</strong> Working session.</li>
+        <li><strong>"I want to be able to ask again after that."</strong> Hourly support, on request.</li>
       </ul>
     </div>
 
-    <!-- Payment plan toggle -->
-    <div class="payment-toggle" role="group" aria-label="Payment plan">
-      <span class="label-off active" id="label-upfront">Pay upfront</span>
-      <label class="switch">
-        <input type="checkbox" id="payment-plan-toggle" aria-label="Switch to pay in 4 instalments">
-        <span class="slider"></span>
-      </label>
-      <span class="label-on" id="label-pay4">Pay in 4 (+10%)</span>
-    </div>
-
-    <!-- Pricing grid — 2 ways in (Continuation Retainer demoted below) -->
+    <!-- The two ways to buy time -->
     <div class="pricing-grid stagger-grid">
 
-      <!-- Single Session — no pay-in-4 -->
-      <article class="rung" data-sku="single-session">
-        <h3 class="rung-name">Single Session</h3>
-        <p class="rung-meta">90 min · 1:1</p>
-        <p class="price" data-upfront="A$300" data-pay4="A$300">A$300</p>
-        <p class="price-detail" data-upfront="" data-pay4="(no instalment plan on this one)"></p>
-        <p class="rung-pitch">Fix the one thing that's eating your week, in 90 focused minutes. The try-before-you-commit taste of the full block.</p>
-        <a class="cta" href="/book/single-session" data-base-href="/book/single-session">Book a session →</a>
+      <article class="rung featured" data-sku="guided-setup">
+        <span class="rung-badge">Where most people start</span>
+        <h3 class="rung-name">Guided setup</h3>
+        <p class="rung-meta">2 × 60 min · 1:1 · at least a day apart</p>
+        <p class="price">A$700</p>
+        <p class="price-detail">Fixed. Pay once for both sessions.</p>
+        <p class="rung-pitch">Session one: your own server stood up, your brain repo connected, Claude signed in, the app running on your machine. Homework in between. Session two: your first workflows built and written down. You leave with the docs for your own setup, which you keep.</p>
+        <a class="cta" href="/book/guided-setup">Book a guided setup →</a>
       </article>
 
-      <!-- Coaching Block — the standard way in (featured, centre slot to mirror home) -->
-      <article class="rung featured" data-sku="coaching-block">
-        <span class="rung-badge">★ The standard way in</span>
-        <h3 class="rung-name">Coaching Block</h3>
-        <p class="rung-meta">4 × 90 min · 1:1</p>
-        <p class="price" data-upfront="A$1,000" data-pay4="A$1,100">A$1,000</p>
-        <p class="price-detail" data-upfront="Full personalised pack between sessions" data-pay4="4 × A$275 — one payment per session">Full personalised pack between sessions</p>
-        <p class="rung-pitch">Walk away with your own AI assistant running your week — and the skill to keep building it. Four 1:1 sessions, a full personalised pack between each.</p>
-        <a class="cta" href="/book/coaching-block" data-base-href="/book/coaching-block">Book the block →</a>
+      <article class="rung" data-sku="working-session">
+        <h3 class="rung-name">Working session</h3>
+        <p class="rung-meta">90 min · 1:1</p>
+        <p class="price">A$350</p>
+        <p class="price-detail">One question. Recorded, notes after.</p>
+        <p class="rung-pitch">A workflow you want built, a connection that will not behave, a skill you want written. We work on it live and you keep the recording and the notes.</p>
+        <a class="cta" href="/book/working-session">Book a working session →</a>
       </article>
 
     </div>
 
-    <!-- Continuation Retainer — demoted off the primary grid: it's where a
-         client goes AFTER a Block, not a way in. (2026-06-21) -->
     <p class="retainer-note reveal-on-scroll">
-      Already a client and want to keep going? The <a href="/book/continuation-retainer">Continuation Retainer</a> keeps the line open — <strong>A$650/mo</strong>, two 90-minute sessions a month plus async Slack. It's the natural step after a Block, not a way in.
+      After a guided setup, <strong>hourly support is on request</strong>: <a href="mailto:cradsdavis@gmail.com">email me</a> with what you are stuck on and I will quote it. Nothing recurring, nothing you have to cancel.
     </p>
 
-    <!-- Proof strip — client quotes, rendered by /lib/testimonialsRender.js when
-         1+ REAL testimonials exist. Hidden + empty by design until then. -->
+    <!-- Proof strip: client quotes, rendered by /lib/testimonialsRender.js -->
     <section class="testimonials-strip" data-testimonials hidden></section>
 
     <!-- Discovery card -->
@@ -354,79 +324,18 @@
       <p class="eyebrow">Not sure which fits?</p>
       <h2>Start with a call.</h2>
       <span class="meta">30 min · free</span>
-      <p>Discovery is free. Thirty minutes. I'll ask what you're trying to build, you'll ask what I do, and by the end one of three things is true: a rung above fits, you've got a smaller problem we can solve in a single session, or this isn't the right shape and I'll point you somewhere better.</p>
-      <a class="cta-primary" href="/book/discovery">Book a Discovery call</a>
+      <p>Thirty minutes. You tell me what you want the assistant to do, I tell you honestly whether a guided setup is worth it or whether the docs will get you there. No pitch.</p>
+      <a class="cta-primary" href="/book/discovery">Book a discovery call</a>
     </div>
+
+    <!-- retired-offers -->
+    <div class="decision-helper reveal-on-scroll" id="retired">
+      <h2>What is no longer offered</h2>
+      <p>Retired in September 2026, when Crads-AI became free and self-hosted: subscriptions and hosted boxes, the four-session Coaching Block, the Continuation Retainer, the Group Block, and pay-in-4 instalments. If you bought one of these, your sessions and your sign-in still work; email me if anything does not.</p>
+    </div>
+    <!-- /retired-offers -->
   </section>
 </main>
-
-<script>
-  // Payment plan toggle — swaps prices + appends ?plan=pay4 to CTA hrefs.
-  // SKUs with no pay-in-4 (Single Session, Continuation Retainer) leave the
-  // price untouched but show a clarifying detail line.
-  (function () {
-    'use strict';
-    var toggle = document.getElementById('payment-plan-toggle');
-    if (!toggle) return;
-    var labelUpfront = document.getElementById('label-upfront');
-    var labelPay4 = document.getElementById('label-pay4');
-    var rungs = document.querySelectorAll('.rung');
-
-    function applyMode(pay4) {
-      labelUpfront.classList.toggle('active', !pay4);
-      labelPay4.classList.toggle('active', pay4);
-
-      rungs.forEach(function (rung) {
-        var sku = rung.getAttribute('data-sku');
-        var supportsPay4 = (sku === 'coaching-block');
-
-        var priceEl = rung.querySelector('.price');
-        var detailEl = rung.querySelector('.price-detail');
-        var ctaEl = rung.querySelector('.cta');
-
-        if (priceEl) {
-          var newPrice = pay4 ? priceEl.getAttribute('data-pay4') : priceEl.getAttribute('data-upfront');
-          var valueSpan = priceEl.querySelector('[data-price-value]');
-          var suffixSpan = priceEl.querySelector('.price-suffix');
-          if (valueSpan) {
-            valueSpan.textContent = newPrice;
-          } else {
-            // Reset and re-render (no suffix case)
-            priceEl.textContent = newPrice;
-          }
-          // Re-append suffix span if it existed
-          if (suffixSpan && !priceEl.contains(suffixSpan)) {
-            priceEl.appendChild(suffixSpan);
-          }
-        }
-        if (detailEl) {
-          detailEl.textContent = pay4
-            ? detailEl.getAttribute('data-pay4')
-            : detailEl.getAttribute('data-upfront');
-        }
-        if (ctaEl) {
-          var baseHref = ctaEl.getAttribute('data-base-href');
-          if (pay4 && supportsPay4) {
-            ctaEl.setAttribute('href', baseHref + '?plan=pay4');
-          } else {
-            ctaEl.setAttribute('href', baseHref);
-          }
-        }
-      });
-    }
-
-    toggle.addEventListener('change', function () {
-      applyMode(toggle.checked);
-    });
-    // Allow clicking the labels to toggle too
-    labelUpfront.addEventListener('click', function () {
-      toggle.checked = false; applyMode(false);
-    });
-    labelPay4.addEventListener('click', function () {
-      toggle.checked = true; applyMode(true);
-    });
-  })();
-</script>
 
 <footer class="site-footer wrap">
   <span class="wordmark">crads-<span class="accent">ai</span></span>

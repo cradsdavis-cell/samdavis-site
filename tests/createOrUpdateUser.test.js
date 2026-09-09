@@ -86,3 +86,18 @@ test('retainer subscription sets active=true on engagement', async () => {
   assert.strictEqual(u.engagements[0].active, true);
   assert.strictEqual(u.engagements[0].stripe_subscription_id, 'sub_R');
 });
+
+test('v4 guided-setup purchase stamps the checkout slot so the portal can enforce the gap', async () => {
+  const kv = makeKv(fakeKvClient());
+  await createOrUpdateUser({
+    kv,
+    resend: { emails: { send: async () => ({ id: 'em' }) } },
+    email: 'g@example.com', name: 'G', stripeCustomerId: 'cus_G',
+    sku: 'guided-setup', stripeSessionId: 'cs_G', slotIso: '2026-10-01T10:00:00+10:00',
+  });
+  const u = await kv.getUser('g@example.com');
+  assert.strictEqual(u.engagements[0].type, 'guided-setup');
+  assert.strictEqual(u.engagements[0].sessions_total, 2);
+  assert.strictEqual(u.engagements[0].sessions_used, 1);
+  assert.strictEqual(u.engagements[0].first_slot_iso, '2026-10-01T10:00:00+10:00');
+});
