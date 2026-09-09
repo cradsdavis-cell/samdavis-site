@@ -22,6 +22,7 @@ test('hero CTAs are Download and the first hour', () => {
   assert.match(hero, /class="cta-primary" href="\/download"/, 'primary CTA downloads');
   assert.match(hero, /href="\/docs\/first-hour"/, 'secondary CTA reads the docs');
   assert.ok(hero.includes('/lib/img/shots/overview.png'), 'the hero shows the product');
+  assert.match(hero, /href="https:\/\/github\.com\/cradsdavis-cell\/crads-ai"/, 'open source links to the public repository (flipped 2026-09-09)');
 });
 
 test('the product sections exist in order: inside, get-it, free, then the offer', () => {
