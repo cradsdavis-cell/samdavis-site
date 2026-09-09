@@ -14,7 +14,7 @@ function readHIW() {
 
 test('how-it-works page has the canonical head', () => {
   const html = readHIW();
-  assert.ok(html.includes('<title>How it works — Sam Davis</title>'),
+  assert.ok(html.includes('<title>How it works · Crads-AI</title>'),
     'expected canonical title');
   assert.ok(html.includes('href="/lib/site.css"'),
     'expected shared CSS link');
@@ -37,29 +37,23 @@ test('how-it-works page renders the canonical nav with How it works marked curre
   }
 });
 
-test('how-it-works page contains the 4 canonical session-arc headings', () => {
+// 2026-09-09 (v4): the four-session coaching arc, the packs and the private
+// dashboard left this page with the Coaching Block. The four layers stay; the
+// page now ends on what you have once it is running and where Sam comes in.
+test('how-it-works page keeps the four layers and drops the coaching arc', () => {
   const html = readHIW();
-  assert.ok(html.includes('Up and running — and no longer scared of it'),
-    'expected Session 1 heading (up and running)');
-  assert.ok(html.includes('Teach it who you are'),
-    'expected Session 2 heading (teach it who you are)');
-  assert.ok(html.includes('Plug it into your actual day'),
-    'expected Session 3 heading (plug it into your day)');
-  assert.ok(html.includes('Running your week — without me'),
-    'expected Session 4 heading (run it solo)');
-});
-
-test('how-it-works page names the materials and is discovery-only (no lead-magnet)', () => {
-  const html = readHIW();
-  assert.match(html, />Everything you get</, 'expected materials section');
-  assert.ok(html.includes('Pack 0'), 'expected Pack 0 named');
-  assert.ok(html.includes('Pack 1'), 'expected Pack 1 named');
-  assert.ok(html.includes('Pack 2'), 'expected Pack 2 named');
-  assert.ok(html.includes('Pack 3'), 'expected Pack 3 named');
-  assert.ok(!html.includes('data-lead-capture'),
-    'lead-magnet capture form must be removed (discovery-only)');
-  assert.ok(!/free install guide/i.test(html),
-    'free-install-guide lead-magnet copy must be removed');
+  for (const h of ['>Context<', '>Connections<', '>Capabilities<', '>Cadence<']) {
+    assert.ok(html.includes(h), `expected layer heading ${h}`);
+  }
+  assert.ok(html.includes('id="the-four-layers"'), 'expected the four-layers section');
+  assert.match(html, />What you have once it is running</, 'expected the after section');
+  assert.match(html, />Free to run\. Paid when you want a hand\.</, 'expected the where-Sam-comes-in card');
+  for (const gone of ['The 4-session arc', 'Everything you get', 'Pack 0', 'Pack 1', 'Pack 2', 'Pack 3', 'private dashboard', 'Continuation Retainer', 'Coaching Block']) {
+    assert.ok(!html.includes(gone), `${gone} should be gone`);
+  }
+  assert.ok(!html.includes('data-lead-capture'), 'lead-magnet capture form must stay removed');
+  assert.ok(!/free install guide/i.test(html), 'free-install-guide lead-magnet copy must stay removed');
+  assert.match(html, /href="\/download"/, 'expected a Download CTA');
 });
 
 test('how-it-works page contains CTAs to /offer and /book/discovery', () => {
