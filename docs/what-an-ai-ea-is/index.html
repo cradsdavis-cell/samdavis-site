@@ -109,6 +109,10 @@
   .docs-article h2 { font-size: 19px; line-height: 1.3; font-weight: 650; margin: 34px 0 10px; }
   .docs-article h3 { font-size: 16px; line-height: 1.35; font-weight: 650; margin: 24px 0 6px; }
   .docs-article p, .docs-article li { font-family: var(--sans); font-size: 15px; line-height: 1.65; color: var(--ink-soft); }
+  /* site.css zeroes every margin; without this two body paragraphs run into
+     one block (seen on the 2026-09-10 republish), which reads as a wall */
+  .docs-article p { margin: 0 0 0.9em; }
+  .docs-article li { margin: 0 0 0.35em; }
   .docs-article strong, .docs-article b { color: var(--ink-deep); font-weight: 620; }
   .docs-article ul, .docs-article ol { padding-left: 24px; margin: 10px 0; }
   .docs-article li { margin: 4px 0; }
