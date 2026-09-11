@@ -34,11 +34,12 @@ test('between-s3-s4 hero unlocks Pack 3', () => {
   assert.match(html, /Pack 3/);
 });
 
-test('post-s4-decision hero offers a working session (the retainer is retired, v4)', () => {
+test('post-s4-decision hero offers the hourly rate (the retainer and the working session are retired, v5)', () => {
   const user = { state: 'post-s4-decision', email: 'a@b.com' };
   const html = renderHeroCard({ user, nextSession: null });
-  assert.match(html, /working session/i);
-  assert.match(html, /href="\/book\/working-session"/);
+  assert.match(html, /A\$233 an hour/);
+  assert.doesNotMatch(html, /working session|book\/working-session/i);
+  assert.match(html, /href="mailto:cradsdavis@gmail\.com"/);
   assert.doesNotMatch(html, /\$650|Retainer/);
 });
 
@@ -49,11 +50,11 @@ test('retainer-active hero shows monthly cadence', () => {
   assert.match(html, /Retainer active|retainer/i);
 });
 
-test('graduated hero offers a working session', () => {
+test('graduated hero offers the hourly rate', () => {
   const user = { state: 'graduated', email: 'a@b.com' };
   const html = renderHeroCard({ user, nextSession: null });
   assert.match(html, /Alumni|alumni/);
-  assert.match(html, /href="\/book\/working-session"/);
+  assert.match(html, /href="mailto:cradsdavis@gmail\.com"/);
 });
 
 test('guided-setup client sees the two-session hero, not pack copy', () => {
@@ -68,6 +69,24 @@ test('guided-setup client sees the two-session hero, not pack copy', () => {
   const done = renderHeroCard({ user: { ...user, state: 'between-s1-s2', engagements: [{ type: 'guided-setup', sessions_total: 2, sessions_used: 2 }] },
     nextSession: null, balance: { ...balance, remaining: 0, used: 2, activeBlock: null } });
   assert.match(done, /Both sessions booked/);
-  assert.match(done, /href="\/book\/working-session"/);
+  assert.match(done, /A\$233 an hour/);
+  assert.match(done, /href="mailto:cradsdavis@gmail\.com"/);
 });
 
+
+test('walkthrough client sees the same two-session hero as guided setup, labelled walkthrough, 30-minute session 2', () => {
+  const user = { state: 'pre-s1', email: 'w@x.com',
+    engagements: [{ type: 'walkthrough', sessions_total: 2, sessions_used: 1, first_slot_iso: '2026-10-01T10:00:00+10:00' }] };
+  const balance = { activeBlock: user.engagements[0], remaining: 1, used: 1, total: 2, hasBlock: true, bookable: true };
+  const html = renderHeroCard({ user, nextSession: null, balance });
+  assert.match(html, /Walkthrough/);
+  assert.match(html, /Session 1 of 2/);
+  assert.match(html, /30 minutes/);
+  assert.match(html, /href="\/account\/book"/);
+  assert.doesNotMatch(html, /Pack|pack/);
+  const done = renderHeroCard({ user: { ...user, state: 'between-s1-s2', engagements: [{ type: 'walkthrough', sessions_total: 2, sessions_used: 2 }] },
+    nextSession: null, balance: { ...balance, remaining: 0, used: 2, activeBlock: null } });
+  assert.match(done, /Both sessions booked/);
+  assert.match(done, /on your own by design/);
+  assert.match(done, /A\$233 an hour/);
+});

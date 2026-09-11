@@ -29,16 +29,26 @@ function bookingSkuFor(balance) {
   return null;
 }
 
-// The guided setup's session 2 sits at least a day after session 1 (the
-// onboarding homework lives in that gap). Session 1's slot is stamped on the
-// engagement by the Stripe webhook; records without it (admin-created) are
-// not gated. Returns the earliest allowed ms, or null when no gap applies.
+// A v5 engagement's session 2 sits at least a day after session 1 (the
+// onboarding interview, the homework, lives in that gap). Session 1's slot is
+// stamped on the engagement by the Stripe webhook; records without it
+// (admin-created) are not gated. Returns the earliest allowed ms, or null when
+// no gap applies.
 function earliestAllowedMs(engagement) {
   if (!engagement) return null;
   const gap = minGapMsFor(engagement.type);
   if (!gap || !engagement.first_slot_iso) return null;
   const first = Date.parse(engagement.first_slot_iso);
   return Number.isNaN(first) ? null : first + gap;
+}
+
+// Which session (1-based) the client's next portal booking is. v5 SKUs have a
+// different Cal event type (and length) per session, so the portal must book
+// session N's type, not "the" type. Session 1 is always the checkout slot, so
+// the next one is used + 1. The retainer has no counter: always 1.
+function nextSessionNumber(balance) {
+  if (!balance.activeBlock) return 1;
+  return engagementBalance(balance.activeBlock).used + 1;
 }
 
 // Pure-ish booking core. Returns { ok, status, error?, booking? }. Mutates `user`
@@ -58,8 +68,9 @@ async function bookSession({ kv, cal, skus, user, slotIso, now = Date.now() }) {
     return { ok: false, status: 400, error: 'too_soon', earliest_iso: new Date(earliest).toISOString() };
   }
 
+  const sessionNumber = nextSessionNumber(balance);
   let eventTypeId;
-  try { eventTypeId = skus.calEventTypeIdFor(sku); } catch { return { ok: false, status: 500, error: 'sku_misconfigured' }; }
+  try { eventTypeId = skus.calEventTypeIdFor(sku, sessionNumber); } catch { return { ok: false, status: 500, error: 'sku_misconfigured' }; }
 
   // Dedupe a double-submit / refresh on the same slot. Synthetic id mirrors the
   // discovery path's convention so the same Cal-metadata backstop works.
@@ -91,7 +102,7 @@ async function bookSession({ kv, cal, skus, user, slotIso, now = Date.now() }) {
     if (advanced) { user.state = advanced; user.state_updated_at = new Date(now).toISOString(); }
     await kv.setUser(user.email, user);
   }
-  return { ok: true, status: 200, booking, sku };
+  return { ok: true, status: 200, booking, sku, session: sessionNumber };
 }
 
 // ---- HTTP handler (GET = picker page, POST = book) ----
@@ -108,19 +119,21 @@ function parseJsonBody(req) {
 function renderBookPage({ balance, sku, nextSession }) {
   if (!balance.bookable || !sku) {
     const msg = balance.hasBlock
-      ? `You've used all the sessions you paid for. Want more time? <a href="/book/working-session">Book a working session</a>, or <a href="mailto:cradsdavis@gmail.com">email Sam</a> about hourly support.`
+      ? `You've used all the sessions you paid for. After your 30 days of Slack support you're on your own by design; if you want Sam back, it's A$233 an hour: <a href="mailto:cradsdavis@gmail.com">email Sam</a>.`
       : `You don't have a session to book right now. <a href="/offer">See setup and support</a> or <a href="mailto:cradsdavis@gmail.com">email Sam</a>.`;
     return `
       <h1 class="serif">Book a session</h1>
       <section class="panel"><div class="panel-content">${msg}</div></section>`;
   }
 
-  const isGuided = !!(balance.activeBlock && balance.activeBlock.type === 'guided-setup');
+  const v5Type = balance.activeBlock && (balance.activeBlock.type === 'guided-setup' || balance.activeBlock.type === 'walkthrough') ? balance.activeBlock.type : null;
+  const sessionNumber = nextSessionNumber(balance);
   const earliest = earliestAllowedMs(balance.activeBlock);
+  const v5Length = v5Type === 'walkthrough' ? '30 minutes' : 'two hours';
   const balanceLine = balance.isRetainer
     ? `Retainer active: book your next session below.`
-    : isGuided
-      ? `Your second guided setup session. Pick a time at least a day after your first one${earliest ? ` (from ${escapeHtml(new Date(earliest).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Australia/Sydney' }))})` : ''}, so the homework between them has room.`
+    : v5Type
+      ? `Your second ${v5Type === 'walkthrough' ? 'walkthrough' : 'guided setup'} session (${v5Length}). Pick a time at least a day after your first one${earliest ? ` (from ${escapeHtml(new Date(earliest).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Australia/Sydney' }))})` : ''}, so the interview between them has room.`
       : `You have <strong>${balance.remaining}</strong> session${balance.remaining === 1 ? '' : 's'} left in your block (${balance.used} of ${balance.total} used).`;
   const nextLine = nextSession
     ? `<p class="subtitle">Next booked: ${escapeHtml(new Date(nextSession.date).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Australia/Sydney' }))}.</p>`
@@ -139,6 +152,7 @@ function renderBookPage({ balance, sku, nextSession }) {
     (function () {
       'use strict';
       var SKU = ${JSON.stringify(sku)};
+      var SESSION = ${JSON.stringify(sessionNumber)};
       var root = document.getElementById('slot-picker');
       function fmtDay(iso){var d=new Date(iso);return d.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});}
       function fmtTime(iso){var d=new Date(iso);return d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});}
@@ -151,7 +165,7 @@ function renderBookPage({ balance, sku, nextSession }) {
       }
       function load(){
         var now=new Date();var start=now.toISOString();var end=new Date(now.getTime()+21*86400000).toISOString();
-        fetch('/api/cal/availability?sku='+encodeURIComponent(SKU)+'&startDate='+encodeURIComponent(start)+'&endDate='+encodeURIComponent(end))
+        fetch('/api/cal/availability?sku='+encodeURIComponent(SKU)+'&session='+encodeURIComponent(SESSION)+'&startDate='+encodeURIComponent(start)+'&endDate='+encodeURIComponent(end))
           .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
           .then(function(d){render(norm(d.slots!==undefined?d.slots:d));})
           .catch(function(e){root.innerHTML='<div class="slot-error">Could not load times: '+e.message+'. Refresh, or email cradsdavis@gmail.com.</div>';});
@@ -221,3 +235,4 @@ module.exports = async function handler(req, res) {
 module.exports.bookSession = bookSession;
 module.exports.bookingSkuFor = bookingSkuFor;
 module.exports.earliestAllowedMs = earliestAllowedMs;
+module.exports.nextSessionNumber = nextSessionNumber;

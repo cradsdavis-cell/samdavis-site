@@ -39,7 +39,12 @@
     },
     {
       "source": "/book/single-session",
-      "destination": "/book/working-session",
+      "destination": "/book/walkthrough",
+      "permanent": true
+    },
+    {
+      "source": "/book/working-session",
+      "destination": "/book/walkthrough",
       "permanent": true
     },
     {

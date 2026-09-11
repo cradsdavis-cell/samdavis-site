@@ -1,6 +1,6 @@
 # crads-ai.com
 
-The home of Crads-AI: a free, open-source, self-hosted AI assistant that runs on a server you own. The site is the product's front door, its manual and its download page, plus the two paid ways to get Sam's time (guided setup, working session).
+The home of Crads-AI: a free, open-source, self-hosted AI assistant that runs on a server you own. The site is the product's front door, its manual and its download page, plus the two paid ways to get Sam's time (walkthrough, guided setup).
 
 ## What is served
 
@@ -12,7 +12,7 @@ The home of Crads-AI: a free, open-source, self-hosted AI assistant that runs on
 | `/how-it-works` | What it is made of and how it gets built | `how-it-works/index.html` |
 | `/offer` | Setup and support (the two paid SKUs) | `offer/index.html` |
 | `/about` | Who built it | `about/index.html` |
-| `/book`, `/book/discovery`, `/book/guided-setup`, `/book/working-session` | Booking pages (Cal slot picker, Stripe Checkout for the paid two) | `book/*.html`, `book/_slot-picker.js` |
+| `/book`, `/book/discovery`, `/book/walkthrough`, `/book/guided-setup` | Booking pages (Cal slot picker, Stripe Checkout for the paid two) | `book/*.html`, `book/_slot-picker.js` |
 | `/thanks`, `/booking-failed`, `/404` | Utility pages | root |
 
 Unlisted, kept for existing coaching clients and the owner's cockpit: the account portal (`/account/*`, `api/account/*`), the admin API (`api/admin/*`), the Stripe webhook, the Cal proxies. `tests/coachingUnlisted.test.js` pins that these exist and stay gated; nothing links to them from the public site. `api/wc-tasks.js` is a Trello fetcher for the samdavis-trackers dashboard, which still calls it.
@@ -55,28 +55,30 @@ npm test
 
 `node --test tests/*.test.js`; eslint runs inside the suite as a bug net (no style rules). The tests that guard the public surface: `deadLinks` (every site-relative link resolves; redirects never chain), `navConsistency`, `sitemap`, `noBakServed` (no `.bak`/`.pem`/`.md` served), `download`, `coachingUnlisted`, and the Stripe/Cal plumbing tests (`checkout`, `webhook`, `book`, `sessionBalance`).
 
-## Offer and money (v4, 2026-09-09)
+## Offer and money (v5, 2026-09-11)
 
-The software is free. Two SKUs are purchasable (`lib/skus.js`):
+The software is free. Two SKUs are purchasable (`lib/skus.js`), both two sessions at least a day apart. Session 1 is booked at Stripe Checkout; session 2 from `/account/book`, which refuses a slot inside 24h of session 1. The two sessions of a SKU have different lengths, so each SKU carries one Cal event type per session (`sessions: [{label, duration_min, cal_event_env, cal_event_default}]`), and `/api/cal/availability` takes `session=N`.
 
-- **Guided setup, A$700.** Two 1-hour Cal sessions at least a day apart. Session 1 is booked at Stripe Checkout; session 2 from `/account/book`, which refuses a slot inside 24h of session 1.
-- **Working session, A$350.** 90 minutes, booked at checkout.
+- **Walkthrough, A$350.** Session 1 60 min (how to use Claude Code and the app; the client installs both and creates their mineral beforehand), the onboarding interview as homework, session 2 30 min (what it learned, the CRIT method, one real problem).
+- **Guided setup, A$700.** Session 1 60 min (same, plus hosted or local), the interview, session 2 120 min (email, calendar, Slack or WhatsApp connected; first skills; on a server, the morning brief and a first scheduled job).
 
-Retired that day and never purchasable again: the Coaching Block (4 × 90), Single Session, Continuation Retainer (subscription), pay-in-4, Group Block, EA Basic Build. Their Cal event types survive in `LEGACY_SKU_DEFS` so a client mid-engagement can still book from the portal.
+Both include written docs and 30 days of Slack support. Where it lives (a small server, or the app's "On this computer" mode) is the client's call at the same price. After 30 days, extra time is A$233 an hour on request: not a SKU.
 
-Live Stripe price IDs and the two Cal event type IDs are in `lib/skus.js` (neither is a secret); `STRIPE_PRICE_*` and `CAL_EVENT_TYPE_GUIDED_SETUP` / `CAL_EVENT_TYPE_WORKING_SESSION` override them if set.
+Retired 2026-09-11: the Working session (90 min, A$350). Its Stripe price is reused as the walkthrough price (the Stripe product is still named "Working session"; renaming it is a Stripe-side chore, not a code change). Retired 2026-09-09 and never purchasable again: the Coaching Block (4 × 90), Single Session, Continuation Retainer (subscription), pay-in-4, Group Block, EA Basic Build. Their Cal event types survive in `LEGACY_SKU_DEFS` (env only, no default) so a client mid-engagement can still book from the portal.
+
+Live Stripe price IDs and the four Cal event type IDs are in `lib/skus.js` (neither is a secret); `STRIPE_PRICE_WALKTHROUGH` / `STRIPE_PRICE_GUIDED_SETUP` and `CAL_EVENT_TYPE_WALKTHROUGH_S1` / `_S2`, `CAL_EVENT_TYPE_GUIDED_SETUP_S1` / `_S2` override them if set.
 
 ## Env vars (Vercel Production)
 
 Auth and portal: `SESSION_SECRET` (32+ chars), `REDIS_URL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET` (redirect URI `https://crads-ai.com/api/auth/google/callback`), `CRON_SECRET` / `CRON_SECRET_2` (admin API bearer).
 
-Money and booking: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `CAL_API_KEY`, `CAL_EVENT_TYPE_DISCOVERY` (30 min, free), `CAL_EVENT_TYPE_GUIDED_SETUP` and `CAL_EVENT_TYPE_WORKING_SESSION` (optional overrides; the v4 event type IDs are hard-coded in `lib/skus.js`, 60 and 90 min), `CAL_EVENT_TYPE_SINGLE` and `CAL_EVENT_TYPE_BLOCK` (legacy portal bookings only), `BASE_URL`.
+Money and booking: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `CAL_API_KEY`, `CAL_EVENT_TYPE_DISCOVERY` (30 min, free), `CAL_EVENT_TYPE_WALKTHROUGH_S1` / `_S2` and `CAL_EVENT_TYPE_GUIDED_SETUP_S1` / `_S2` (optional overrides; the v5 event type IDs are hard-coded in `lib/skus.js`: 60 + 30 and 60 + 120 min), `CAL_EVENT_TYPE_WORKING_SESSION`, `CAL_EVENT_TYPE_SINGLE` and `CAL_EVENT_TYPE_BLOCK` (legacy portal bookings only), `BASE_URL`.
 
 Changing env vars requires a redeploy.
 
 ## Deploy gate
 
-Before merging to `main`: `npm test` green; open the branch preview on desktop and mobile and check one nav, the Download pill, the v4 prices only, no Sign in; `curl -sI` every redirect source in `vercel.json` (308 + a 200 destination); `/download/windows` and `/download/mac` 302 to assets that answer 200; a smoke booking through `/book/working-session` with a 100% coupon, then delete the Cal booking and the coupon. After deploy, watch the Vercel runtime logs for 500s on `/api/checkout`, `/api/stripe/webhook` and `/api/download`.
+Before merging to `main`: `npm test` green; open the branch preview on desktop and mobile and check one nav, the Download pill, the v5 prices only (A$350, A$700, A$233 an hour), no Sign in; `curl -sI` every redirect source in `vercel.json` (308 + a 200 destination); `/download/windows` and `/download/mac` 302 to assets that answer 200; a smoke booking through `/book/walkthrough` with a 100% coupon, then delete the Cal booking and the coupon. After deploy, watch the Vercel runtime logs for 500s on `/api/checkout`, `/api/stripe/webhook` and `/api/download`.
 
 ## Marketing screenshots
 

@@ -25,6 +25,13 @@ module.exports = async (req, res) => {
     res.status(400).json({ error: 'missing_params', required: ['sku', 'startDate', 'endDate'] });
     return;
   }
+  // v5: a SKU's sessions have different lengths, so the portal asks for session
+  // N's slots. Public /book pages omit it: checkout always books session 1.
+  const session = req.query.session === undefined ? 1 : parseInt(String(req.query.session), 10);
+  if (!(session >= 1)) {
+    res.status(400).json({ error: 'invalid_session' });
+    return;
+  }
 
   // Date sanity bounds
   const startMs = Date.parse(startDate);
@@ -52,10 +59,10 @@ module.exports = async (req, res) => {
       eventTypeId = DISCOVERY_EVENT_TYPE_ID();
     } else {
       // purchasable or legacy: a mid-engagement client's portal picker uses this too
-      eventTypeId = calEventTypeIdFor(sku);
+      eventTypeId = calEventTypeIdFor(sku, session);
     }
   } catch (e) {
-    res.status(400).json({ error: 'unknown_sku' });
+    res.status(400).json({ error: /has \d+ sessions, not/.test(e && e.message) ? 'invalid_session' : 'unknown_sku' });
     return;
   }
 

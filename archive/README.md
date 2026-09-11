@@ -19,3 +19,7 @@ publicly served `*.html.bak` files, three one-off KV backfill/seed scripts
 (one carried client data and none had their dependency installed), the
 `book/ea-basic-build` tombstone and the three meta-refresh stubs
 (`onepager`, `build`, `build-onepager`; `vercel.json` already redirects).
+
+Deleted outright on 2026-09-11 (offer v5): `book/working-session.html`, the
+90-minute Working session page; `vercel.json` redirects it to
+`/book/walkthrough`, the two-session product that took its price.
