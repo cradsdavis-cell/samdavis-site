@@ -79,6 +79,23 @@ test('single-session is not a portal-bookable block', () => {
 
 // --- v4 (2026-09-09) ---
 
+test('the session counts here agree with lib/skus.js for every slug both know', () => {
+  const { sessionCountFor, SKU_SLUGS, LEGACY_SKU_DEFS } = require('../lib/skus');
+  for (const slug of [...SKU_SLUGS, ...Object.keys(LEGACY_SKU_DEFS)]) {
+    assert.strictEqual(sessionsForSku(slug), sessionCountFor(slug), slug);
+  }
+});
+
+test('walkthrough: 2 sessions, session 1 used at checkout, 1 left, portal-bookable, 24h gap', () => {
+  assert.strictEqual(sessionsForSku('walkthrough'), 2);
+  assert.strictEqual(initialSessionsUsed('walkthrough'), 1);
+  assert.strictEqual(minGapMsFor('walkthrough'), 86400000);
+  const b = computeBalance({ state: 'pre-s1', engagements: [{ type: 'walkthrough', sessions_total: 2, sessions_used: 1 }] });
+  assert.strictEqual(b.remaining, 1);
+  assert.strictEqual(b.bookable, true);
+  assert.strictEqual(b.activeBlock.type, 'walkthrough');
+});
+
 test('guided-setup: 2 sessions, session 1 used at checkout, 1 left, portal-bookable, 24h gap', () => {
   assert.strictEqual(sessionsForSku('guided-setup'), 2);
   assert.strictEqual(sessionsForSku('working-session'), 1);

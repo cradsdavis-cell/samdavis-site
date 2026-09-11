@@ -151,3 +151,39 @@ test('guided setup: after both sessions nothing is left to book', async () => {
   assert.strictEqual(r.status, 403);
   assert.strictEqual(calls.createBooking.length, 0);
 });
+
+// --- v5 (2026-09-11): a SKU's sessions have different Cal types; the portal books session N's ---
+
+test('the portal asks for session (used + 1)\'s Cal type: session 2 of a walkthrough, never session 1\'s', async () => {
+  const asked = [];
+  const { kv, cal, calls } = fakes();
+  const skus = { calEventTypeIdFor: (sku, session) => { asked.push([sku, session]); return session === 2 ? 30302 : 60601; } };
+  const user = { email: 'w@y.com', name: 'W', state: 'pre-s1',
+    engagements: [{ type: 'walkthrough', sessions_total: 2, sessions_used: 1, first_slot_iso: '2026-06-24T10:00:00+10:00' }] };
+  const r = await bookSession({ kv, cal, skus, user, slotIso: '2026-06-26T10:00:00+10:00', now: NOW });
+  assert.strictEqual(r.ok, true);
+  assert.strictEqual(r.sku, 'walkthrough');
+  assert.strictEqual(r.session, 2);
+  assert.deepStrictEqual(asked, [['walkthrough', 2]]);
+  assert.strictEqual(calls.createBooking[0].eventTypeId, 30302);
+  assert.strictEqual(user.engagements[0].sessions_used, 2);
+});
+
+test('walkthrough: session 2 inside 24h of session 1 is refused as too_soon, like the guided setup', async () => {
+  const { kv, cal, skus, calls } = fakes();
+  const user = { email: 'w@y.com', name: 'W', state: 'pre-s1',
+    engagements: [{ type: 'walkthrough', sessions_total: 2, sessions_used: 1, first_slot_iso: '2026-06-24T10:00:00+10:00' }] };
+  const r = await bookSession({ kv, cal, skus, user, slotIso: '2026-06-25T09:00:00+10:00', now: NOW });
+  assert.strictEqual(r.ok, false);
+  assert.strictEqual(r.error, 'too_soon');
+  assert.strictEqual(calls.createBooking.length, 0);
+});
+
+test('a legacy block asks for session (used + 1) too; the retainer always asks for session 1', async () => {
+  const asked = [];
+  const { kv, cal } = fakes();
+  const skus = { calEventTypeIdFor: (sku, session) => { asked.push([sku, session]); return 777; } };
+  await bookSession({ kv, cal, skus, user: blockUser(2), slotIso: FUTURE, now: NOW });
+  await bookSession({ kv, cal, skus, user: { email: 'r@y.com', state: 'retainer-active', engagements: [] }, slotIso: FUTURE, now: NOW });
+  assert.deepStrictEqual(asked, [['coaching-block', 3], ['continuation-retainer', 1]]);
+});

@@ -60,14 +60,15 @@ test('the URLs clients already hold still resolve: rewrites and static pages sur
     assert.ok(sources.has(url), `${url} lost its rewrite — a client's link would 404`);
   }
   // 2026-09-09 (v4): the three coaching-era booking pages became redirects
-  // (single-session -> working-session, coaching-block -> guided-setup,
-  // continuation-retainer -> /offer), so a held link still lands somewhere
-  // true. The pages that must exist are the v4 ones.
-  for (const page of ['book/index.html', 'book/guided-setup.html', 'book/working-session.html', 'thanks.html']) {
+  // (single-session, coaching-block -> guided-setup, continuation-retainer ->
+  // /offer); 2026-09-11 (v5): working-session joined them (-> walkthrough, and
+  // single-session repointed there so no redirect chains). A held link still
+  // lands somewhere true. The pages that must exist are the v5 ones.
+  for (const page of ['book/index.html', 'book/walkthrough.html', 'book/guided-setup.html', 'thanks.html']) {
     assert.ok(existsSync(join(ROOT, page)), `${page} was deleted`);
   }
   const redirected = new Set(cfg.redirects.map((r) => r.source));
-  for (const url of ['/book/single-session', '/book/coaching-block', '/book/continuation-retainer']) {
+  for (const url of ['/book/single-session', '/book/working-session', '/book/coaching-block', '/book/continuation-retainer']) {
     assert.ok(redirected.has(url), `${url} neither exists nor redirects: a client's link would 404`);
   }
 });
