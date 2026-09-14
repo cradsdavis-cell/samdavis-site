@@ -13,7 +13,7 @@
 const { renderDownloadPage } = require('../lib/downloadPage');
 const { releaseAssets } = require('../lib/releaseAssets');
 
-const REL = 'https://github.com/cradsdavis-cell/crads-ai-app/releases/download/wizard-app';
+const REL = 'https://github.com/cradsdavis-cell/crads-ai/releases/download/wizard-app';
 const ASSETS = { windows: `${REL}/crads-ai.exe`, mac: `${REL}/crads-ai-mac.zip` };
 
 module.exports = async (req, res) => {
