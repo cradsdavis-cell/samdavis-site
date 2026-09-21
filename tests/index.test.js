@@ -10,8 +10,8 @@ const path = require('path');
 const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 
 test('front door names the product, not the coaching', () => {
-  assert.ok(html.includes('<title>Crads-AI · A free, self-hosted AI assistant that knows you</title>'), 'title');
-  assert.match(html, /<h1>An AI assistant on your own server that /, 'h1 leads with the product');
+  assert.ok(html.includes('<title>Crads-AI · The AI foundation for you and your business</title>'), 'title');
+  assert.match(html, /<h1>The AI foundation for you and /, 'h1 leads with the foundation');
   const desc = html.match(/<meta name="description" content="([^"]*)">/)[1];
   assert.ok(!/coach/i.test(desc), 'no coaching framing in the description');
   assert.ok(html.includes('<meta property="og:site_name" content="Crads-AI">'), 'og:site_name is the product');
