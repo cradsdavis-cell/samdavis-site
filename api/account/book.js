@@ -119,7 +119,7 @@ function parseJsonBody(req) {
 function renderBookPage({ balance, sku, nextSession }) {
   if (!balance.bookable || !sku) {
     const msg = balance.hasBlock
-      ? `You've used all the sessions you paid for. After your 30 days of Slack support you're on your own by design; if you want Sam back, it's A$233 an hour: <a href="mailto:cradsdavis@gmail.com">email Sam</a>.`
+      ? `You've used all the sessions you paid for. After your 30 days of Slack support it's yours, and you're welcome to invite Sam back into the chat whenever you like, at A$233 an hour: <a href="mailto:cradsdavis@gmail.com">email Sam</a>.`
       : `You don't have a session to book right now. <a href="/offer">See setup and support</a> or <a href="mailto:cradsdavis@gmail.com">email Sam</a>.`;
     return `
       <h1 class="serif">Book a session</h1>

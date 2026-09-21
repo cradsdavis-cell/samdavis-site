@@ -87,6 +87,6 @@ test('walkthrough client sees the same two-session hero as guided setup, labelle
   const done = renderHeroCard({ user: { ...user, state: 'between-s1-s2', engagements: [{ type: 'walkthrough', sessions_total: 2, sessions_used: 2 }] },
     nextSession: null, balance: { ...balance, remaining: 0, used: 2, activeBlock: null } });
   assert.match(done, /Both sessions booked/);
-  assert.match(done, /on your own by design/);
+  assert.match(done, /invite Sam back into the chat/);
   assert.match(done, /A\$233 an hour/);
 });

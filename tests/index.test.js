@@ -58,7 +58,7 @@ test('the offer on the front door is v5 and nothing ongoing', () => {
   assert.match(html, /href="\/book\/guided-setup"/);
   assert.ok(!/book\/working-session/.test(html), 'the working session is retired');
   assert.match(html, /A\$233 an hour/);
-  assert.match(html, /on your own by design/);
+  assert.match(html, /invite me back into the chat/);
   assert.match(html, /on your own computer/);
   assert.match(html, /You won't write code\. You will open a terminal once/);
   assert.ok(!/four sessions|4 sessions|retainer/i.test(html), 'no session arc or retainer copy');

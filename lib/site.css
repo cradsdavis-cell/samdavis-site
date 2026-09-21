@@ -1498,6 +1498,16 @@ a:hover { color: var(--accent-deep); }
 .rung-includes li { padding-left: 1.1em; position: relative; margin-bottom: 0.55em; }
 .rung-includes li::before { content: "•"; position: absolute; left: 0; color: var(--accent); }
 .rung-includes strong { color: var(--ink-deep); }
+.rung-label {
+  margin: var(--space-2) 0 0;
+  font-size: 0.78em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.rung-outcomes { color: var(--ink-deep); }
+.rung-ladder .rung-card ul.r-pitch { margin-top: 0; }
 .rung-pitch {
   color: var(--ink-soft);
   font-size: 0.95em;
