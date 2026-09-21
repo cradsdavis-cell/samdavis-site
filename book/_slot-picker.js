@@ -100,7 +100,7 @@
         <div class="field"><label for="bk-name">Your name</label><input id="bk-name" type="text" name="name" autocomplete="name" required></div>
         <div class="field"><label for="bk-email">Email</label><input id="bk-email" type="email" name="email" autocomplete="email" required></div>
         <input type="hidden" name="slot_iso" id="slot-iso">
-        ${isPaid ? `<div class="field field-check"><label for="bk-terms"><input id="bk-terms" type="checkbox" name="agreed_terms" value="yes" required><span>I agree to the <a href="/docs/terms" target="_blank" rel="noopener">terms of service</a>, including the <a href="/docs/terms#10-paid-sessions-cancelling-and-refunds" target="_blank" rel="noopener">cancellation and refund terms</a>.</span></label></div>` : ''}
+        ${isPaid ? `<div class="field field-check"><label for="bk-terms"><input id="bk-terms" type="checkbox" name="agreed_terms" value="yes" required><span>I agree to the <a href="/docs/terms" target="_blank" rel="noopener">terms of service</a>.</span></label></div>` : ''}
         <button class="book-cta" type="submit" id="submit-btn">
           ${isPaid ? 'Book + Pay →' : 'Book →'}
         </button>
