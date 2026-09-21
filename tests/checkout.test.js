@@ -96,6 +96,7 @@ test('creates Stripe session and returns checkout_url', async () => {
     slot_iso: FUTURE_SLOT,
     email: 'alex@example.com',
     name: 'Alex Mills',
+    agreed_terms: true,
   }), res);
   assert.strictEqual(res.statusCode, 200);
   assert.ok(res.body.checkout_url.startsWith('https://stripe.test/'));
@@ -144,7 +145,7 @@ test('name sanitization strips URLs', async () => {
 test('guided-setup: payment mode, slot required, default price id, session 1 (60-min) Cal type', async () => {
   resetStripeCalls(); resetCalCalls();
   const res = mockRes();
-  await handler(mockReq({ sku: 'guided-setup', slot_iso: FUTURE_SLOT, email: 'g@example.com', name: 'G' }), res);
+  await handler(mockReq({ sku: 'guided-setup', slot_iso: FUTURE_SLOT, email: 'g@example.com', name: 'G', agreed_terms: true }), res);
   assert.strictEqual(res.statusCode, 200);
   assert.strictEqual(STRIPE_CALLS.length, 1);
   const args = STRIPE_CALLS[0];
@@ -166,7 +167,7 @@ test('guided-setup: rejects a missing slot (no out-of-band SKU survives)', async
 test('walkthrough: env override wins over the default price id, session 1 (60-min) Cal type, never session 2', async () => {
   resetStripeCalls();
   const res = mockRes();
-  await handler(mockReq({ sku: 'walkthrough', slot_iso: FUTURE_SLOT, email: 'w@example.com', name: 'W' }), res);
+  await handler(mockReq({ sku: 'walkthrough', slot_iso: FUTURE_SLOT, email: 'w@example.com', name: 'W', agreed_terms: true }), res);
   assert.strictEqual(res.statusCode, 200);
   assert.strictEqual(STRIPE_CALLS[0].priceId, 'price_test_walkthrough');
   assert.strictEqual(STRIPE_CALLS[0].calEventTypeId, 109);
@@ -212,4 +213,47 @@ test('lib/skus: calEventTypeIdFor resolves per session, and legacy slugs for the
   assert.strictEqual(sessionLabelFor('walkthrough', 2), 'Walkthrough, session 2');
   assert.strictEqual(sessionCountFor('continuation-retainer'), null);
   delete process.env.CAL_EVENT_TYPE_WORKING_SESSION;
+});
+
+// Terms agreement (2026-09-21). The tick box on the booking form is the UX;
+// this is the guarantee, because anything can POST to /api/checkout.
+test('paid checkout is refused without the terms agreement, and Stripe is never called', async () => {
+  for (const agreed of [undefined, false, 'true', 'yes', 1]) {
+    resetStripeCalls();
+    const res = mockRes();
+    const body = { sku: 'walkthrough', slot_iso: FUTURE_SLOT, email: 'a@b.com', name: 'X' };
+    if (agreed !== undefined) body.agreed_terms = agreed;
+    await handler(mockReq(body), res);
+    assert.strictEqual(res.statusCode, 400, `agreed_terms=${JSON.stringify(agreed)} should be refused`);
+    assert.strictEqual(res.body.error, 'terms_not_accepted');
+    assert.strictEqual(STRIPE_CALLS.length, 0, 'no Stripe session without agreement');
+  }
+});
+
+test('paid checkout records the terms version and time it was agreed', async () => {
+  resetStripeCalls();
+  const { TERMS_VERSION } = require('../lib/terms');
+  const before = Date.now();
+  const res = mockRes();
+  await handler(mockReq({ sku: 'guided-setup', slot_iso: FUTURE_SLOT, email: 'g@example.com', name: 'G', agreed_terms: true }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(STRIPE_CALLS[0].termsVersion, TERMS_VERSION);
+  const at = Date.parse(STRIPE_CALLS[0].termsAcceptedAt);
+  assert.ok(at >= before && at <= Date.now(), 'accepted-at is the request time');
+});
+
+test('free discovery booking does not require the terms tick box', async () => {
+  resetCalCalls();
+  const res = mockRes();
+  await handler(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, email: 'd@example.com', name: 'D' }, { free: '1' }), res);
+  assert.strictEqual(res.statusCode, 200);
+});
+
+test('the published terms page carries the version the checkout records', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const { TERMS_VERSION, REFUNDS_ANCHOR } = require('../lib/terms');
+  const html = fs.readFileSync(path.join(__dirname, '..', 'docs', 'terms', 'index.html'), 'utf8');
+  assert.ok(html.includes(`Version ${TERMS_VERSION},`), `docs/terms says a different version than lib/terms.js (${TERMS_VERSION})`);
+  assert.ok(html.includes(`id="${REFUNDS_ANCHOR}"`), 'the refunds anchor the booking form links to is missing');
 });

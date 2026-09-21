@@ -111,6 +111,9 @@ body {
   font-family: var(--sans);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
+.field-check label { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.9rem; line-height: 1.45; cursor: pointer; }
+.field-check input[type="checkbox"] { width: auto; flex: 0 0 auto; margin-top: 0.2rem; accent-color: var(--accent); }
+.field-check a { color: var(--accent-deep, var(--accent)); }
 .field input:focus {
   outline: none;
   border-color: var(--accent);

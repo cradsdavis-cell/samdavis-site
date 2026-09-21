@@ -4,6 +4,7 @@
 const { getSku, isPurchasable, DISCOVERY_EVENT_TYPE_ID } = require('../lib/skus');
 const { createCheckoutSession } = require('../lib/stripe');
 const { createBooking, findBookingByStripeSession } = require('../lib/cal');
+const { TERMS_VERSION } = require('../lib/terms');
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:?\d{2})$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -107,6 +108,10 @@ module.exports = async (req, res) => {
   // are unknown here on purpose: a client mid-engagement books through
   // /account/book, never through a fresh checkout.
   if (!isPurchasable(sku)) { res.status(400).json({ error: 'unknown_sku' }); return; }
+  // The tick box on the booking form. Enforced here too, because the form is
+  // not the only thing that can POST to this endpoint. Strictly boolean true:
+  // a string "false" must not count as agreement.
+  if (body.agreed_terms !== true) { res.status(400).json({ error: 'terms_not_accepted' }); return; }
   let cfg;
   try { cfg = getSku(sku); }
   catch (err) {
@@ -119,6 +124,7 @@ module.exports = async (req, res) => {
     const session = await createCheckoutSession({
       sku, priceId: cfg.stripe_price_id, slotIso: slot_iso, name, email,
       calEventTypeId: cfg.cal_event_type_id, baseUrl: process.env.BASE_URL,
+      termsVersion: TERMS_VERSION, termsAcceptedAt: new Date().toISOString(),
     });
     res.status(200).json({ checkout_url: session.url, session_id: session.id });
   } catch (err) {
