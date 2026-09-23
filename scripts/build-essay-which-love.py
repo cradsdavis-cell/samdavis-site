@@ -251,12 +251,9 @@ FIGURES = [
     ("His answer, in other words, is love.", photo("kg-mother-son.jpg", "A Kyrgyz mother in a headscarf and her teenage son standing together", "A mother and son selling apricots by the road, Kyrgyzstan.", 900, 1200, "portrait"), "after"),
     ("Steve Omohundro added the sharper point", D_CONVERGE, "after"),
     ("- Researchers at Anthropic and Redwood", dumbbell(), "after"),
-    ("## The mirror", img("mirror-lake.jpg", "A still alpine lake reflecting snow-capped mountains", "The mirror."), "after"),
-    ("## Which love", img("forest-monastery.jpg", "A forest monastery hall among eucalypts above a misty valley, a monk walking the path", "A forest monastery in the bush."), "after"),
     ("That's the love I think we should be trying to build.", D_LOVES, "after"),
     ("Hierocles, a Stoic", D_CIRCLES, "after"),
     ("Now look again at the alignment-faking result.", HOLD, "after"),
-    ("## Imagine Sisyphus happy", img("sisyphus.jpg", "A small figure pushing a round boulder up a green hill at golden hour", "One must imagine Sisyphus happy."), "after"),
     ("## The test", photo("kg-glacier.jpg", "Three mountaineers in orange jackets looking out across a glacier to snow peaks", "Looking out across the East Bordlu Glacier."), "after"),
 ]
 
@@ -368,7 +365,7 @@ PAGE = f"""<!DOCTYPE html>
         <summary>References</summary>
         {"".join(refs_html)}
       </details>
-      <p class="essay-credit">Photographs of Kyrgyzstan by Alex Metcalfe (<a href="https://www.alexmetcalfephotography.com/blog-notes-from-the-road/expedition-kyrgyzstan-trip-report" target="_blank" rel="noopener">alexmetcalfephotography.com</a>), the expedition’s photographer. Other illustrations generated with AI for this essay. Figures by the author.</p>
+      <p class="essay-credit">Photographs of Kyrgyzstan by Alex Metcalfe (<a href="https://www.alexmetcalfephotography.com/blog-notes-from-the-road/expedition-kyrgyzstan-trip-report" target="_blank" rel="noopener">alexmetcalfephotography.com</a>), the expedition’s photographer. Figures by the author.</p>
     </section>
   </article>
 </main>
