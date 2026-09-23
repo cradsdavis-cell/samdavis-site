@@ -2,6 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://crads-ai.com/</loc><lastmod>2026-09-10</lastmod><priority>1.0</priority></url>
   <url><loc>https://crads-ai.com/about</loc><lastmod>2026-09-09</lastmod><priority>0.7</priority></url>
+  <url><loc>https://crads-ai.com/writing</loc><lastmod>2026-09-24</lastmod><priority>0.6</priority></url>
+  <url><loc>https://crads-ai.com/writing/which-love</loc><lastmod>2026-09-24</lastmod><priority>0.7</priority></url>
   <url><loc>https://crads-ai.com/book</loc><lastmod>2026-09-09</lastmod><priority>0.7</priority></url>
   <url><loc>https://crads-ai.com/book/discovery</loc><lastmod>2026-09-09</lastmod><priority>0.7</priority></url>
   <url><loc>https://crads-ai.com/book/guided-setup</loc><lastmod>2026-09-10</lastmod><priority>0.7</priority></url>
