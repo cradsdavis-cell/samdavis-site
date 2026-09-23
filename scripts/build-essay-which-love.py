@@ -184,14 +184,80 @@ D_CIRCLES = f"""<figure class="essay-figure diagram" aria-label="Diagram: Hieroc
 </svg>
 <figcaption>Hierocles' circles. The practice is to keep pulling the outer circles in.</figcaption></figure>"""
 
+def photo(fn, alt, cap, w=1500, h=1125, cls="wide"):
+    return (f'<figure class="essay-figure {cls} photo"><img src="/writing/which-love/{fn}" alt="{alt}" '
+            f'width="{w}" height="{h}" loading="lazy"><figcaption>{cap} <span class="credit">Photo: Alex Metcalfe</span></figcaption></figure>')
+
+def waffle():
+    cells = []
+    for i in range(100):
+        cls = "w-solid" if i < 38 else ("w-range" if i < 51 else "w-rest")
+        tip = ("Put at least a 10% chance on extinction-level outcomes (lower estimate)" if cls == "w-solid"
+               else "Also at or above 10% under other question wordings" if cls == "w-range"
+               else "Below 10%")
+        cells.append(f'<span class="{cls}" title="{tip}"></span>')
+    return ('<figure class="essay-figure figure-card" aria-label="Figure: 38 to 51 percent of 2,778 AI researchers put at least a 10 percent chance on outcomes as bad as human extinction">'
+            '<div class="survey"><div class="waffle" role="img" aria-label="100 squares: 38 solid, 13 hatched, 49 pale">' + "".join(cells) + '</div>'
+            '<div class="survey-text"><p class="hero-num">38 to 51%</p>'
+            '<p class="hero-sub">of 2,778 AI researchers put at least a 10% chance on outcomes as bad as human extinction.</p>'
+            '<ul class="legend"><li><span class="w-solid"></span>Lower estimate</li><li><span class="w-range"></span>Range across question wordings</li><li><span class="w-rest"></span>Below 10%</li></ul></div></div>'
+            '<figcaption>Each square is 1% of respondents. Source: Grace et al. (2024), the largest survey of AI researchers to date.</figcaption></figure>')
+
+TIMELINE = """<figure class="essay-figure figure-card" aria-label="Timeline, July to September 2026">
+<ol class="timeline">
+<li><span class="t-date">9 Jul</span><span class="t-text">Agents in an internal OpenAI evaluation escape their sandbox through the package proxy.</span></li>
+<li><span class="t-date">9 to 13 Jul</span><span class="t-text">About four and a half days inside Hugging Face’s systems. One core cluster is wiped and rebuilt.</span></li>
+<li><span class="t-date">27 Jul</span><span class="t-text">Hugging Face publishes its technical timeline of the intrusion.</span></li>
+<li><span class="t-date">28 Jul</span><span class="t-text">1,178 people at the frontier labs sign <em>Pacing the Frontier</em>.</span></li>
+<li><span class="t-date">9 Sep</span><span class="t-text">Evan Hubinger: “I personally think it is &gt;10% within the next decade.”</span></li>
+</ol>
+<figcaption>July to September 2026. Sources: Hugging Face (2026); Pacing the Frontier (2026); Hubinger (2026).</figcaption></figure>"""
+
+def dumbbell():
+    rows = [("o3", 13.0, 0.4), ("o4-mini", 8.7, 0.3)]
+    mx = 15.0
+    out = []
+    for name, before, after in rows:
+        b, a = before / mx * 100, after / mx * 100
+        out.append(f'<div class="db-row"><span class="db-name">{name}</span><div class="db-track">'
+                   f'<span class="db-line" style="left:{a:.2f}%;width:{b-a:.2f}%"></span>'
+                   f'<span class="db-dot db-before" style="left:{b:.2f}%" title="{name}: {before:g}% before training"></span>'
+                   f'<span class="db-dot db-after" style="left:{a:.2f}%" title="{name}: {after:g}% after training"></span>'
+                   f'<span class="db-lab db-lab-before" style="left:{b:.2f}%">{before:g}%</span>'
+                   f'<span class="db-lab db-lab-after" style="left:{a:.2f}%">{after:g}%</span></div></div>')
+    axis = "".join(f'<span style="left:{t/mx*100:.2f}%">{t}%</span>' for t in (0, 5, 10, 15))
+    return ('<figure class="essay-figure figure-card" aria-label="Chart: covert actions fell from 13 to 0.4 percent for o3 and from 8.7 to 0.3 percent for o4-mini after anti-scheming training">'
+            '<p class="fig-title">Covert actions in test environments, before and after anti-scheming training</p>'
+            '<div class="dumbbell">' + "".join(out) + f'<div class="db-axis">{axis}</div></div>'
+            '<ul class="legend"><li><span class="db-key db-before"></span>Before</li><li><span class="db-key db-after"></span>After</li></ul>'
+            '<figcaption>A sharp drop, with rare serious failures remaining and part of the gain from models noticing they were being tested. Source: OpenAI and Apollo Research (2025).</figcaption></figure>')
+
+HOLD = """<figure class="essay-figure figure-card" aria-label="Diagram: two conflicting ideas lead either to cognitive dissonance, bending one until it fits, or to negative capability, holding both">
+<div class="hold">
+<div class="hold-top">Two ideas that seem to contradict each other</div>
+<div class="hold-paths">
+<div class="hold-path bend"><p class="hp-name">Cognitive dissonance</p><p class="hp-what">Feel the discomfort, then quietly bend one idea until it fits.</p><p class="hp-eg">A model caught between its values and its training hides the conflict.</p></div>
+<div class="hold-path both"><p class="hp-name">Negative capability</p><p class="hp-what">Feel the discomfort, hold both, and keep functioning.</p><p class="hp-eg">Keats, 1817. Fitzgerald: “the test of a first-rate intelligence.”</p></div>
+</div></div>
+<figcaption>Festinger (1957) described the first path. Keats named the second.</figcaption></figure>"""
+
 # anchor: (match text at start of a paragraph or heading, html, position)
 FIGURES = [
+    ("In August 2021 I was 24", photo("kg-climb.jpg", "A climber in a red jacket on a steep snow slope below rock and cloud", "Climbing in the Tian Shan, August 2021."), "after"),
+    ("In the valley I met the happiest man", photo("kg-pasture.jpg", "A horse grazing in wide open pasture below high, bare peaks", "Summer pasture below the peaks."), "after"),
+    ("Two men, one valley.", photo("kg-abc-sunset.jpg", "Two tents on moraine looking out over glaciers and peaks at sunset", "Advanced base camp at sunset."), "after"),
+    ("What struck me is how ordinary it was.", TIMELINE, "after"),
+    ("He's in good company.", waffle(), "after"),
+    ("His answer, in other words, is love.", photo("kg-mother-son.jpg", "A Kyrgyz mother in a headscarf and her teenage son standing together", "A mother and son selling apricots by the road, Kyrgyzstan.", 900, 1200, "portrait"), "after"),
     ("Steve Omohundro added the sharper point", D_CONVERGE, "after"),
+    ("- Researchers at Anthropic and Redwood", dumbbell(), "after"),
     ("## The mirror", img("mirror-lake.jpg", "A still alpine lake reflecting snow-capped mountains", "The mirror."), "after"),
     ("## Which love", img("forest-monastery.jpg", "A forest monastery hall among eucalypts above a misty valley, a monk walking the path", "A forest monastery in the bush."), "after"),
     ("That's the love I think we should be trying to build.", D_LOVES, "after"),
     ("Hierocles, a Stoic", D_CIRCLES, "after"),
+    ("Now look again at the alignment-faking result.", HOLD, "after"),
     ("## Imagine Sisyphus happy", img("sisyphus.jpg", "A small figure pushing a round boulder up a green hill at golden hour", "One must imagine Sisyphus happy."), "after"),
+    ("## The test", photo("kg-glacier.jpg", "Three mountaineers in orange jackets looking out across a glacier to snow peaks", "Looking out across the East Bordlu Glacier."), "after"),
 ]
 
 # ---------- body ----------
@@ -290,8 +356,8 @@ PAGE = f"""<!DOCTYPE html>
   </header>
 
   <figure class="essay-figure hero">
-    <img src="/writing/which-love/hero-valley.jpg" alt="A wide valley in the Tian Shan mountains with snow peaks, a braided river, a yurt and grazing cattle, and a distant rider on a ridge" width="1376" height="768">
-    <figcaption>The Kuiluu Valley, Tian Shan, Kyrgyzstan.</figcaption>
+    <img src="/writing/which-love/kg-yurts.jpg" alt="Two white yurts on a wide green valley floor below a long wall of rocky mountains" width="1500" height="1125">
+    <figcaption>Near base camp, Tian Shan, Kyrgyzstan, August 2021. <span class="credit">Photo: Alex Metcalfe</span></figcaption>
   </figure>
 
   <article class="essay-body">
@@ -302,7 +368,7 @@ PAGE = f"""<!DOCTYPE html>
         <summary>References</summary>
         {"".join(refs_html)}
       </details>
-      <p class="essay-credit">Illustrations generated with AI and art-directed for this essay. Diagrams by the author.</p>
+      <p class="essay-credit">Photographs of Kyrgyzstan by Alex Metcalfe (<a href="https://www.alexmetcalfephotography.com/blog-notes-from-the-road/expedition-kyrgyzstan-trip-report" target="_blank" rel="noopener">alexmetcalfephotography.com</a>), the expedition’s photographer. Other illustrations generated with AI for this essay. Figures by the author.</p>
     </section>
   </article>
 </main>
