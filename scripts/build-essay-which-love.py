@@ -309,11 +309,13 @@ PAGE = f"""<!DOCTYPE html>
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Crads-AI">
 <meta property="og:url" content="https://crads-ai.com/writing/which-love">
-<meta property="og:title" content="Which love?">
+<meta property="og:title" content="Which love? · Sam Davis">
 <meta property="og:description" content="{html.escape(dek)}">
 <meta property="og:image" content="https://crads-ai.com/writing/which-love/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two yurts on a green valley floor below rocky mountains, Tian Shan, Kyrgyzstan">
+<meta name="author" content="Sam Davis">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Which love?">
 <meta name="twitter:description" content="{html.escape(dek)}">
