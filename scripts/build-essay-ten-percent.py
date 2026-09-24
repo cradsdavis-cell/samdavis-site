@@ -17,7 +17,7 @@ import html, re, sys, pathlib
 SLUG = "is-ten-percent-a-lot"
 SRC = pathlib.Path(sys.argv[1]).read_text()
 OUT = pathlib.Path(__file__).resolve().parent.parent / "writing" / SLUG / "index.html"
-DATE_PUBLISHED = "2026-09-25"  # placeholder until Sam picks the publish day
+DATE_PUBLISHED = "2026-09-24"
 
 body_md = SRC[SRC.index("# Is Ten Percent a Lot?"):]
 
