@@ -4,6 +4,7 @@
 Usage: python3 scripts/build-essay-which-love.py <essay.md>
 The markdown is Sam's edited text (source of truth: the Google Doc, mirrored in
 second-brain ops/inbox/2026-09-23-essay-which-love-draft.md). Re-run after any edit.
+After building, run `npm run nav` so the static nav matches lib/site.js NAV_ITEMS.
 Figures and diagrams are injected at anchor paragraphs (FIGURES below); in-text
 citations "(Author, 2024)" are linked to their reference entries.
 """
@@ -339,6 +340,7 @@ PAGE = f"""<!DOCTYPE html>
     <a href="/how-it-works" class="nav-simple">How it works</a>
     <a href="/offer" class="nav-simple">Setup and support</a>
     <a href="/about" class="nav-simple">About</a>
+    <a href="/writing" class="nav-simple current">Writing</a>
     <a href="/book" class="nav-simple nav-book">Book a call</a>
     <a href="/download" class="nav-simple nav-cta">Download</a>
   </div>
