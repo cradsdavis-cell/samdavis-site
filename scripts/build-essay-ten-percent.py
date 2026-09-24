@@ -41,8 +41,8 @@ for phrase, _ in LINKS:
         sys.exit(f"link phrase {phrase!r} found {n} times (want exactly 1)")
 
 def smart(s):
-    s = re.sub(r'"([^"]*)"', "“\\1”", s)
-    return s.replace("'", "’")
+    s = re.sub(r'"([^"]*)"', "\u201c\\1\u201d", s)
+    return s.replace("'", "\u2019")
 
 def inline(s):
     # swap each link phrase for a token first, so quote-curling and escaping
@@ -198,7 +198,7 @@ PAGE = f"""<!DOCTYPE html>
 </body>
 </html>
 """
-if "—" in PAGE:
+if "\u2014" in PAGE:
     sys.exit("em dash in output")
 OUT.parent.mkdir(parents=True, exist_ok=True)
 OUT.write_text(PAGE)
