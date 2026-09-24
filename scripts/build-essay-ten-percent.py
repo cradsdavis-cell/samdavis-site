@@ -117,6 +117,40 @@ url = f"https://crads-ai.com/writing/{SLUG}"
 OG_IMG = "https://crads-ai.com/lib/img/og-card.png"
 jsonld_desc = dek.replace("\\", "\\\\").replace('"', '\\"')
 
+# ---------- references (rendered as a collapsible list, like which-love) ----------
+def ref(rid, text, url=None):
+    link = f' <a class="ref-link" href="{url}" target="_blank" rel="noopener">link</a>' if url else ""
+    return f'<li id="ref-{rid}">{text}{link}</li>'
+
+REF_GROUPS = [
+    ("Estimates of AI risk", [
+        ref("carlsmith2022", "Carlsmith, J. (2022). Is power-seeking AI an existential risk? arXiv:2206.13353.", "https://arxiv.org/abs/2206.13353"),
+        ref("doac2026", "The Diary of a CEO (2026). AI emergency debate, with Ed Zitron, Andrew McAfee, Nate Soares and Roman Yampolskiy. YouTube, 17 September.", "https://www.youtube.com/watch?v=0z0mWA8plRc"),
+        ref("fri2023", "Forecasting Research Institute (2023). Existential Risk Persuasion Tournament (XPT): results report.", "https://forecastingresearch.org/research/existential-risk-persuasion-tournament"),
+        ref("grace2026", "Grace, K. et al. (2026). Expert Survey on Progress in AI, 2024 wave. AI Impacts.", "https://aiimpacts.org/wp-content/uploads/2026/09/ESPAI2024.pdf"),
+        ref("hubinger2026", "Hubinger, E. (2026). Post on X, 9 September; reported by FOX 11 Los Angeles.", "https://www.foxla.com/news/anthropic-researcher-ai-10-percent-chance-kill-humans"),
+        ref("narayanan2024", "Narayanan, A. and Kapoor, S. (2024). AI existential risk probabilities are too unreliable to inform policy. <em>AI as Normal Technology</em>, 26 July.", "https://www.normaltech.ai/p/ai-existential-risk-probabilities"),
+    ]),
+    ("Safety standards and public views", [
+        ref("faa1988", "Federal Aviation Administration (1988). Advisory Circular 25.1309-1A: System design and analysis.", "https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_25.1309-1A.pdf"),
+        ref("iaisr2026", "International AI Safety Report (2026). Extended summary for policymakers, February.", "https://internationalaisafetyreport.org/publication/2026-report-extended-summary-policymakers"),
+        ref("sara2025", "Survey Assessing Risks from AI (2025). SARA 2025 technical report: Australian public attitudes to AI risk and governance.", "https://aigovernance.org.au/survey/2025/sara_2025_technical_report"),
+    ]),
+    ("Climbing", [
+        ref("aac1994", "American Alpine Club (1994). Fall on rock, climbing alone and unroped, weather probably: California, Yosemite Valley, Sentinel Rock. <em>Accidents in North American Mountaineering</em>.", "https://publications.americanalpineclub.org/articles/13199403102/Fall-on-Rock-Climbing-Alone-and-Unroped-WeatherProbably-California-Yosemite-Valley-Sentinel-Rock"),
+        ref("aac2025", "American Alpine Club (2025). The Prescription, 12 August.", "https://americanalpineclub.org/news/2025/8/12/the-prescription"),
+    ]),
+    ("The Cuban Missile Crisis", [
+        ref("nsa2022", "National Security Archive (2022). Soviet submarines and nuclear torpedoes in the Cuban Missile Crisis. Briefing book, 3 October.", "https://nsarchive.gwu.edu/briefing-book/russia-programs/2022-10-03/soviet-submarines-nuclear-torpedoes-cuban-missile-crisis"),
+        ref("sorensen1965", "Sorensen, T. C. (1965). <em>Kennedy</em>. Harper &amp; Row."),
+    ]),
+]
+REFS_HTML = (
+    '\n    <section class="essay-refs" id="references">\n      <details>\n        <summary>References</summary>\n        '
+    + "".join(f"<h3>{h}</h3><ul>{''.join(items)}</ul>" for h, items in REF_GROUPS)
+    + "\n      </details>\n    </section>"
+)
+
 PAGE = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -183,7 +217,7 @@ PAGE = f"""<!DOCTYPE html>
 {HERO}
 
   <article class="essay-body">
-{chr(10).join(out)}
+{chr(10).join(out)}{REFS_HTML}
   </article>
 </main>
 
