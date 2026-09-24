@@ -60,30 +60,27 @@ def inline(s):
         s = s.replace(tok, f'<a href="{url}" target="_blank" rel="noopener">{html.escape(smart(phrase), quote=False)}</a>')
     return s
 
-# ---------- photo slots (empty until Sam supplies real photos; never AI images, never stock) ----------
-def slot(n, desc, fn, cls, caption):
-    lazy = "" if cls == "hero" else " loading=\"lazy\""
-    return (f"<!-- PHOTO SLOT {n}: {desc} | file: /writing/{SLUG}/{fn} -->\n"
-            "<!--\n"
-            f'<figure class="essay-figure {cls} photo">\n'
-            f'  <img src="/writing/{SLUG}/{fn}" alt="DESCRIBE THE PHOTO" width="1500" height="1125"{lazy}>\n'
-            f"  <figcaption>{caption}</figcaption>\n"
-            "</figure>\n"
-            "Set alt, caption, and width/height to the real pixel size, then remove this comment wrapper.\n"
-            "-->")
+# ---------- photos (Sam's own, from his Google Photos; never AI images, never stock) ----------
+# Captured at screen resolution from Google Photos (24 Sep 2026); swap in the originals if Sam exports them.
+def fig(fn, cls, w, h, alt, caption):
+    lazy = "" if cls == "hero" else ' loading="lazy"'
+    return (f'<figure class="essay-figure {cls} photo"><img src="/writing/{SLUG}/{fn}" alt="{alt}" '
+            f'width="{w}" height="{h}"{lazy}><figcaption>{caption}</figcaption></figure>')
 
-HERO = slot(1, "the Candlestick sea stack, Cape Hauy, Tasmania, September 2023", "candlestick.jpg", "hero",
-            "The Candlestick, Cape Hauy, Tasmania, September 2023.")
+HERO = "  " + fig("candlestick.jpg", "hero", 1392, 784,
+    "Two sea stacks of pale columnar rock, one slender, one broad, standing in white surf below a cliff",
+    "The Totem Pole and the Candlestick, Cape Hauy, Tasmania, September 2023.")
 
-# anchor = start of the paragraph the slot follows
+# anchor = start of the paragraph the photo follows
 PHOTOS = [
     ("I abseiled down the cliff on the mainland side",
-     slot(2, "Sam on the cliff edge at Cape Hauy with the rope, sea stacks behind", "cape-hauy-rope.jpg", "wide",
-          "Cape Hauy, Tasmania, September 2023.")),
+     fig("cape-hauy-rope.jpg", "wide", 1392, 1740,
+         "Sam in an orange jumper on a cliff edge, a coiled rope in his hand, sea stacks and surf far below",
+         "On the cliff edge at Cape Hauy, September 2023.")),
     ("On the rock, understanding a risk lowers it.",
-     slot(3, "hands on the rope and belay device", "belay-hands.jpg", "wide", "CAPTION")),
-    ("If Steven Bartlett turned to me",
-     slot(4, "(optional) alpine snow ridge", "alpine-ridge.jpg", "wide", "CAPTION")),
+     fig("rope-coil.jpg", "wide", 1392, 784,
+         "A coiled climbing rope held at the hip above a drop to rocks and white water",
+         "Cape Hauy, Tasmania.")),
 ]
 for anchor, _ in PHOTOS:
     if not re.search(r"(^|\n\n)" + re.escape(anchor), body_md):
@@ -112,9 +109,7 @@ minutes = max(1, round(words / 230))
 e_title = html.escape(TITLE)
 e_dek = html.escape(dek)
 url = f"https://crads-ai.com/writing/{SLUG}"
-# Share image: the site default card until photos exist. Switch to
-# /writing/is-ten-percent-a-lot/og.jpg (1200x630) when they land.
-OG_IMG = "https://crads-ai.com/lib/img/og-card.png"
+OG_IMG = f"https://crads-ai.com/writing/{SLUG}/og.jpg"
 jsonld_desc = dek.replace("\\", "\\\\").replace('"', '\\"')
 
 # ---------- references (rendered as a collapsible list, like which-love) ----------
@@ -172,7 +167,7 @@ PAGE = f"""<!DOCTYPE html>
 <meta property="og:image" content="{OG_IMG}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Crads-AI card: the crads-ai wordmark beside a line-drawn leaf">
+<meta property="og:image:alt" content="Sea stacks of columnar rock in white surf, Cape Hauy, Tasmania">
 <meta name="author" content="Sam Davis">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{e_title}">
