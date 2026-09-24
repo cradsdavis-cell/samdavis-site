@@ -41,7 +41,8 @@ function resolves(url) {
 function linksIn(html) {
   const out = [];
   // inline scripts build URLs from fragments ('/docs/' + slug); only markup counts
-  const markup = html.replace(/<script[\s\S]*?<\/script>/g, '');
+  // commented-out markup (e.g. a photo slot waiting for its file) is not a link either
+  const markup = html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<!--[\s\S]*?-->/g, '');
   const re = /\b(?:href|src|poster)="(\/[^"]*)"/g;
   let m;
   while ((m = re.exec(markup))) {
