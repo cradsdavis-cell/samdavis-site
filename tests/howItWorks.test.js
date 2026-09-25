@@ -14,7 +14,7 @@ function readHIW() {
 
 test('how-it-works page has the canonical head', () => {
   const html = readHIW();
-  assert.ok(html.includes('<title>How it works · Crads-AI</title>'),
+  assert.ok(html.includes('<title>How it works: a self-hosted Claude assistant · Crads-AI</title>'),
     'expected canonical title');
   assert.ok(html.includes('href="/lib/site.css"'),
     'expected shared CSS link');
