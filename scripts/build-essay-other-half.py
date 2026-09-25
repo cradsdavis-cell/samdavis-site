@@ -80,7 +80,21 @@ HERO = "  " + fig("campfire.jpg", "hero", 1216, 812,
     "A figure in a hooded jacket sitting alone on a log beside a campfire at night, sparks rising, a tent behind",
     "Tasmania, September 2023.")
 
-PHOTOS = []
+# Wildly Calm photos: Camp Bunya, October 2025 (Wildly Calm shared Drive). Chosen so no one is identifiable.
+PHOTOS = [
+    ("I think that's why we're all in this mess.",
+     fig("circle.jpg", "wide", 1151, 1535,
+         "A group of men sitting in a circle in a wide grassy field, two kayaks in the foreground, forest behind",
+         "A Wildly Calm circle, Camp Bunya, October 2025. <span class=\"credit\">Photo: Wildly Calm</span>")),
+    ("Masculine energy is powerful.",
+     fig("fire.jpg", "wide", 1600, 1067,
+         "A man seen from behind, in a hat and singlet, stoking a large campfire as sparks rise into the trees",
+         "Camp Bunya, October 2025. <span class=\"credit\">Photo: Wildly Calm</span>")),
+    ("So what should an AI do for a lonely 22-year-old",
+     fig("morning.jpg", "wide", 1600, 1067,
+         "Early morning in a grassy clearing: men asleep in sleeping bags around a smoking fire ring of logs",
+         "The morning after, Camp Bunya, October 2025. <span class=\"credit\">Photo: Wildly Calm</span>")),
+]
 for anchor, _ in PHOTOS:
     if not re.search(r"(^|\n\n)" + re.escape(anchor), body_md):
         sys.exit(f"photo anchor {anchor!r} not found at the start of a paragraph")
