@@ -28,7 +28,7 @@ LINKS = [
     ("In a 2025 Australian survey", "https://aigovernance.org.au/survey/2025/sara_2025_technical_report"),
     ("the Forecasting Research Institute", "https://forecastingresearch.org/research/existential-risk-persuasion-tournament"),
     ("Joe Carlsmith", "https://arxiv.org/abs/2206.13353"),
-    ("Diary of a CEO debate", "https://www.youtube.com/watch?v=0z0mWA8plRc"),
+    ("Diary of a CEO debate", "https://www.youtube.com/watch?v=OhOmLqR5nN4"),
     ("Critics call these", "https://www.normaltech.ai/p/ai-existential-risk-probabilities"),
     ("American Alpine Club's accident report", "https://publications.americanalpineclub.org/articles/13199403102/Fall-on-Rock-Climbing-Alone-and-Unroped-WeatherProbably-California-Yosemite-Valley-Sentinel-Rock"),
     ('"on well-trafficked moderate routes"', "https://americanalpineclub.org/news/2025/8/12/the-prescription"),
@@ -120,7 +120,7 @@ def ref(rid, text, url=None):
 REF_GROUPS = [
     ("Estimates of AI risk", [
         ref("carlsmith2022", "Carlsmith, J. (2022). Is power-seeking AI an existential risk? arXiv:2206.13353.", "https://arxiv.org/abs/2206.13353"),
-        ref("doac2026", "The Diary of a CEO (2026). AI emergency debate, with Ed Zitron, Andrew McAfee, Nate Soares and Roman Yampolskiy. YouTube, 17 September.", "https://www.youtube.com/watch?v=0z0mWA8plRc"),
+        ref("doac2026", "The Diary of a CEO (2026). AI emergency debate, with Ed Zitron, Andrew McAfee, Nate Soares and Roman Yampolskiy. YouTube, 17 September.", "https://www.youtube.com/watch?v=OhOmLqR5nN4"),
         ref("fri2023", "Forecasting Research Institute (2023). Existential Risk Persuasion Tournament (XPT): results report.", "https://forecastingresearch.org/research/existential-risk-persuasion-tournament"),
         ref("grace2026", "Grace, K. et al. (2026). Expert Survey on Progress in AI, 2024 wave. AI Impacts.", "https://aiimpacts.org/wp-content/uploads/2026/09/ESPAI2024.pdf"),
         ref("hubinger2026", "Hubinger, E. (2026). Post on X, 9 September; reported by FOX 11 Los Angeles.", "https://www.foxla.com/news/anthropic-researcher-ai-10-percent-chance-kill-humans"),
