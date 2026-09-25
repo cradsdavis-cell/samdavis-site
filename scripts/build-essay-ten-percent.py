@@ -78,9 +78,9 @@ PHOTOS = [
          "Sam in an orange jumper on a cliff edge, a coiled rope in his hand, sea stacks and surf far below",
          "On the cliff edge at Cape Hauy, September 2023.")),
     ("On the rock, understanding a risk lowers it.",
-     fig("rope-coil.jpg", "wide", 1392, 784,
-         "A coiled climbing rope held at the hip above a drop to rocks and white water",
-         "Cape Hauy, Tasmania.")),
+     fig("multipitch.jpg", "wide", 1392, 784,
+         "A climber in a blue helmet pulling over an orange sandstone edge, green rope below, forest far beneath",
+         "Coming up to the belay, April 2024.")),
 ]
 for anchor, _ in PHOTOS:
     if not re.search(r"(^|\n\n)" + re.escape(anchor), body_md):
