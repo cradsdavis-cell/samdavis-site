@@ -93,6 +93,15 @@
     wireUp();
   }
 
+  // ?code=XYZ on the booking page URL fills the discount field. Only
+  // letters, digits and dashes survive, so nothing can be injected.
+  function prefillCode() {
+    try {
+      const c = new URLSearchParams(window.location.search).get('code') || '';
+      return /^[A-Za-z0-9-]{1,40}$/.test(c) ? c.toUpperCase() : '';
+    } catch (_) { return ''; }
+  }
+
   function renderForm() {
     return `
       <form id="slot-form" class="slot-form" style="display:none;">
@@ -100,6 +109,7 @@
         <div class="field"><label for="bk-name">Your name</label><input id="bk-name" type="text" name="name" autocomplete="name" required></div>
         <div class="field"><label for="bk-email">Email</label><input id="bk-email" type="email" name="email" autocomplete="email" required></div>
         <input type="hidden" name="slot_iso" id="slot-iso">
+        ${isPaid ? `<div class="field"><label for="bk-code">Discount code (optional)</label><input id="bk-code" type="text" name="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" value="${prefillCode()}"></div>` : ''}
         ${isPaid ? `<div class="field field-check"><label for="bk-terms"><input id="bk-terms" type="checkbox" name="agreed_terms" value="yes" required><span>I agree to the <a href="/docs/terms" target="_blank" rel="noopener">terms of service</a>.</span></label></div>` : ''}
         <button class="book-cta" type="submit" id="submit-btn">
           ${isPaid ? 'Book + Pay →' : 'Book →'}
@@ -141,6 +151,7 @@
       name: fd.get('name'),
       email: fd.get('email'),
       agreed_terms: fd.get('agreed_terms') === 'yes',
+      code: String(fd.get('code') || '').trim(),
     };
     try {
       if (!isPaid) {
@@ -159,7 +170,9 @@
       if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
       window.location.href = json.checkout_url;
     } catch (err) {
-      errBox.textContent = `Couldn't proceed: ${err.message}. Try a different slot or email cradsdavis@gmail.com.`;
+      errBox.textContent = err.message === 'invalid_code'
+        ? "That discount code isn't valid, or it has been used up. Check it, or clear the box to book at the full price."
+        : `Couldn't proceed: ${err.message}. Try a different slot or email cradsdavis@gmail.com.`;
       errBox.style.display = 'block';
       submitBtn.disabled = false; submitBtn.textContent = isPaid ? 'Book + Pay →' : 'Book →';
     }

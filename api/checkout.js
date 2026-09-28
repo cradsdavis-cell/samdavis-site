@@ -2,13 +2,14 @@
 'use strict';
 
 const { getSku, isPurchasable, DISCOVERY_EVENT_TYPE_ID } = require('../lib/skus');
-const { createCheckoutSession } = require('../lib/stripe');
+const { createCheckoutSession, findPromotionCode } = require('../lib/stripe');
 const { createBooking, findBookingByStripeSession } = require('../lib/cal');
 const { TERMS_VERSION } = require('../lib/terms');
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:?\d{2})$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NAME_MAX = 80;
+const CODE_RE = /^[A-Za-z0-9-]{1,40}$/;
 const MAX_BOOKING_WINDOW_MS = 60 * 86400000; // 60 days
 
 function setCors(res) {
@@ -120,15 +121,33 @@ module.exports = async (req, res) => {
     return;
   }
 
+  // Optional discount code from the booking form. Unknown, used-up, expired
+  // or wrong-product codes all answer the same way: invalid_code.
+  const code = String(body.code || '').trim();
+  let promotionCodeId = null;
+  if (code) {
+    if (!CODE_RE.test(code)) { res.status(400).json({ error: 'invalid_code' }); return; }
+    try { promotionCodeId = await findPromotionCode(code); }
+    catch (err) { console.error('[checkout] promotion code lookup failed', err && err.message); res.status(500).json({ error: 'stripe_failed' }); return; }
+    if (!promotionCodeId) { res.status(400).json({ error: 'invalid_code' }); return; }
+  }
+
   try {
     const session = await createCheckoutSession({
       sku, priceId: cfg.stripe_price_id, priceAud: cfg.price_aud, productName: cfg.label,
       slotIso: slot_iso, name, email,
       calEventTypeId: cfg.cal_event_type_id, baseUrl: process.env.BASE_URL,
       termsVersion: TERMS_VERSION, termsAcceptedAt: new Date().toISOString(),
+      promotionCodeId,
     });
     res.status(200).json({ checkout_url: session.url, session_id: session.id });
   } catch (err) {
+    // A code that exists but does not apply (another product, run out) is
+    // refused by Stripe at session creation.
+    if (promotionCodeId && err && err.type === 'StripeInvalidRequestError') {
+      res.status(400).json({ error: 'invalid_code' });
+      return;
+    }
     console.error('[checkout] Stripe error', err);
     res.status(500).json({ error: 'stripe_failed' });
   }
