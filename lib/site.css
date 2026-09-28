@@ -916,7 +916,7 @@ a:hover { color: var(--accent-deep); }
   background: var(--bg-soft);
 }
 
-.rung-ladder .rung-card.hero .badge {
+.rung-ladder .rung-card .badge {
   position: absolute;
   top: -10px;
   left: 16px;
@@ -975,23 +975,6 @@ a:hover { color: var(--accent-deep); }
 .rung-ladder .rung-card:hover .r-cta {
   color: var(--accent-deep);
 }
-
-/* .side-offer: a smaller, secondary offer that sits after the main ones
-   (the A$200 roadmap, 2026-09-28). Used by: / (#how) and /offer. */
-.side-offer {
-  max-width: var(--read-col);
-  margin: var(--space-4) auto 0;
-  padding: var(--space-3);
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  background: var(--bg-soft);
-  text-align: center;
-  font-family: var(--sans);
-}
-.side-offer h3 { margin: 0 0 var(--space-1); color: var(--ink-deep); }
-.side-offer p { font-size: 15px; line-height: 1.55; color: var(--ink-soft); margin: 0 auto var(--space-2); }
-.side-offer .side-offer-price { font-weight: 700; color: var(--ink-deep); }
-.side-offer ul.rung-includes { text-align: left; max-width: 460px; margin: 0 auto var(--space-2); }
 
 /* ============================================================
    v2 — .price-panel (right-col sidebar for /offer rung sections)

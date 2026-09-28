@@ -103,7 +103,7 @@
   }
   .payment-toggle .active { color: var(--ink-deep); font-weight: 600; }
 
-  /* Pricing grid: 4 SKUs */
+  /* Pricing grid: walkthrough, guided setup, roadmap */
   .pricing-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -292,7 +292,7 @@
       </ul>
     </div>
 
-    <!-- The two ways to buy time -->
+    <!-- The two ways to buy time, then the roadmap -->
     <div class="pricing-grid stagger-grid">
       <article class="rung" data-sku="walkthrough">
         <h3 class="rung-name">Walkthrough</h3>
@@ -342,6 +342,29 @@
         <a class="cta" href="/book/guided-setup">Book a guided setup →</a>
       </article>
 
+      <article class="rung" data-sku="roadmap" id="roadmap">
+        <span class="rung-badge">One specific problem</span>
+        <h3 class="rung-name">AI problem-solving roadmap</h3>
+        <p class="rung-meta">30 min + written report · 1:1 · video call</p>
+        <p class="price">A$200</p>
+        <p class="price-detail">Fixed. Pay once.</p>
+        <p class="rung-label">You leave with</p>
+        <ul class="rung-includes rung-outcomes">
+          <li>The problem, as you described it.</li>
+          <li>What's actually causing it.</li>
+          <li>Two or three ways to solve it, each with a rough cost.</li>
+          <li>Which one I'd pick, and why.</li>
+        </ul>
+        <p class="rung-label">How it runs</p>
+        <ul class="rung-includes">
+          <li><strong>The call (30 min, video):</strong> you walk me through the problem as it shows up in your week, and I ask questions. With your OK, I record the call with an AI note-taker so the report reflects what you said.</li>
+          <li><strong>The report, within 3 business days:</strong> the four points above, in writing.</li>
+          <li><strong>Then you choose:</strong> set it up yourself with a walkthrough or guided setup, or I build it for you in your own accounts and hand it over, priced separately and quoted in your roadmap.</li>
+        </ul>
+        <p class="rung-pitch">A diagnosis of one specific problem, with a written report.</p>
+        <a class="cta" href="/book/roadmap">Book a roadmap →</a>
+      </article>
+
     </div>
 
     <p class="retainer-note reveal-on-scroll">
@@ -353,22 +376,6 @@
     <p class="retainer-note reveal-on-scroll">
       After 30 days it's yours. You're welcome to invite me back into the chat whenever you like, at <strong>A$233 an hour</strong>: <a href="mailto:cradsdavis@gmail.com">email me</a> with what you are stuck on. Nothing recurring, nothing you have to cancel.
     </p>
-
-    <!-- Secondary: the roadmap (2026-09-28) -->
-    <div class="side-offer reveal-on-scroll" id="roadmap">
-      <h3>Got a specific problem you think AI could fix?</h3>
-      <p>Book an AI problem-solving roadmap: a 30-minute video call, then a written report within 3 business days.</p>
-      <p>With your OK, I record the call with an AI note-taker so the report reflects what you said.</p>
-      <ul class="rung-includes">
-        <li>The problem, as you described it.</li>
-        <li>What's actually causing it.</li>
-        <li>Two or three ways to solve it, each with a rough cost.</li>
-        <li>Which one I'd pick, and why.</li>
-      </ul>
-      <p>Then you choose: set it up yourself with a walkthrough or guided setup, or I build it for you in your own accounts and hand it over, priced separately and quoted in your roadmap.</p>
-      <p class="side-offer-price">Fixed price: A$200</p>
-      <a class="cta-primary" href="/book/roadmap">Book a roadmap</a>
-    </div>
 
     <!-- Proof strip: client quotes, rendered by /lib/testimonialsRender.js -->
     <section class="testimonials-strip" data-testimonials hidden></section>
