@@ -45,15 +45,15 @@ test('the two price ids: the walkthrough reuses the v4 working-session price, gu
   assert.strictEqual(getSku('guided-setup').stripe_price_id, 'price_1UDZF62MeTK4rlQYWqYrGVnJ');
 });
 
-test('roadmap: one 30-min session, A$200, Cal type 7245541 by default, no Stripe price object', () => {
+test('roadmap: one 30-min session booked at checkout, A$250, Cal type 7245541 and the live price by default', () => {
   delete process.env.CAL_EVENT_TYPE_ROADMAP; delete process.env.STRIPE_PRICE_ROADMAP;
   let skus = fresh();
   assert.ok(skus.isPurchasable('roadmap'));
   const r = skus.getSku('roadmap');
   assert.strictEqual(r.cal_event_type_id, 7245541);
   assert.strictEqual(skus.calEventTypeIdFor('roadmap', 1), 7245541);
-  assert.strictEqual(r.price_aud, 200);
-  assert.strictEqual(r.stripe_price_id, null);
+  assert.strictEqual(r.price_aud, 250);
+  assert.strictEqual(r.stripe_price_id, 'price_1UKYzY2MeTK4rlQYKskblLX0');
   assert.deepStrictEqual(r.sessions.map((s) => s.duration_min), [30]);
   process.env.CAL_EVENT_TYPE_ROADMAP = '777';
   process.env.STRIPE_PRICE_ROADMAP = 'price_roadmap_live';

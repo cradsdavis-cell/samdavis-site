@@ -13,6 +13,7 @@ test('the confirmation names the call time, the prep and the 3-business-day repo
   assert.match(t, /Thanks for booking your AI problem-solving roadmap\. Your call is on Thu 1 Oct, 10:00 am AEST \(the link is in your calendar invite\)\./);
   assert.match(t, /jot down the problem as it shows up in your week, and who it affects/);
   assert.match(t, /within 3 business days of the call/);
+  assert.match(t, /a second 30-minute call where we go through it together/);
   assert.ok(!/sign in|set up your account|verify-token|http/i.test(t), 'no account or sign-in link');
   assert.ok(!t.includes('\u2014'), 'no em dashes');
 });

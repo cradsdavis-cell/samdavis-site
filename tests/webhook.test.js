@@ -116,6 +116,46 @@ test('idempotent: skip if Cal already has booking for session', async () => {
   assert.strictEqual(createCalled, false, 'should not call createBooking when already exists');
 });
 
+test('free order (100%-off code): happy path books with no PaymentIntent', async () => {
+  let created = null;
+  stripeStub = {
+    constructWebhookEvent: () => fakeSessionEvent({ payment_intent: null, amount_total: 0 }),
+    retrievePaymentIntent: async () => { throw new Error('must not be called'); },
+    updatePaymentIntentMetadata: async () => { throw new Error('must not be called'); },
+  };
+  calStub = {
+    findBookingByStripeSession: async () => ({ ok: true, body: { data: [] } }),
+    createBooking: async (args) => { created = args; return { ok: true, body: { data: { id: 1 } } }; },
+  };
+  emailStub = {};
+  const res = mockRes();
+  await handler(mockReq('{}'), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.ok(created, 'booking created');
+});
+
+test('free order (100%-off code) losing the slot race: no refund attempt, Sam alerted, 200', async () => {
+  let refundCalled = false, raceMailed = false, alerted = null;
+  stripeStub = {
+    constructWebhookEvent: () => fakeSessionEvent({ payment_intent: null, amount_total: 0 }),
+    refundSession: async () => { refundCalled = true; throw new Error('no payment to refund'); },
+  };
+  calStub = {
+    findBookingByStripeSession: async () => ({ ok: true, body: { data: [] } }),
+    createBooking: async () => ({ ok: false, status: 409, body: { error: 'slot_unavailable' } }),
+  };
+  emailStub = {
+    sendRaceLossEmail: async () => { raceMailed = true; },
+    sendSamAlert: async (args) => { alerted = args; return { id: 'em2' }; },
+  };
+  const res = mockRes();
+  await handler(mockReq('{}'), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(refundCalled, false);
+  assert.strictEqual(raceMailed, false);
+  assert.ok(alerted.subject.includes('free booking lost its slot'));
+});
+
 test('race-loss: 409 from Cal triggers refund + race-loss email + Sam alert', async () => {
   let refunded = null, raceMailed = null, alerted = null;
   stripeStub = {
