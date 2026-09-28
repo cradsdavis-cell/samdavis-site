@@ -122,7 +122,8 @@ module.exports = async (req, res) => {
 
   try {
     const session = await createCheckoutSession({
-      sku, priceId: cfg.stripe_price_id, slotIso: slot_iso, name, email,
+      sku, priceId: cfg.stripe_price_id, priceAud: cfg.price_aud, productName: cfg.label,
+      slotIso: slot_iso, name, email,
       calEventTypeId: cfg.cal_event_type_id, baseUrl: process.env.BASE_URL,
       termsVersion: TERMS_VERSION, termsAcceptedAt: new Date().toISOString(),
     });

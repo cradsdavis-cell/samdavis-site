@@ -56,6 +56,7 @@ test('structured data describes the free software application', () => {
 test('the offer on the front door is v5 and nothing ongoing', () => {
   assert.match(html, /href="\/book\/walkthrough"/);
   assert.match(html, /href="\/book\/guided-setup"/);
+  assert.match(html, /href="\/book\/roadmap"/, 'the roadmap sits after the setup offers');
   assert.ok(!/book\/working-session/.test(html), 'the working session is retired');
   assert.match(html, /A\$233 an hour/);
   assert.match(html, /invite me back into the chat/);
