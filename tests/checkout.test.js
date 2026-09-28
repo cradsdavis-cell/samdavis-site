@@ -258,10 +258,10 @@ test('the published terms page carries the version the checkout records', () => 
   assert.ok(html.includes(`id="${REFUNDS_ANCHOR}"`), 'the refunds anchor the booking form links to is missing');
 });
 
-// --- roadmap (2026-09-28): one 30-min call + written report, A$200 ---
-// No live Stripe price: price falls back to inline price_data. The Cal type
-// defaults to 7245541 (created 28 Sep); the env var still overrides it.
-test('roadmap: bookable by default, with A$200 + the label for inline price_data and Cal type 7245541', async () => {
+// --- roadmap (2026-09-28): 30-min call + written report + 30-min call, A$250 ---
+// Live A$250 price by default (so a promotion code can be product-restricted).
+// The Cal type defaults to 7245541 (created 28 Sep); the env vars still override.
+test('roadmap: bookable by default, with the live A$250 price id and Cal type 7245541', async () => {
   delete process.env.CAL_EVENT_TYPE_ROADMAP;
   delete process.env.STRIPE_PRICE_ROADMAP;
   resetStripeCalls();
@@ -270,8 +270,8 @@ test('roadmap: bookable by default, with A$200 + the label for inline price_data
   assert.strictEqual(res.statusCode, 200);
   const args = STRIPE_CALLS[0];
   assert.strictEqual(args.sku, 'roadmap');
-  assert.strictEqual(args.priceId, null);
-  assert.strictEqual(args.priceAud, 200);
+  assert.strictEqual(args.priceId, 'price_1UKYzY2MeTK4rlQYKskblLX0');
+  assert.strictEqual(args.priceAud, 250);
   assert.strictEqual(args.productName, 'AI problem-solving roadmap');
   assert.strictEqual(args.calEventTypeId, 7245541);
 });

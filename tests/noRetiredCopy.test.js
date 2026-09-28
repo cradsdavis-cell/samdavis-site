@@ -43,14 +43,14 @@ test('the marked retired-offers block exists exactly once, on /offer', () => {
 
 // v5 (2026-09-11): A$350 walkthrough, A$700 guided setup, A$233 an hour after
 // the 30 days, and the "about A$10 a month" server line. 2026-09-28: plus the
-// A$200 roadmap in front of them. Nothing else.
-const V5_PRICES = new Set(['A$200', 'A$350', 'A$700', 'A$233', 'A$10']);
+// A$200 roadmap in front of them, A$250 from the same day. Nothing else.
+const V5_PRICES = new Set(['A$250', 'A$350', 'A$700', 'A$233', 'A$10']);
 test('the v5 prices are the only prices on the offer and book pages', () => {
   for (const rel of ['offer/index.html', 'book/index.html', 'index.html']) {
     const src = fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(ALLOW_BLOCK, '');
     const prices = new Set([...src.matchAll(/A\$[\d,]+/g)].map((m) => m[0]));
     for (const p of prices) assert.ok(V5_PRICES.has(p), `${rel}: unexpected price ${p}`);
-    assert.ok(prices.has('A$200') && prices.has('A$700') && prices.has('A$350') && prices.has('A$233'), `${rel}: the roadmap, the two v5 prices and the hourly rate expected`);
+    assert.ok(prices.has('A$250') && prices.has('A$700') && prices.has('A$350') && prices.has('A$233'), `${rel}: the roadmap, the two v5 prices and the hourly rate expected`);
   }
 });
 

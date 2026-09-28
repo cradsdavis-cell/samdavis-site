@@ -162,6 +162,16 @@ module.exports = async (req, res) => {
     // C4/M6: refund FAILURES must trigger Stripe retry so we don't strand the customer.
     // Email failures are best-effort — log + alert Sam, but don't 500 on email-only failure
     // (refund landed, customer's money is safe, email is recoverable manually).
+    // A 100%-off promotion code leaves nothing to refund (no PaymentIntent):
+    // refunding would throw and 500 into a retry loop. Alert Sam to rebook by hand.
+    if (!paymentIntentId || !(amount_total > 0)) {
+      await safeAlert(
+        `free booking lost its slot: ${customerEmail}`,
+        `Customer ${customerEmail} (${name}) booked ${sku} with a free code, but slot ${slot_iso} was taken first. Nothing was charged, so nothing to refund. Email them a new time. Stripe session: ${stripeSessionId}`,
+      );
+      res.status(200).json({ received: true, race_loss: true, refunded: false, free: true });
+      return;
+    }
     let refunded = false;
     let refundError = null;
     try {
