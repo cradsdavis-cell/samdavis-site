@@ -3,6 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert');
 
 let stripeStub, calStub, emailStub;
+const ACCOUNT_CALLS = [];
 
 require.cache[require.resolve('../lib/stripe')] = {
   exports: {
@@ -20,12 +21,13 @@ require.cache[require.resolve('../lib/email')] = {
   exports: {
     sendRaceLossEmail: (args) => emailStub.sendRaceLossEmail(args),
     sendSamAlert: (args) => emailStub.sendSamAlert(args),
+    sendRoadmapConfirmationEmail: (args) => emailStub.sendRoadmapConfirmationEmail(args),
     getResendClient: () => ({ emails: { send: async () => ({ id: 'em-stub' }) } }),
   },
 };
 require.cache[require.resolve('../lib/createOrUpdateUser')] = {
   exports: {
-    createOrUpdateUser: async () => ({ created: false, user: null }),
+    createOrUpdateUser: async (args) => { ACCOUNT_CALLS.push(args); return { created: false, user: null }; },
   },
 };
 require.cache[require.resolve('../lib/kv')] = {
@@ -154,4 +156,55 @@ test('non-checkout.session.completed event returns 200 no-op', async () => {
   const res = mockRes();
   await handler(mockReq('{}'), res);
   assert.strictEqual(res.statusCode, 200);
+});
+
+// --- roadmap (2026-09-28): no account, one confirmation email instead ---
+function roadmapEvent() {
+  return fakeSessionEvent({ metadata: { sku: 'roadmap', slot_iso: '2026-10-01T10:00:00+10:00', name: 'Rhi Jones', cal_event_type_id: '120' } });
+}
+const okCal = () => ({
+  findBookingByStripeSession: async () => ({ ok: true, body: { data: [] } }),
+  createBooking: async () => ({ ok: true, status: 201, body: { data: { id: 1 } } }),
+});
+
+test('roadmap: booked slot sends the confirmation email and creates NO account', async () => {
+  ACCOUNT_CALLS.length = 0;
+  let mailed = null;
+  stripeStub = { constructWebhookEvent: () => roadmapEvent() };
+  calStub = okCal();
+  emailStub = { sendRoadmapConfirmationEmail: async (a) => { mailed = a; return { id: 'em' }; } };
+  const res = mockRes();
+  await handler(mockReq('{}'), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(res.body.booked, true);
+  assert.deepStrictEqual(mailed, { to: 'alex@example.com', name: 'Rhi Jones', slotIso: '2026-10-01T10:00:00+10:00' });
+  assert.strictEqual(ACCOUNT_CALLS.length, 0, 'no welcome email / portal account for a roadmap buyer');
+});
+
+test('roadmap: a failed confirmation email alerts Sam and still returns 200', async () => {
+  let alerted = null;
+  stripeStub = { constructWebhookEvent: () => roadmapEvent() };
+  calStub = okCal();
+  emailStub = {
+    sendRoadmapConfirmationEmail: async () => { throw new Error('resend down'); },
+    sendSamAlert: async (a) => { alerted = a; },
+  };
+  const res = mockRes();
+  await handler(mockReq('{}'), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.ok(/roadmap confirmation/.test(alerted.subject));
+});
+
+test('setup SKUs unchanged: a walkthrough still creates the account and sends no roadmap email', async () => {
+  ACCOUNT_CALLS.length = 0;
+  let mailed = false;
+  stripeStub = { constructWebhookEvent: () => fakeSessionEvent({ metadata: { sku: 'walkthrough', slot_iso: '2026-10-01T10:00:00+10:00', name: 'A', cal_event_type_id: '109' } }) };
+  calStub = okCal();
+  emailStub = { sendRoadmapConfirmationEmail: async () => { mailed = true; } };
+  const res = mockRes();
+  await handler(mockReq('{}'), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(ACCOUNT_CALLS.length, 1);
+  assert.strictEqual(ACCOUNT_CALLS[0].sku, 'walkthrough');
+  assert.strictEqual(mailed, false);
 });

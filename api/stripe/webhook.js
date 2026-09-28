@@ -6,7 +6,8 @@
 
 const { constructWebhookEvent, refundSession, retrievePaymentIntent, updatePaymentIntentMetadata } = require('../../lib/stripe');
 const { findBookingByStripeSession, createBooking } = require('../../lib/cal');
-const { sendRaceLossEmail, sendSamAlert, getResendClient } = require('../../lib/email');
+const { sendRaceLossEmail, sendRoadmapConfirmationEmail, sendSamAlert, getResendClient } = require('../../lib/email');
+const { createsAccount } = require('../../lib/skus');
 const { createOrUpdateUser } = require('../../lib/createOrUpdateUser');
 const { defaultKv } = require('../../lib/kv');
 
@@ -49,6 +50,19 @@ async function safeCreateOrUpdateUser({ session, sku, customerEmail, slotIso }) 
     await safeAlert(
       `createOrUpdateUser failed for ${customerEmail}`,
       `User record create/update failed for ${customerEmail} (session ${session.id}, sku ${sku}): ${userErr && userErr.message}. Booking/payment unaffected; manually create the account if needed.`,
+    );
+  }
+}
+
+// Roadmap buyers get no account: one short confirmation email instead. Best-
+// effort like the account path: a failed send alerts Sam, never fails the webhook.
+async function safeRoadmapConfirmation({ customerEmail, name, slotIso, stripeSessionId }) {
+  try {
+    await sendRoadmapConfirmationEmail({ to: customerEmail, name, slotIso });
+  } catch (err) {
+    await safeAlert(
+      `roadmap confirmation email FAILED for ${customerEmail}`,
+      `Booking and payment went through (session ${stripeSessionId}, slot ${slotIso}) but the confirmation email failed: ${err && err.message}. Send it manually.`,
     );
   }
 }
@@ -134,7 +148,11 @@ module.exports = async (req, res) => {
     if (paymentIntentId && bookingId) {
       try { await updatePaymentIntentMetadata(paymentIntentId, { cal_booking_id: String(bookingId) }); } catch (_) {}
     }
-    await safeCreateOrUpdateUser({ session, sku, customerEmail, slotIso: slot_iso });
+    if (createsAccount(sku)) {
+      await safeCreateOrUpdateUser({ session, sku, customerEmail, slotIso: slot_iso });
+    } else {
+      await safeRoadmapConfirmation({ customerEmail, name, slotIso: slot_iso, stripeSessionId });
+    }
     res.status(200).json({ received: true, booked: true });
     return;
   }

@@ -257,3 +257,31 @@ test('the published terms page carries the version the checkout records', () => 
   assert.ok(html.includes(`Version ${TERMS_VERSION},`), `docs/terms says a different version than lib/terms.js (${TERMS_VERSION})`);
   assert.ok(html.includes(`id="${REFUNDS_ANCHOR}"`), 'the refunds anchor the booking form links to is missing');
 });
+
+// --- roadmap (2026-09-28): one 30-min call + written report, A$200 ---
+// No live Stripe price: price falls back to inline price_data. The Cal type
+// defaults to 7245541 (created 28 Sep); the env var still overrides it.
+test('roadmap: bookable by default, with A$200 + the label for inline price_data and Cal type 7245541', async () => {
+  delete process.env.CAL_EVENT_TYPE_ROADMAP;
+  delete process.env.STRIPE_PRICE_ROADMAP;
+  resetStripeCalls();
+  const res = mockRes();
+  await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'r@b.com', name: 'R', agreed_terms: true }), res);
+  assert.strictEqual(res.statusCode, 200);
+  const args = STRIPE_CALLS[0];
+  assert.strictEqual(args.sku, 'roadmap');
+  assert.strictEqual(args.priceId, null);
+  assert.strictEqual(args.priceAud, 200);
+  assert.strictEqual(args.productName, 'AI problem-solving roadmap');
+  assert.strictEqual(args.calEventTypeId, 7245541);
+});
+
+test('roadmap: CAL_EVENT_TYPE_ROADMAP overrides the default', async () => {
+  process.env.CAL_EVENT_TYPE_ROADMAP = '120';
+  resetStripeCalls();
+  const res = mockRes();
+  await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'r@b.com', name: 'R', agreed_terms: true }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(STRIPE_CALLS[0].calEventTypeId, 120);
+  delete process.env.CAL_EVENT_TYPE_ROADMAP;
+});

@@ -6,7 +6,7 @@
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Setup and support · Crads-AI</title>
-<meta name="description" content="Get it all out of your head: a walkthrough (1 hour + 30 min, A$350), a guided setup (1 hour + 2 hours, A$700), then A$233 an hour on request. Free discovery call first.">
+<meta name="description" content="Get it all out of your head: a walkthrough (1 hour + 30 min, A$350), a guided setup (1 hour + 2 hours, A$700), then A$233 an hour on request. Got one specific problem? An AI problem-solving roadmap is A$200. Free discovery call first.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 <script defer src="/lib/testimonialsRender.js"></script>
@@ -103,7 +103,7 @@
   }
   .payment-toggle .active { color: var(--ink-deep); font-weight: 600; }
 
-  /* Pricing grid: 4 SKUs */
+  /* Pricing grid: walkthrough, guided setup, roadmap */
   .pricing-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -224,6 +224,7 @@
   }
   .retainer-note a { color: var(--accent); font-weight: 600; }
   .nowrap { white-space: nowrap; }
+  .offer-byline { font-family: var(--sans); font-size: 13.5px; line-height: 1.5; color: var(--ink-faint); margin-top: var(--space-2); }
 
   @media (max-width: 900px) {
     .offer-hero { grid-template-columns: 1fr; }
@@ -236,13 +237,13 @@
 <meta property="og:site_name" content="Crads-AI">
 <meta property="og:url" content="https://crads-ai.com/offer">
 <meta property="og:title" content="Setup and support · Crads-AI">
-<meta property="og:description" content="The software is free. A walkthrough is an hour then 30 minutes (A$350); a guided setup is an hour then two hours (A$700); after 30 days it is A$233 an hour, on request.">
+<meta property="og:description" content="The software is free. A walkthrough is an hour then 30 minutes (A$350); a guided setup is an hour then two hours (A$700); after 30 days it is A$233 an hour, on request. One specific problem? A roadmap is A$200.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Setup and support · Crads-AI">
-<meta name="twitter:description" content="The software is free. A walkthrough is an hour then 30 minutes (A$350); a guided setup is an hour then two hours (A$700); after 30 days it is A$233 an hour, on request.">
+<meta name="twitter:description" content="The software is free. A walkthrough is an hour then 30 minutes (A$350); a guided setup is an hour then two hours (A$700); after 30 days it is A$233 an hour, on request. One specific problem? A roadmap is A$200.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body>
@@ -274,6 +275,7 @@
       <p class="eyebrow">Setup and support</p>
       <h1>Get it all <em class="nowrap">out of your head.</em></h1>
       <p class="lead">Crads-AI is free, open source and self-hosted, and the <a href="/docs">docs</a> get most people there on their own. If you'd rather lay the foundation with someone who has set these up before, here's what you walk away with.</p>
+      <p class="offer-byline">You'd work with me, Sam Davis: a physicist by training with a PhD in environmental data science from the University of Sydney, and the person who built Crads-AI.</p>
     </div>
   </section>
 
@@ -286,12 +288,12 @@
         <li><strong>"I've installed it. Show me how to actually use it."</strong> Walkthrough.</li>
         <li><strong>"I want it wired into my business, with someone who has done it before."</strong> Guided setup.</li>
         <li><strong>"I want to be able to ask again after the 30 days."</strong> A$233 an hour, on request.</li>
+        <li><strong>"I have one specific problem and want to know if AI can fix it."</strong> AI problem-solving roadmap, below.</li>
       </ul>
     </div>
 
-    <!-- The two ways to buy time -->
+    <!-- The two ways to buy time, then the roadmap -->
     <div class="pricing-grid stagger-grid">
-
       <article class="rung" data-sku="walkthrough">
         <h3 class="rung-name">Walkthrough</h3>
         <p class="rung-meta">1 hour + 30 min · 1:1 · video call · at least a day apart</p>
@@ -340,13 +342,36 @@
         <a class="cta" href="/book/guided-setup">Book a guided setup →</a>
       </article>
 
+      <article class="rung" data-sku="roadmap" id="roadmap">
+        <span class="rung-badge">One specific problem</span>
+        <h3 class="rung-name">AI problem-solving roadmap</h3>
+        <p class="rung-meta">30 min + written report · 1:1 · video call</p>
+        <p class="price">A$200</p>
+        <p class="price-detail">Fixed. Pay once.</p>
+        <p class="rung-label">You leave with</p>
+        <ul class="rung-includes rung-outcomes">
+          <li>The problem, as you described it.</li>
+          <li>What's actually causing it.</li>
+          <li>Two or three ways to solve it, each with a rough cost.</li>
+          <li>Which one I'd pick, and why.</li>
+        </ul>
+        <p class="rung-label">How it runs</p>
+        <ul class="rung-includes">
+          <li><strong>The call (30 min, video):</strong> you walk me through the problem as it shows up in your week, and I ask questions. With your OK, I record the call with an AI note-taker so the report reflects what you said.</li>
+          <li><strong>The report, within 3 business days:</strong> the four points above, in writing.</li>
+          <li><strong>Then you choose:</strong> set it up yourself with a walkthrough or guided setup, or I build it for you in your own accounts and hand it over, priced separately and quoted in your roadmap.</li>
+        </ul>
+        <p class="rung-pitch">A diagnosis of one specific problem, with a written report.</p>
+        <a class="cta" href="/book/roadmap">Book a roadmap →</a>
+      </article>
+
     </div>
 
     <p class="retainer-note reveal-on-scroll">
       <strong>What clients use it for:</strong> turning a script into a shot list, building client decks, clearing a nearly full drive, and a morning brief that checks the calendar against the to-do list, with nudges through the day.
     </p>
     <p class="retainer-note reveal-on-scroll">
-      <strong>Where it lives is your call.</strong> On a small server (about A$10 a month, runs while you sleep, talks to you on Telegram) or on your own computer (free, no schedules, only awake when you are). Same price either way. Not included: the server bill, paid to your hosting provider, and your Claude subscription. Sessions are not recorded.
+      <strong>Where it lives is your call.</strong> On a small server (about A$10 a month, runs while you sleep, talks to you on Telegram) or on your own computer (free, no schedules, only awake when you are). Same price either way. Not included: the server bill, paid to your hosting provider, and your Claude subscription. Setup sessions are not recorded.
     </p>
     <p class="retainer-note reveal-on-scroll">
       After 30 days it's yours. You're welcome to invite me back into the chat whenever you like, at <strong>A$233 an hour</strong>: <a href="mailto:cradsdavis@gmail.com">email me</a> with what you are stuck on. Nothing recurring, nothing you have to cancel.
@@ -361,6 +386,7 @@
       <h2>Start with a call.</h2>
       <span class="meta">30 min · free</span>
       <p>Thirty minutes. You tell me what you want the assistant to do, I tell you honestly whether a walkthrough or a guided setup is worth it, or whether the docs will get you there. No pitch.</p>
+      <p>The free call is for whether a Crads-AI setup fits you. The <a href="#roadmap">roadmap</a> is a diagnosis of one specific problem, with a written report.</p>
       <a class="cta-primary" href="/book/discovery">Book a discovery call</a>
     </div>
 
