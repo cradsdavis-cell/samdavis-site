@@ -21,7 +21,11 @@ const STRIPE_CALLS = [];
 function resetStripeCalls() { STRIPE_CALLS.length = 0; }
 require.cache[require.resolve('../lib/stripe')] = {
   exports: {
+    findPromotionCode: async (code) => (String(code).toUpperCase() === 'GOODCODE' ? 'promo_good' : null),
     createCheckoutSession: async (args) => {
+      if (args.promotionCodeId === 'promo_good' && args.sku === 'walkthrough') {
+        const e = new Error('This promotion code cannot be applied'); e.type = 'StripeInvalidRequestError'; throw e;
+      }
       STRIPE_CALLS.push(args);
       return { id: 'cs_test_123', url: 'https://stripe.test/cs_test_123', _args: args };
     },
@@ -284,4 +288,45 @@ test('roadmap: CAL_EVENT_TYPE_ROADMAP overrides the default', async () => {
   assert.strictEqual(res.statusCode, 200);
   assert.strictEqual(STRIPE_CALLS[0].calEventTypeId, 120);
   delete process.env.CAL_EVENT_TYPE_ROADMAP;
+});
+
+// --- discount code on our own form (2026-09-28) ---
+test('code: a valid code is resolved and passed through as promotionCodeId', async () => {
+  resetStripeCalls();
+  const res = mockRes();
+  await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'r@b.com', name: 'R', agreed_terms: true, code: 'goodcode' }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(STRIPE_CALLS[0].promotionCodeId, 'promo_good');
+});
+
+test('code: no code means no promotionCodeId', async () => {
+  resetStripeCalls();
+  const res = mockRes();
+  await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'r@b.com', name: 'R', agreed_terms: true }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(STRIPE_CALLS[0].promotionCodeId, null);
+});
+
+test('code: unknown code is invalid_code and creates no session', async () => {
+  resetStripeCalls();
+  const res = mockRes();
+  await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'r@b.com', name: 'R', agreed_terms: true, code: 'NOPE' }), res);
+  assert.strictEqual(res.statusCode, 400);
+  assert.strictEqual(res.body.error, 'invalid_code');
+  assert.strictEqual(STRIPE_CALLS.length, 0);
+});
+
+test('code: malformed code is invalid_code without a Stripe lookup', async () => {
+  resetStripeCalls();
+  const res = mockRes();
+  await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'r@b.com', name: 'R', agreed_terms: true, code: '<script>' }), res);
+  assert.strictEqual(res.statusCode, 400);
+  assert.strictEqual(res.body.error, 'invalid_code');
+});
+
+test('code: a real code on the wrong product (Stripe refuses) is invalid_code, not a 500', async () => {
+  const res = mockRes();
+  await handler(mockReq({ sku: 'walkthrough', slot_iso: FUTURE_SLOT, email: 'r@b.com', name: 'R', agreed_terms: true, code: 'GOODCODE' }), res);
+  assert.strictEqual(res.statusCode, 400);
+  assert.strictEqual(res.body.error, 'invalid_code');
 });
