@@ -259,20 +259,10 @@ test('the published terms page carries the version the checkout records', () => 
 });
 
 // --- roadmap (2026-09-28): one 30-min call + written report, A$200 ---
-// No live Stripe price or Cal type yet: price falls back to inline price_data,
-// and a missing Cal type refuses the sale instead of taking money it cannot book.
-test('roadmap: without its Cal type, checkout refuses (sku_misconfigured) and Stripe is never called', async () => {
+// No live Stripe price: price falls back to inline price_data. The Cal type
+// defaults to 7245541 (created 28 Sep); the env var still overrides it.
+test('roadmap: bookable by default, with A$200 + the label for inline price_data and Cal type 7245541', async () => {
   delete process.env.CAL_EVENT_TYPE_ROADMAP;
-  resetStripeCalls();
-  const res = mockRes();
-  await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'r@b.com', name: 'R', agreed_terms: true }), res);
-  assert.strictEqual(res.statusCode, 500);
-  assert.strictEqual(res.body.error, 'sku_misconfigured');
-  assert.strictEqual(STRIPE_CALLS.length, 0);
-});
-
-test('roadmap: with its Cal type set and no price id, checkout passes A$200 + the label for inline price_data', async () => {
-  process.env.CAL_EVENT_TYPE_ROADMAP = '120';
   delete process.env.STRIPE_PRICE_ROADMAP;
   resetStripeCalls();
   const res = mockRes();
@@ -283,6 +273,15 @@ test('roadmap: with its Cal type set and no price id, checkout passes A$200 + th
   assert.strictEqual(args.priceId, null);
   assert.strictEqual(args.priceAud, 200);
   assert.strictEqual(args.productName, 'AI problem-solving roadmap');
-  assert.strictEqual(args.calEventTypeId, 120);
+  assert.strictEqual(args.calEventTypeId, 7245541);
+});
+
+test('roadmap: CAL_EVENT_TYPE_ROADMAP overrides the default', async () => {
+  process.env.CAL_EVENT_TYPE_ROADMAP = '120';
+  resetStripeCalls();
+  const res = mockRes();
+  await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'r@b.com', name: 'R', agreed_terms: true }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(STRIPE_CALLS[0].calEventTypeId, 120);
   delete process.env.CAL_EVENT_TYPE_ROADMAP;
 });
