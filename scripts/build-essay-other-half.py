@@ -21,10 +21,12 @@ OUT = pathlib.Path(__file__).resolve().parent.parent / "writing" / SLUG / "index
 DATE_PUBLISHED = "2026-09-25"
 
 body_md = SRC[SRC.index("# The Other Half of the Room"):]
-# Held back until the man concerned agrees (Sam asking him). Remove from EXCLUDE to publish it.
-EXCLUDE = ["At a recent Wildly Calm retreat"]
+# Paragraphs held back pending consent. The Rage-workshop paragraph was released 30 Sep 2026
+# (the man said yes). Add a paragraph's opening words here to hold it back again.
+EXCLUDE = []
+body_md = re.sub(r"<!--.*?-->", "", body_md, flags=re.S)
 _blocks = [b for b in re.split(r"\n\s*\n", body_md)]
-_blocks = [b for b in _blocks if not b.strip().startswith("<!--") and not any(b.strip().startswith(x) for x in EXCLUDE)]
+_blocks = [b for b in _blocks if b.strip() and not any(b.strip().startswith(x) for x in EXCLUDE)]
 body_md = "\n\n".join(_blocks)
 
 # ---------- inline links: (exact phrase in the markdown, url) ----------
@@ -41,7 +43,7 @@ LINKS = [
     ("In one US survey, almost a third of men", "https://www.prnewswire.com/news-releases/virtual-valentines-nearly-1-in-5-adults-report-having-chatted-with-ai-romantic-partner-302376017.html"),
     ("take the edge off loneliness in the short term", "https://www.hbs.edu/ris/Publication%20Files/24-078_a3d2e2c7-eca1-4767-8543-122e818bf2e5.pdf"),
     ("in a four-week study", "https://www.media.mit.edu/publications/how-ai-and-human-behaviors-shape-psychosocial-effects-of-chatbot-use-a-longitudinal-controlled-study/"),
-    ("Anthropic's published guidelines", "https://www.anthropic.com/constitution"),
+    ("Claude's constitution", "https://www.anthropic.com/constitution"),
     ("roll back an update", "https://openai.com/index/sycophancy-in-gpt-4o/"),
 ]
 for phrase, _ in LINKS:
