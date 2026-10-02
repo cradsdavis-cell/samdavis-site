@@ -603,7 +603,7 @@
     &quot;description&quot;: &quot;My assistant, acting as me in this workspace.&quot;
   },
   &quot;features&quot;: {
-    &quot;bot_user&quot;: { &quot;display_name&quot;: &quot;Crads assistant&quot;, &quot;always_online&quot;: false }
+    &quot;bot_user&quot;: { &quot;display_name&quot;: &quot;crads-assistant&quot;, &quot;always_online&quot;: false }
   },
   &quot;oauth_config&quot;: {
     &quot;scopes&quot;: {
@@ -629,7 +629,8 @@
 <li><strong><code>is_mcp_enabled</code> is on.</strong> That is the switch Slack checks before it lets an assistant in. An app made by hand needs it turned on in the app's settings, on the page Slack calls <strong>Agents &amp; AI Apps</strong> (some of Slack's own pages just say <strong>Agents</strong>).</li>
 <li><strong>Token rotation is off.</strong> With it on, the token you paste would expire twelve hours later. Slack does not let you turn rotation off again once it is on, so if you made an app with it on, make a fresh one from the template.</li>
 </ul>
-<p>The app also has a bot user. It never posts; it is there because Slack's sign-in has been known to refuse an app without one.</p>
+<p>The app also has a bot user, named <code>crads-assistant</code> because Slack only allows lowercase letters, numbers, dashes, dots and underscores in a bot's name. It never posts; it is there because Slack's sign-in has been known to refuse an app without one.</p>
+<p>If Slack says <strong>&quot;We can't translate a manifest with errors&quot;</strong>, you have an older copy of the template: change the bot's <code>display_name</code> to <code>crads-assistant</code> and press Next.</p>
 <h2 id="step-2-install-it-and-copy-the-token">Step 2. Install it and copy the token<a class="anchor" href="#step-2-install-it-and-copy-the-token" aria-label="Link to this section">#</a></h2>
 <ol>
 <li>In your new app's settings, open <strong>OAuth &amp; Permissions</strong>.</li>
