@@ -5,8 +5,8 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Use Claude Code on your own server · Crads-AI, a free self-hosted Claude assistant</title>
-<meta name="description" content="Where you talk to your assistant. The app is the window onto your mineral; Claude Code is the room you work in.">
+<title>Connect WordPress and WooCommerce · Crads-AI, a free self-hosted Claude assistant</title>
+<meta name="description" content="Switch on MCP on your site, make a user for your assistant, give it an application password, and connect. About ten minutes, with a check at the end.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 
@@ -438,16 +438,16 @@
     });
   });
 </script>
-<link rel="canonical" href="https://crads-ai.com/docs/claude-code-on-your-mineral">
+<link rel="canonical" href="https://crads-ai.com/docs/connect-wordpress">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Crads-AI">
-<meta property="og:url" content="https://crads-ai.com/docs/claude-code-on-your-mineral">
-<meta property="og:title" content="Use Claude Code on your mineral">
-<meta property="og:description" content="Where you talk to your assistant. The app is the window onto your mineral; Claude Code is the room you work in.">
+<meta property="og:url" content="https://crads-ai.com/docs/connect-wordpress">
+<meta property="og:title" content="Connect WordPress and WooCommerce">
+<meta property="og:description" content="Switch on MCP on your site, make a user for your assistant, give it an application password, and connect. About ten minutes, with a check at the end.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Use Claude Code on your mineral">
-<meta name="twitter:description" content="Where you talk to your assistant. The app is the window onto your mineral; Claude Code is the room you work in.">
+<meta name="twitter:title" content="Connect WordPress and WooCommerce">
+<meta name="twitter:description" content="Switch on MCP on your site, make a user for your assistant, give it an application password, and connect. About ten minutes, with a check at the end.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body>
@@ -495,7 +495,7 @@
       <li><a href="/docs/faq">Questions, answered straight</a></li>
       </ul>
     </details>
-    <details class="navgrp">
+    <details class="navgrp" open>
       <summary>Getting set up<span class="cnt">10</span></summary>
       <ul>
       <li><a href="/docs/get-a-hetzner-api-token">Get a Hetzner API token</a></li>
@@ -506,11 +506,11 @@
       <li><a href="/docs/connect-google">Connect Google, with your own key</a></li>
       <li><a href="/docs/connect-telegram">Connect Telegram</a></li>
       <li><a href="/docs/connect-slack">Connect Slack, with your own app</a></li>
-      <li><a href="/docs/connect-wordpress">Connect WordPress and WooCommerce</a></li>
+      <li><a href="/docs/connect-wordpress" aria-current="page">Connect WordPress and WooCommerce</a></li>
       <li><a href="/docs/connect-shopify-and-xero">Shopify and Xero, through your Claude account</a></li>
       </ul>
     </details>
-    <details class="navgrp" open>
+    <details class="navgrp">
       <summary>Working with your EA<span class="cnt">11</span></summary>
       <ul>
       <li><a href="/docs/how-your-assistant-thinks">How your assistant thinks</a></li>
@@ -523,7 +523,7 @@
       <li><a href="/docs/starter-recipes">Starter recipes</a></li>
       <li><a href="/docs/what-it-will-not-do">What it will not do</a></li>
       <li><a href="/docs/find-what-you-do-not-know">Find what you do not know</a></li>
-      <li><a href="/docs/claude-code-on-your-mineral" aria-current="page">Use Claude Code on your mineral</a></li>
+      <li><a href="/docs/claude-code-on-your-mineral">Use Claude Code on your mineral</a></li>
       </ul>
     </details>
     <details class="navgrp">
@@ -577,54 +577,69 @@
     </details>
 </details></aside>
 <article class="docs-article">
-<nav class="docs-crumbs" aria-label="Breadcrumb"><a href="/docs">Docs</a><span class="sep">/</span><span class="here">Working with your EA</span></nav>
-<h1>Use Claude Code on your mineral</h1>
-<p class="docs-lede">Where you talk to your assistant. The app is the window onto your mineral; Claude Code is the room you work in.</p>
-<p class="docs-outcome"><span>You will be able to</span> connect Claude Code to your mineral and work there, with your whole brain in context.</p>
-<p>Where you talk to your assistant. The app is the window onto your mineral; Claude Code is the room you work in. The app shows you what it knows and lets you switch things on. Claude Code is where you do the interview, ask it things, and have it draft. Same assistant, same brain, the whole of it in context.</p>
-<p>That is Claude Code, connected to your mineral over SSH. Same assistant, same brain, much more room. SSH is not a side door here: your keys are the only identity your mineral has, so this route is the product's own front door with the panelling off.</p>
-<figure class="film" id="film-docs-2-sign-in-claude-code"><video controls playsinline preload="metadata" poster="/lib/video/posters/docs-2-sign-in-claude-code.jpg" aria-label="Sign in once in the app's Terminal, then open your mineral in Claude Code: the connection name from Help, Add SSH connection, pick the folder called state, say hello."><source src="/lib/video/docs-2-sign-in-claude-code.mp4" type="video/mp4"></video><figcaption>Sign in once in the app's Terminal, then open your mineral in Claude Code: the connection name from Help, Add SSH connection, pick the folder called state, say hello.</figcaption></figure>
-<h2 id="when-this-is-worth-it">When this is worth it<a class="anchor" href="#when-this-is-worth-it" aria-label="Link to this section">#</a></h2>
-<p>Every day. The one thing you do in the app's Terminal instead is the first sign-in to Claude, because that signs in the mineral itself and Claude Code cannot do that for it. Beyond the everyday, this is also the place for:</p>
+<nav class="docs-crumbs" aria-label="Breadcrumb"><a href="/docs">Docs</a><span class="sep">/</span><span class="here">Getting set up</span></nav>
+<h1>Connect WordPress and WooCommerce</h1>
+<p class="docs-lede">Switch on MCP on your site, make a user for your assistant, give it an application password, and connect. About ten minutes, with a check at the end.</p>
+<p class="docs-outcome"><span>You will be able to</span> let your assistant work with your WordPress site and your WooCommerce products and orders, signed in as its own user.</p>
+<p>Your assistant connects to your WordPress site <strong>as a user you make for it</strong>, signed in with an <strong>application password</strong>. That is a second password WordPress lets you create for one purpose and revoke on its own, without touching anyone's real password. Your mineral checks the connection works before it keeps it.</p>
+<p>With WooCommerce, your assistant can look up, add, update and remove products, look up orders, change an order's status, and add notes to orders. When it connects, the card says how many of these your site offers (seven, today). It works in your chats and in your scheduled jobs.</p>
+<h2 id="what-your-site-needs">What your site needs<a class="anchor" href="#what-your-site-needs" aria-label="Link to this section">#</a></h2>
 <ul>
-<li><strong>building or editing skills</strong> rather than running them</li>
-<li><strong>restructuring your brain</strong>, where you want to see and move files</li>
-<li>doing something long and iterative that a chat window makes tedious</li>
+<li><strong>https.</strong> WordPress only offers application passwords on a secure site.</li>
+<li><strong>Permalinks set to anything but Plain</strong> (Settings, then Permalinks).</li>
+<li><strong>For the shop tools: WooCommerce 10.9 or newer.</strong> WooCommerce's MCP feature is still a preview, so it is off until you switch it on (step 1).</li>
+<li><strong>Without WooCommerce:</strong> the MCP Adapter plugin, from WordPress's own GitHub (step 1). A site without a shop can only offer your assistant what its plugins choose to share, which out of the box may be very little.</li>
 </ul>
-<h2 id="getting-connected">Getting connected<a class="anchor" href="#getting-connected" aria-label="Link to this section">#</a></h2>
-<p>The connect guide lives in the app under <strong>Help</strong>. It is there rather than here because it hands you the exact host for <em>your</em> mineral, and a page that told you the general shape would just be a worse version of the thing that knows your address.</p>
-<p>What the guide gives you is an SSH host entry. Once that is in place, opening Claude Code against your mineral is the same as opening it against any machine you have access to.</p>
-<p>The short shape, so you know what you are in for: in Claude Code, open the <strong>Environment</strong> dropdown, choose &quot;+ Add SSH connection&quot;, name it anything you like, and put your connection name in the SSH Host field exactly as the app shows it. Port and identity file stay empty; your key is already on this computer and the app finds it from the connection name. If this computer was set up through the app in the first place, the connection is usually already sitting in that dropdown, folder included, so check there before adding anything.</p>
-<p>When Claude Code asks which folder to open, pick the folder named after your mineral (a mineral that has not named its folder yet calls it &quot;state&quot;). The first connection takes a minute while the app sets itself up on your mineral; after that it is quick. And the first thing to say is <strong>&quot;introduce yourself&quot;</strong>: your assistant already knows who you are and takes it from there.</p>
-<p>One distinction that cost people hours: connecting Claude Code signs in your laptop and reaches into your mineral over SSH. It does not sign the mineral itself in, it does not switch on scheduled jobs, and nothing it does makes the Overview's sign-in step go green. That step is the Terminal tab, once: open it and run <code>claude</code>. The create wizard's finish checklist offers exactly that under <strong>Connect Claude</strong>, so a mineral set up recently has usually done it on day one. Then live here.</p>
-<h2 id="connections-you-make-in-here-stay-chats-only">Connections you make in here stay chats-only<a class="anchor" href="#connections-you-make-in-here-stay-chats-only" aria-label="Link to this section">#</a></h2>
-<p>A service you connect from inside a Claude Code session works when you chat and is invisible to your scheduled jobs, which load their connections from a different place. This is not hidden from you: the <a href="/docs/connections-page">Connections page</a> lists such a service honestly, marked &quot;in your chats only, not in scheduled jobs&quot;, and gives it a one-click <strong>&quot;Use in jobs too&quot;</strong> button that moves it where jobs can load it. The sign-in survives the move.</p>
-<h2 id="what-is-different-on-a-mineral">What is different on a mineral<a class="anchor" href="#what-is-different-on-a-mineral" aria-label="Link to this section">#</a></h2>
-<p>Two things surprise people.</p>
-<p><strong>Your brain is just files.</strong> Markdown, in a git repository, with wikilinks between pages. There is no database and no API. You can <code>grep</code> it, edit it in place, move pages around, and your assistant will read whatever it finds next time. The brain graph in the app draws your actual structure rather than a structure it expected, so you can see the effect of a reorganisation immediately.</p>
-<p><strong>Skills are files too.</strong> A skill is a markdown file with frontmatter describing when it applies. Writing a new one is writing a file. Editing one is editing a file. Nothing needs to be registered, compiled or deployed: it is present, so it works.</p>
-<p>That is the whole reason this route exists. Once you can see that the product is files, the ceiling on what you can make it do stops being our imagination.</p>
-<h2 id="your-mineral-describes-itself">Your mineral describes itself<a class="anchor" href="#your-mineral-describes-itself" aria-label="Link to this section">#</a></h2>
-<p>At the top of the brain sits a page the mineral writes about itself: what it is, who holds it, which machines can sign in, what is connected, which skills are installed and where each came from, and its last few custody events. It is rewritten on every status update, so it can never be older than the last run, and your assistant reads it before answering questions about what this mineral is or can do. You can read it too. It is just a file, like everything else here.</p>
-<p>Skills have an address as well: your own live under the brain's <code>.claude/skills/&lt;name&gt;/</code>, one folder per skill, which is what <a href="/docs/write-your-own-skill">write your own skill</a> walks you through. The mineral's software version is on the self-description page too, and in the app under <strong>Help</strong>, in the Mineral software fold.</p>
-<h2 id="the-terminal-in-the-app">The terminal in the app<a class="anchor" href="#the-terminal-in-the-app" aria-label="Link to this section">#</a></h2>
-<p>There is also a Terminal tab in the app: the short way in when you are already there, for a quick question or running a skill by name, and the place the first Claude sign-in happens.</p>
-<p>Use it for the sign-in and for one-off asks. Use Claude Code for the interview and for everything after.</p>
-<h2 id="three-cautions">Three cautions<a class="anchor" href="#three-cautions" aria-label="Link to this section">#</a></h2>
-<p><strong>You have real access.</strong> From a session on your mineral you can delete your own brain. Your mineral has a nightly backup and a repository in your own account (<a href="/docs/back-up-and-restore">back up your mineral</a>), and neither is a reason to be casual the day you decide to reorganise everything.</p>
-<p><strong>The machinery is not yours to edit.</strong> The engine, the scheduler and the app are maintained by us and replaced when the mineral updates, so a change you make there is a change that disappears on the next restart. Everything under your own brain and your own skills survives updates, by design: that boundary is what <a href="/docs/the-three-layers">who edits what</a> describes.</p>
-<p><strong>Your edits are pushed on the mineral's schedule, not yours.</strong> The brain goes to your own repository nightly, at 03:50 mineral time, so a long evening of terminal edits sits only on the mineral until then. Before a big reorganisation, ask your assistant to push the brain first; then the state you are about to change is already somewhere safe. <a href="/docs/back-up-and-restore">Back up and restore</a> is the full picture.</p>
-<nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/find-what-you-do-not-know"><span class="dir">Previous</span>Find what you do not know</a><a class="next" href="/docs/overview-page"><span class="dir">Next</span>Overview</a></nav>
+<p>In the Crads AI app, open <strong>Your assistant</strong>, then <strong>Connections</strong>. Under <strong>Add a connection</strong>, find <strong>WordPress</strong> and press <strong>Set up</strong>. Type your site's address at the top of the card first: every button on the card then opens the right page on your site.</p>
+<h2 id="step-1-switch-on-mcp-on-your-site">Step 1. Switch on MCP on your site<a class="anchor" href="#step-1-switch-on-mcp-on-your-site" aria-label="Link to this section">#</a></h2>
+<p><strong>With WooCommerce:</strong></p>
+<ol>
+<li>Press <strong>Open WooCommerce features</strong> on the card (that is WooCommerce, then Settings, then Advanced, then Features, in your site's admin).</li>
+<li>Find <strong>WooCommerce MCP</strong>. WooCommerce lists it with its experimental features.</li>
+<li>Tick it and press <strong>Save changes</strong>.</li>
+</ol>
+<p><strong>Without WooCommerce:</strong></p>
+<ol>
+<li>Press <strong>Download MCP Adapter</strong> to download the plugin's zip file. It comes from WordPress's own GitHub; it is not in the plugin directory yet.</li>
+<li>Press <strong>Upload a plugin</strong>, choose the zip, press <strong>Install Now</strong>, then <strong>Activate</strong>.</li>
+</ol>
+<h2 id="step-2-make-a-user-for-your-assistant">Step 2. Make a user for your assistant<a class="anchor" href="#step-2-make-a-user-for-your-assistant" aria-label="Link to this section">#</a></h2>
+<p>Press <strong>Add a user</strong> on the card. Give the new user a name you will recognise, like <code>assistant</code>, and an email address you own.</p>
+<p>Pick its <strong>role</strong> with care, because the role is what your assistant can do:</p>
+<ul>
+<li><strong>Shop manager</strong> if you run WooCommerce. It can manage products and orders, including refunds and customer details. It cannot change your site's settings, themes or plugins, or other users.</li>
+<li><strong>Editor</strong> for a site without a shop.</li>
+</ul>
+<p>Do not give it Administrator. Your assistant does not need it, and a separate, smaller user is the whole point.</p>
+<h2 id="step-3-make-an-application-password">Step 3. Make an application password<a class="anchor" href="#step-3-make-an-application-password" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>Press <strong>Open your users</strong> on the card and click the user you just made.</li>
+<li>Scroll down to <strong>Application Passwords</strong>.</li>
+<li>Under <strong>New Application Password Name</strong>, type <code>Crads</code>.</li>
+<li>Press <strong>Add Application Password</strong>.</li>
+<li>WordPress shows the new password <strong>once</strong>, in groups of four letters. Copy all of it, spaces included.</li>
+</ol>
+<p><strong>If there is no Application Passwords section:</strong> something has switched the feature off. The usual cause is a security plugin. Wordfence does it by default: in Wordfence, open <strong>All Options</strong>, then <strong>Brute Force Protection</strong>, and turn off <strong>Disable WordPress application passwords</strong>. A site that is not on https never shows the section at all.</p>
+<h2 id="step-4-connect">Step 4. Connect<a class="anchor" href="#step-4-connect" aria-label="Link to this section">#</a></h2>
+<p>Type the new user's <strong>username</strong> and paste the <strong>application password</strong>, then press <strong>Connect WordPress</strong>. Your mineral saves them, then asks your site for the list of things your assistant can do. When the site answers, the card says how many tools it found, and WordPress appears in <strong>Your connections</strong> with the status &quot;working, including in scheduled jobs&quot;.</p>
+<p>If the site does not answer properly, the card says why, and <strong>nothing is kept</strong>: the password is removed from your mineral straight away, so you can fix the problem and press Connect again.</p>
+<table><thead><tr><th>The card says</th><th>What happened</th><th>What to do</th></tr></thead><tbody><tr><td>Your site turned down that username and password</td><td>Wrong username, or the user's normal password instead of the application password, or your host is dropping the sign-in (below)</td><td>Check both, then see below</td></tr><tr><td>Your site has no MCP connection at that address yet</td><td>Step 1 is not done</td><td>Tick WooCommerce MCP and save, or activate MCP Adapter</td></tr><tr><td>Your mineral could not reach your site</td><td>The address is wrong, or the site is not public</td><td>Check the address starts <code>https://</code> and opens in a browser</td></tr></tbody></table>
+<h3 id="if-the-username-and-password-are-right-and-it-still-says-no">If the username and password are right and it still says no<a class="anchor" href="#if-the-username-and-password-are-right-and-it-still-says-no" aria-label="Link to this section">#</a></h3>
+<p>Some hosts quietly drop the part of the request that carries the password, so WordPress never sees it. On Apache hosts the fix is one line in your site's <code>.htaccess</code> file, straight after <code>RewriteEngine On</code>:</p>
+<pre><code>RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]</code></pre>
+<p>WordPress writes this line itself in a standard setup, so you will usually only need it on a site with an old or customised <code>.htaccess</code>. If you are not comfortable editing that file, your host's support can add it for you; ask them to &quot;pass the Authorization header through to PHP&quot;.</p>
+<h2 id="disconnecting">Disconnecting<a class="anchor" href="#disconnecting" aria-label="Link to this section">#</a></h2>
+<p>Press <strong>Disconnect</strong> on the WordPress row in Your connections. That deletes the password from your mineral. To switch it off at your site's end too, open the user in WordPress, find <strong>Application Passwords</strong>, and revoke <code>Crads</code>, or delete the user.</p>
+<nav class="docs-trail" aria-label="By goal"><a class="t" href="/docs#goal-reach"><svg class="glyph" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="m3 8 9 6 9-6"/></svg>I want it in my inbox and my pocket</a><ol><li><span class="n">1</span><a href="/docs/connect-google">Connect Google, with your own key</a></li><li><span class="n">2</span><a href="/docs/connect-telegram">Connect Telegram</a></li><li><span class="n">3</span><a href="/docs/connect-slack">Connect Slack, with your own app</a></li><li class="here" aria-current="step"><span class="n">4</span><span>Connect WordPress and WooCommerce</span></li><li><span class="n">5</span><a href="/docs/connect-shopify-and-xero">Shopify and Xero, through your Claude account</a></li><li><span class="n">6</span><a href="/docs/connections-page">Connections</a></li></ol></nav><nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/connect-slack"><span class="dir">Previous</span>Connect Slack, with your own app</a><a class="next" href="/docs/connect-shopify-and-xero"><span class="dir">Next</span>Shopify and Xero, through your Claude account</a></nav>
 </article>
 <nav class="docs-toc" aria-label="On this page"><h2>On this page</h2>
 <ul>
-  <li><a href="#when-this-is-worth-it">When this is worth it</a></li>
-  <li><a href="#getting-connected">Getting connected</a></li>
-  <li><a href="#connections-you-make-in-here-stay-chats-only">Connections you make in here stay chats-only</a></li>
-  <li><a href="#what-is-different-on-a-mineral">What is different on a mineral</a></li>
-  <li><a href="#your-mineral-describes-itself">Your mineral describes itself</a></li>
-  <li><a href="#the-terminal-in-the-app">The terminal in the app</a></li>
-  <li><a href="#three-cautions">Three cautions</a></li>
+  <li><a href="#what-your-site-needs">What your site needs</a></li>
+  <li><a href="#step-1-switch-on-mcp-on-your-site">Step 1. Switch on MCP on your site</a></li>
+  <li><a href="#step-2-make-a-user-for-your-assistant">Step 2. Make a user for your assistant</a></li>
+  <li><a href="#step-3-make-an-application-password">Step 3. Make an application password</a></li>
+  <li><a href="#step-4-connect">Step 4. Connect</a></li>
+  <li><a href="#disconnecting">Disconnecting</a></li>
 </ul></nav>
 </div>
 </main>
