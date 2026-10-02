@@ -97,13 +97,24 @@ def ref(rid, text, url=None):
 REF_GROUPS = [
     ("Sources", [
         ref("anthropic2026", "Anthropic (2026). Trustworthy agents in practice. 9 April.", "https://www.anthropic.com/research/trustworthy-agents"),
+        ref("aristotle", "Aristotle. <em>Nicomachean Ethics</em>. Trans. W. D. Ross.", "http://classics.mit.edu/Aristotle/nicomachaen.html"),
+        ref("baltes2000", "Baltes, P. B. and Staudinger, U. M. (2000). Wisdom: a metaheuristic (pragmatic) to orchestrate mind and virtue toward excellence. <em>American Psychologist</em>, 55(1), 122-136.", "https://doi.org/10.1037/0003-066X.55.1.122"),
         ref("blair2005", "Blair, R. J. R. (2005). Responding to the emotions of others: dissociating forms of empathy through the study of typical and psychiatric populations. <em>Consciousness and Cognition</em>, 14(4), 698-718.", "https://doi.org/10.1016/j.concog.2005.06.004"),
-        ref("bodhi1994", "Bodhi, Bhikkhu (1994). <em>The Noble Eightfold Path: Way to the End of Suffering</em>. Buddhist Publication Society.", "https://www.accesstoinsight.org/lib/authors/bodhi/waytoend.html"),
+        ref("bodhi1999", "Bodhi, Bhikkhu (1999). <em>The Noble Eightfold Path: The Way to the End of Suffering</em>. Buddhist Publication Society.", "https://www.accesstoinsight.org/lib/authors/bodhi/waytoend.html"),
         ref("dimartino2005", "DiMartino, M. D. and Konietzko, B. (creators) (2005 to 2008). <em>Avatar: The Last Airbender</em>. Nickelodeon."),
+        ref("dreyfus1986", "Dreyfus, H. L. and Dreyfus, S. E., with Athanasiou, T. (1986). <em>Mind over Machine: The Power of Human Intuition and Expertise in the Era of the Computer</em>. Free Press."),
         ref("good1965", "Good, I. J. (1965). Speculations concerning the first ultraintelligent machine. <em>Advances in Computers</em>, 6, 31-88."),
+        ref("grossmann2014", "Grossmann, I. and Kross, E. (2014). Exploring Solomon's paradox: self-distancing eliminates the self-other asymmetry in wise reasoning about close relationships in younger and older adults. <em>Psychological Science</em>, 25(8), 1571-1580.", "https://doi.org/10.1177/0956797614535400"),
+        ref("grossmann2020", "Grossmann, I. et al. (2020). The science of wisdom in a polarized world: knowns and unknowns. <em>Psychological Inquiry</em>, 31(2), 103-133.", "https://doi.org/10.1080/1047840X.2020.1750917"),
+        ref("johnson2024", "Johnson, S. G. B., Karimi, A.-H., Bengio, Y., Chater, N., Gerstenberg, T., Larson, K., Levine, S., Mitchell, M., Rahwan, I., Schölkopf, B. and Grossmann, I. (2024). Imagining and building wise machines: the centrality of AI metacognition. arXiv:2411.02478.", "https://arxiv.org/abs/2411.02478"),
+        ref("kahneman2009", "Kahneman, D. and Klein, G. (2009). Conditions for intuitive expertise: a failure to disagree. <em>American Psychologist</em>, 64(6), 515-526.", "https://doi.org/10.1037/a0016755"),
         ref("kamtekar2025", "Kamtekar, R. (2025). Marcus Aurelius. <em>Stanford Encyclopedia of Philosophy</em> (substantive revision 31 March 2025).", "https://plato.stanford.edu/entries/marcus-aurelius/"),
+        ref("murdoch1970", "Murdoch, I. (1970). <em>The Sovereignty of Good</em>. Routledge."),
         ref("openai2026", "OpenAI (2026). OpenAI and Hugging Face incident technical report.", "https://cdn.openai.com/pdf/67869394-cb91-4c12-888c-5cbd85c7814c/OpenAI-Hugging-Face%20Incident-Technical-Report.pdf"),
         ref("polanyi1966", "Polanyi, M. (1966). <em>The Tacit Dimension</em>. Doubleday."),
+        ref("schwartz2002", "Schwartz, B., Ward, A., Monterosso, J., Lyubomirsky, S., White, K. and Lehman, D. R. (2002). Maximizing versus satisficing: happiness is a matter of choice. <em>Journal of Personality and Social Psychology</em>, 83(5), 1178-1197.", "https://doi.org/10.1037/0022-3514.83.5.1178"),
+        ref("simon1956", "Simon, H. A. (1956). Rational choice and the structure of the environment. <em>Psychological Review</em>, 63(2), 129-138.", "https://doi.org/10.1037/h0042769"),
+        ref("weil1942", "Weil, S. (1942). Letter to Joë Bousquet, 13 April 1942. In Weil, S. and Bousquet, J. (1982). <em>Correspondance</em>. L'Age d'Homme."),
     ]),
 ]
 REFS_HTML = (
