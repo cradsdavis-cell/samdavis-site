@@ -5,8 +5,8 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>When something looks wrong · Crads-AI, a free self-hosted Claude assistant</title>
-<meta name="description" content="The short list of symptoms, what each usually means, and where to look before you worry.">
+<title>Connect Mailchimp, with your own key · Crads-AI, a free self-hosted Claude assistant</title>
+<meta name="description" content="Make an API key in Mailchimp, paste it, and your assistant can read your audiences and reports, add and tag contacts, and draft campaigns. It never sends one.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 
@@ -438,16 +438,16 @@
     });
   });
 </script>
-<link rel="canonical" href="https://crads-ai.com/docs/when-something-looks-wrong">
+<link rel="canonical" href="https://crads-ai.com/docs/connect-mailchimp">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Crads-AI">
-<meta property="og:url" content="https://crads-ai.com/docs/when-something-looks-wrong">
-<meta property="og:title" content="When something looks wrong">
-<meta property="og:description" content="The short list of symptoms, what each usually means, and where to look before you worry.">
+<meta property="og:url" content="https://crads-ai.com/docs/connect-mailchimp">
+<meta property="og:title" content="Connect Mailchimp, with your own key">
+<meta property="og:description" content="Make an API key in Mailchimp, paste it, and your assistant can read your audiences and reports, add and tag contacts, and draft campaigns. It never sends one.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="When something looks wrong">
-<meta name="twitter:description" content="The short list of symptoms, what each usually means, and where to look before you worry.">
+<meta name="twitter:title" content="Connect Mailchimp, with your own key">
+<meta name="twitter:description" content="Make an API key in Mailchimp, paste it, and your assistant can read your audiences and reports, add and tag contacts, and draft campaigns. It never sends one.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body>
@@ -495,7 +495,7 @@
       <li><a href="/docs/faq">Questions, answered straight</a></li>
       </ul>
     </details>
-    <details class="navgrp">
+    <details class="navgrp" open>
       <summary>Getting set up<span class="cnt">11</span></summary>
       <ul>
       <li><a href="/docs/get-a-hetzner-api-token">Get a Hetzner API token</a></li>
@@ -507,7 +507,7 @@
       <li><a href="/docs/connect-telegram">Connect Telegram</a></li>
       <li><a href="/docs/connect-slack">Connect Slack, with your own app</a></li>
       <li><a href="/docs/connect-wordpress">Connect WordPress and WooCommerce</a></li>
-      <li><a href="/docs/connect-mailchimp">Connect Mailchimp, with your own key</a></li>
+      <li><a href="/docs/connect-mailchimp" aria-current="page">Connect Mailchimp, with your own key</a></li>
       <li><a href="/docs/connect-shopify-and-xero">Shopify and Xero, through your Claude account</a></li>
       </ul>
     </details>
@@ -539,12 +539,12 @@
       <li><a href="/docs/terminal-page">Terminal</a></li>
       </ul>
     </details>
-    <details class="navgrp" open>
+    <details class="navgrp">
       <summary>Keep it running<span class="cnt">6</span></summary>
       <ul>
       <li><a href="/docs/back-up-and-restore">Back up your mineral, and get it back</a></li>
       <li><a href="/docs/fix-a-broken-connection">Fix a connection that has stopped working</a></li>
-      <li><a href="/docs/when-something-looks-wrong" aria-current="page">When something looks wrong</a></li>
+      <li><a href="/docs/when-something-looks-wrong">When something looks wrong</a></li>
       <li><a href="/docs/devices-and-access">Machines that can open your mineral</a></li>
       <li><a href="/docs/add-another-computer">Add another computer</a></li>
       <li><a href="/docs/grant-support-access">Let someone look at your mineral</a></li>
@@ -578,65 +578,52 @@
     </details>
 </details></aside>
 <article class="docs-article">
-<nav class="docs-crumbs" aria-label="Breadcrumb"><a href="/docs">Docs</a><span class="sep">/</span><span class="here">Keep it running</span></nav>
-<h1>When something looks wrong</h1>
-<p class="docs-lede">The short list of symptoms, what each usually means, and where to look before you worry.</p>
-<p class="docs-outcome"><span>You will be able to</span> match a symptom to its usual cause and know where to look before you worry.</p>
-<p>Most problems on a mineral present as one of the symptoms below, and most have a one-line cause. This page is the list, ordered by how often each actually happens rather than by how alarming it feels.</p>
-<h2 id="the-morning-brief-did-not-arrive">The morning brief did not arrive<a class="anchor" href="#the-morning-brief-did-not-arrive" aria-label="Link to this section">#</a></h2>
-<p><strong>Look at <a href="/docs/connections-page">Connections</a> first.</strong> A scheduled job that needed a dead connection fails rather than pretending, so a missing brief usually means an expired sign-in, and the row will say so.</p>
-<p>If Connections is green, check the schedule itself on <a href="/docs/skills-page">Skills</a>: a malformed schedule is refused rather than guessed at, and the page says so.</p>
-<p>Third check, if both of those look right: the fold at the bottom of Connections for services connected to your <strong>Claude account</strong>. Those work in your chats and can never run in a scheduled job, so a brief that depends on one keeps failing until the service is connected on the mineral itself, from the Connections page.</p>
-<h2 id="my-assistant-answers-like-it-knows-nothing-about-me">My assistant answers like it knows nothing about me<a class="anchor" href="#my-assistant-answers-like-it-knows-nothing-about-me" aria-label="Link to this section">#</a></h2>
-<p>It probably does not. Check the Onboarding card on <a href="/docs/overview-page">Overview</a>: until <a href="/docs/the-interview">the interview</a> is finished, every answer is generic. That is the cause almost every time this is reported.</p>
-<h2 id="i-connected-the-claude-code-app-but-the-checklist-still-says-not-signed-in">I connected the Claude Code app but the checklist still says not signed in<a class="anchor" href="#i-connected-the-claude-code-app-but-the-checklist-still-says-not-signed-in" aria-label="Link to this section">#</a></h2>
-<p>That is the expected result, not a failure. Connecting the app signs in <strong>your laptop</strong> and reaches into your mineral over SSH; it does not sign the <strong>mineral</strong> in, so it does not switch on scheduled jobs and nothing it does makes the Overview checklist tick. The app now says it in bold: &quot;This is an extra, not a step.&quot; The checklist item belongs to the Terminal tab: open it and run <code>claude</code> once.</p>
-<h2 id="my-assistant-uses-a-service-when-i-chat-but-the-scheduled-job-cannot-see-it">My assistant uses a service when I chat, but the scheduled job cannot see it<a class="anchor" href="#my-assistant-uses-a-service-when-i-chat-but-the-scheduled-job-cannot-see-it" aria-label="Link to this section">#</a></h2>
-<p>The service is connected in a place only chats load. A connection made inside a Claude Code session works when you talk and is invisible to scheduled jobs, and <a href="/docs/connections-page">Connections</a> says so rather than hiding it: the row is marked &quot;in your chats only, not in scheduled jobs&quot; and carries a one-click <strong>&quot;Use in jobs too&quot;</strong> button, which is the fix. The one kind with no button is a service connected to your <strong>Claude account</strong> in the app's own fold: those can never run in jobs, because there is nothing on the mineral to move; connect the service on the mineral instead.</p>
-<h2 id="the-app-says-software-unknown-for-my-mineral">The app says &quot;software unknown&quot; for my mineral<a class="anchor" href="#the-app-says-software-unknown-for-my-mineral" aria-label="Link to this section">#</a></h2>
-<p>The mineral is running a build too old to report which build it is. The fix is an update: open <strong>Help</strong>, and under <strong>Mineral software</strong> run <strong>Update and restart this mineral</strong>. When it comes back it will be current and say so; <a href="/docs/how-updates-reach-you">how updates reach you</a> is the mechanics.</p>
-<h2 id="sign-in-answers-a-raw-error-like-bad-server-url">Sign in answers a raw error like &quot;bad server url&quot;<a class="anchor" href="#sign-in-answers-a-raw-error-like-bad-server-url" aria-label="Link to this section">#</a></h2>
-<p>The mineral's software is behind the app. The Connections page fills in the addresses it signs in against from what the mineral reports, and a mineral running older software does not report them, so the sign-in starts with a blank address and fails with a raw error instead of a kind sentence. The fix is the same update as above: open <strong>Help</strong> and run the software update under <strong>Mineral software</strong>. Once the mineral is current, Sign in behaves.</p>
-<h2 id="my-new-computer-cannot-connect">My new computer cannot connect<a class="anchor" href="#my-new-computer-cannot-connect" aria-label="Link to this section">#</a></h2>
-<p>Adding a computer needs a machine that already opens the mineral to vouch for it: <a href="/docs/add-another-computer">add another computer</a> walks both halves, and its last section covers the refusals (a name that does not match the bundle, a mineral that did not answer the probe). If the mineral is mid-restart, the bundle stays good; try again in a minute.</p>
-<h2 id="google-shows-a-scary-unverified-app-screen">Google shows a scary &quot;unverified app&quot; screen<a class="anchor" href="#google-shows-a-scary-unverified-app-screen" aria-label="Link to this section">#</a></h2>
-<p>That screen is correct and expected: the app is <strong>yours</strong>, you created it minutes ago, and nobody was asked to verify it. Click <strong>Advanced</strong>, then <em>Go to</em> your app's name. The whole story is in <a href="/docs/connect-google">connect Google</a>.</p>
-<h2 id="i-got-a-telegram-message-saying-my-google-sign-in-stopped-working">I got a Telegram message saying my Google sign-in stopped working<a class="anchor" href="#i-got-a-telegram-message-saying-my-google-sign-in-stopped-working" aria-label="Link to this section">#</a></h2>
-<p>Rare, and real: Google dropped the key your mineral holds, so &quot;your scheduled jobs cannot reach Gmail or Calendar until you sign in again&quot;. The mineral checks the key itself and sends that message exactly once, not on repeat. The fix is the two clicks the message names: <strong>Connections</strong>, then <strong>Google</strong>, then <strong>Sign in</strong>. If the sign-in itself misbehaves, <a href="/docs/connect-google">connect Google</a> has the whole story.</p>
-<h2 id="there-is-a-machine-on-my-roster-i-do-not-recognise">There is a machine on my roster I do not recognise<a class="anchor" href="#there-is-a-machine-on-my-roster-i-do-not-recognise" aria-label="Link to this section">#</a></h2>
-<p>Remove it, then work out what it was. A mineral made through the setup wizard is born with only your own key, so every row should be a machine of yours, a machine you added, or a live support grant you made. See <a href="/docs/devices-and-access">machines that can open your mineral</a>.</p>
-<h2 id="a-machine-appeared-on-my-roster-that-i-was-already-using">A machine appeared on my roster that I was already using<a class="anchor" href="#a-machine-appeared-on-my-roster-that-i-was-already-using" aria-label="Link to this section">#</a></h2>
-<p>If the notice reads &quot;This computer was already connected but had never been listed here, so it has been added to the roster&quot;, that is the roster healing itself, not an intruder: a machine connected before the roster existed gets listed the first time you open the page on it, and the new row is yours to rename or revoke like any other. A machine you genuinely do not recognise is the entry above, and gets the opposite treatment.</p>
-<h2 id="secrets-lists-things-i-never-added">Secrets lists things I never added<a class="anchor" href="#secrets-lists-things-i-never-added" aria-label="Link to this section">#</a></h2>
-<p>Rows described as the mineral's own plumbing are exactly that: the keys and tokens the mineral needs to be a mineral (status keys, internal tokens, and so on). They are listed because a <a href="/docs/secrets-page">Secrets page</a> that hid some of the secrets would be a different kind of page. There is nothing on them for you to revoke; each row that IS yours says where it comes off.</p>
-<h2 id="my-bot-never-replies-on-telegram">My bot never replies on Telegram<a class="anchor" href="#my-bot-never-replies-on-telegram" aria-label="Link to this section">#</a></h2>
-<p>Look at the Telegram card on Connections. A chip reading &quot;one step left&quot; means the pairing never finished: the bot exists, but it was never bound to your chat, so it has nobody to answer. The pairing code expires after ten minutes, so reopen the card for a fresh one and message that code to your bot. The button you want is <strong>Finish setup</strong>, not disconnect; <a href="/docs/connect-telegram">connect Telegram</a> walks the two steps.</p>
-<h2 id="everything-disconnected-for-a-minute">Everything disconnected for a minute<a class="anchor" href="#everything-disconnected-for-a-minute" aria-label="Link to this section">#</a></h2>
-<p>That is the expected face of a software update. The restart takes about a minute and everyone connected drops briefly: this panel, open terminals and Claude Code sessions all reconnect on their own afterwards, and nothing of yours is touched.</p>
-<h2 id="the-mineral-is-unreachable">The mineral is unreachable<a class="anchor" href="#the-mineral-is-unreachable" aria-label="Link to this section">#</a></h2>
-<p>Sometimes it is genuinely the machine, and sometimes it is between you and it. Give it a minute, then open <strong>Help</strong> and run <strong>Update and restart this mineral</strong> (under <strong>Mineral software</strong>), which restarts the mineral's software without touching anything of yours. If it stays unreachable, the machine itself is worth a look in your own hosting console, Hetzner's or DigitalOcean's (it is your server; their console can reboot it), and a person helping you can go deeper <a href="/docs/grant-support-access">with your permission</a>.</p>
-<h2 id="something-else">Something else<a class="anchor" href="#something-else" aria-label="Link to this section">#</a></h2>
-<p>Report it, and say what you saw rather than what you concluded: &quot;the brief had no calendar section&quot; finds the cause faster than &quot;the assistant is broken&quot;. When a fix lands, the app's version notes say so in plain words.</p>
-<nav class="docs-trail" aria-label="By goal"><a class="t" href="/docs#goal-fix"><svg class="glyph" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 6.5a4 4 0 0 0 5 5L9 22l-3-3L16.5 8.5A4 4 0 0 0 14.5 6.5z"/><path d="M14.5 6.5 19 2"/></svg>I want to fix something</a><ol><li class="here" aria-current="step"><span class="n">1</span><span>When something looks wrong</span></li><li><span class="n">2</span><a href="/docs/fix-a-broken-connection">Fix a connection that has stopped working</a></li><li><span class="n">3</span><a href="/docs/grant-support-access">Let someone look at your mineral</a></li></ol></nav><nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/fix-a-broken-connection"><span class="dir">Previous</span>Fix a connection that has stopped working</a><a class="next" href="/docs/devices-and-access"><span class="dir">Next</span>Machines that can open your mineral</a></nav>
+<nav class="docs-crumbs" aria-label="Breadcrumb"><a href="/docs">Docs</a><span class="sep">/</span><span class="here">Getting set up</span></nav>
+<h1>Connect Mailchimp, with your own key</h1>
+<p class="docs-lede">Make an API key in Mailchimp, paste it, and your assistant can read your audiences and reports, add and tag contacts, and draft campaigns. It never sends one.</p>
+<p class="docs-outcome"><span>You will be able to</span> let your assistant work with your Mailchimp audiences and campaigns, with a key that is yours and a send button that stays yours.</p>
+<p>Mailchimp connects with <strong>an API key you make in your own account</strong>. You paste it on the Connections page, and your mineral checks it with one real read of your account before it keeps it. About three minutes.</p>
+<p>Once it is connected, your assistant can work with your audiences, contacts, draft campaigns and reports, in your chats and in your scheduled jobs. A Monday job that tells you how last week's newsletter did is the kind of thing this is for.</p>
+<h2 id="why-your-own-key-and-why-on-your-mineral">Why your own key, and why on your mineral<a class="anchor" href="#why-your-own-key-and-why-on-your-mineral" aria-label="Link to this section">#</a></h2>
+<p>Mailchimp does not publish an official connection for assistants that covers audiences and campaigns. The services that offer one host it themselves, which means your audience passes through their machines.</p>
+<p>So this one runs <strong>on your mineral</strong>. Your key is stored there, the small program that talks to Mailchimp runs there, and your contact list never passes through Crads AI or anyone else on its way to your assistant.</p>
+<h2 id="what-it-can-and-cannot-do">What it can and cannot do<a class="anchor" href="#what-it-can-and-cannot-do" aria-label="Link to this section">#</a></h2>
+<table><thead><tr><th>It can</th><th>It cannot</th></tr></thead><tbody><tr><td>List your audiences, tags and saved segments</td><td><strong>Send or schedule a campaign</strong></td></tr><tr><td>Find contacts and read a contact's details</td><td>Delete a contact, an audience or a campaign</td></tr><tr><td>Add a contact, or update one's name and fields</td><td>Change an existing contact's subscription status</td></tr><tr><td>Add and remove tags</td><td></td></tr><tr><td>Draft a campaign: audience, subject and content</td><td></td></tr><tr><td>Change a campaign's content while it is still a draft</td><td></td></tr><tr><td>Send you a test of a draft</td><td></td></tr><tr><td>Read a sent campaign's report: opens, clicks, unsubscribes</td><td></td></tr></tbody></table>
+<p><strong>It never sends a campaign.</strong> A newsletter to your whole list cannot be taken back, so your assistant drafts it and sends you a test, and you press Send in Mailchimp.</p>
+<p><strong>New contacts are added as &quot;pending&quot;.</strong> Mailchimp emails them to confirm, and they receive nothing until they do. If you tell your assistant someone has agreed to hear from you (they signed up at a market stall, say), it can add them as subscribed instead. That is your call to make: the law in most countries, and Mailchimp's own rules, need you to have that consent.</p>
+<h2 id="before-you-start">Before you start<a class="anchor" href="#before-you-start" aria-label="Link to this section">#</a></h2>
+<p>You need to be able to sign in to Mailchimp. In the Crads AI app, open <strong>Your assistant</strong>, then <strong>Connections</strong>. Under <strong>Add a connection</strong>, find <strong>Mailchimp</strong> and press <strong>Set up</strong>.</p>
+<h2 id="step-1-make-an-api-key">Step 1. Make an API key<a class="anchor" href="#step-1-make-an-api-key" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>Press <strong>Open Mailchimp API keys</strong> on the card. Mailchimp may ask you to sign in first; it then opens the right page. (To find it yourself: your profile icon, <strong>Profile</strong>, then <strong>Extras</strong>, then <strong>API keys</strong>.)</li>
+<li>Click <strong>Create A Key</strong>.</li>
+<li>Name it <code>Crads</code>, so you know what it is later.</li>
+<li>Click <strong>Generate Key</strong>, then <strong>Copy Key to Clipboard</strong>, then <strong>Done</strong>.</li>
+</ol>
+<p>Mailchimp shows the whole key <strong>only this once</strong>. It looks like 32 letters and numbers, a dash, and a short code such as <code>us21</code>. That ending tells your mineral which of Mailchimp's servers holds your account, so copy all of it.</p>
+<p><strong>A key can do whatever the Mailchimp user who made it can.</strong> Mailchimp does not offer smaller, limited keys. If that matters to you, have someone with a smaller role in your Mailchimp account make the key instead.</p>
+<h2 id="step-2-paste-the-key">Step 2. Paste the key<a class="anchor" href="#step-2-paste-the-key" aria-label="Link to this section">#</a></h2>
+<p>Paste it into the card and press <strong>Connect Mailchimp</strong>. Your mineral saves it, starts the Mailchimp program, and asks Mailchimp who the account belongs to. When Mailchimp answers, the card says &quot;Connected to&quot; your account's name, and Mailchimp appears in <strong>Your connections</strong> with the status &quot;working, including in scheduled jobs&quot;.</p>
+<p>If Mailchimp turns the key down, the card says so and <strong>nothing is kept</strong>: the key is removed from your mineral straight away, so you can make a new one and try again.</p>
+<table><thead><tr><th>The card says</th><th>What happened</th><th>What to do</th></tr></thead><tbody><tr><td>That does not look like a Mailchimp API key</td><td>Part of the key is missing, often the <code>-us21</code> ending</td><td>Copy it again; if Mailchimp no longer shows it, make a new one</td></tr><tr><td>Mailchimp turned that key down</td><td>The key is wrong, revoked, or expired</td><td>Make a new key and paste that</td></tr><tr><td>Your mineral could not reach Mailchimp</td><td>A network hiccup</td><td>Try again in a minute</td></tr></tbody></table>
+<h2 id="keys-expire-after-a-year">Keys expire after a year<a class="anchor" href="#keys-expire-after-a-year" aria-label="Link to this section">#</a></h2>
+<p>Mailchimp keys made since 22 June 2026 stop working a year after they are made. The Mailchimp row in Your connections shows roughly when to expect that, counted from the day you pasted the key. When it happens, your assistant tells you Mailchimp has turned the key down: make a new key, disconnect Mailchimp, and set it up again with the new one. Keys made before 22 June 2026 do not expire.</p>
+<h2 id="some-things-depend-on-your-mailchimp-plan">Some things depend on your Mailchimp plan<a class="anchor" href="#some-things-depend-on-your-mailchimp-plan" aria-label="Link to this section">#</a></h2>
+<p>Mailchimp decides which features each plan includes, and your assistant can only do what your plan allows. If something is not in your plan, your assistant says Mailchimp refused it and why. Test emails are limited by Mailchimp too: on the Free plan, 24 in a day.</p>
+<h2 id="disconnecting">Disconnecting<a class="anchor" href="#disconnecting" aria-label="Link to this section">#</a></h2>
+<p>Press <strong>Disconnect</strong> on the Mailchimp row in Your connections. That deletes the key from your mineral. To switch it off at Mailchimp's end too, open <strong>API keys</strong> in your Mailchimp profile and click <strong>Revoke</strong> next to the key named <code>Crads</code>. A revoked key cannot be switched back on.</p>
+<nav class="docs-trail" aria-label="By goal"><a class="t" href="/docs#goal-reach"><svg class="glyph" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="m3 8 9 6 9-6"/></svg>I want it in my inbox and my pocket</a><ol><li><span class="n">1</span><a href="/docs/connect-google">Connect Google, with your own key</a></li><li><span class="n">2</span><a href="/docs/connect-telegram">Connect Telegram</a></li><li><span class="n">3</span><a href="/docs/connect-slack">Connect Slack, with your own app</a></li><li><span class="n">4</span><a href="/docs/connect-wordpress">Connect WordPress and WooCommerce</a></li><li class="here" aria-current="step"><span class="n">5</span><span>Connect Mailchimp, with your own key</span></li><li><span class="n">6</span><a href="/docs/connect-shopify-and-xero">Shopify and Xero, through your Claude account</a></li><li><span class="n">7</span><a href="/docs/connections-page">Connections</a></li></ol></nav><nav class="docs-nextprev" aria-label="More docs"><a class="prev" href="/docs/connect-wordpress"><span class="dir">Previous</span>Connect WordPress and WooCommerce</a><a class="next" href="/docs/connect-shopify-and-xero"><span class="dir">Next</span>Shopify and Xero, through your Claude account</a></nav>
 </article>
 <nav class="docs-toc" aria-label="On this page"><h2>On this page</h2>
 <ul>
-  <li><a href="#the-morning-brief-did-not-arrive">The morning brief did not arrive</a></li>
-  <li><a href="#my-assistant-answers-like-it-knows-nothing-about-me">My assistant answers like it knows nothing about me</a></li>
-  <li><a href="#i-connected-the-claude-code-app-but-the-checklist-still-says-not-signed-in">I connected the Claude Code app but the checklist still says not signed in</a></li>
-  <li><a href="#my-assistant-uses-a-service-when-i-chat-but-the-scheduled-job-cannot-see-it">My assistant uses a service when I chat, but the scheduled job cannot see it</a></li>
-  <li><a href="#the-app-says-software-unknown-for-my-mineral">The app says &quot;software unknown&quot; for my mineral</a></li>
-  <li><a href="#sign-in-answers-a-raw-error-like-bad-server-url">Sign in answers a raw error like &quot;bad server url&quot;</a></li>
-  <li><a href="#my-new-computer-cannot-connect">My new computer cannot connect</a></li>
-  <li><a href="#google-shows-a-scary-unverified-app-screen">Google shows a scary &quot;unverified app&quot; screen</a></li>
-  <li><a href="#i-got-a-telegram-message-saying-my-google-sign-in-stopped-working">I got a Telegram message saying my Google sign-in stopped working</a></li>
-  <li><a href="#there-is-a-machine-on-my-roster-i-do-not-recognise">There is a machine on my roster I do not recognise</a></li>
-  <li><a href="#a-machine-appeared-on-my-roster-that-i-was-already-using">A machine appeared on my roster that I was already using</a></li>
-  <li><a href="#secrets-lists-things-i-never-added">Secrets lists things I never added</a></li>
-  <li><a href="#my-bot-never-replies-on-telegram">My bot never replies on Telegram</a></li>
-  <li><a href="#everything-disconnected-for-a-minute">Everything disconnected for a minute</a></li>
-  <li><a href="#the-mineral-is-unreachable">The mineral is unreachable</a></li>
-  <li><a href="#something-else">Something else</a></li>
+  <li><a href="#why-your-own-key-and-why-on-your-mineral">Why your own key, and why on your mineral</a></li>
+  <li><a href="#what-it-can-and-cannot-do">What it can and cannot do</a></li>
+  <li><a href="#before-you-start">Before you start</a></li>
+  <li><a href="#step-1-make-an-api-key">Step 1. Make an API key</a></li>
+  <li><a href="#step-2-paste-the-key">Step 2. Paste the key</a></li>
+  <li><a href="#keys-expire-after-a-year">Keys expire after a year</a></li>
+  <li><a href="#some-things-depend-on-your-mailchimp-plan">Some things depend on your Mailchimp plan</a></li>
+  <li><a href="#disconnecting">Disconnecting</a></li>
 </ul></nav>
 </div>
 </main>
