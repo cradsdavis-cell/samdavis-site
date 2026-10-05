@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<channel>
+  <title>Sam Davis · Writing</title>
+  <link>https://crads-ai.com/writing</link>
+  <atom:link href="https://crads-ai.com/writing/feed.xml" rel="self" type="application/rss+xml"/>
+  <description>Essays by Sam Davis on the questions underneath AI: what these systems will want, whose values they'll carry, and what we owe them.</description>
+  <language>en-au</language>
+  <lastBuildDate>Mon, 05 Oct 2026 00:00:00 +1000</lastBuildDate>
+  <item>
+    <title>Crazy Idea or Crazy Person?</title>
+    <link>https://crads-ai.com/writing/crazy-idea-or-crazy-person</link>
+    <guid isPermaLink="true">https://crads-ai.com/writing/crazy-idea-or-crazy-person</guid>
+    <pubDate>Mon, 05 Oct 2026 00:00:00 +1000</pubDate>
+    <dc:creator>Sam Davis</dc:creator>
+    <description>On subjective truth, delusion, creativity, and whether an AI would need a little of its own reality.</description>
+  </item>
+  <item>
+    <title>Nice or Kind?</title>
+    <link>https://crads-ai.com/writing/nice-or-kind</link>
+    <guid isPermaLink="true">https://crads-ai.com/writing/nice-or-kind</guid>
+    <pubDate>Sat, 03 Oct 2026 00:00:00 +1000</pubDate>
+    <dc:creator>Sam Davis</dc:creator>
+    <description>On trust, masks, and what it would take to trust a mind smarter than us.</description>
+  </item>
+  <item>
+    <title>When Should You Turn Back?</title>
+    <link>https://crads-ai.com/writing/when-should-you-turn-back</link>
+    <guid isPermaLink="true">https://crads-ai.com/writing/when-should-you-turn-back</guid>
+    <pubDate>Fri, 02 Oct 2026 00:00:00 +1000</pubDate>
+    <dc:creator>Sam Davis</dc:creator>
+    <description>On wisdom, and whether a machine can know when to stop.</description>
+  </item>
+  <item>
+    <title>What Comes After Agents?</title>
+    <link>https://crads-ai.com/writing/what-comes-after-agents</link>
+    <guid isPermaLink="true">https://crads-ai.com/writing/what-comes-after-agents</guid>
+    <pubDate>Sat, 26 Sep 2026 00:00:00 +1000</pubDate>
+    <dc:creator>Sam Davis</dc:creator>
+    <description>I&amp;#x27;ve been close to AI for nearly a decade. A diagram of its layers got me thinking about what comes next.</description>
+  </item>
+  <item>
+    <title>The Other Half of the Room</title>
+    <link>https://crads-ai.com/writing/the-other-half-of-the-room</link>
+    <guid isPermaLink="true">https://crads-ai.com/writing/the-other-half-of-the-room</guid>
+    <pubDate>Fri, 25 Sep 2026 00:00:00 +1000</pubDate>
+    <dc:creator>Sam Davis</dc:creator>
+    <description>Men and women are being sold stories about each other. The first AI most of us lived with was built to sell them. What should the next one be built for?</description>
+  </item>
+  <item>
+    <title>Is Ten Percent a Lot?</title>
+    <link>https://crads-ai.com/writing/is-ten-percent-a-lot</link>
+    <guid isPermaLink="true">https://crads-ai.com/writing/is-ten-percent-a-lot</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 +1000</pubDate>
+    <dc:creator>Sam Davis</dc:creator>
+    <description>AI researchers put the chance of AI ending humanity at around one in ten. Is that a lot?</description>
+  </item>
+  <item>
+    <title>Which love?</title>
+    <link>https://crads-ai.com/writing/which-love</link>
+    <guid isPermaLink="true">https://crads-ai.com/writing/which-love</guid>
+    <pubDate>Thu, 24 Sep 2026 00:00:00 +1000</pubDate>
+    <dc:creator>Sam Davis</dc:creator>
+    <description>On superintelligence, what we should want it to feel, and what 2,500 years of contemplative practice might have to say about it.</description>
+  </item>
+</channel>
+</rss>

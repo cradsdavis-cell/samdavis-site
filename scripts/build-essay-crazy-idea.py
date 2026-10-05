@@ -127,6 +127,7 @@ PAGE = f"""<!DOCTYPE html>
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 <link rel="canonical" href="{url}">
+<link rel="alternate" type="application/rss+xml" title="Sam Davis · Writing" href="/writing/feed.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Crads-AI">
 <meta property="og:url" content="{url}">
