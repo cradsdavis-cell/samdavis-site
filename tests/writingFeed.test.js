@@ -45,3 +45,11 @@ test('every writing page advertises the feed', () => {
     assert.ok(src.includes(ALT), `${rel} is missing the RSS alternate link`);
   }
 });
+
+test('every essay carries the drafting note under the byline', () => {
+  const NOTE = '<p class="essay-process">Built from my own ideas and stories, with Claude as a drafting partner.</p>';
+  for (const rel of writingPages().filter((r) => r !== 'writing/index.html')) {
+    const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');
+    assert.ok(src.includes(NOTE), `${rel} is missing the drafting note`);
+  }
+});

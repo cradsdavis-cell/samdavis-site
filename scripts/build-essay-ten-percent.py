@@ -208,6 +208,7 @@ PAGE = f"""<!DOCTYPE html>
     <h1>{e_title}</h1>
     <p class="essay-dek">{inline(dek)}</p>
     <p class="essay-byline"><img src="/lib/img/sam-photo.jpg" alt="" width="36" height="36"> Sam Davis · Sydney · September 2026</p>
+    <p class="essay-process">Built from my own ideas and stories, with Claude as a drafting partner.</p>
   </header>
 
 {HERO}
