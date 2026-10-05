@@ -53,8 +53,8 @@ def inline(s):
     return s
 
 # ---------- photos (Sam's own; never AI images, never stock) ----------
-PHOTO_SIZES = {"sunnataram-chedi.jpg": (825, 950)}
-PHOTO_ALT = {"sunnataram-chedi.jpg": "An ornate golden Thai stupa with standing Buddha statues in its alcoves, under a blue sky with white clouds, pink flowers in the foreground"}
+PHOTO_SIZES = {"sunnataram-chedi.jpg": (825, 950), "rainbow.jpg": (1549, 1033), "campfire.jpg": (1549, 1033), "sunset.jpg": (1378, 1033)}
+PHOTO_ALT = {"rainbow.jpg": "A rainbow arching over a green coastal hillside, with a driftwood sculpture of a bird in the foreground", "campfire.jpg": "Three friends around a fire pit at night beside an open campervan", "sunset.jpg": "A man sitting on an old cannon on a seaside terrace, looking out at a pink sunset over the sea and distant mountains", "sunnataram-chedi.jpg": "An ornate golden Thai stupa with standing Buddha statues in its alcoves, under a blue sky with white clouds, pink flowers in the foreground"}
 
 def photo(block):
     path, caption = block[len("[PHOTO: "):-1].split(" | ")
