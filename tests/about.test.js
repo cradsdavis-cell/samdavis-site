@@ -14,7 +14,7 @@ function readAbout() {
 
 test('about page has the canonical head', () => {
   const html = readAbout();
-  assert.ok(html.includes('<title>About Sam · Crads-AI</title>'),
+  assert.ok(html.includes('<title>About Dr Sam Davis · Crads-AI</title>'),
     'expected canonical title');
   assert.ok(html.includes('href="/lib/site.css"'),
     'expected shared CSS link');
@@ -40,10 +40,10 @@ test('about page renders the canonical nav with About marked current', () => {
   }
 });
 
-test('about page has identity rail with name', () => {
+test('about page has identity rail with name and title', () => {
   const html = readAbout();
-  assert.match(html, /Samuel<br>Caradog Davis/,
-    'expected name with line break');
+  assert.match(html, /<h1>Dr Sam Davis<\/h1>/, 'expected Dr Sam Davis as the h1');
+  assert.ok(html.includes('Samuel Caradog Davis'), 'expected full name in the rail');
 });
 
 test('about page has the four main section headings + intro heading', () => {
@@ -51,8 +51,10 @@ test('about page has the four main section headings + intro heading', () => {
   assert.ok(html.includes('>Hi, I\'m Sam.<'), 'expected intro heading');
   assert.ok(html.includes('>Experience<'), 'expected Experience heading');
   assert.match(html, /<h2[^>]*>Education</, 'expected Education H2 heading');
-  assert.ok(html.includes('>Side practice<'), 'expected Side practice heading');
-  assert.match(html, /<h2[^>]*>Builds/, 'expected Builds H2 heading');
+  assert.ok(html.includes('>Outside work<'), 'expected Outside work heading');
+  assert.match(html, /<h2[^>]*>Things I've built</, 'expected builds H2 heading');
+  assert.ok(html.includes(">Every job I've had has been the same job<"), 'expected the proof section');
+  assert.ok(html.includes('>You can check my work<'), 'expected the open-source / pricing section');
 });
 
 test('about page renders the canonical site-footer', () => {
@@ -61,17 +63,20 @@ test('about page renders the canonical site-footer', () => {
     'expected canonical site-footer');
 });
 
-test('identity rail renders Skills and Recognition blocks (Education now in main column)', () => {
+// 2026-10-08: the rail swapped self-labels (skills pills, Recognition) for
+// checkable facts, so a stranger can verify who Sam is in ten seconds.
+test('identity rail renders the At a glance facts (Education now in main column)', () => {
   const html = readAbout();
   assert.ok(html.includes('class="about-sidebar"'), 'expected sidebar');
-  assert.ok(html.includes('Builder · Teacher · Translator'), 'expected role line');
-  assert.match(html, />What I'm good at</, 'expected skills heading');
-  assert.match(html, />Recognition</, 'expected Recognition heading');
+  assert.match(html, />At a glance</, 'expected At a glance heading');
+  for (const fact of ['PhD · University of Sydney', 'European Space Agency', 'Alan Turing Institute', 'Seven paying clients']) {
+    assert.ok(html.includes(fact), `expected rail fact: ${fact}`);
+  }
   // Real photo, not the placeholder illustration
   assert.ok(html.includes('src="/lib/img/sam-photo.jpg"'),
     'expected the real photo in the identity rail');
   // Recognition rule — Pik Perseverance framed as team member
-  assert.match(html, /first-ascent team/i,
+  assert.match(html, /part of the British Alpine Club team that made the first ascent/i,
     'Kyrgyzstan must be framed as team member, never expedition leader');
   // Education should NOT live in the sidebar — extract sidebar HTML to verify
   const sidebarMatch = html.match(/<aside class="about-sidebar">[\s\S]*?<\/aside>/);
@@ -100,11 +105,22 @@ test('education renders 4 accordion rows', () => {
 test('about page intro section renders with sibling-page pointers', () => {
   const h = readAbout();
   assert.match(h, /<section class="about-intro">/, 'expected intro section');
-  assert.match(h, /I'm Welsh, based in Sydney/,
+  assert.match(h, /I'm Welsh \(Caradog is my middle name\)/,
     'expected the Welsh identity line');
-  assert.match(h, /teacher before I'm a technologist/,
-    'expected the teacher-first positioning line');
+  assert.match(h, /taking something technical and making it work for the people in the room/,
+    'expected the throughline');
   assert.match(h, /href="\/offer"/, 'expected /offer sibling link');
+  assert.match(h, /href="\/how-it-works"/, 'expected /how-it-works sibling link');
+});
+
+test('the proof strip sits straight after the intro, and the CTA goes to the roadmap', () => {
+  const h = readAbout();
+  const intro = h.indexOf('</section>', h.indexOf('class="about-intro"'));
+  const strip = h.indexOf('data-testimonials');
+  const experience = h.indexOf('>Experience<');
+  assert.ok(intro < strip && strip < experience, 'testimonials must come right after the intro');
+  assert.ok(!h.includes('/book/discovery'), 'About books the roadmap, not discovery');
+  assert.ok(h.includes('href="/book/roadmap"'), 'expected roadmap CTA');
 });
 
 test('about page renders the real-testimonials proof strip anchor', () => {
@@ -143,17 +159,20 @@ test('side practice block contains Wildly Calm with label', () => {
   assert.ok(h.includes('side-practice-label'), 'expected side-practice label badge');
 });
 
-test('builds renders all 7 build names', () => {
+// 2026-10-08 (Sam): shipped builds get rows; concepts are named in one line
+// underneath, and the page carries no headline build count.
+test('builds lists shipped work as rows and concepts as one line', () => {
   const h = readAbout();
   const builds = [
-    'EA / Second Brain',
+    'Crads-AI',
+    'My own assistant',
     'Carbon Tracker',
     'Derwen',
+    'River mesh generator',
+    'Earlier ideas I specced but didn\'t build',
     'TrailMate',
-    'The Calm and the Storm',
-    'Waste2Wattage',
-    'Sasha',
   ];
+  assert.ok(!/7 builds|7 in 12 months/.test(h), 'no headline build count');
   for (const b of builds) {
     assert.ok(h.includes(b), `expected build: ${b}`);
   }
