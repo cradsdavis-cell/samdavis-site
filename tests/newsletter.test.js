@@ -157,7 +157,6 @@ test('site.js injects the box on /writing pages and posts to the API', () => {
 });
 
 // ---- unsubscribe + direct adds (2026-10-11) ---------------------------------
-process.env.SESSION_SECRET = process.env.SESSION_SECRET || 'test-secret-do-not-use-in-prod-32-chars-min';
 const { makeUnsubscribeHandler, addSubscriber, unsubscribeUrl } = require('../lib/newsletter');
 
 function unsubReq(url, method = 'GET') {
@@ -169,7 +168,7 @@ test('unsubscribe link marks the row unsubscribed and keeps the record', async (
   const s = setup();
   await addSubscriber(s.kv, 'reader@example.com', { source: '/writing', consent: 'inferred-customer' });
   const res = mockRes();
-  await makeUnsubscribeHandler({ kv: s.kv })(unsubReq(unsubscribeUrl('reader@example.com')), res);
+  await makeUnsubscribeHandler({ kv: s.kv })(unsubReq(unsubscribeUrl(await s.kv.getSubscriber('reader@example.com'))), res);
   assert.strictEqual(res.statusCode, 302);
   assert.strictEqual(res.headers.location, '/writing?subscribed=unsubscribed#subscribe');
   const row = await s.kv.getSubscriber('reader@example.com');
@@ -182,7 +181,7 @@ test('one-click POST unsubscribe (RFC 8058) answers 200', async () => {
   const s = setup();
   await addSubscriber(s.kv, 'reader@example.com', { source: '/writing', consent: 'double-opt-in' });
   const res = mockRes();
-  await makeUnsubscribeHandler({ kv: s.kv })(unsubReq(unsubscribeUrl('reader@example.com'), 'POST'), res);
+  await makeUnsubscribeHandler({ kv: s.kv })(unsubReq(unsubscribeUrl(await s.kv.getSubscriber('reader@example.com')), 'POST'), res);
   assert.strictEqual(res.statusCode, 200);
   assert.strictEqual((await s.kv.getSubscriber('reader@example.com')).status, 'unsubscribed');
 });
@@ -190,7 +189,8 @@ test('one-click POST unsubscribe (RFC 8058) answers 200', async () => {
 test('a forged or swapped signature unsubscribes nobody', async () => {
   const s = setup();
   await addSubscriber(s.kv, 'a@example.com', { source: '/writing', consent: 'double-opt-in' });
-  const good = new URL(unsubscribeUrl('b@example.com'));
+  await addSubscriber(s.kv, 'b@example.com', { source: '/writing', consent: 'double-opt-in' });
+  const good = new URL(unsubscribeUrl(await s.kv.getSubscriber('b@example.com')));
   const forged = `https://crads-ai.com/api/newsletter/unsubscribe?e=a%40example.com&t=${good.searchParams.get('t')}`;
   for (const url of [forged, 'https://crads-ai.com/api/newsletter/unsubscribe?e=a%40example.com&t=zz']) {
     const res = mockRes();
@@ -217,4 +217,21 @@ test('confirmed signups record double-opt-in consent', async () => {
   const token = tokenFrom(s.sends[0]);
   await s.confirm({ method: 'GET', query: { token } }, mockRes());
   assert.strictEqual((await s.kv.getSubscriber('dbl@example.com')).consent, 'double-opt-in');
+});
+
+test('every way onto the list leaves a 32-hex unsub_token, kept across re-adds', async () => {
+  const s = setup();
+  await s.subscribe(post({ email: 'tok@example.com' }), mockRes());
+  await s.confirm({ method: 'GET', query: { token: tokenFrom(s.sends[0]) } }, mockRes());
+  const t1 = (await s.kv.getSubscriber('tok@example.com')).unsub_token;
+  assert.match(t1, /^[a-f0-9]{32}$/);
+  await addSubscriber(s.kv, 'box@example.com', { source: '/book/discovery', consent: 'express-booking' });
+  assert.match((await s.kv.getSubscriber('box@example.com')).unsub_token, /^[a-f0-9]{32}$/);
+  await s.kv.setSubscriber('tok@example.com', { ...(await s.kv.getSubscriber('tok@example.com')), status: 'unsubscribed' });
+  await addSubscriber(s.kv, 'tok@example.com', { source: '/book/discovery', consent: 'express-booking' });
+  assert.strictEqual((await s.kv.getSubscriber('tok@example.com')).unsub_token, t1);
+});
+
+test('unsubscribeUrl refuses a row without a token', () => {
+  assert.throws(() => unsubscribeUrl({ email: 'x@example.com' }), /unsub_token/);
 });
