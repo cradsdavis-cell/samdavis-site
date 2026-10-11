@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "sitemap": "node scripts/build-sitemap.mjs",
     "nav": "node scripts/write-static-nav.js",
-    "feed": "node scripts/build-feed.mjs"
+    "feed": "node scripts/build-feed.mjs",
+    "llms": "node scripts/build-llms.mjs"
   },
   "dependencies": {
     "google-auth-library": "^11.0.2",
