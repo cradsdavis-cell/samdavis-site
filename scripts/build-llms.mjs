@@ -40,7 +40,7 @@ const SUMMARY = `# Crads-AI
 `;
 
 const SECTIONS = [
-  ['Start here', (u) => ['/', '/how-it-works', '/download', '/docs', '/docs/faq', '/docs/what-a-mineral-is', '/docs/what-an-ai-ea-is'].includes(u)],
+  ['Start here', (u) => ['/', '/how-it-works', '/download', '/docs', '/docs/faq', '/docs/what-a-mineral-is', '/docs/self-hosted-claude', '/docs/what-an-ai-ea-is'].includes(u)],
   ['Docs', (u) => u.startsWith('/docs/')],
   ['Setup and support', (u) => u === '/offer' || u.startsWith('/book')],
   ['About', (u) => u === '/about'],
