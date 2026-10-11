@@ -1,0 +1,101 @@
+# Crads-AI
+
+> Crads-AI is a free, open-source (AGPL-3.0) AI assistant built on Claude, for
+> small-business owners and independent professionals. It runs on a server you
+> own (Hetzner or DigitalOcean) or on your own computer, uses your own Claude
+> subscription, keeps its memory as plain Markdown backed up to a private GitHub
+> repository on your account, and connects to the tools you already use. It is
+> made by Dr Sam Davis in Sydney, Australia.
+
+- The software is free. You pay for your own Claude subscription and, if you
+  run it on a server, your own hosting provider; nothing is paid to Crads-AI to
+  use it.
+- There is no Crads-AI account, central server or billing in the loop: the
+  server, the SSH key and the accounts are yours.
+- Paid help is optional: a walkthrough, a guided setup and ongoing support
+  (see Setup and support below).
+- Source code: https://github.com/cradsdavis-cell/crads-ai
+- Desktop app (Windows and macOS): https://crads-ai.com/download
+
+## Start here
+
+- [Crads-AI · Free self-hosted Claude assistant for your business](https://crads-ai.com/): Crads-AI is the AI foundation for you and your business: it onboards Claude to your work through one interview, connects the tools you already use, and teaches you to solve real problems with it. Free and open source.
+- [Docs](https://crads-ai.com/docs): How Crads AI works: getting a mineral, working with it, connecting it, keeping it running, and the legal detail.
+- [Questions, answered straight](https://crads-ai.com/docs/faq): The questions people actually ask before and after getting a mineral, each answered in a few sentences with the deep page beside it.
+- [What a mineral is](https://crads-ai.com/docs/what-a-mineral-is): The two words these docs use for the thing you get, and why it is a private box of your own rather than a seat in someone's software.
+- [What an AI EA actually is](https://crads-ai.com/docs/what-an-ai-ea-is): The category, explained without the hype: what changes about your week, who it is for, and what it is not.
+- [Download Crads-AI](https://crads-ai.com/download): The Crads-AI desktop app for Windows and macOS: a setup wizard, a panel and a terminal for your assistant.
+- [How it works: a self-hosted Claude assistant](https://crads-ai.com/how-it-works): How Crads-AI lays your AI foundation: four layers (Context, Connections, Capabilities, Cadence) that onboard Claude to you, and CRIT, the method for building on them.
+
+## Docs
+
+- [A day with your assistant](https://crads-ai.com/docs/a-day-with-your-assistant): One ordinary working day, morning to close, showing where the assistant fits and why tomorrow is slightly better than today.
+- [Acceptable use](https://crads-ai.com/docs/acceptable-use): The short list of things you must not do with a mineral, and what enforcement honestly means when the machine is yours.
+- [Add another computer](https://crads-ai.com/docs/add-another-computer): A machine you already trust lets the new one in, over SSH, with no account and no service in the middle.
+- [Back up your mineral, and get it back](https://crads-ai.com/docs/back-up-and-restore): What is already backed up, the one thing you have to do yourself, and why the passphrase matters more than the backup.
+- [Brain](https://crads-ai.com/docs/brain-page): Everything your assistant knows, drawn from the files actually on your mineral.
+- [Use Claude Code on your mineral](https://crads-ai.com/docs/claude-code-on-your-mineral): Where you talk to your assistant. The app is the window onto your mineral; Claude Code is the room you work in.
+- [Connect Google, with your own key](https://crads-ai.com/docs/connect-google): Five console visits, one file, one sign-in, per account. Your Google key never touches our infrastructure, and here is why we made you do it the hard way.
+- [Connect Mailchimp, with your own key](https://crads-ai.com/docs/connect-mailchimp): Make an API key in Mailchimp, paste it, and your assistant can read your audiences and reports, add and tag contacts, and draft campaigns. It never sends one.
+- [Shopify and Xero, through your Claude account](https://crads-ai.com/docs/connect-shopify-and-xero): Why these two connect through your Claude account instead of your mineral, how to set them up there, and what that means for your scheduled jobs.
+- [Connect Slack, with your own app](https://crads-ai.com/docs/connect-slack): Make a small private Slack app from our template, paste one token, and your assistant can search, read and post in your workspace, in chats and in scheduled jobs.
+- [Connect Telegram](https://crads-ai.com/docs/connect-telegram): Your assistant in your pocket, step by step: your own private bot, made in about two minutes, that drafts and never sends.
+- [Connect WordPress and WooCommerce](https://crads-ai.com/docs/connect-wordpress): Switch on MCP on your site, make a user for your assistant, give it an application password, and connect. About ten minutes, with a check at the end.
+- [What you can connect](https://crads-ai.com/docs/connections): The 66 services your mineral can connect to, the 2 that only connect through your Claude account, and how each one signs in.
+- [Connections](https://crads-ai.com/docs/connections-page): What your assistant can reach, and whether each one is still working.
+- [What happens if Crads AI goes away](https://crads-ai.com/docs/continuity): The honest answer to "what if you pick up another job", and why the self-hosted shape makes it survivable.
+- [Machines that can open your mineral](https://crads-ai.com/docs/devices-and-access): The roster, what a key is, removing a machine, and why the door has no back door.
+- [Find what you do not know](https://crads-ai.com/docs/find-what-you-do-not-know): Five ways to make your assistant surface what is missing, from your brain, from a plan, and from a decision you are about to make.
+- [Your first hour](https://crads-ai.com/docs/first-hour): From opening the app to an assistant that is awake, one small step at a time, with what you should see at each one.
+- [Fix a connection that has stopped working](https://crads-ai.com/docs/fix-a-broken-connection): What an expired token looks like, why it happens, and the one place that tells you the truth.
+- [Get a DigitalOcean API token](https://crads-ai.com/docs/get-a-digitalocean-api-token): The five-minute walk from no account to the token the setup wizard asks for when you pick DigitalOcean, and what that token actually is.
+- [Get a Hetzner API token](https://crads-ai.com/docs/get-a-hetzner-api-token): The five-minute walk from no account to the token the setup wizard asks for, and what that token actually is.
+- [The words](https://crads-ai.com/docs/glossary): A plain glossary of the terms these docs use, with the page where each one first matters.
+- [Let someone look at your mineral](https://crads-ai.com/docs/grant-support-access): Granting support access: what it opens, when it closes, and how to end it early.
+- [Grow the brain](https://crads-ai.com/docs/grow-the-brain): The everyday habits that turn a seeded brain into one that knows your business: correct it, tell it things, capture, and bring documents in.
+- [How updates reach you](https://crads-ai.com/docs/how-updates-reach-you): Your mineral restarts nightly onto new software, what that does and does not touch, and how to tell what you are running.
+- [How your assistant thinks](https://crads-ai.com/docs/how-your-assistant-thinks): The one picture behind every page of these docs: a mind that is rented, a memory that is yours, and senses you add one at a time.
+- [The jobs your mineral runs by itself](https://crads-ai.com/docs/machinery-jobs): The 15 machinery jobs Crads AI maintains on every mineral, and what each one is for.
+- [Overview](https://crads-ai.com/docs/overview-page): The page your mineral opens on: what your assistant knows, and how it is doing.
+- [Privacy policy](https://crads-ai.com/docs/privacy-policy): What is stored, where it runs, what leaves your mineral, and why almost none of this page is about us any more.
+- [Six prompting habits](https://crads-ai.com/docs/prompting-habits): The small changes in how you ask that make the biggest difference to what comes back, with an instead-of table you can keep open.
+- [Secrets](https://crads-ai.com/docs/secrets-page): Every password, token and key this mineral holds, and what each one is for.
+- [Every skill your mineral ships with](https://crads-ai.com/docs/skills): The 11 engine skills present on every mineral, with what each one does.
+- [Skills](https://crads-ai.com/docs/skills-page): What your assistant can do, and when it runs.
+- [Starter recipes](https://crads-ai.com/docs/starter-recipes): Twelve recipes for a working week, five already on your mineral to switch on and seven to build as skills of your own.
+- [Teach it your voice](https://crads-ai.com/docs/teach-it-your-voice): The three-step loop that makes drafts sound like you, the self-check you can ask for, and the one page in the brain where your voice lives.
+- [Terminal](https://crads-ai.com/docs/terminal-page): Talking to your assistant directly, and when that is the right way in.
+- [Terms of service](https://crads-ai.com/docs/terms): What you get, what it costs, what we each promise, and how either of us ends it.
+- [The CRIT method](https://crads-ai.com/docs/the-crit-method): Four steps that turn a vague ask into a brief your assistant can act on, and why the third step is the one people skip.
+- [The interview](https://crads-ai.com/docs/the-interview): The hour that turns a blank machine into an assistant that knows your world, and what it asks about.
+- [Who edits what](https://crads-ai.com/docs/the-three-layers): Three layers on every mineral: the machinery the project maintains, the infrastructure you own, and the pages you build.
+- [What it will not do](https://crads-ai.com/docs/what-it-will-not-do): The limits that are built in, the rules I hold mine to, and how to tell a broken connection from a thin brain.
+- [When something looks wrong](https://crads-ai.com/docs/when-something-looks-wrong): The short list of symptoms, what each usually means, and where to look before you worry.
+- [Where these ideas come from](https://crads-ai.com/docs/where-these-ideas-come-from): The four people whose thinking shaped how I use my assistant, what each one gave, and which pages carry it.
+- [Write your own skill](https://crads-ai.com/docs/write-your-own-skill): Turn a task you do more than twice into a command you run by name, without writing code.
+- [Your first week](https://crads-ai.com/docs/your-first-week): Seven days from a finished setup to an assistant you would miss: what to switch on, what to correct, and what to ask.
+- [Your pebble](https://crads-ai.com/docs/your-pebble-page): The machine itself: its name, where its backup goes, the computers that can open it, and your own pages.
+
+## Setup and support
+
+- [Book](https://crads-ai.com/book): Book a free discovery call, a walkthrough, a guided setup, or an AI problem-solving roadmap with Sam.
+- [Discovery Call, Sam Davis](https://crads-ai.com/book/discovery): Book a free 30-minute Discovery call with Sam Davis, scope whether an AI executive assistant build fits your shape.
+- [Guided setup](https://crads-ai.com/book/guided-setup): Guided setup with Sam: an hour on how to use Claude Code and the app, the interview as homework, then two hours wiring it into your email, calendar and Slack or WhatsApp. Two sessions at least a day apart. A$700.
+- [AI problem-solving roadmap](https://crads-ai.com/book/roadmap): AI problem-solving roadmap with Sam: a 30-minute call about one problem you think AI could fix, then a written report with what is causing it, two or three ways to solve it with rough costs, and a recommendation, then a second 30-minute call to go through it. A$250.
+- [Walkthrough](https://crads-ai.com/book/walkthrough): Walkthrough with Sam: an hour on how to use Claude Code and the Crads-AI app, the interview as homework, then 30 minutes on what it learned. Two sessions at least a day apart. A$350.
+- [Setup and support](https://crads-ai.com/offer): Get it all out of your head: a walkthrough (1 hour + 30 min, A$350), a guided setup (1 hour + 2 hours, A$700), then A$233 an hour on request. Got one specific problem? An AI problem-solving roadmap is A$250. Free discovery call first.
+
+## About
+
+- [About Dr Sam Davis](https://crads-ai.com/about): Dr Sam Davis sets up AI assistants for small-business owners. PhD (University of Sydney), European Space Agency, Alan Turing Institute, three years teaching engineering. Crads-AI is free and open source.
+
+## Writing
+
+- [Writing on AI ethics](https://crads-ai.com/writing): Essays by Sam Davis on the questions underneath AI: what these systems will want, whose values they'll carry, and what we owe them.
+- [Crazy Idea or Crazy Person?](https://crads-ai.com/writing/crazy-idea-or-crazy-person): On subjective truth, delusion, creativity, and whether an AI would need a little of its own reality.
+- [Is Ten Percent a Lot?](https://crads-ai.com/writing/is-ten-percent-a-lot): AI researchers put the chance of AI ending humanity at around one in ten. Is that a lot?
+- [Nice or Kind?](https://crads-ai.com/writing/nice-or-kind): On trust, masks, and what it would take to trust a mind smarter than us.
+- [The Other Half of the Room](https://crads-ai.com/writing/the-other-half-of-the-room): Men and women are being sold stories about each other. The first AI most of us lived with was built to sell them. What should the next one be built for?
+- [What Comes After Agents?](https://crads-ai.com/writing/what-comes-after-agents): I've been close to AI for nearly a decade. A diagram of its layers got me thinking about what comes next.
+- [When Should You Turn Back?](https://crads-ai.com/writing/when-should-you-turn-back): On wisdom, and whether a machine can know when to stop.
+- [Which love?](https://crads-ai.com/writing/which-love): On superintelligence, what we should want it to feel, and what 2,500 years of contemplative practice might have to say about it.
