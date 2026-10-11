@@ -22,6 +22,7 @@
 - [Crads-AI · Free self-hosted Claude assistant for your business](https://crads-ai.com/): Crads-AI is the AI foundation for you and your business: it onboards Claude to your work through one interview, connects the tools you already use, and teaches you to solve real problems with it. Free and open source.
 - [Docs](https://crads-ai.com/docs): How Crads AI works: getting a mineral, working with it, connecting it, keeping it running, and the legal detail.
 - [Questions, answered straight](https://crads-ai.com/docs/faq): The questions people actually ask before and after getting a mineral, each answered in a few sentences with the deep page beside it.
+- [Self-hosted Claude: what runs where](https://crads-ai.com/docs/self-hosted-claude): You cannot run Claude itself on a machine you own. You can own everything around it. What runs on your mineral, what goes to Anthropic, and the honest alternative.
 - [What a mineral is](https://crads-ai.com/docs/what-a-mineral-is): The two words these docs use for the thing you get, and why it is a private box of your own rather than a seat in someone's software.
 - [What an AI EA actually is](https://crads-ai.com/docs/what-an-ai-ea-is): The category, explained without the hype: what changes about your week, who it is for, and what it is not.
 - [Download Crads-AI](https://crads-ai.com/download): The Crads-AI desktop app for Windows and macOS: a setup wizard, a panel and a terminal for your assistant.
