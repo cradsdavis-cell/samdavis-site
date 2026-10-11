@@ -330,3 +330,47 @@ test('code: a real code on the wrong product (Stripe refuses) is invalid_code, n
   assert.strictEqual(res.statusCode, 400);
   assert.strictEqual(res.body.error, 'invalid_code');
 });
+
+// ---- discovery newsletter opt-in (2026-10-11) -------------------------------
+// The tick box adds the booker to the essay list; unticked (or anything but a
+// strict true) adds nobody, and a list failure never fails the booking.
+function stubKv(rows, { fail = false } = {}) {
+  require.cache[require.resolve('../lib/kv')] = {
+    exports: {
+      defaultKv: () => ({
+        getSubscriber: async (e) => { if (fail) throw new Error('redis down'); return rows[e] || null; },
+        setSubscriber: async (e, r) => { rows[e] = r; },
+      }),
+    },
+  };
+}
+
+test('discovery booking with the opt-in ticked adds an express-booking subscriber', async () => {
+  const rows = {};
+  stubKv(rows);
+  const res = mockRes();
+  await handler(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, name: 'N', email: 'News@Example.com', newsletter: true }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(rows['news@example.com'].status, 'subscribed');
+  assert.strictEqual(rows['news@example.com'].consent, 'express-booking');
+  assert.strictEqual(rows['news@example.com'].source, '/book/discovery');
+});
+
+test('discovery booking without the opt-in adds nobody', async () => {
+  const rows = {};
+  stubKv(rows);
+  for (const newsletter of [undefined, false, 'true', 'yes']) {
+    const res = mockRes();
+    await handler(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, name: 'N', email: 'no@example.com', newsletter }), res);
+    assert.strictEqual(res.statusCode, 200);
+  }
+  assert.deepStrictEqual(rows, {});
+});
+
+test('a list failure never fails a discovery booking', async () => {
+  stubKv({}, { fail: true });
+  const res = mockRes();
+  await handler(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, name: 'N', email: 'x@example.com', newsletter: true }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(res.body.booked, true);
+});
