@@ -79,6 +79,13 @@
 - [Your first week](https://crads-ai.com/docs/your-first-week): Seven days from a finished setup to an assistant you would miss: what to switch on, what to correct, and what to ask.
 - [Your pebble](https://crads-ai.com/docs/your-pebble-page): The machine itself: its name, where its backup goes, the computers that can open it, and your own pages.
 
+## Guides
+
+- [Guides: AI for the problems small businesses bring me](https://crads-ai.com/guides): Practical ways to use AI on the problems small-business owners keep bringing to my roadmap calls, starting with what plain Claude can already do.
+- [Write proposals and quotes faster with AI](https://crads-ai.com/guides/ai-proposals-and-quotes): Every bespoke proposal starting from a blank page? How to get Claude to draft proposals and quotes from your own past work, and keep the bespoke feel.
+- [Social media posts with AI, in your own voice](https://crads-ai.com/guides/ai-social-media-posts): Posting by hand every week? How to use Claude to turn the work you've already done into posts for each platform, in your voice, with you editing every one.
+- [Why Claude forgets your business (and the fix)](https://crads-ai.com/guides/claude-remember-your-business): Every Claude or ChatGPT chat starting from zero? Why AI forgets your business, how to give it lasting context today, and how a team's AI use can add up.
+
 ## Setup and support
 
 - [Book](https://crads-ai.com/book): Book a free discovery call, a walkthrough, a guided setup, or an AI problem-solving roadmap with Sam.
