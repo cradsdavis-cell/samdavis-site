@@ -155,3 +155,66 @@ test('site.js injects the box on /writing pages and posts to the API', () => {
   const css = fs.readFileSync(path.join(__dirname, '..', 'writing', 'essay.css'), 'utf8');
   assert.match(css, /\.subscribe-hp/, 'honeypot is hidden by CSS');
 });
+
+// ---- unsubscribe + direct adds (2026-10-11) ---------------------------------
+process.env.SESSION_SECRET = process.env.SESSION_SECRET || 'test-secret-do-not-use-in-prod-32-chars-min';
+const { makeUnsubscribeHandler, addSubscriber, unsubscribeUrl } = require('../lib/newsletter');
+
+function unsubReq(url, method = 'GET') {
+  const u = new URL(url);
+  return { method, query: Object.fromEntries(u.searchParams), headers: {} };
+}
+
+test('unsubscribe link marks the row unsubscribed and keeps the record', async () => {
+  const s = setup();
+  await addSubscriber(s.kv, 'reader@example.com', { source: '/writing', consent: 'inferred-customer' });
+  const res = mockRes();
+  await makeUnsubscribeHandler({ kv: s.kv })(unsubReq(unsubscribeUrl('reader@example.com')), res);
+  assert.strictEqual(res.statusCode, 302);
+  assert.strictEqual(res.headers.location, '/writing?subscribed=unsubscribed#subscribe');
+  const row = await s.kv.getSubscriber('reader@example.com');
+  assert.strictEqual(row.status, 'unsubscribed');
+  assert.ok(row.unsubscribed_at);
+  assert.strictEqual(row.consent, 'inferred-customer');
+});
+
+test('one-click POST unsubscribe (RFC 8058) answers 200', async () => {
+  const s = setup();
+  await addSubscriber(s.kv, 'reader@example.com', { source: '/writing', consent: 'double-opt-in' });
+  const res = mockRes();
+  await makeUnsubscribeHandler({ kv: s.kv })(unsubReq(unsubscribeUrl('reader@example.com'), 'POST'), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual((await s.kv.getSubscriber('reader@example.com')).status, 'unsubscribed');
+});
+
+test('a forged or swapped signature unsubscribes nobody', async () => {
+  const s = setup();
+  await addSubscriber(s.kv, 'a@example.com', { source: '/writing', consent: 'double-opt-in' });
+  const good = new URL(unsubscribeUrl('b@example.com'));
+  const forged = `https://crads-ai.com/api/newsletter/unsubscribe?e=a%40example.com&t=${good.searchParams.get('t')}`;
+  for (const url of [forged, 'https://crads-ai.com/api/newsletter/unsubscribe?e=a%40example.com&t=zz']) {
+    const res = mockRes();
+    await makeUnsubscribeHandler({ kv: s.kv })(unsubReq(url), res);
+    assert.strictEqual(res.headers.location, '/writing?subscribed=badlink#subscribe');
+  }
+  assert.strictEqual((await s.kv.getSubscriber('a@example.com')).status, 'subscribed');
+});
+
+test('an inferred-consent import never re-adds someone who unsubscribed', async () => {
+  const s = setup();
+  await s.kv.setSubscriber('gone@example.com', { email: 'gone@example.com', status: 'unsubscribed' });
+  const r = await addSubscriber(s.kv, 'gone@example.com', { source: 'import', consent: 'inferred-customer' });
+  assert.strictEqual(r.added, false);
+  assert.strictEqual((await s.kv.getSubscriber('gone@example.com')).status, 'unsubscribed');
+  // ...but ticking the box again is fresh, express consent.
+  const again = await addSubscriber(s.kv, 'gone@example.com', { source: '/book/discovery', consent: 'express-booking' });
+  assert.strictEqual(again.added, true);
+});
+
+test('confirmed signups record double-opt-in consent', async () => {
+  const s = setup();
+  await s.subscribe(post({ email: 'dbl@example.com' }), mockRes());
+  const token = tokenFrom(s.sends[0]);
+  await s.confirm({ method: 'GET', query: { token } }, mockRes());
+  assert.strictEqual((await s.kv.getSubscriber('dbl@example.com')).consent, 'double-opt-in');
+});

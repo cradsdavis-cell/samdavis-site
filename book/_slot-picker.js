@@ -110,6 +110,7 @@
         <div class="field"><label for="bk-email">Email</label><input id="bk-email" type="email" name="email" autocomplete="email" required></div>
         <input type="hidden" name="slot_iso" id="slot-iso">
         ${isPaid ? `<div class="field"><label for="bk-code">Discount code (optional)</label><input id="bk-code" type="text" name="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" value="${prefillCode()}"></div>` : ''}
+        ${sku === 'discovery' ? `<div class="field field-check"><label for="bk-news"><input id="bk-news" type="checkbox" name="newsletter" value="yes"><span>Send me new essays from <a href="/writing" target="_blank" rel="noopener">crads-ai.com/writing</a>. Unsubscribe any time.</span></label></div>` : ''}
         ${isPaid ? `<div class="field field-check"><label for="bk-terms"><input id="bk-terms" type="checkbox" name="agreed_terms" value="yes" required><span>I agree to the <a href="/docs/terms" target="_blank" rel="noopener">terms of service</a>.</span></label></div>` : ''}
         <button class="book-cta" type="submit" id="submit-btn">
           ${isPaid ? 'Book + Pay →' : 'Book →'}
@@ -151,6 +152,7 @@
       name: fd.get('name'),
       email: fd.get('email'),
       agreed_terms: fd.get('agreed_terms') === 'yes',
+      newsletter: fd.get('newsletter') === 'yes',
       code: String(fd.get('code') || '').trim(),
     };
     try {
