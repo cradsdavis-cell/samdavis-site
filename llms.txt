@@ -45,6 +45,7 @@
 - [What you can connect](https://crads-ai.com/docs/connections): The 66 services your mineral can connect to, the 2 that only connect through your Claude account, and how each one signs in.
 - [Connections](https://crads-ai.com/docs/connections-page): What your assistant can reach, and whether each one is still working.
 - [What happens if Crads AI goes away](https://crads-ai.com/docs/continuity): The honest answer to "what if you pick up another job", and why the self-hosted shape makes it survivable.
+- [Crads for teams](https://crads-ai.com/docs/crads-for-teams): One company brain your whole team contributes to, an assistant on its own server for each person, and a company agent that holds the brain together. What goes where, who can change what, and what the owner owns.
 - [Machines that can open your mineral](https://crads-ai.com/docs/devices-and-access): The roster, what a key is, removing a machine, and why the door has no back door.
 - [Find what you do not know](https://crads-ai.com/docs/find-what-you-do-not-know): Five ways to make your assistant surface what is missing, from your brain, from a plan, and from a decision you are about to make.
 - [Your first hour](https://crads-ai.com/docs/first-hour): From opening the app to an assistant that is awake, one small step at a time, with what you should see at each one.
@@ -56,12 +57,13 @@
 - [Grow the brain](https://crads-ai.com/docs/grow-the-brain): The everyday habits that turn a seeded brain into one that knows your business: correct it, tell it things, capture, and bring documents in.
 - [How updates reach you](https://crads-ai.com/docs/how-updates-reach-you): Your mineral restarts nightly onto new software, what that does and does not touch, and how to tell what you are running.
 - [How your assistant thinks](https://crads-ai.com/docs/how-your-assistant-thinks): The one picture behind every page of these docs: a mind that is rented, a memory that is yours, and senses you add one at a time.
-- [The jobs your mineral runs by itself](https://crads-ai.com/docs/machinery-jobs): The 15 machinery jobs Crads AI maintains on every mineral, and what each one is for.
+- [The jobs your mineral runs by itself](https://crads-ai.com/docs/machinery-jobs): The 18 machinery jobs Crads AI maintains on every mineral, and what each one is for.
 - [Overview](https://crads-ai.com/docs/overview-page): The page your mineral opens on: what your assistant knows, and how it is doing.
 - [Privacy policy](https://crads-ai.com/docs/privacy-policy): What is stored, where it runs, what leaves your mineral, and why almost none of this page is about us any more.
 - [Six prompting habits](https://crads-ai.com/docs/prompting-habits): The small changes in how you ask that make the biggest difference to what comes back, with an instead-of table you can keep open.
 - [Secrets](https://crads-ai.com/docs/secrets-page): Every password, token and key this mineral holds, and what each one is for.
-- [Every skill your mineral ships with](https://crads-ai.com/docs/skills): The 11 engine skills present on every mineral, with what each one does.
+- [Set up a team](https://crads-ai.com/docs/set-up-a-team): The owner's walkthrough: build the company brain and everyone's assistants in one run, hand each person their assistant, connect Slack, approve changes, add people, and handle someone leaving.
+- [Every skill your mineral ships with](https://crads-ai.com/docs/skills): The 12 engine skills present on every mineral, with what each one does.
 - [Skills](https://crads-ai.com/docs/skills-page): What your assistant can do, and when it runs.
 - [Starter recipes](https://crads-ai.com/docs/starter-recipes): Twelve recipes for a working week, five already on your mineral to switch on and seven to build as skills of your own.
 - [Teach it your voice](https://crads-ai.com/docs/teach-it-your-voice): The three-step loop that makes drafts sound like you, the self-check you can ask for, and the one page in the brain where your voice lives.
