@@ -45,7 +45,7 @@ const SECTIONS = [
   ['Guides', (u) => u === '/guides' || u.startsWith('/guides/')],
   ['Setup and support', (u) => u === '/offer' || u.startsWith('/book')],
   ['About', (u) => u === '/about'],
-  ['Writing', (u) => u.startsWith('/writing')],
+  ['Writing', (u) => u.startsWith('/writing') || u.startsWith('/newsletter')],
 ];
 
 const MANUAL = {
