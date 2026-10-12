@@ -21,6 +21,25 @@
     return;
   }
 
+  // The invoice link (2026-10-12). Independent of the Cal poll: the payment
+  // happened even if the booking is slow, so show it as soon as Stripe has it.
+  // A free (A$0) booking has no invoice and the box stays hidden.
+  const invoiceBox = document.getElementById('invoice');
+  async function loadInvoice(triesLeft) {
+    try {
+      const res = await fetch(`/api/invoice-link?session_id=${encodeURIComponent(sessionId)}`);
+      const json = await res.json();
+      if (json.invoice && json.invoice.url) {
+        document.getElementById('invoice-link').href = json.invoice.url;
+        if (json.invoice.number) document.getElementById('invoice-number').textContent = ` (invoice ${json.invoice.number})`;
+        invoiceBox.hidden = false;
+        return;
+      }
+    } catch { /* retried below */ }
+    if (triesLeft > 1) setTimeout(() => loadInvoice(triesLeft - 1), 3000);
+  }
+  loadInvoice(4);
+
   let attempts = 0;
   let consecutiveErrors = 0;
   const maxAttempts = 15; // 15 × 2s = 30s
