@@ -101,6 +101,7 @@
 
 ## Writing
 
+- [The Crads-AI letter, No. 1](https://crads-ai.com/newsletter/1): The first Crads-AI letter: where AI goes after agents, plus five bits of AI news worth knowing.
 - [Writing on AI ethics](https://crads-ai.com/writing): Essays by Sam Davis on the questions underneath AI: what these systems will want, whose values they'll carry, and what we owe them.
 - [Crazy Idea or Crazy Person?](https://crads-ai.com/writing/crazy-idea-or-crazy-person): On subjective truth, delusion, creativity, and whether an AI would need a little of its own reality.
 - [Is Ten Percent a Lot?](https://crads-ai.com/writing/is-ten-percent-a-lot): AI researchers put the chance of AI ending humanity at around one in ten. Is that a lot?
