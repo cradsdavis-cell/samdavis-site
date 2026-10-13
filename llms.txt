@@ -66,6 +66,7 @@
 - [Skills](https://crads-ai.com/docs/skills-page): What your assistant can do, and when it runs.
 - [Starter recipes](https://crads-ai.com/docs/starter-recipes): Twelve recipes for a working week, five already on your mineral to switch on and seven to build as skills of your own.
 - [Teach it your voice](https://crads-ai.com/docs/teach-it-your-voice): The three-step loop that makes drafts sound like you, the self-check you can ask for, and the one page in the brain where your voice lives.
+- [Team](https://crads-ai.com/docs/team-page): The tab a team mineral grows: the owner's approvals, the shared inbox and the company agent in Slack, or, on a person's assistant, how the company brain works for them.
 - [Terminal](https://crads-ai.com/docs/terminal-page): Talking to your assistant directly, and when that is the right way in.
 - [Terms of service](https://crads-ai.com/docs/terms): What you get, what it costs, what we each promise, and how either of us ends it.
 - [The CRIT method](https://crads-ai.com/docs/the-crit-method): Four steps that turn a vague ask into a brief your assistant can act on, and why the third step is the one people skip.
