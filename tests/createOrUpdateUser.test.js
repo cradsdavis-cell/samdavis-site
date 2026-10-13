@@ -101,3 +101,39 @@ test('v4 guided-setup purchase stamps the checkout slot so the portal can enforc
   assert.strictEqual(u.engagements[0].sessions_used, 1);
   assert.strictEqual(u.engagements[0].first_slot_iso, '2026-10-01T10:00:00+10:00');
 });
+
+// 2026-10-13: a v5 buyer (walkthrough, guided setup) has session 1 booked at
+// checkout and must land on the v5 hero, not the retired coaching onboarding
+// stepper, which /account/book redirected them into before session 2.
+for (const sku of ['walkthrough', 'guided-setup']) {
+  test(`${sku}: new account starts at pre-s1 with no coaching onboarding`, async () => {
+    const kv = makeKv(fakeKvClient());
+    const sent = [];
+    await createOrUpdateUser({
+      kv,
+      resend: { emails: { send: async (o) => { sent.push(o); return { id: 'em' }; } } },
+      email: 'roger@example.com', name: 'Roger Example', stripeCustomerId: 'cus_R',
+      sku, stripeSessionId: 'cs_R', slotIso: '2026-10-27T03:00:00Z',
+    });
+    const u = await kv.getUser('roger@example.com');
+    assert.strictEqual(u.state, 'pre-s1');
+    assert.strictEqual(u.onboarding.completed, true);
+    assert.deepStrictEqual(u.onboarding.install_checklist, {});
+    assert.strictEqual(u.engagements[0].sessions_total, 2);
+    assert.strictEqual(sent.length, 1);
+    assert.match(sent[0].subject, /book session 2/);
+    assert.doesNotMatch(sent[0].subject + sent[0].html, /—/);
+    assert.doesNotMatch(sent[0].html, /VS Code|Obsidian|first 4 sessions/);
+  });
+}
+
+test('no welcome email carries an em dash', async () => {
+  const kv = makeKv(fakeKvClient());
+  const sent = [];
+  await createOrUpdateUser({
+    kv,
+    resend: { emails: { send: async (o) => { sent.push(o); return { id: 'em' }; } } },
+    email: 'c@example.com', name: 'C', stripeCustomerId: 'cus_C', sku: 'coaching-block', stripeSessionId: 'cs_C',
+  });
+  assert.doesNotMatch(sent[0].subject + sent[0].html, /—/);
+});
