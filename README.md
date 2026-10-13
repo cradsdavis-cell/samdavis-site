@@ -60,9 +60,9 @@ npm test
 The software is free. Two SKUs are purchasable (`lib/skus.js`), both two sessions at least a day apart. Session 1 is booked at Stripe Checkout; session 2 from `/account/book`, which refuses a slot inside 24h of session 1. The two sessions of a SKU have different lengths, so each SKU carries one Cal event type per session (`sessions: [{label, duration_min, cal_event_env, cal_event_default}]`), and `/api/cal/availability` takes `session=N`.
 
 - **Walkthrough, A$350.** Session 1 60 min (how to use Claude Code and the app; the client installs both and creates their mineral beforehand), the onboarding interview as homework, session 2 30 min (what it learned, the CRIT method, one real problem).
-- **Guided setup, A$700.** Session 1 60 min (same, plus hosted or local), the interview, session 2 120 min (email, calendar, Slack or WhatsApp connected; first skills; on a server, the morning brief and a first scheduled job).
+- **Guided setup, A$700.** Session 1 60 min (same, plus building the server in the client's own hosting account), the interview, session 2 120 min (email, calendar, Slack or WhatsApp connected; first skills; the morning brief and a first scheduled job).
 
-Both include written docs and 30 days of Slack support. Where it lives (a small server, or the app's "On this computer" mode) is the client's call at the same price. After 30 days, extra time is A$233 an hour on request: not a SKU.
+Both include written docs and 30 days of Slack support. The assistant always lives on a small server in the client's own hosting account (local mode, "On this computer", was retired from the offer and the copy on 2026-10-13). After 30 days, extra time is A$233 an hour on request: not a SKU.
 
 Retired 2026-09-11: the Working session (90 min, A$350). Its Stripe price is reused as the walkthrough price (the Stripe product is still named "Working session"; renaming it is a Stripe-side chore, not a code change). Retired 2026-09-09 and never purchasable again: the Coaching Block (4 × 90), Single Session, Continuation Retainer (subscription), pay-in-4, Group Block, EA Basic Build. Their Cal event types survive in `LEGACY_SKU_DEFS` (env only, no default) so a client mid-engagement can still book from the portal.
 
