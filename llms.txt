@@ -76,7 +76,7 @@
 - [Where these ideas come from](https://crads-ai.com/docs/where-these-ideas-come-from): The four people whose thinking shaped how I use my assistant, what each one gave, and which pages carry it.
 - [Write your own skill](https://crads-ai.com/docs/write-your-own-skill): Turn a task you do more than twice into a command you run by name, without writing code.
 - [Your first week](https://crads-ai.com/docs/your-first-week): Seven days from a finished setup to an assistant you would miss: what to switch on, what to correct, and what to ask.
-- [Your pebble](https://crads-ai.com/docs/your-pebble-page): The machine itself: its name, where its backup goes, the computers that can open it, and your own pages.
+- [Your mineral](https://crads-ai.com/docs/your-pebble-page): The machine itself: its name, where its backup goes, the computers that can open it, and your own pages.
 
 ## Guides
 
