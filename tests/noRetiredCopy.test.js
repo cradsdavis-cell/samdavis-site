@@ -42,9 +42,9 @@ test('the marked retired-offers block exists exactly once, on /offer', () => {
 });
 
 // v5 (2026-09-11): A$350 walkthrough, A$700 guided setup, A$233 an hour after
-// the 30 days, and the "about A$10 a month" server line. 2026-09-28: plus the
+// the 30 days, and the "about A$20 a month" server line (A$10 until 13 Oct, when Hetzner stopped selling its cheapest x86 servers and the wizard moved to Arm cax21, ~€10.49). 2026-09-28: plus the
 // A$200 roadmap in front of them, A$250 from the same day. Nothing else.
-const V5_PRICES = new Set(['A$250', 'A$350', 'A$700', 'A$233', 'A$10']);
+const V5_PRICES = new Set(['A$250', 'A$350', 'A$700', 'A$233', 'A$20']);
 test('the v5 prices are the only prices on the offer and book pages', () => {
   for (const rel of ['offer/index.html', 'book/index.html', 'index.html']) {
     const src = fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(ALLOW_BLOCK, '');
