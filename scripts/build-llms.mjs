@@ -7,8 +7,8 @@
 // then every public page with its own title and meta description. The page
 // list is the sitemap's (expectedUrls), so the two can never disagree; the
 // summary at the top is the only hand-written part. Keep it to facts the site
-// already states, and never "your data stays local" (local mode still talks to
-// Claude).
+// already states, and never "your data stays local" (it always talks to
+// Claude, at Anthropic).
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -22,15 +22,14 @@ const HOST = 'https://crads-ai.com';
 const SUMMARY = `# Crads-AI
 
 > Crads-AI is a free, open-source (AGPL-3.0) AI assistant built on Claude, for
-> small-business owners and independent professionals. It runs on a server you
-> own (Hetzner or DigitalOcean) or on your own computer, uses your own Claude
+> small-business owners and independent professionals. It runs on a server in
+> your own hosting account (Hetzner or DigitalOcean), uses your own Claude
 > subscription, keeps its memory as plain Markdown backed up to a private GitHub
 > repository on your account, and connects to the tools you already use. It is
 > made by Dr Sam Davis in Sydney, Australia.
 
-- The software is free. You pay for your own Claude subscription and, if you
-  run it on a server, your own hosting provider; nothing is paid to Crads-AI to
-  use it.
+- The software is free. You pay for your own Claude subscription and your own
+  hosting provider; nothing is paid to Crads-AI to use it.
 - There is no Crads-AI account, central server or billing in the loop: the
   server, the SSH key and the accounts are yours.
 - Paid help is optional: a walkthrough, a guided setup and ongoing support
