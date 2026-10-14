@@ -6,7 +6,9 @@
 //
 // 2026-10-14: brought back HIDDEN (Sam: "I want to definitely prioritise people
 // using their own servers over anything else"). The one allowed place is the
-// closed "More options" fold on /offer, after the "Where it lives" note.
+// closed "More options" fold on /offer, after the "Where it lives" note. The
+// fold carries two options: a folder on your own computer, and (added the same
+// day, after the cloud test passed) Claude's own cloud.
 // Everywhere else, including the rest of /offer, stays server-only.
 const { test } = require('node:test');
 const assert = require('node:assert');
@@ -32,6 +34,8 @@ test('offer/index.html keeps the non-server option in ONE closed More options fo
   assert.doesNotMatch(folds[0], /<details[^>]*\bopen\b/, 'closed by default');
   assert.match(folds[0], /your own computer/, 'it carries the local option');
   assert.match(folds[0], /I'd still pick the server\./, 'and still steers to the server');
+  assert.match(folds[0], /Claude's own cloud/, 'it carries the Claude-hosted option (tested 2026-10-14)');
+  assert.match(folds[0], /at most hourly/, 'with its honest limit');
   const where = body.indexOf('<strong>Where it lives.</strong>');
   assert.ok(where > -1 && where < body.indexOf(folds[0]), 'the server note comes first');
 });
