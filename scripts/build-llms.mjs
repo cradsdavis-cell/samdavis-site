@@ -23,7 +23,8 @@ const SUMMARY = `# Crads-AI
 
 > Crads-AI is a free, open-source (AGPL-3.0) AI assistant built on Claude, for
 > small-business owners and independent professionals. It runs on a server in
-> your own hosting account (Hetzner or DigitalOcean), uses your own Claude
+> your own hosting account (Hetzner or DigitalOcean), or on a server you
+> already have (AWS, Google Cloud, Azure, or a machine you own), uses your own Claude
 > subscription, keeps its memory as plain Markdown backed up to a private GitHub
 > repository on your account, and connects to the tools you already use. It is
 > made by Dr Sam Davis in Sydney, Australia.
