@@ -42,15 +42,16 @@ test('the marked retired-offers block exists exactly once, on /offer', () => {
 });
 
 // v5 (2026-09-11): A$350 walkthrough, A$700 guided setup, A$233 an hour after
-// the 30 days, and the "about A$20 a month" server line (A$10 until 13 Oct, when Hetzner stopped selling its cheapest x86 servers and the wizard moved to Arm cax21, ~€10.49). 2026-09-28: plus the
+// the 30 days, and the "about A$20 a month" server line (A$10 until 13 Oct, when Hetzner stopped selling its cheapest x86 servers and the wizard moved to Arm cax21, ~€10.49; then about €35 from 15 Oct, Sam's figure, once cax21 stopped selling and the Standard size came out near €35). 2026-09-28: plus the
 // A$200 roadmap in front of them, A$250 from the same day. Nothing else.
-const V5_PRICES = new Set(['A$250', 'A$350', 'A$700', 'A$233', 'A$20']);
+const V5_PRICES = new Set(['A$250', 'A$350', 'A$700', 'A$233']);
 test('the v5 prices are the only prices on the offer and book pages', () => {
   for (const rel of ['offer/index.html', 'book/index.html', 'index.html']) {
     const src = fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(ALLOW_BLOCK, '');
     const prices = new Set([...src.matchAll(/A\$[\d,]+/g)].map((m) => m[0]));
     for (const p of prices) assert.ok(V5_PRICES.has(p), `${rel}: unexpected price ${p}`);
     assert.ok(prices.has('A$250') && prices.has('A$700') && prices.has('A$350') && prices.has('A$233'), `${rel}: the roadmap, the two v5 prices and the hourly rate expected`);
+    if (rel !== 'book/index.html') assert.match(src, /about €35 a month/, `${rel}: the server line says about €35 a month`);
   }
 });
 
