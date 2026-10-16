@@ -2,7 +2,8 @@
 
 > Crads-AI is a free, open-source (AGPL-3.0) AI assistant built on Claude, for
 > small-business owners and independent professionals. It runs on a server in
-> your own hosting account (Hetzner or DigitalOcean), uses your own Claude
+> your own hosting account (Hetzner or DigitalOcean), or on a server you
+> already have (AWS, Google Cloud, Azure, or a machine you own), uses your own Claude
 > subscription, keeps its memory as plain Markdown backed up to a private GitHub
 > repository on your account, and connects to the tools you already use. It is
 > made by Dr Sam Davis in Sydney, Australia.
@@ -72,6 +73,7 @@
 - [The CRIT method](https://crads-ai.com/docs/the-crit-method): Four steps that turn a vague ask into a brief your assistant can act on, and why the third step is the one people skip.
 - [The interview](https://crads-ai.com/docs/the-interview): The hour that turns a blank machine into an assistant that knows your world, and what it asks about.
 - [Who edits what](https://crads-ai.com/docs/the-three-layers): Three layers on every mineral: the machinery the project maintains, the infrastructure you own, and the pages you build.
+- [Use a server you already have](https://crads-ai.com/docs/use-a-server-you-already-have): Run your assistant on a server you made yourself, at AWS, Google Cloud, Azure or any host, or on a machine you own at home or in the office.
 - [Use it from your phone](https://crads-ai.com/docs/use-it-from-your-phone): Your whole assistant in the Claude app on your phone, with your brain, your skills and your connections, while your laptop stays shut.
 - [What it will not do](https://crads-ai.com/docs/what-it-will-not-do): The limits that are built in, the rules I hold mine to, and how to tell a broken connection from a thin brain.
 - [When something looks wrong](https://crads-ai.com/docs/when-something-looks-wrong): The short list of symptoms, what each usually means, and where to look before you worry.
