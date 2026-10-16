@@ -30,10 +30,21 @@ require.cache[require.resolve('../lib/createOrUpdateUser')] = {
     createOrUpdateUser: async (args) => { ACCOUNT_CALLS.push(args); return { created: false, user: null }; },
   },
 };
+// An in-memory KV behind the real makeKv, so the referral writes run for real.
+const KV_STORE = new Map();
+const { makeKv: realMakeKv } = require('../lib/kv');
+const memKv = realMakeKv({
+  get: async (k) => (KV_STORE.has(k) ? JSON.parse(KV_STORE.get(k)) : null),
+  set: async (k, v) => { KV_STORE.set(k, JSON.stringify(v)); return 'OK'; },
+  del: async (k) => (KV_STORE.delete(k) ? 1 : 0),
+  incr: async () => 1,
+  expire: async () => 1,
+  keys: async (pattern) => [...KV_STORE.keys()].filter((k) => k.startsWith(pattern.replace('*', ''))),
+});
 require.cache[require.resolve('../lib/kv')] = {
   exports: {
-    defaultKv: () => ({}),
-    makeKv: () => ({}),
+    defaultKv: () => memKv,
+    makeKv: () => memKv,
   },
 };
 
@@ -247,4 +258,88 @@ test('setup SKUs unchanged: a walkthrough still creates the account and sends no
   assert.strictEqual(ACCOUNT_CALLS.length, 1);
   assert.strictEqual(ACCOUNT_CALLS[0].sku, 'walkthrough');
   assert.strictEqual(mailed, false);
+});
+
+// ---- partner referrals (2026-10-16) ----------------------------------------
+
+function refEvent({ sku = 'guided-setup', id = 'cs_ref_1', email = 'buyer@example.com', ref, text, eventType = '106' } = {}) {
+  const metadata = { sku, slot_iso: '2026-10-20T10:00:00+10:00', name: 'Bea Buyer', cal_event_type_id: eventType };
+  if (ref) { metadata.ref = ref; metadata.ref_at = '2026-10-10T00:00:00.000Z'; }
+  return fakeSessionEvent({
+    id, customer_email: email, metadata,
+    custom_fields: text ? [{ key: 'referrer', text: { value: text } }] : [{ key: 'referrer', text: { value: null } }],
+  });
+}
+
+test('referral: a guided setup bought through /r/nim is recorded pending-s1 and the Cal booking carries the ref', async () => {
+  KV_STORE.clear();
+  let bookingArgs = null;
+  const alerts = [];
+  stripeStub = { constructWebhookEvent: () => refEvent({ ref: 'nim' }) };
+  calStub = {
+    findBookingByStripeSession: async () => ({ ok: true, body: { data: [] } }),
+    createBooking: async (a) => { bookingArgs = a; return { ok: true, status: 201, body: { data: { id: 1 } } }; },
+  };
+  emailStub = { sendSamAlert: async (a) => { alerts.push(a); } };
+  const res = mockRes();
+  await handler(mockReq('{}'), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(bookingArgs.ref, 'nim');
+  const rec = JSON.parse(KV_STORE.get('referral:cs_ref_1'));
+  assert.strictEqual(rec.referrer, 'nim');
+  assert.strictEqual(rec.status, 'pending-s1');
+  assert.strictEqual(rec.amount_aud, 100);
+  assert.strictEqual(rec.buyer_email, 'buyer@example.com');
+  assert.ok(alerts.some((a) => /referral recorded: nim/.test(a.subject)));
+});
+
+test('referral: roadmap first, guided setup later on another device, still pays the partner', async () => {
+  KV_STORE.clear();
+  calStub = okCal();
+  emailStub = { sendRoadmapConfirmationEmail: async () => ({}), sendSamAlert: async () => {} };
+  stripeStub = { constructWebhookEvent: () => refEvent({ sku: 'roadmap', id: 'cs_rm', ref: 'nim', eventType: '200' }) };
+  await handler(mockReq('{}'), mockRes());
+  assert.strictEqual(KV_STORE.has('referral:cs_rm'), false, 'the roadmap itself pays nothing');
+  assert.strictEqual(JSON.parse(KV_STORE.get('ref_attr:buyer@example.com')).slug, 'nim');
+
+  stripeStub = { constructWebhookEvent: () => refEvent({ id: 'cs_gs' }) };
+  await handler(mockReq('{}'), mockRes());
+  const rec = JSON.parse(KV_STORE.get('referral:cs_gs'));
+  assert.strictEqual(rec.referrer, 'nim');
+  assert.strictEqual(rec.via, 'earlier-booking');
+});
+
+test('referral: a "Who sent you?" answer alone is recorded needs-review', async () => {
+  KV_STORE.clear();
+  calStub = okCal();
+  emailStub = { sendSamAlert: async () => {} };
+  stripeStub = { constructWebhookEvent: () => refEvent({ id: 'cs_txt', text: 'Nim Zappert' }) };
+  await handler(mockReq('{}'), mockRes());
+  const rec = JSON.parse(KV_STORE.get('referral:cs_txt'));
+  assert.strictEqual(rec.status, 'needs-review');
+  assert.strictEqual(rec.suggested, 'nim');
+});
+
+test('referral: a plain guided setup writes no referral and sends no referral alert', async () => {
+  KV_STORE.clear();
+  const alerts = [];
+  calStub = okCal();
+  emailStub = { sendSamAlert: async (a) => { alerts.push(a); } };
+  stripeStub = { constructWebhookEvent: () => refEvent({ id: 'cs_plain' }) };
+  await handler(mockReq('{}'), mockRes());
+  assert.strictEqual([...KV_STORE.keys()].some((k) => k.startsWith('referral:')), false);
+  assert.strictEqual(alerts.length, 0);
+});
+
+test('referral: a webhook retry does not duplicate or overwrite the record', async () => {
+  KV_STORE.clear();
+  calStub = okCal();
+  emailStub = { sendSamAlert: async () => {} };
+  stripeStub = { constructWebhookEvent: () => refEvent({ id: 'cs_dup', ref: 'nim' }) };
+  await handler(mockReq('{}'), mockRes());
+  const first = KV_STORE.get('referral:cs_dup');
+  // Sam marks it owed by hand between deliveries; a late retry must not reset it.
+  const rec = JSON.parse(first); rec.status = 'owed'; KV_STORE.set('referral:cs_dup', JSON.stringify(rec));
+  await handler(mockReq('{}'), mockRes());
+  assert.strictEqual(JSON.parse(KV_STORE.get('referral:cs_dup')).status, 'owed');
 });

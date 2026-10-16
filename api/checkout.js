@@ -5,6 +5,7 @@ const { getSku, isPurchasable, DISCOVERY_EVENT_TYPE_ID } = require('../lib/skus'
 const { createCheckoutSession, findPromotionCode } = require('../lib/stripe');
 const { createBooking, findBookingByStripeSession } = require('../lib/cal');
 const { TERMS_VERSION } = require('../lib/terms');
+const { refFromCookie } = require('../lib/referrals');
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:?\d{2})$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -144,6 +145,10 @@ module.exports = async (req, res) => {
     if (!promotionCodeId) { res.status(400).json({ error: 'invalid_code' }); return; }
   }
 
+  // A partner's referral cookie (/r/<slug>, 90 days, first touch). Rides on
+  // the session metadata; the webhook decides what it is worth.
+  const ref = refFromCookie(req.headers && req.headers.cookie);
+
   try {
     const session = await createCheckoutSession({
       sku, priceId: cfg.stripe_price_id, priceAud: cfg.price_aud, productName: cfg.label,
@@ -151,6 +156,7 @@ module.exports = async (req, res) => {
       calEventTypeId: cfg.cal_event_type_id, baseUrl: process.env.BASE_URL,
       termsVersion: TERMS_VERSION, termsAcceptedAt: new Date().toISOString(),
       promotionCodeId,
+      ref: ref ? ref.slug : null, refAt: ref ? ref.at : null,
     });
     res.status(200).json({ checkout_url: session.url, session_id: session.id });
   } catch (err) {

@@ -374,3 +374,28 @@ test('a list failure never fails a discovery booking', async () => {
   assert.strictEqual(res.statusCode, 200);
   assert.strictEqual(res.body.booked, true);
 });
+
+// ---- partner referrals (2026-10-16) ----------------------------------------
+
+test('a live crads_ref cookie rides onto the Checkout Session as ref + ref_at', async () => {
+  resetStripeCalls();
+  const at = Math.floor((Date.now() - 3 * 86400000) / 1000);
+  const req = mockReq({ sku: 'guided-setup', slot_iso: FUTURE_SLOT, email: 'b@x.com', name: 'B', agreed_terms: true });
+  req.headers = { cookie: `crads_ref=nim.${at}` };
+  const res = mockRes();
+  await handler(req, res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(STRIPE_CALLS[0].ref, 'nim');
+  assert.strictEqual(STRIPE_CALLS[0].refAt, new Date(at * 1000).toISOString());
+});
+
+test('no cookie, or an unknown partner, means no ref on the session', async () => {
+  resetStripeCalls();
+  const req = mockReq({ sku: 'guided-setup', slot_iso: FUTURE_SLOT, email: 'b@x.com', name: 'B', agreed_terms: true });
+  req.headers = { cookie: `crads_ref=nobody.${Math.floor(Date.now() / 1000)}` };
+  await handler(req, mockRes());
+  await handler(mockReq({ sku: 'guided-setup', slot_iso: FUTURE_SLOT, email: 'b@x.com', name: 'B', agreed_terms: true }), mockRes());
+  assert.strictEqual(STRIPE_CALLS.length, 2);
+  assert.strictEqual(STRIPE_CALLS[0].ref, null);
+  assert.strictEqual(STRIPE_CALLS[1].ref, null);
+});
