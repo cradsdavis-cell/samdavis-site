@@ -218,7 +218,7 @@ test('createCheckoutSession carries the ref and asks "Who sent you?" (optional)'
     assert.strictEqual(params.metadata.ref, 'nim');
     assert.strictEqual(params.metadata.ref_at, '2026-10-10T00:00:00.000Z');
     const f = params.custom_fields.find((x) => x.key === 'referrer');
-    assert.strictEqual(f.label.custom, 'Who sent you?');
+    assert.strictEqual(f.label.custom, 'Who sent you? (optional)');
     assert.strictEqual(f.optional, true);
     assert.strictEqual(f.type, 'text');
 
