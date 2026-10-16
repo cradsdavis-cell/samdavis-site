@@ -81,6 +81,11 @@
       "source": "/coaching",
       "destination": "/offer",
       "permanent": true
+    },
+    {
+      "source": "/r",
+      "destination": "/",
+      "permanent": false
     }
   ],
   "rewrites": [
@@ -155,6 +160,10 @@
     {
       "source": "/download/:asset",
       "destination": "/api/download?asset=:asset"
+    },
+    {
+      "source": "/r/:slug",
+      "destination": "/api/r?slug=:slug"
     }
   ],
   "headers": [

@@ -10,6 +10,7 @@ const { sendRaceLossEmail, sendRoadmapConfirmationEmail, sendSamAlert, getResend
 const { createsAccount } = require('../../lib/skus');
 const { createOrUpdateUser } = require('../../lib/createOrUpdateUser');
 const { defaultKv } = require('../../lib/kv');
+const { planReferral, customFieldText, WINDOW_SECONDS } = require('../../lib/referrals');
 
 // Disable Vercel body parsing — Stripe needs raw bytes for signature verification
 module.exports.config = { api: { bodyParser: false } };
@@ -63,6 +64,46 @@ async function safeRoadmapConfirmation({ customerEmail, name, slotIso, stripeSes
     await safeAlert(
       `roadmap confirmation email FAILED for ${customerEmail}`,
       `Booking and payment went through (session ${stripeSessionId}, slot ${slotIso}) but the confirmation email failed: ${err && err.message}. Send it manually.`,
+    );
+  }
+}
+
+// Partner referrals (2026-10-16, lib/referrals.js). After a booking lands:
+// a roadmap remembers its referrer against the buyer's email for the rest of
+// the 90 days; a guided setup writes the A$100 referral record. Best effort
+// like the account path, but a failure alerts Sam: a lost record is money a
+// partner is owed.
+async function safeRecordReferral({ session, sku, customerEmail, name, slotIso }) {
+  const meta = session.metadata || {};
+  const text = customFieldText(session);
+  try {
+    const kv = defaultKv();
+    const attr = await kv.getRefAttribution(customerEmail);
+    const nowIso = new Date().toISOString();
+    const plan = planReferral({
+      sku, meta: { ref: meta.ref, ref_at: meta.ref_at }, text, attr,
+      sessionId: session.id, email: customerEmail, name, slotIso, nowIso,
+    });
+    if (plan.attribution) {
+      const ageS = Math.max(0, Math.floor((Date.now() - Date.parse(plan.attribution.at)) / 1000));
+      const ttl = Math.max(60, WINDOW_SECONDS - ageS);
+      await kv.setRefAttributionIfAbsent(customerEmail, plan.attribution, ttl);
+    }
+    if (plan.record) {
+      const added = await kv.addReferralIfAbsent(plan.record.id, plan.record);
+      if (added) {
+        const who = plan.record.referrer || `"${plan.record.referrer_text}" (needs review)`;
+        await safeAlert(
+          `referral recorded: ${who} sent ${customerEmail}`,
+          `Guided setup bought by ${customerEmail} (${name}), session ${session.id}. Referrer: ${who}. Status ${plan.record.status}; A$${plan.record.amount_aud} becomes owed after session 1 (${slotIso}). It shows on the cockpit Referrals card.`,
+        );
+      }
+    }
+  } catch (err) {
+    console.error('referral record failed:', err && err.message);
+    await safeAlert(
+      `referral record FAILED for ${customerEmail}`,
+      `Could not record a possible referral for session ${session.id} (sku ${sku}, ref ${meta.ref || '-'}, who sent you "${text}"): ${err && err.message}. Booking and payment unaffected. Check by hand.`,
     );
   }
 }
@@ -140,6 +181,7 @@ module.exports = async (req, res) => {
     email: customerEmail,
     stripeSessionId,
     sku,
+    ...(metadata.ref ? { ref: metadata.ref } : {}),
   });
 
   if (booking.ok) {
@@ -153,6 +195,7 @@ module.exports = async (req, res) => {
     } else {
       await safeRoadmapConfirmation({ customerEmail, name, slotIso: slot_iso, stripeSessionId });
     }
+    await safeRecordReferral({ session, sku, customerEmail, name, slotIso: slot_iso });
     res.status(200).json({ received: true, booked: true });
     return;
   }
