@@ -399,3 +399,19 @@ test('no cookie, or an unknown partner, means no ref on the session', async () =
   assert.strictEqual(STRIPE_CALLS[0].ref, null);
   assert.strictEqual(STRIPE_CALLS[1].ref, null);
 });
+
+// ---- booking source (2026-10-17, lib/attribution.js) -----------------------
+
+test('the booking page link\'s utm_source rides onto the Checkout Session, cleaned', async () => {
+  resetStripeCalls();
+  await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'b@x.com', name: 'B', agreed_terms: true, utm_source: 'LinkedIn<x>' }), mockRes());
+  await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'b@x.com', name: 'B', agreed_terms: true }), mockRes());
+  assert.strictEqual(STRIPE_CALLS[0].utmSource, 'linkedinx');
+  assert.strictEqual(STRIPE_CALLS[1].utmSource, '');
+});
+
+test('a free discovery booking carries utm_source to Cal', async () => {
+  resetCalCalls();
+  await handler(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, email: 'utm@x.com', name: 'U', utm_source: 'newsletter' }), mockRes());
+  assert.strictEqual(CAL_CALLS[0].utmSource, 'newsletter');
+});

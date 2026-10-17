@@ -11,6 +11,7 @@ const { createsAccount } = require('../../lib/skus');
 const { createOrUpdateUser } = require('../../lib/createOrUpdateUser');
 const { defaultKv } = require('../../lib/kv');
 const { planReferral, customFieldText, WINDOW_SECONDS } = require('../../lib/referrals');
+const { heardFromValue, cleanUtmSource } = require('../../lib/attribution');
 
 // Disable Vercel body parsing — Stripe needs raw bytes for signature verification
 module.exports.config = { api: { bodyParser: false } };
@@ -182,6 +183,8 @@ module.exports = async (req, res) => {
     stripeSessionId,
     sku,
     ...(metadata.ref ? { ref: metadata.ref } : {}),
+    ...(heardFromValue(session) ? { heardFrom: heardFromValue(session) } : {}),
+    ...(cleanUtmSource(metadata.utm_source) ? { utmSource: cleanUtmSource(metadata.utm_source) } : {}),
   });
 
   if (booking.ok) {

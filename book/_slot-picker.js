@@ -154,6 +154,9 @@
       agreed_terms: fd.get('agreed_terms') === 'yes',
       newsletter: fd.get('newsletter') === 'yes',
       code: String(fd.get('code') || '').trim(),
+      // The link's own tag (crads-ai.com/book/roadmap?utm_source=linkedin):
+      // read from this page's address only, never stored (README, "Link tags").
+      utm_source: new URLSearchParams(window.location.search).get('utm_source') || '',
     };
     try {
       if (!isPaid) {

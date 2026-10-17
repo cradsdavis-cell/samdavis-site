@@ -343,3 +343,25 @@ test('referral: a webhook retry does not duplicate or overwrite the record', asy
   await handler(mockReq('{}'), mockRes());
   assert.strictEqual(JSON.parse(KV_STORE.get('referral:cs_dup')).status, 'owed');
 });
+
+// ---- booking source (2026-10-17, lib/attribution.js) -----------------------
+
+test('booking source: the dropdown answer and utm_source reach the Cal booking', async () => {
+  KV_STORE.clear();
+  let bookingArgs = null;
+  calStub = {
+    findBookingByStripeSession: async () => ({ ok: true, body: { data: [] } }),
+    createBooking: async (a) => { bookingArgs = a; return { ok: true, status: 201, body: { data: { id: 1 } } }; },
+  };
+  emailStub = { sendRoadmapConfirmationEmail: async () => ({}), sendSamAlert: async () => {} };
+  stripeStub = { constructWebhookEvent: () => fakeSessionEvent({
+    id: 'cs_src', customer_email: 'src@example.com',
+    metadata: { sku: 'roadmap', slot_iso: '2026-10-20T10:00:00+10:00', name: 'S', cal_event_type_id: '200', utm_source: 'linkedin' },
+    custom_fields: [{ key: 'referrer', text: { value: null } }, { key: 'heard_from', dropdown: { value: 'whatsapp' } }],
+  }) };
+  const res = mockRes();
+  await handler(mockReq('{}'), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(bookingArgs.heardFrom, 'whatsapp');
+  assert.strictEqual(bookingArgs.utmSource, 'linkedin');
+});
