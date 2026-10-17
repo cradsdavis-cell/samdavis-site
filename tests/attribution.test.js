@@ -14,7 +14,7 @@ test('the dropdown offers the eight agreed answers, in order, and is optional', 
     'An event', 'Email from Sam', 'Search', 'Other',
   ]);
   const f = A.heardFromField();
-  assert.strictEqual(f.key, 'heard_from');
+  assert.strictEqual(f.key, 'heardfrom');
   assert.strictEqual(f.type, 'dropdown');
   assert.strictEqual(f.optional, true);
   assert.strictEqual(f.label.custom, 'How did you hear about this? (optional)');
@@ -22,7 +22,7 @@ test('the dropdown offers the eight agreed answers, in order, and is optional', 
 });
 
 test('heardFromValue reads the answer and drops anything off the list', () => {
-  const s = (v) => ({ custom_fields: [{ key: 'referrer', text: { value: 'x' } }, { key: 'heard_from', dropdown: { value: v } }] });
+  const s = (v) => ({ custom_fields: [{ key: 'referrer', text: { value: 'x' } }, { key: 'heardfrom', dropdown: { value: v } }] });
   assert.strictEqual(A.heardFromValue(s('linkedin')), 'linkedin');
   assert.strictEqual(A.heardFromValue(s(null)), '');
   assert.strictEqual(A.heardFromValue(s('<script>')), '');
@@ -46,7 +46,7 @@ test('createCheckoutSession asks both questions and carries utm_source', async (
   try {
     const { createCheckoutSession } = require('../lib/stripe');
     await createCheckoutSession({ sku: 'roadmap', priceId: 'p', name: 'B', email: 'b@x.com', calEventTypeId: 1, baseUrl: 'https://crads-ai.com', utmSource: 'linkedin' });
-    assert.deepStrictEqual(params.custom_fields.map((f) => f.key), ['referrer', 'heard_from']);
+    assert.deepStrictEqual(params.custom_fields.map((f) => f.key), ['referrer', 'heardfrom']);
     assert.strictEqual(params.metadata.utm_source, 'linkedin');
     await createCheckoutSession({ sku: 'roadmap', priceId: 'p', name: 'B', email: 'b@x.com', calEventTypeId: 1, baseUrl: 'https://crads-ai.com' });
     assert.strictEqual(params.metadata.utm_source, '');

@@ -357,7 +357,7 @@ test('booking source: the dropdown answer and utm_source reach the Cal booking',
   stripeStub = { constructWebhookEvent: () => fakeSessionEvent({
     id: 'cs_src', customer_email: 'src@example.com',
     metadata: { sku: 'roadmap', slot_iso: '2026-10-20T10:00:00+10:00', name: 'S', cal_event_type_id: '200', utm_source: 'linkedin' },
-    custom_fields: [{ key: 'referrer', text: { value: null } }, { key: 'heard_from', dropdown: { value: 'whatsapp' } }],
+    custom_fields: [{ key: 'referrer', text: { value: null } }, { key: 'heardfrom', dropdown: { value: 'whatsapp' } }],
   }) };
   const res = mockRes();
   await handler(mockReq('{}'), res);
