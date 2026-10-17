@@ -68,6 +68,42 @@ Retired 2026-09-11: the Working session (90 min, A$350). Its Stripe price is reu
 
 Live Stripe price IDs and the four Cal event type IDs are in `lib/skus.js` (neither is a secret); `STRIPE_PRICE_WALKTHROUGH` / `STRIPE_PRICE_GUIDED_SETUP` and `CAL_EVENT_TYPE_WALKTHROUGH_S1` / `_S2`, `CAL_EVENT_TYPE_GUIDED_SETUP_S1` / `_S2` override them if set.
 
+## Where bookings come from
+
+Three records, each answering a different question. Read them together; none is complete alone.
+
+| Record | What it says | Where to read it |
+|---|---|---|
+| Vercel Web Analytics | Page views and the two conversion clicks (`Book click`, `Download click`), broken down by referrer and by `utm_source`. Cookieless; disclosed in the privacy policy, "Visiting crads-ai.com". | Vercel dashboard, project `crads-ai`, Analytics (or the Vercel MCP `aggregate_pageviews` / `aggregate_events`, `by: ["utmSource"]`). Production only. |
+| `heard_from` | What the booker says: the optional "How did you hear about this?" dropdown on the Stripe Checkout page, next to "Who sent you?". | Stripe (the session's custom fields) and the Cal booking metadata. |
+| `utm_source` | What the link says: the tag on the booking page address they booked from. | Stripe session metadata and the Cal booking metadata. |
+
+Code: `lib/attribution.js` (the dropdown, its eight answers, the tag cleaner), `book/_slot-picker.js` (reads the tag from the page address only, stores nothing in the browser), `api/checkout.js` and `api/stripe/webhook.js` (carry both to Cal). Partner referrals are separate (`/r/<slug>`, `lib/referrals.js`).
+
+### Link tags
+
+Every link to the site that Sam shares carries `utm_source`, so a booking can be traced to the place the link was posted. Point it at the booking page where the post is asking for a booking, since that page is the one whose tag reaches Stripe and Cal.
+
+| Where the link goes | `utm_source` | Example |
+|---|---|---|
+| LinkedIn post or its first comment | `linkedin` | `https://crads-ai.com/book/roadmap?utm_source=linkedin&utm_medium=post` |
+| LinkedIn DM | `linkedin` (`utm_medium=dm`) | `https://crads-ai.com/book/roadmap?utm_source=linkedin&utm_medium=dm` |
+| Cold email (impact practitioners) | `email-cold` | `https://crads-ai.com/book/roadmap?code=PAINKILLER26&utm_source=email-cold` |
+| Job-ad email ("before you hire") | `email-jobad` | `https://crads-ai.com/book/roadmap?code=PAINKILLER26&utm_source=email-jobad` |
+| The weekly letter | `newsletter` | `https://crads-ai.com/writing/<essay>?utm_source=newsletter&utm_campaign=no-2` |
+| Impact Collab Slack or community posts | `impactcollab` | `https://crads-ai.com/book/roadmap?utm_source=impactcollab` |
+| WhatsApp groups | `whatsapp` | `https://crads-ai.com/book/roadmap?utm_source=whatsapp` |
+| Other community hosts and groups | `community` (`utm_campaign=<group>`) | `https://crads-ai.com/book/roadmap?utm_source=community&utm_campaign=co-day` |
+| Talks and events (slides, QR codes) | `event` (`utm_campaign=<event>`) | `https://crads-ai.com/book/roadmap?utm_source=event&utm_campaign=secna-summit` |
+
+Rules:
+
+- Lowercase, letters, digits and dashes. The site cuts `utm_source` to 40 characters and drops anything else.
+- `utm_source` is the one that matters. `utm_medium` and `utm_campaign` are optional detail, and only Web Analytics reads them.
+- Never put a person's name, email or company in a tag. Page addresses are recorded by Web Analytics, so a tag is public in effect.
+- A partner's link stays `/r/<slug>`; don't add `utm_source` to it.
+- The tag survives only on the page it lands on. A visitor who arrives at `/` with a tag and then clicks through to `/book/roadmap` books with no `utm_source` (the site keeps nothing in the browser to carry it). Their visit is still counted by tag in Web Analytics, and the dropdown still asks.
+
 ## Env vars (Vercel Production)
 
 Auth and portal: `SESSION_SECRET` (32+ chars), `REDIS_URL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET` (redirect URI `https://crads-ai.com/api/auth/google/callback`), `CRON_SECRET` / `CRON_SECRET_2` (admin API bearer).
