@@ -232,6 +232,18 @@ test('roadmap: booked slot sends the confirmation email and creates NO account',
   assert.strictEqual(ACCOUNT_CALLS.length, 0, 'no welcome email / portal account for a roadmap buyer');
 });
 
+test('time zone: the session metadata zone reaches Cal and the roadmap confirmation', async () => {
+  let bookingArgs = null; let mailed = null;
+  stripeStub = { constructWebhookEvent: () => fakeSessionEvent({ metadata: { sku: 'roadmap', slot_iso: '2026-10-01T10:00:00+10:00', name: 'Rhi Jones', cal_event_type_id: '120', time_zone: 'Europe/London' } }) };
+  calStub = { ...okCal(), createBooking: async (a) => { bookingArgs = a; return { ok: true, status: 201, body: { data: { id: 1 } } }; } };
+  emailStub = { sendRoadmapConfirmationEmail: async (a) => { mailed = a; return { id: 'em' }; } };
+  const res = mockRes();
+  await handler(mockReq('{}'), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(bookingArgs.timeZone, 'Europe/London');
+  assert.strictEqual(mailed.timeZone, 'Europe/London');
+});
+
 test('roadmap: a failed confirmation email alerts Sam and still returns 200', async () => {
   let alerted = null;
   stripeStub = { constructWebhookEvent: () => roadmapEvent() };

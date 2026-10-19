@@ -415,3 +415,17 @@ test('a free discovery booking carries utm_source to Cal', async () => {
   await handler(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, email: 'utm@x.com', name: 'U', utm_source: 'newsletter' }), mockRes());
   assert.strictEqual(CAL_CALLS[0].utmSource, 'newsletter');
 });
+
+test('time zone: the browser zone reaches Cal on a free booking, and Stripe metadata on a paid one', async () => {
+  resetCalCalls(); resetStripeCalls();
+  await handler(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, name: 'Jo', email: 'jo@example.com', time_zone: 'Europe/London' }), mockRes());
+  assert.strictEqual(CAL_CALLS[0].timeZone, 'Europe/London');
+  await handler(mockReq({ sku: 'walkthrough', slot_iso: FUTURE_SLOT, name: 'Jo', email: 'jo@example.com', agreed_terms: true, time_zone: 'America/New_York' }), mockRes());
+  assert.strictEqual(STRIPE_CALLS[0].timeZone, 'America/New_York');
+});
+
+test('time zone: a missing or junk zone books in Sydney time', async () => {
+  resetCalCalls();
+  await handler(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, name: 'Jo', email: 'jo2@example.com', time_zone: '"><img>' }), mockRes());
+  assert.strictEqual(CAL_CALLS[0].timeZone, 'Australia/Sydney');
+});

@@ -14,6 +14,29 @@
     const d = new Date(iso);
     return d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
   }
+  // The visitor's own zone. Slots come back from Cal in Sydney time; every
+  // label, day heading and booking uses this zone instead.
+  function visitorTimeZone() {
+    try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (_) { return ''; }
+  }
+  // YYYY-MM-DD of the slot in the visitor's zone, so a slot that is Tuesday
+  // in Sydney but Monday evening in London sits under Monday.
+  function localDayKey(iso) {
+    const d = new Date(iso);
+    const p = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+  }
+  function zoneNote() {
+    const tz = visitorTimeZone();
+    let abbr = '';
+    try {
+      const part = new Intl.DateTimeFormat(undefined, { timeZoneName: 'short' }).formatToParts(new Date()).find(x => x.type === 'timeZoneName');
+      abbr = part ? part.value : '';
+    } catch (_) { /* label without the abbreviation */ }
+    const place = tz ? tz.split('/').pop().replace(/_/g, ' ') : '';
+    const label = place ? place + (abbr && abbr !== place ? ` (${abbr})` : '') : 'your local time';
+    return `<p class="slot-zone">Times are shown in your time zone: ${label}.</p>`;
+  }
 
   async function loadSlots() {
     root.innerHTML = '<div class="slot-loading">Loading available slots…</div>';
@@ -74,11 +97,11 @@
     const byDay = {};
     for (const s of slots) {
       const iso = s.time;
-      const dayKey = iso.slice(0, 10);
+      const dayKey = localDayKey(iso);
       (byDay[dayKey] = byDay[dayKey] || []).push(iso);
     }
     const dayKeys = Object.keys(byDay).sort();
-    let html = '';
+    let html = zoneNote();
     for (const day of dayKeys) {
       html += `<div class="slot-day">`;
       html += `<div class="slot-day-label">${fmtDay(day + 'T12:00:00')}</div>`;
@@ -157,6 +180,8 @@
       // The link's own tag (crads-ai.com/book/roadmap?utm_source=linkedin):
       // read from this page's address only, never stored (README, "Link tags").
       utm_source: new URLSearchParams(window.location.search).get('utm_source') || '',
+      // So Cal's confirmation email and reminders are in the booker's time.
+      time_zone: visitorTimeZone(),
     };
     try {
       if (!isPaid) {

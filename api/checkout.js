@@ -7,6 +7,7 @@ const { createBooking, findBookingByStripeSession } = require('../lib/cal');
 const { TERMS_VERSION } = require('../lib/terms');
 const { refFromCookie } = require('../lib/referrals');
 const { cleanUtmSource } = require('../lib/attribution');
+const { cleanTimeZone } = require('../lib/timeZone');
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:?\d{2})$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -64,6 +65,8 @@ module.exports = async (req, res) => {
   const name = sanitize(body.name || '');
   // The utm_source tag on the booking page link, if any (lib/attribution.js).
   const utmSource = cleanUtmSource(body.utm_source);
+  // The booker's browser time zone (Sydney if missing or unknown).
+  const timeZone = cleanTimeZone(body.time_zone);
 
   const validationError = validateBody({ sku, slot_iso, email, name });
   if (validationError) { res.status(400).json({ error: validationError }); return; }
@@ -90,6 +93,7 @@ module.exports = async (req, res) => {
         email,
         stripeSessionId: synthSessionId,
         sku: 'discovery',
+        timeZone,
         ...(utmSource ? { utmSource } : {}),
       });
       if (!booking.ok) {
@@ -161,7 +165,7 @@ module.exports = async (req, res) => {
       termsVersion: TERMS_VERSION, termsAcceptedAt: new Date().toISOString(),
       promotionCodeId,
       ref: ref ? ref.slug : null, refAt: ref ? ref.at : null,
-      utmSource,
+      utmSource, timeZone,
     });
     res.status(200).json({ checkout_url: session.url, session_id: session.id });
   } catch (err) {

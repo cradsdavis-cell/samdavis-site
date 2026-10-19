@@ -53,7 +53,7 @@ function nextSessionNumber(balance) {
 
 // Pure-ish booking core. Returns { ok, status, error?, booking? }. Mutates `user`
 // (decrements the drawn-down engagement) and persists via kv on success.
-async function bookSession({ kv, cal, skus, user, slotIso, now = Date.now() }) {
+async function bookSession({ kv, cal, skus, user, slotIso, timeZone, now = Date.now() }) {
   const balance = computeBalance(user);
   const sku = bookingSkuFor(balance);
   if (!balance.bookable || !sku) return { ok: false, status: 403, error: 'no_sessions_remaining' };
@@ -84,7 +84,7 @@ async function bookSession({ kv, cal, skus, user, slotIso, now = Date.now() }) {
 
   const name = (user.name && String(user.name).trim()) || user.email.split('@')[0];
   const booking = await cal.createBooking({
-    eventTypeId, slotIso, name, email: user.email, stripeSessionId: synthId, sku,
+    eventTypeId, slotIso, name, email: user.email, stripeSessionId: synthId, sku, timeZone,
   });
   if (!booking || !booking.ok) {
     if (booking && booking.status === 409) return { ok: false, status: 409, error: 'slot_unavailable' };
@@ -136,7 +136,7 @@ function renderBookPage({ balance, sku, nextSession }) {
       ? `Your second ${v5Type === 'walkthrough' ? 'walkthrough' : 'guided setup'} session (${v5Length}). Pick a time at least a day after your first one${earliest ? ` (from ${escapeHtml(new Date(earliest).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Australia/Sydney' }))})` : ''}, so the interview between them has room.`
       : `You have <strong>${balance.remaining}</strong> session${balance.remaining === 1 ? '' : 's'} left in your block (${balance.used} of ${balance.total} used).`;
   const nextLine = nextSession
-    ? `<p class="subtitle">Next booked: ${escapeHtml(new Date(nextSession.date).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Australia/Sydney' }))}.</p>`
+    ? `<p class="subtitle">Next booked: ${escapeHtml(new Date(nextSession.date).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Australia/Sydney', timeZoneName: 'short' }))}.</p>`
     : '';
 
   // Inlined picker (no name/email fields — identity comes from the session). Posts the
@@ -156,6 +156,10 @@ function renderBookPage({ balance, sku, nextSession }) {
       var root = document.getElementById('slot-picker');
       function fmtDay(iso){var d=new Date(iso);return d.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});}
       function fmtTime(iso){var d=new Date(iso);return d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});}
+      // Slots arrive in Sydney time; group and label them in the visitor's own zone.
+      function tz(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone||'';}catch(_){return '';}}
+      function dayKey(iso){var d=new Date(iso);function p(n){return (n<10?'0':'')+n;}return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());}
+      function zoneNote(){var z=tz();return '<p class="slot-zone">Times are shown in your time zone'+(z?': '+z.split('/').pop().replace(/_/g,' '):'')+'.</p>';}
       function norm(raw){
         if(Array.isArray(raw))return raw.map(function(s){return typeof s==='string'?{time:s}:s;});
         if(!raw||typeof raw!=='object')return [];
@@ -172,8 +176,8 @@ function renderBookPage({ balance, sku, nextSession }) {
       }
       function render(slots){
         if(!slots.length){root.innerHTML='<div class="slot-error">No availability in the next 3 weeks. Email cradsdavis@gmail.com and Sam will sort a time.</div>';return;}
-        var byDay={};slots.forEach(function(s){var k=s.time.slice(0,10);(byDay[k]=byDay[k]||[]).push(s.time);});
-        var html='';Object.keys(byDay).sort().forEach(function(day){
+        var byDay={};slots.forEach(function(s){var k=dayKey(s.time);(byDay[k]=byDay[k]||[]).push(s.time);});
+        var html=zoneNote();Object.keys(byDay).sort().forEach(function(day){
           html+='<div class="slot-day"><div class="slot-day-label">'+fmtDay(day+'T12:00:00')+'</div><div class="slot-grid">';
           byDay[day].forEach(function(iso){html+='<button class="slot-button" data-iso="'+iso+'" aria-pressed="false">'+fmtTime(iso)+'</button>';});
           html+='</div></div>';
@@ -189,7 +193,7 @@ function renderBookPage({ balance, sku, nextSession }) {
         form.addEventListener('submit',function(e){
           e.preventDefault();if(!iso)return;var er=document.getElementById('er');er.style.display='none';
           var sb=document.getElementById('sb');sb.disabled=true;sb.textContent='Booking…';
-          fetch('/api/account/book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slot_iso:iso})})
+          fetch('/api/account/book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slot_iso:iso,time_zone:tz()})})
             .then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j};});})
             .then(function(res){if(!res.ok)throw new Error(res.j.error==='too_soon'?'that is too close to your first session; pick a slot at least a day later':(res.j.message||res.j.error||'failed'));window.location.href='/account/sessions?booked=1';})
             .catch(function(err){er.textContent='Could not book: '+err.message+'. Pick another time or email cradsdavis@gmail.com.';er.style.display='block';sb.disabled=false;sb.textContent='Book this session →';});
@@ -211,7 +215,7 @@ module.exports = async function handler(req, res) {
 
   if (req.method === 'POST') {
     const body = parseJsonBody(req);
-    const result = await bookSession({ kv, cal: calLib, skus: { calEventTypeIdFor }, user, slotIso: String(body.slot_iso || '') });
+    const result = await bookSession({ kv, cal: calLib, skus: { calEventTypeIdFor }, user, slotIso: String(body.slot_iso || ''), timeZone: body.time_zone });
     return res.status(result.status).json(result.ok ? { booked: true } : { error: result.error, earliest_iso: result.earliest_iso });
   }
 
