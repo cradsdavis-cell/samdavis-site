@@ -33,8 +33,8 @@ const SUMMARY = `# Crads-AI
   hosting provider; nothing is paid to Crads-AI to use it.
 - There is no Crads-AI account, central server or billing in the loop: the
   server, the SSH key and the accounts are yours.
-- Paid help is optional: a walkthrough, a guided setup and ongoing support
-  (see Setup and support below).
+- Paid help is optional: an AI roadmap, a walkthrough, a guided setup and
+  ongoing support (see Setup and support below).
 - Source code: https://github.com/cradsdavis-cell/crads-ai
 - Desktop app (Windows and macOS): ${HOST}/download
 `;

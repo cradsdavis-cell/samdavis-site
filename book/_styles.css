@@ -88,6 +88,11 @@ body {
 .book-card-hero { border: 2px solid var(--accent); box-shadow: 0 4px 12px rgba(143,117,48,0.12); position: relative; }
 .book-card-hero::before { content: '★ Most popular'; position: absolute; top: -10px; left: 16px; background: var(--accent); color: var(--bg-main); font-size: 0.75rem; padding: 2px 10px; border-radius: 4px; letter-spacing: 0.02em; }
 
+/* The roadmap leads /book (21 Oct 2026): a full-width first row */
+.book-card-first { grid-column: 1 / -1; border: 2px solid var(--accent); position: relative; background: var(--bg-main); }
+.book-card-first::before { content: 'Start here'; position: absolute; top: -10px; left: 16px; background: var(--accent); color: var(--bg-main); font-size: 0.75rem; padding: 2px 10px; border-radius: 4px; letter-spacing: 0.02em; }
+.book-card-first .book-cta { align-self: flex-start; }
+
 /* mobile: tighter slot grid */
 @media (max-width: 480px) {
   .slot-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.4rem; }

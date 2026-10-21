@@ -12,14 +12,14 @@
   hosting provider; nothing is paid to Crads-AI to use it.
 - There is no Crads-AI account, central server or billing in the loop: the
   server, the SSH key and the accounts are yours.
-- Paid help is optional: a walkthrough, a guided setup and ongoing support
-  (see Setup and support below).
+- Paid help is optional: an AI roadmap, a walkthrough, a guided setup and
+  ongoing support (see Setup and support below).
 - Source code: https://github.com/cradsdavis-cell/crads-ai
 - Desktop app (Windows and macOS): https://crads-ai.com/download
 
 ## Start here
 
-- [Crads-AI · Free self-hosted Claude assistant for your business](https://crads-ai.com/): Crads-AI is the AI foundation for you and your business: it onboards Claude to your work through one interview, connects the tools you already use, and teaches you to solve real problems with it. Free and open source.
+- [Make Claude know your business](https://crads-ai.com/): Start with an AI roadmap: a 30-minute call on the pain points in your business, a written report on where AI could help and what to start with, then a second call to go through it. A$250 · up to 10 a week.
 - [Docs](https://crads-ai.com/docs): How Crads AI works: getting a mineral, working with it, connecting it, keeping it running, and the legal detail.
 - [Questions, answered straight](https://crads-ai.com/docs/faq): The questions people actually ask before and after getting a mineral, each answered in a few sentences with the deep page beside it.
 - [Self-hosted Claude: what runs where](https://crads-ai.com/docs/self-hosted-claude): You cannot run Claude itself on a machine you own. You can own everything around it. What runs on your mineral, what goes to Anthropic, and the honest alternative.
@@ -91,12 +91,12 @@
 
 ## Setup and support
 
-- [Book](https://crads-ai.com/book): Book a free discovery call, a walkthrough, a guided setup, or an AI problem-solving roadmap with Sam.
+- [Book](https://crads-ai.com/book): Book an AI roadmap with Sam (A$250 · up to 10 a week), a free discovery call, a walkthrough or a guided setup.
 - [Discovery Call, Sam Davis](https://crads-ai.com/book/discovery): Book a free 30-minute Discovery call with Sam Davis, scope whether an AI executive assistant build fits your shape.
 - [Guided setup](https://crads-ai.com/book/guided-setup): Guided setup with Sam: an hour on how to use Claude Code and the app, the interview as homework, then two hours wiring it into your email, calendar and Slack or WhatsApp. Two sessions at least a day apart. A$700.
-- [AI problem-solving roadmap](https://crads-ai.com/book/roadmap): AI problem-solving roadmap with Sam: a 30-minute call about one problem you think AI could fix, then a written report with what is causing it, two or three ways to solve it with rough costs, and a recommendation, then a second 30-minute call to go through it. A$250.
+- [AI roadmap](https://crads-ai.com/book/roadmap): AI roadmap with Sam: a 30-minute call on all the pain points in your business, a written report on where AI could help and what to start with, then a second 30-minute call to go through it together. A$250 · up to 10 a week.
 - [Walkthrough](https://crads-ai.com/book/walkthrough): Walkthrough with Sam: an hour on how to use Claude Code and the Crads-AI app, the interview as homework, then 30 minutes on what it learned. Two sessions at least a day apart. A$350.
-- [Setup and support](https://crads-ai.com/offer): Get it all out of your head: a walkthrough (1 hour + 30 min, A$350), a guided setup (1 hour + 2 hours, A$700), then A$233 an hour on request. Got one specific problem? An AI problem-solving roadmap is A$250. Free discovery call first.
+- [Setup and support](https://crads-ai.com/offer): Start with an AI roadmap: two 30-minute calls and a written report on where AI could help in your business (A$250 · up to 10 a week). Then a walkthrough (A$350), a guided setup (A$700), and A$233 an hour on request. Free discovery call if you are not sure.
 
 ## About
 
