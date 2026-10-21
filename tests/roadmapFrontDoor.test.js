@@ -24,7 +24,7 @@ test('/book/roadmap describes the roadmap as it runs, and stays paid with a code
   assert.match(html, /<h1>AI roadmap<\/h1>/);
   assert.match(html, /On a 30-min call we go through all the pain points in your business and get properly into the weeds\. I write up a report on where AI could help and what I'd start with, then we go through it together on a second call\./);
   assert.match(html, /A\$250/);
-  assert.match(html, /Up to 10 a week\./);
+  assert.match(html, /A\$250 · up to 10 a week/);
   assert.ok(!/one specific problem|two or three ways/i.test(html), 'the one-problem framing is gone');
   assert.match(html, /window\.SKU_SLUG='roadmap';window\.IS_PAID=true;/, 'still goes through Stripe checkout');
   assert.match(read('book/_slot-picker.js'), /Discount code \(optional\)/, 'the code field is still on paid booking forms');
