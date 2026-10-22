@@ -136,9 +136,9 @@ function withCoupon(value, fn) {
 
 test('buyerDiscountFor: A$100 off a guided setup, thanking the partner by first name', () => {
   withCoupon('referral-guided-setup-100', () => {
-    assert.deepStrictEqual(R.buyerDiscountFor({ slug: 'nim', at: 'x' }, 'guided-setup'), { coupon: 'referral-guided-setup-100', aud: 100, name: 'Nim' });
+    assert.deepStrictEqual(R.buyerDiscountFor({ slug: 'nim', at: 'x' }, 'guided-setup'), { coupon: 'referral-guided-setup-100', aud: 100, slug: 'nim', name: 'Nim' });
     // A surname slug has no first name to show: the page says "referral discount".
-    assert.deepStrictEqual(R.buyerDiscountFor({ slug: 'elderfield', at: 'x' }, 'guided-setup'), { coupon: 'referral-guided-setup-100', aud: 100, name: null });
+    assert.deepStrictEqual(R.buyerDiscountFor({ slug: 'elderfield', at: 'x' }, 'guided-setup'), { coupon: 'referral-guided-setup-100', aud: 100, slug: 'elderfield', name: null });
   });
 });
 
