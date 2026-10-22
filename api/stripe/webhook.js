@@ -82,7 +82,7 @@ async function safeRecordReferral({ session, sku, customerEmail, name, slotIso }
     const attr = await kv.getRefAttribution(customerEmail);
     const nowIso = new Date().toISOString();
     const plan = planReferral({
-      sku, meta: { ref: meta.ref, ref_at: meta.ref_at }, text, attr,
+      sku, meta: { ref: meta.ref, ref_at: meta.ref_at, ref_discount_aud: meta.ref_discount_aud }, text, attr,
       sessionId: session.id, email: customerEmail, name, slotIso, nowIso,
     });
     if (plan.attribution) {
@@ -94,9 +94,10 @@ async function safeRecordReferral({ session, sku, customerEmail, name, slotIso }
       const added = await kv.addReferralIfAbsent(plan.record.id, plan.record);
       if (added) {
         const who = plan.record.referrer || `"${plan.record.referrer_text}" (needs review)`;
+        const off = plan.record.buyer_discount_aud ? ` The buyer got A$${plan.record.buyer_discount_aud} off at checkout.` : '';
         await safeAlert(
           `referral recorded: ${who} sent ${customerEmail}`,
-          `Guided setup bought by ${customerEmail} (${name}), session ${session.id}. Referrer: ${who}. Status ${plan.record.status}; A$${plan.record.amount_aud} becomes owed after session 1 (${slotIso}). It shows on the cockpit Referrals card.`,
+          `Guided setup bought by ${customerEmail} (${name}), session ${session.id}. Referrer: ${who}. Status ${plan.record.status}; A$${plan.record.amount_aud} becomes owed after session 1 (${slotIso}).${off} It shows on the cockpit Referrals card.`,
         );
       }
     }

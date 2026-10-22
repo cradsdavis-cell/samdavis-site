@@ -40,6 +40,39 @@
   }
   loadInvoice(4);
 
+  // "Who else could do this with you?" (2026-10-21): after a guided setup
+  // only, once the booking is confirmed. The answer goes to Sam by email.
+  const whoElse = document.getElementById('who-else');
+  function showWhoElse() {
+    if (params.get('sku') !== 'guided-setup' || !whoElse) return;
+    whoElse.hidden = false;
+    const form = document.getElementById('who-else-form');
+    const errBox = document.getElementById('we-error');
+    const btn = document.getElementById('we-submit');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errBox.hidden = true;
+      btn.disabled = true; btn.textContent = 'Sending…';
+      const fd = new FormData(form);
+      try {
+        const res = await fetch('/api/who-else', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: sessionId, name: fd.get('name'), email: fd.get('email') }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
+        form.hidden = true;
+        document.getElementById('we-done').hidden = false;
+      } catch (err) {
+        errBox.textContent = err.message === 'invalid_email'
+          ? "That email doesn't look right. Check it, or leave it blank."
+          : 'That didn\'t send. Email their name to cradsdavis@gmail.com instead.';
+        errBox.hidden = false;
+        btn.disabled = false; btn.textContent = 'Send to Sam';
+      }
+    });
+  }
+
   let attempts = 0;
   let consecutiveErrors = 0;
   const maxAttempts = 15; // 15 × 2s = 30s
@@ -59,6 +92,7 @@
         header.classList.remove('polling');
         subhead.textContent = '';
         confirmation.style.display = 'block';
+        showWhoElse();
         return;
       }
     } catch (err) {
