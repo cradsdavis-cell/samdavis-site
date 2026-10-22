@@ -26,6 +26,9 @@ require.cache[require.resolve('../lib/stripe')] = {
       if (args.promotionCodeId === 'promo_good' && args.sku === 'walkthrough') {
         const e = new Error('This promotion code cannot be applied'); e.type = 'StripeInvalidRequestError'; throw e;
       }
+      if (args.couponId === 'gone-coupon') {
+        const e = new Error('No such coupon'); e.type = 'StripeInvalidRequestError'; throw e;
+      }
       STRIPE_CALLS.push(args);
       return { id: 'cs_test_123', url: 'https://stripe.test/cs_test_123', _args: args };
     },
@@ -41,6 +44,10 @@ require.cache[require.resolve('../lib/cal')] = {
     },
     findBookingByStripeSession: async () => ({ ok: true, status: 200, body: { data: [] } }),
   },
+};
+const ALERTS = [];
+require.cache[require.resolve('../lib/email')] = {
+  exports: { sendSamAlert: async (a) => { ALERTS.push(a); } },
 };
 const handler = require('../api/checkout');
 
@@ -428,4 +435,144 @@ test('time zone: a missing or junk zone books in Sydney time', async () => {
   resetCalCalls();
   await handler(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, name: 'Jo', email: 'jo2@example.com', time_zone: '"><img>' }), mockRes());
   assert.strictEqual(CAL_CALLS[0].timeZone, 'Australia/Sydney');
+});
+
+// ---- two-sided referrals (2026-10-21) ----------------------------------------
+// A live referral takes A$100 off a guided setup through the coupon named by
+// STRIPE_REFERRAL_COUPON. One discount per session: a typed code replaces it.
+
+function gsReq(extra = {}, cookie) {
+  const req = mockReq({ sku: 'guided-setup', slot_iso: FUTURE_SLOT, email: 'b@x.com', name: 'B', agreed_terms: true, ...extra });
+  if (cookie) req.headers = { cookie };
+  return req;
+}
+// Without the cookie, the referral remembered against the buyer's email by an
+// earlier roadmap booking (ref_attr) gives the same A$100 off.
+function stubAttr(map, { fail = false } = {}) {
+  require.cache[require.resolve('../lib/kv')] = {
+    exports: {
+      defaultKv: () => ({
+        getRefAttribution: async (e) => { if (fail) throw new Error('redis down'); return map[e] || null; },
+      }),
+    },
+  };
+}
+
+const liveRef = () => `crads_ref=nim.${Math.floor((Date.now() - 86400000) / 1000)}`;
+
+test('referral discount: a live cookie on a guided setup applies the coupon', async () => {
+  process.env.STRIPE_REFERRAL_COUPON = 'referral-guided-setup-100';
+  try {
+    resetStripeCalls();
+    const res = mockRes();
+    await handler(gsReq({}, liveRef()), res);
+    assert.strictEqual(res.statusCode, 200);
+    assert.strictEqual(STRIPE_CALLS[0].couponId, 'referral-guided-setup-100');
+    assert.strictEqual(STRIPE_CALLS[0].refDiscountAud, 100);
+    assert.strictEqual(STRIPE_CALLS[0].ref, 'nim');
+    assert.strictEqual(STRIPE_CALLS[0].promotionCodeId, null);
+  } finally { delete process.env.STRIPE_REFERRAL_COUPON; }
+});
+
+test('referral discount: none without a cookie, on another SKU, or while the coupon env is unset', async () => {
+  process.env.STRIPE_REFERRAL_COUPON = 'referral-guided-setup-100';
+  stubAttr({});
+  try {
+    resetStripeCalls();
+    await handler(gsReq(), mockRes());
+    const roadmap = mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'b@x.com', name: 'B', agreed_terms: true });
+    roadmap.headers = { cookie: liveRef() };
+    await handler(roadmap, mockRes());
+  } finally { delete process.env.STRIPE_REFERRAL_COUPON; }
+  await handler(gsReq({}, liveRef()), mockRes());
+  assert.strictEqual(STRIPE_CALLS.length, 3);
+  for (const call of STRIPE_CALLS) assert.strictEqual(call.couponId, null);
+  assert.strictEqual(STRIPE_CALLS[2].ref, 'nim', 'the referrer is still credited while the discount is off');
+});
+
+test('referral discount: a typed code replaces it (never stacked); the referrer is still credited', async () => {
+  process.env.STRIPE_REFERRAL_COUPON = 'referral-guided-setup-100';
+  try {
+    resetStripeCalls();
+    const res = mockRes();
+    await handler(gsReq({ code: 'GOODCODE' }, liveRef()), res);
+    assert.strictEqual(res.statusCode, 200);
+    assert.strictEqual(STRIPE_CALLS[0].promotionCodeId, 'promo_good');
+    assert.strictEqual(STRIPE_CALLS[0].couponId, null);
+    assert.strictEqual(STRIPE_CALLS[0].ref, 'nim');
+  } finally { delete process.env.STRIPE_REFERRAL_COUPON; }
+});
+
+test('referral discount: a coupon Stripe refuses books at full price and alerts Sam', async () => {
+  process.env.STRIPE_REFERRAL_COUPON = 'gone-coupon';
+  try {
+    resetStripeCalls();
+    ALERTS.length = 0;
+    const res = mockRes();
+    await handler(gsReq({}, liveRef()), res);
+    assert.strictEqual(res.statusCode, 200);
+    assert.strictEqual(STRIPE_CALLS.length, 1);
+    assert.strictEqual(STRIPE_CALLS[0].couponId, null);
+    assert.strictEqual(STRIPE_CALLS[0].ref, 'nim');
+    assert.strictEqual(ALERTS.length, 1);
+    assert.match(ALERTS[0].subject, /referral coupon REFUSED/);
+    assert.match(ALERTS[0].body, /refund A\$100/);
+  } finally { delete process.env.STRIPE_REFERRAL_COUPON; }
+});
+
+test('referral discount: no cookie, but an earlier roadmap referral by email gets the A$100 off', async () => {
+  process.env.STRIPE_REFERRAL_COUPON = 'referral-guided-setup-100';
+  stubAttr({ 'b@x.com': { slug: 'nim', at: '2026-10-01T00:00:00.000Z', sku: 'roadmap' } });
+  try {
+    resetStripeCalls();
+    const res = mockRes();
+    await handler(gsReq(), res);
+    assert.strictEqual(res.statusCode, 200);
+    assert.strictEqual(STRIPE_CALLS[0].couponId, 'referral-guided-setup-100');
+    assert.strictEqual(STRIPE_CALLS[0].refDiscountAud, 100);
+    assert.strictEqual(STRIPE_CALLS[0].ref, null, 'metadata ref stays the cookie; the webhook reads ref_attr itself');
+  } finally { delete process.env.STRIPE_REFERRAL_COUPON; }
+});
+
+test('referral discount by email: a text-only answer, another email, a typed code or the roadmap get nothing', async () => {
+  process.env.STRIPE_REFERRAL_COUPON = 'referral-guided-setup-100';
+  stubAttr({
+    'b@x.com': { slug: 'nim', at: '2026-10-01T00:00:00.000Z' },
+    'text@x.com': { slug: null, text: 'a friend' },
+  });
+  try {
+    resetStripeCalls();
+    await handler(gsReq({ email: 'text@x.com' }), mockRes());
+    await handler(gsReq({ email: 'other@x.com' }), mockRes());
+    await handler(gsReq({ code: 'GOODCODE' }), mockRes());
+    await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'b@x.com', name: 'B', agreed_terms: true }), mockRes());
+    assert.strictEqual(STRIPE_CALLS.length, 4);
+    for (const call of STRIPE_CALLS) assert.strictEqual(call.couponId, null);
+    assert.strictEqual(STRIPE_CALLS[2].promotionCodeId, 'promo_good');
+  } finally { delete process.env.STRIPE_REFERRAL_COUPON; }
+});
+
+test('referral discount by email: a KV failure books at full price, never a failed checkout', async () => {
+  process.env.STRIPE_REFERRAL_COUPON = 'referral-guided-setup-100';
+  stubAttr({}, { fail: true });
+  try {
+    resetStripeCalls();
+    const res = mockRes();
+    await handler(gsReq(), res);
+    assert.strictEqual(res.statusCode, 200);
+    assert.strictEqual(STRIPE_CALLS[0].couponId, null);
+  } finally { delete process.env.STRIPE_REFERRAL_COUPON; }
+});
+
+test('referral discount by email: a refused coupon alert names the partner from the email path', async () => {
+  process.env.STRIPE_REFERRAL_COUPON = 'gone-coupon';
+  stubAttr({ 'b@x.com': { slug: 'nim', at: '2026-10-01T00:00:00.000Z' } });
+  try {
+    resetStripeCalls();
+    ALERTS.length = 0;
+    const res = mockRes();
+    await handler(gsReq(), res);
+    assert.strictEqual(res.statusCode, 200);
+    assert.match(ALERTS[0].body, /referred by nim/);
+  } finally { delete process.env.STRIPE_REFERRAL_COUPON; }
 });

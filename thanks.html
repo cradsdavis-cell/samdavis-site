@@ -53,6 +53,17 @@
         <p>Sam</p>
       </div>
     </div>
+    <div id="who-else" class="book-policy" hidden>
+      <p><strong>Who else could do this with you?</strong></p>
+      <p>If someone you know could use this as much as you, tell me who and I'll email you both to introduce you. Optional.</p>
+      <form id="who-else-form" class="who-else-form">
+        <div class="field"><label for="we-name">Their name</label><input id="we-name" type="text" name="name" autocomplete="off" maxlength="80" required></div>
+        <div class="field"><label for="we-email">Their email (optional)</label><input id="we-email" type="email" name="email" autocomplete="off" maxlength="254"></div>
+        <button class="book-cta" type="submit" id="we-submit">Send to Sam</button>
+        <p id="we-error" class="slot-error" hidden></p>
+      </form>
+      <p id="we-done" hidden>Thanks. I'll be in touch with you both.</p>
+    </div>
     <div id="invoice" class="book-policy" hidden>
       <p><strong>Your invoice and receipt</strong></p>
       <p><a id="invoice-link" href="#" target="_blank" rel="noopener">View or download them on Stripe</a><span id="invoice-number"></span>. Keep this link for your records.</p>

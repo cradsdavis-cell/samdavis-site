@@ -10,8 +10,8 @@ const cookieFor = (slug, ms) => `${R.COOKIE_NAME}=${R.formatCookieValue(slug, ms
 // ---- lib/referrals.js -------------------------------------------------------
 
 test('partnerFor: nim is a live partner; unknown, malformed and empty slugs are not', () => {
-  assert.deepStrictEqual(R.partnerFor('nim'), { slug: 'nim', active: true });
-  assert.deepStrictEqual(R.partnerFor(' NIM '), { slug: 'nim', active: true });
+  assert.deepStrictEqual(R.partnerFor('nim'), { slug: 'nim', name: 'Nim', active: true });
+  assert.deepStrictEqual(R.partnerFor(' NIM '), { slug: 'nim', name: 'Nim', active: true });
   assert.strictEqual(R.partnerFor('nobody'), null);
   assert.strictEqual(R.partnerFor('../etc'), null);
   assert.strictEqual(R.partnerFor(''), null);
@@ -124,6 +124,86 @@ test('planReferral: no referral anywhere writes nothing', () => {
   assert.deepStrictEqual(R.planReferral({ ...base, sku: 'roadmap' }), { attribution: null, record: null });
 });
 
+// ---- the buyer's side (2026-10-21) --------------------------------------------
+
+function withCoupon(value, fn) {
+  const saved = process.env.STRIPE_REFERRAL_COUPON;
+  if (value === undefined) delete process.env.STRIPE_REFERRAL_COUPON; else process.env.STRIPE_REFERRAL_COUPON = value;
+  try { return fn(); } finally {
+    if (saved === undefined) delete process.env.STRIPE_REFERRAL_COUPON; else process.env.STRIPE_REFERRAL_COUPON = saved;
+  }
+}
+
+test('buyerDiscountFor: A$100 off a guided setup, thanking the partner by first name', () => {
+  withCoupon('referral-guided-setup-100', () => {
+    assert.deepStrictEqual(R.buyerDiscountFor({ slug: 'nim', at: 'x' }, 'guided-setup'), { coupon: 'referral-guided-setup-100', aud: 100, slug: 'nim', name: 'Nim' });
+    // A surname slug has no first name to show: the page says "referral discount".
+    assert.deepStrictEqual(R.buyerDiscountFor({ slug: 'elderfield', at: 'x' }, 'guided-setup'), { coupon: 'referral-guided-setup-100', aud: 100, slug: 'elderfield', name: null });
+  });
+});
+
+test('buyerDiscountFor: nothing off the roadmap or walkthrough, nothing without a referral', () => {
+  withCoupon('referral-guided-setup-100', () => {
+    assert.strictEqual(R.buyerDiscountFor({ slug: 'nim', at: 'x' }, 'roadmap'), null);
+    assert.strictEqual(R.buyerDiscountFor({ slug: 'nim', at: 'x' }, 'walkthrough'), null);
+    assert.strictEqual(R.buyerDiscountFor(null, 'guided-setup'), null);
+    assert.strictEqual(R.buyerDiscountFor({ slug: 'nobody', at: 'x' }, 'guided-setup'), null);
+  });
+});
+
+test('buyerDiscountFor: switched off until STRIPE_REFERRAL_COUPON is set (and junk does not count)', () => {
+  withCoupon(undefined, () => assert.strictEqual(R.buyerDiscountFor({ slug: 'nim', at: 'x' }, 'guided-setup'), null));
+  withCoupon('', () => assert.strictEqual(R.buyerDiscountFor({ slug: 'nim', at: 'x' }, 'guided-setup'), null));
+  withCoupon('bad coupon!', () => assert.strictEqual(R.buyerDiscountFor({ slug: 'nim', at: 'x' }, 'guided-setup'), null));
+});
+
+test('planReferral: the record notes what the buyer got off; the fee stays A$100', () => {
+  const p = R.planReferral({ ...base, sku: 'guided-setup', meta: { ref: 'nim', ref_at: base.nowIso, ref_discount_aud: '100' } });
+  assert.strictEqual(p.record.buyer_discount_aud, 100);
+  assert.strictEqual(p.record.amount_aud, 100);
+  const q = R.planReferral({ ...base, sku: 'guided-setup', meta: { ref: 'nim', ref_at: base.nowIso } });
+  assert.strictEqual(q.record.buyer_discount_aud, 0);
+});
+
+// ---- api/referral.js: what the booking page shows -------------------------------
+
+function jsonRes() {
+  const res = { statusCode: 200, headers: {}, body: null };
+  res.status = (c) => { res.statusCode = c; return res; };
+  res.json = (b) => { res.body = b; return res; };
+  res.setHeader = (k, v) => { res.headers[k.toLowerCase()] = v; };
+  res.end = () => res;
+  return res;
+}
+
+test('/api/referral: a live cookie on the guided setup page gets the discount, the name and the price', () => {
+  const api = require('../api/referral');
+  withCoupon('referral-guided-setup-100', () => {
+    const res = jsonRes();
+    api({ method: 'GET', query: { sku: 'guided-setup' }, headers: { cookie: cookieFor('nim', Date.now() - 86400000) } }, res);
+    assert.strictEqual(res.statusCode, 200);
+    assert.deepStrictEqual(res.body, { discount: { aud: 100, name: 'Nim', price_aud: 700 } });
+    assert.strictEqual(res.headers['cache-control'], 'no-store');
+  });
+});
+
+test('/api/referral: no cookie, another SKU, an unknown SKU or the scheme switched off means no discount', () => {
+  const api = require('../api/referral');
+  const live = { cookie: cookieFor('nim', Date.now() - 86400000) };
+  withCoupon('referral-guided-setup-100', () => {
+    for (const [query, headers] of [[{ sku: 'guided-setup' }, {}], [{ sku: 'roadmap' }, live], [{ sku: 'nope' }, live], [{}, live]]) {
+      const res = jsonRes();
+      api({ method: 'GET', query, headers }, res);
+      assert.deepStrictEqual(res.body, { discount: null });
+    }
+  });
+  withCoupon(undefined, () => {
+    const res = jsonRes();
+    api({ method: 'GET', query: { sku: 'guided-setup' }, headers: live }, res);
+    assert.deepStrictEqual(res.body, { discount: null });
+  });
+});
+
 // ---- lib/kv.js referral families ----------------------------------------------
 
 function memClient() {
@@ -139,6 +219,16 @@ function memClient() {
     _ttl: ttl,
   };
 }
+
+test('kv: countWhoElse counts per checkout session and expires after 30 days', async () => {
+  const { makeKv } = require('../lib/kv');
+  const counts = new Map();
+  const c = { ...memClient(), incr: async (k) => { counts.set(k, (counts.get(k) || 0) + 1); return counts.get(k); } };
+  const kv = makeKv(c);
+  assert.strictEqual(await kv.countWhoElse('cs_1'), 1);
+  assert.strictEqual(await kv.countWhoElse('cs_1'), 2);
+  assert.strictEqual(c._ttl.get('who_else:cs_1'), 30 * 86400);
+});
 
 test('kv: a referral record is first-wins and listed', async () => {
   const { makeKv } = require('../lib/kv');
@@ -224,6 +314,20 @@ test('createCheckoutSession carries the ref and asks "Who sent you?" (optional)'
 
     await createCheckoutSession({ sku: 'roadmap', priceId: 'price_y', name: 'B', email: 'b@x.com', calEventTypeId: 1, baseUrl: 'https://crads-ai.com' });
     assert.strictEqual(params.metadata.ref, '');
+    assert.strictEqual(params.metadata.ref_discount_aud, '');
+    assert.strictEqual(params.allow_promotion_codes, true);
+    assert.strictEqual(params.discounts, undefined);
+    assert.strictEqual(params.success_url, 'https://crads-ai.com/thanks?session_id={CHECKOUT_SESSION_ID}&sku=roadmap');
+
+    // The buyer's A$100 off (2026-10-21): the coupon is the session's one discount.
+    await createCheckoutSession({ sku: 'guided-setup', priceId: 'price_x', name: 'B', email: 'b@x.com', calEventTypeId: 1, baseUrl: 'https://crads-ai.com', ref: 'nim', couponId: 'referral-guided-setup-100', refDiscountAud: 100 });
+    assert.deepStrictEqual(params.discounts, [{ coupon: 'referral-guided-setup-100' }]);
+    assert.strictEqual(params.allow_promotion_codes, undefined, 'Stripe refuses discounts with allow_promotion_codes');
+    assert.strictEqual(params.metadata.ref_discount_aud, '100');
+
+    // A typed code wins: never both.
+    await createCheckoutSession({ sku: 'guided-setup', priceId: 'price_x', name: 'B', email: 'b@x.com', calEventTypeId: 1, baseUrl: 'https://crads-ai.com', promotionCodeId: 'promo_1', couponId: 'referral-guided-setup-100', refDiscountAud: 100 });
+    assert.deepStrictEqual(params.discounts, [{ promotion_code: 'promo_1' }]);
   } finally {
     if (saved) require.cache[stripePath] = saved; else delete require.cache[stripePath];
     delete require.cache[require.resolve('../lib/stripe')];
@@ -240,6 +344,8 @@ test('/referrals is unlisted, out of the sitemap, and says what Sam ruled', asyn
   assert.ok(!fs.readFileSync(path.join(__dirname, '..', 'sitemap.xml'), 'utf8').includes('/referrals'));
   const text = html.replace(/<[^>]+>/g, ' ');
   assert.match(text, /A\$100/);
+  assert.match(text, /A\$100 off/, 'two-sided since 21 Oct');
+  assert.ok(!/no discount code to pass on|pays the normal price/.test(text), 'the one-sided wording is gone');
   assert.match(text, /90 days/);
   assert.match(text, /first session/);
   assert.match(text, /once a month, by bank transfer/);

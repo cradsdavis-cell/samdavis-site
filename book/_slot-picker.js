@@ -38,6 +38,31 @@
     return `<p class="slot-zone">Times are shown in your time zone: ${label}.</p>`;
   }
 
+  // A referral discount (2026-10-21): the crads_ref cookie is HttpOnly, so
+  // /api/referral says whether it takes anything off this SKU. Never fails
+  // the page: no answer means no discount shown, and checkout decides anyway.
+  let refDiscount = null;
+  const refReady = !isPaid ? Promise.resolve() : fetch(`/api/referral?sku=${encodeURIComponent(sku)}`)
+    .then(r => (r.ok ? r.json() : {}))
+    .then(j => { refDiscount = (j && j.discount) || null; showRefBanner(); })
+    .catch(() => {});
+
+  function refLine() {
+    const d = refDiscount;
+    const who = d.name ? `A$${d.aud} off, thanks to ${d.name}` : `Referral discount: A$${d.aud} off`;
+    const price = Number.isInteger(d.price_aud)
+      ? `You pay A$${d.price_aud - d.aud} instead of A$${d.price_aud}, applied at checkout.`
+      : 'Applied at checkout.';
+    return `${who}. ${price}`;
+  }
+  function showRefBanner() {
+    if (!refDiscount) return;
+    const p = document.createElement('p');
+    p.className = 'ref-discount';
+    p.textContent = refLine();
+    root.parentNode.insertBefore(p, root);
+  }
+
   async function loadSlots() {
     root.innerHTML = '<div class="slot-loading">Loading available slots…</div>';
     const now = new Date();
@@ -48,6 +73,7 @@
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
+      await refReady;
       renderSlots(data.slots);
     } catch (err) {
       root.innerHTML = `<div class="slot-error">Couldn't load slots: ${err.message}. Refresh or email cradsdavis@gmail.com.</div>`;
@@ -132,7 +158,7 @@
         <div class="field"><label for="bk-name">Your name</label><input id="bk-name" type="text" name="name" autocomplete="name" required></div>
         <div class="field"><label for="bk-email">Email</label><input id="bk-email" type="email" name="email" autocomplete="email" required></div>
         <input type="hidden" name="slot_iso" id="slot-iso">
-        ${isPaid ? `<div class="field"><label for="bk-code">Discount code (optional)</label><input id="bk-code" type="text" name="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" value="${prefillCode()}"></div>` : ''}
+        ${isPaid ? `<div class="field"><label for="bk-code">Discount code (optional)</label><input id="bk-code" type="text" name="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" value="${prefillCode()}">${refDiscount ? `<p class="field-note">Codes don't combine: a code here replaces your A$${refDiscount.aud} referral discount.</p>` : ''}</div>` : ''}
         ${sku === 'discovery' ? `<div class="field field-check"><label for="bk-news"><input id="bk-news" type="checkbox" name="newsletter" value="yes"><span>Send me new essays from <a href="/writing" target="_blank" rel="noopener">crads-ai.com/writing</a>. Unsubscribe any time.</span></label></div>` : ''}
         ${isPaid ? `<div class="field field-check"><label for="bk-terms"><input id="bk-terms" type="checkbox" name="agreed_terms" value="yes" required><span>I agree to the <a href="/docs/terms" target="_blank" rel="noopener">terms of service</a>.</span></label></div>` : ''}
         <button class="book-cta" type="submit" id="submit-btn">
