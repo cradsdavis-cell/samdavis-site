@@ -6,7 +6,7 @@
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How it works: a self-hosted Claude assistant · Crads-AI</title>
-<meta name="description" content="How Crads-AI lays your AI foundation: four layers (Context, Connections, Capabilities, Cadence) that onboard Claude to you, and CRIT, the method for building on them.">
+<meta name="description" content="How it works with Sam: an AI roadmap finds where AI would help in your business, a setup builds a Claude assistant on a server you own, and then it is yours to keep.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 <style>
@@ -199,17 +199,6 @@
     border-color: var(--accent);
   }
 
-  .fc-layers-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 7px var(--space-3);
-    margin: var(--space-2) 0;
-    font-size: 15px;
-    color: var(--ink-deep);
-  }
-  .fc-layers-grid .num { font-family: var(--serif); color: var(--accent); margin-right: 0.5em; }
-  .fc-layers-grid .gloss { color: var(--ink-faint); }
-
   /* SVG classes: one visual grammar for all four stages */
   .fc-ring  { fill: none; stroke: var(--good); stroke-width: 2; }
   .fc-spoke { stroke: var(--good); stroke-width: 2; }
@@ -263,7 +252,6 @@
     .how-hero img { margin: 0 auto; }
     .fourc-row { grid-template-columns: 1fr; gap: var(--space-3); }
     .fourc-row .fc-img { order: 2; }
-    .fc-layers-grid { grid-template-columns: 1fr; }
   }
   .lives-list { list-style: none; padding: 0; margin: var(--space-3) 0 0; display: grid; gap: 12px; }
   .lives-list li { padding-left: 22px; position: relative; line-height: 1.55; }
@@ -275,13 +263,13 @@
 <meta property="og:site_name" content="Crads-AI">
 <meta property="og:url" content="https://crads-ai.com/how-it-works">
 <meta property="og:title" content="How it works: a self-hosted Claude assistant · Crads-AI">
-<meta property="og:description" content="How Crads-AI lays your AI foundation: four layers (Context, Connections, Capabilities, Cadence) that onboard Claude to you, and CRIT, the method for building on them.">
+<meta property="og:description" content="How it works with Sam: an AI roadmap finds where AI would help in your business, a setup builds a Claude assistant on a server you own, and then it is yours to keep.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="How it works: a self-hosted Claude assistant · Crads-AI">
-<meta name="twitter:description" content="How Crads-AI lays your AI foundation: four layers (Context, Connections, Capabilities, Cadence) that onboard Claude to you, and CRIT, the method for building on them.">
+<meta name="twitter:description" content="How it works with Sam: an AI roadmap finds where AI would help in your business, a setup builds a Claude assistant on a server you own, and then it is yours to keep.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 </head>
 <body>
@@ -295,33 +283,66 @@
     <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
   </button>
   <div class="nav-links" id="site-nav-links">
-    <a href="/docs" class="nav-simple">Docs</a>
     <a href="/how-it-works" class="nav-simple current">How it works</a>
-    <a href="/offer" class="nav-simple">Setup and support</a>
-    <a href="/about" class="nav-simple">About</a>
+    <a href="/guides" class="nav-simple">Guides</a>
     <a href="/writing" class="nav-simple">Writing</a>
-    <a href="/book" class="nav-simple nav-book">Book a call</a>
-    <a href="/download" class="nav-simple nav-cta">Download</a>
+    <a href="/about" class="nav-simple">About</a>
+    <a href="/download" class="nav-simple">The software</a>
+    <a href="/book/roadmap" class="nav-simple nav-cta">Book a roadmap</a>
   </div>
 </nav>
 
 <main>
-  <!-- Hero -->
+  <!-- Hero (second pass, 22 Oct 2026): for a business owner, roadmap -> setup ->
+       what you have after; the software detail sits below. -->
   <section class="how-hero wrap">
     <img src="/lib/img/sam-illustration.png" alt="" class="float-gentle">
     <div>
       <p class="eyebrow">How it works</p>
-      <h1>Your AI foundation, <em>layer by layer.</em></h1>
-      <p class="lead">Claude is brilliant and starts every conversation knowing nothing about you. Crads-AI is the foundation underneath: four layers that onboard Claude to you and your business, built through the interview and daily use, and a method for solving real problems on top of them.</p>
+      <h1>From one call to an assistant <em>that knows your business.</em></h1>
+      <p class="lead">A roadmap finds where AI would help. A setup builds it with you. Then you have an assistant you own, and it keeps learning.</p>
+    </div>
+  </section>
+
+  <!-- The three steps, for a business owner -->
+  <section class="section section-tight wrap how-it-works" id="the-steps">
+    <div class="session-block reveal-on-scroll">
+      <span class="s-tag">1 · The roadmap · two calls and a report · A$250</span>
+      <h3>Find where AI would help.</h3>
+      <p>On a 30-min call we go through all the pain points in your business and get properly into the weeds. I write up a report on where AI could help and what I'd start with, then we go through it together on a second call.</p>
+      <p>Then it's your call: stop there, do it yourself, or set it up with me.</p>
+    </div>
+    <div class="session-block reveal-on-scroll">
+      <span class="s-tag">2 · The setup · two sessions on screen · A$700</span>
+      <h3>Build it with you.</h3>
+      <p>We start from what the roadmap found. Session one, an hour: I build your assistant on a small server in your own account. Then about an hour of homework, an interview so it learns your business and how you write. Session two, two hours: I connect your email and calendar on limits you choose, build your first skills, and switch on a morning brief.</p>
+      <p>Rather drive it yourself? The walkthrough (A$350) teaches you how.</p>
+    </div>
+    <div class="session-block reveal-on-scroll">
+      <span class="s-tag">3 · After · yours to keep</span>
+      <h3>What you have once it is running.</h3>
+      <p>An assistant that knows your clients, your work and how you write. Its first jobs come from your roadmap: follow-ups you approve before they go, a brief each morning, a post drafted each Friday from your actual week. You can talk to it from the Claude app on your phone, and it gets better the more you use it.</p>
+      <p>I'm on Slack for 30 days. After that it's yours and keeps running without me, on your Claude plan plus a server from about €6 a month. The software is free and open source.</p>
+    </div>
+
+    <!-- Where Sam comes in -->
+    <div class="ready-card reveal-on-scroll">
+      <p class="eyebrow">Where to start</p>
+      <h2>Book an AI roadmap.</h2>
+      <p>A$250, up to 10 a week. Not sure yet? <a href="/book/discovery">Book a free 30-minute call</a>. Rather do it yourself? <a href="/download">Download the software</a> and follow the <a href="/docs/first-hour">first hour</a>.</p>
+      <div class="ctas">
+        <a class="cta-primary" href="/book/roadmap">Book an AI roadmap</a>
+        <a class="cta-secondary" href="/offer">What each one includes →</a>
+      </div>
     </div>
   </section>
 
   <!-- The four layers -->
   <section class="section section-tight wrap how-it-works" id="the-four-layers">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll">What it is made of</p>
+      <p class="eyebrow reveal-on-scroll">Under the hood, for the curious</p>
       <h2 class="reveal-on-scroll">A chatbot forgets you. <em>An assistant accumulates you.</em></h2>
-      <p class="fourc-intro reveal-on-scroll" style="margin-top: var(--space-2);">The difference is a folder of plain files it reads every time it wakes up. That folder is what the app builds with you: four layers, each one making the assistant more yours. This page is about how yours gets built; the <a href="/docs">docs</a> walk every part of a finished one.</p>
+      <p class="fourc-intro reveal-on-scroll" style="margin-top: var(--space-2);">The difference is a folder of plain files it reads every time it wakes up, built in four layers. The <a href="/docs">docs</a> walk every part.</p>
     </div>
 
     <!-- C1 · Context -->
@@ -330,17 +351,7 @@
         <p class="cnum">C1</p>
         <h3>Context</h3>
         <p class="fc-gloss">What it knows about you.</p>
-        <p>Plain files, organised in layers. Mine has eight:</p>
-        <div class="fc-layers-grid">
-          <div><span class="num">1</span>North Star <span class="gloss">: why</span></div>
-          <div><span class="num">2</span>Philosophy <span class="gloss">: how you think</span></div>
-          <div><span class="num">3</span>Self <span class="gloss">: who you are</span></div>
-          <div><span class="num">4</span>Network <span class="gloss">: your people</span></div>
-          <div><span class="num">5</span>Past <span class="gloss">: where you've been</span></div>
-          <div><span class="num">6</span>Goals <span class="gloss">: where you're going</span></div>
-          <div><span class="num">7</span>Tasks <span class="gloss">: what's on now</span></div>
-          <div><span class="num">8</span>Workflow <span class="gloss">: how your week runs</span></div>
-        </div>
+        <p>Plain files about you, your clients, your goals and how your week runs.</p>
         <p>Written down once, never explained twice.</p>
       </div>
       <div class="fc-img">
@@ -368,7 +379,7 @@
         <p class="cnum">C2</p>
         <h3>Connections</h3>
         <p class="fc-gloss">What it can reach.</p>
-        <p>Context tells it who you are. Connections let it work where the work already lives:</p>
+        <p>Where your work already lives:</p>
         <div class="fc-chips">
           <span class="chip">Email</span><span class="chip">Calendar</span><span class="chip">Tasks</span>
           <span class="chip">WhatsApp</span><span class="chip">Docs &amp; Drive</span><span class="chip">CRM / books</span>
@@ -416,7 +427,7 @@
         <p class="cnum">C3</p>
         <h3>Capabilities</h3>
         <p class="fc-gloss">Blueprints for your workflows.</p>
-        <p>A capability is a written recipe: the steps you'd give a new hire, saved so it runs the same way every time:</p>
+        <p>The steps you'd give a new hire, written down so it runs the same way every time:</p>
         <div class="fc-chips">
           <span class="chip alt">Morning brief</span><span class="chip alt">Inbox sweep</span>
           <span class="chip alt">Client debrief</span><span class="chip alt">Weekly review</span>
@@ -480,7 +491,6 @@
         <h3>Cadence</h3>
         <p class="fc-gloss">The heartbeat.</p>
         <p>Jobs that run on a schedule without being asked: the morning brief is waiting before you sit down.</p>
-        <p>You've hired an executive assistant. Give it feedback, and let go of the reins a little more each week.</p>
       </div>
       <div class="fc-img">
         <svg viewBox="0 0 640 520" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="The whole system recedes behind a heartbeat pulse radiating from the core, with an ECG trace running underneath.">
@@ -526,7 +536,7 @@
       </div>
     </div>
 
-    <p class="fc-bridge reveal-on-scroll">The app climbs this ladder with you: Context first (the interview), then the doorways, then the blueprints, then the heartbeat.</p>
+    <p class="fc-bridge reveal-on-scroll">The setup climbs this ladder with you: Context first (the interview), then the doorways, then the blueprints, then the heartbeat.</p>
   </section>
 
   <section class="section section-tight wrap how-it-works">
@@ -536,29 +546,11 @@
       <h2>Where it lives</h2>
       <p>Three places, all yours. Nothing sits with Crads-AI, because there is nothing central to sit with.</p>
       <ul class="lives-list">
-        <li><strong>The app, on your laptop.</strong> Windows or Mac. It builds the server, then it is how you open and steer your assistant every day.</li>
-        <li><strong>The mineral, on your server.</strong> A small machine in your own hosting account, built by the app with your own API token, holding only your computer's key. This is where the assistant runs and where its scheduled jobs happen while you sleep.</li>
-        <li><strong>The brain, on your GitHub.</strong> Everything it knows about you, as plain files in a private repository you own, pushed there every night. Lose the server and you lose nothing.</li>
+        <li><strong>The app, on your laptop.</strong> Windows or Mac. It builds the server, then it is how you open and steer your assistant.</li>
+        <li><strong>The assistant, on your server.</strong> A small machine in your own hosting account. This is where it runs, and where its scheduled jobs happen while you sleep.</li>
+        <li><strong>The brain, on your GitHub.</strong> Everything it knows about you, as plain files in a private repository you own, pushed every night. Lose the server and you lose nothing.</li>
         <li><strong>Or on this computer, last on the list.</strong> A folder on your laptop instead of a server. Free, but no schedule, no phone, and it stops when your laptop sleeps. Move it to a server whenever you want the rest; it comes back the same way.</li>
       </ul>
-    </div>
-
-    <!-- After -->
-    <div class="sub-block reveal-on-scroll">
-      <h2>What you have once it is running</h2>
-      <p>The app on your laptop, your assistant (we call it a mineral) on a server you own, and a brain repo on your GitHub that holds everything it knows about you. Your tools connected, a couple of workflows you actually use, and <a href="/docs/the-crit-method">CRIT</a>, the method for solving the next problem yourself. It is not "finished" on day one; roughly a third of it is built, and the rest compounds through daily use over the months that follow. The <a href="/docs/the-three-layers">docs</a> walk each part.</p>
-    </div>
-
-    <!-- Where Sam comes in -->
-    <div class="ready-card reveal-on-scroll">
-      <p class="eyebrow">Where I come in</p>
-      <h2>Free software. A hand laying the foundation, if you want one.</h2>
-      <p>Most people get there with the <a href="/docs/first-hour">first hour</a> in the docs. If you'd rather lay the foundation with someone who has set these up before, a walkthrough is an hour then 30 minutes, and a guided setup is an hour then two hours.</p>
-      <div class="ctas">
-        <a class="cta-primary" href="/download">Download</a>
-        <a class="cta-secondary" href="/offer">Setup and support →</a>
-        <a class="cta-secondary" href="/book/discovery">Book a discovery call</a>
-      </div>
     </div>
 
   </section>

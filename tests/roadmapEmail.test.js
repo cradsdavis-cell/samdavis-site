@@ -10,8 +10,9 @@ const { createsAccount } = require('../lib/skus');
 test('the confirmation names the call time, the prep and the 3-business-day report', () => {
   const t = roadmapConfirmationText({ name: 'Rhi Jones', slotIso: '2026-10-01T00:00:00.000Z' });
   assert.match(t, /^Hi Rhi,/);
-  assert.match(t, /Thanks for booking your AI problem-solving roadmap\. Your call is on Thu 1 Oct, 10:00 am AEST \(the link is in your calendar invite\)\./);
-  assert.match(t, /jot down the problem as it shows up in your week, and who it affects/);
+  assert.match(t, /Thanks for booking your AI roadmap\. Your call is on Thu 1 Oct, 10:00 am AEST \(the link is in your calendar invite\)\./);
+  assert.match(t, /jot down what's slow, what's stuck and what you're carrying in your head\. We'll go through all of it\./);
+  assert.ok(!/the problem as it shows up|who it affects|problem-solving/.test(t), 'no one-problem framing (2026-10-22)');
   assert.match(t, /within 3 business days of the call/);
   assert.match(t, /a second 30-minute call where we go through it together/);
   assert.ok(!/sign in|set up your account|verify-token|http/i.test(t), 'no account or sign-in link');

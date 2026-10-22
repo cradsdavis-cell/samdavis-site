@@ -1,8 +1,8 @@
 // tests/noRetiredCopy.test.js - the v3 coaching ladder is retired (2026-09-09),
 // the v4 Working session too (2026-09-11), and their prices, product names
-// and instalment plan may not appear anywhere
-// the site serves, except inside the one marked "what is no longer offered"
-// block on /offer. Docs pages are generated in the app repo and are gated
+// and instalment plan may not appear anywhere the site serves. (Until
+// 2026-10-21 one marked "what is no longer offered" block on /offer was
+// exempt; it is gone.) Docs pages are generated in the app repo and are gated
 // there; they are skipped here.
 'use strict';
 const test = require('node:test');
@@ -12,7 +12,6 @@ const path = require('path');
 const { ROOT, servedFiles } = require('../scripts/served.js');
 
 const RETIRED = /A\$300\b|A\$1,000|A\$1,100|A\$650|\$300 AUD|\$1,000 AUD|\$650|pay[- ]in[- ]4|plan=pay4|Continuation Retainer|Coaching Block|Group Block|EA Basic Build|4 × 90|Working session|working-session|2 × 60|90 min/;
-const ALLOW_BLOCK = /<!-- retired-offers -->[\s\S]*?<!-- \/retired-offers -->/g;
 
 // Pages and the two JS files that render public copy. lib/*.js server modules
 // (journeyTracker, skus) legitimately name the retired products for clients
@@ -22,21 +21,20 @@ function scanned() {
   return [...pages, 'lib/site.js', 'lib/downloadPage.js'];
 }
 
-test('no retired price or product name is served outside the marked block on /offer', () => {
+test('no retired price or product name is served', () => {
   const bad = [];
   for (const rel of scanned()) {
-    const src = fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(ALLOW_BLOCK, '');
+    const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');
     const m = src.match(RETIRED);
     if (m) bad.push(`${rel}: "${m[0]}"`);
   }
   assert.deepStrictEqual(bad, [], `retired copy:\n${bad.join('\n')}`);
 });
 
-test('the marked retired-offers block exists exactly once, on /offer', () => {
-  const offer = fs.readFileSync(path.join(ROOT, 'offer', 'index.html'), 'utf8');
-  assert.strictEqual((offer.match(ALLOW_BLOCK) || []).length, 1);
+// 2026-10-21: the "What is no longer offered" block left /offer (the roadmap
+// front door). No page may carry a retired-offers block now.
+test('no page carries a retired-offers block', () => {
   for (const rel of scanned()) {
-    if (rel === 'offer/index.html') continue;
     assert.ok(!/<!-- retired-offers -->/.test(fs.readFileSync(path.join(ROOT, rel), 'utf8')), `${rel} carries a retired-offers block`);
   }
 });
@@ -47,7 +45,7 @@ test('the marked retired-offers block exists exactly once, on /offer', () => {
 const V5_PRICES = new Set(['A$250', 'A$350', 'A$700', 'A$233']);
 test('the v5 prices are the only prices on the offer and book pages', () => {
   for (const rel of ['offer/index.html', 'book/index.html', 'index.html']) {
-    const src = fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(ALLOW_BLOCK, '');
+    const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');
     const prices = new Set([...src.matchAll(/A\$[\d,]+/g)].map((m) => m[0]));
     for (const p of prices) assert.ok(V5_PRICES.has(p), `${rel}: unexpected price ${p}`);
     assert.ok(prices.has('A$250') && prices.has('A$700') && prices.has('A$350') && prices.has('A$233'), `${rel}: the roadmap, the two v5 prices and the hourly rate expected`);
