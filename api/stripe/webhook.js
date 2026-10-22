@@ -10,7 +10,7 @@ const { sendRaceLossEmail, sendRoadmapConfirmationEmail, sendSamAlert, getResend
 const { createsAccount } = require('../../lib/skus');
 const { createOrUpdateUser } = require('../../lib/createOrUpdateUser');
 const { defaultKv } = require('../../lib/kv');
-const { planReferral, customFieldText, WINDOW_SECONDS } = require('../../lib/referrals');
+const { planReferral, customFieldText, normCode, WINDOW_SECONDS } = require('../../lib/referrals');
 const { heardFromValue, cleanUtmSource } = require('../../lib/attribution');
 
 // Disable Vercel body parsing — Stripe needs raw bytes for signature verification
@@ -80,9 +80,11 @@ async function safeRecordReferral({ session, sku, customerEmail, name, slotIso }
   try {
     const kv = defaultKv();
     const attr = await kv.getRefAttribution(customerEmail);
+    // A host's code (ref_code:<CODE>) credits the host when no link did.
+    const codeRef = await kv.getRefCode(normCode(meta.promo_code));
     const nowIso = new Date().toISOString();
     const plan = planReferral({
-      sku, meta: { ref: meta.ref, ref_at: meta.ref_at }, text, attr,
+      sku, meta: { ref: meta.ref, ref_at: meta.ref_at, promo_code: meta.promo_code }, text, attr, codeRef,
       sessionId: session.id, email: customerEmail, name, slotIso, nowIso,
     });
     if (plan.attribution) {
