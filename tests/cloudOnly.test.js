@@ -17,6 +17,10 @@
 // Allowed places: the /offer "Where it lives" note (after the server, with its
 // downsides) and the last item of the how-it-works "Where it lives" list. The
 // More options fold now carries only Claude's own cloud.
+//
+// 2026-10-22 (site second pass): /offer is for business owners and says the
+// server only. The computer stays in one place on the site: the last item of
+// the how-it-works "Where it lives" list, in the software detail.
 const { test } = require('node:test');
 const assert = require('node:assert');
 const fs = require('node:fs');
@@ -36,16 +40,13 @@ const FOLD = /<details class="retainer-note more-options reveal-on-scroll">[\s\S
 const WHERE = /<strong>Where it lives\.<\/strong>[\s\S]*?<\/p>/;
 const LIVES_LOCAL = /<li><strong>Or on this computer, last on the list\.<\/strong>[^<]*<\/li>/;
 
-test('offer/index.html: the server first, then the computer, last and with its downsides', () => {
+test('offer/index.html: Where it lives names the server only', () => {
   const body = fs.readFileSync(path.join(ROOT, 'offer/index.html'), 'utf8');
   const where = body.match(WHERE);
   assert.ok(where, 'the Where it lives note');
-  const server = where[0].indexOf('small server in your own hosting account');
-  const local = where[0].indexOf('a folder on your own computer');
-  assert.ok(server > -1 && local > server, 'server named before the computer');
-  assert.match(where[0], /last and cheapest/);
-  assert.match(where[0], /no schedule, no phone, and it stops when your laptop sleeps/);
-  assert.match(where[0], /move it to a server any time, and back/);
+  assert.match(where[0], /small server in your own hosting account/);
+  assert.match(where[0], /from about €6 a month/);
+  assert.doesNotMatch(where[0], /computer|laptop/i, 'no local option on /offer');
 });
 
 test('offer/index.html keeps ONE closed More options fold, now Claude\'s own cloud only', () => {
@@ -71,7 +72,7 @@ test('how-it-works/index.html lists the computer LAST in Where it lives', () => 
 
 for (const rel of PAGES) {
   test(`${rel} carries no local-mode copy`, () => {
-    const body = fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(FOLD, '').replace(WHERE, '').replace(LIVES_LOCAL, '');
+    const body = fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(FOLD, '').replace(LIVES_LOCAL, '');
     const m = body.match(LOCAL);
     assert.ok(!m, `${rel}: found "${m && m[0]}"`);
   });
