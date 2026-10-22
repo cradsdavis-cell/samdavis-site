@@ -43,7 +43,7 @@ const SECTIONS = [
   ['Start here', (u) => ['/', '/how-it-works', '/download', '/docs', '/docs/faq', '/docs/what-a-mineral-is', '/docs/self-hosted-claude', '/docs/what-an-ai-ea-is'].includes(u)],
   ['Docs', (u) => u.startsWith('/docs/')],
   ['Guides', (u) => u === '/guides' || u.startsWith('/guides/')],
-  ['Setup and support', (u) => u === '/offer' || u.startsWith('/book')],
+  ['Setup and support', (u) => u === '/offer' || u === '/membership' || u.startsWith('/book')],
   ['About', (u) => u === '/about'],
   ['Writing', (u) => u.startsWith('/writing') || u.startsWith('/newsletter')],
 ];

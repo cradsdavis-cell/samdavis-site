@@ -221,6 +221,18 @@ test('payment link (membership): 200 no-op, no booking, no alert', async () => {
   assert.deepStrictEqual(calls, []);
 });
 
+test('membership checkout (/membership): 200 no-op, no booking, no alert', async () => {
+  const calls = [];
+  stripeStub = { constructWebhookEvent: () => fakeSessionEvent({ mode: 'subscription', metadata: { kind: 'membership', tier: 'founding' } }) };
+  calStub = { findBookingByStripeSession: async () => { calls.push('find'); }, createBooking: async () => { calls.push('book'); } };
+  emailStub = { sendSamAlert: async () => { calls.push('alert'); } };
+  const res = mockRes();
+  await handler(mockReq('{}'), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(res.body.source, 'membership');
+  assert.deepStrictEqual(calls, []);
+});
+
 // --- roadmap (2026-09-28): no account, one confirmation email instead ---
 function roadmapEvent() {
   return fakeSessionEvent({ metadata: { sku: 'roadmap', slot_iso: '2026-10-01T10:00:00+10:00', name: 'Rhi Jones', cal_event_type_id: '120' } });

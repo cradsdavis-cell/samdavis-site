@@ -96,6 +96,7 @@
 - [Guided setup](https://crads-ai.com/book/guided-setup): Guided setup with Sam: an hour on how to use Claude Code and the app, the interview as homework, then two hours wiring it into your email, calendar and Slack or WhatsApp. Two sessions at least a day apart. A$700.
 - [AI problem-solving roadmap](https://crads-ai.com/book/roadmap): AI problem-solving roadmap with Sam: a 30-minute call about one problem you think AI could fix, then a written report with what is causing it, two or three ways to solve it with rough costs, and a recommendation, then a second 30-minute call to go through it. A$250.
 - [Walkthrough](https://crads-ai.com/book/walkthrough): Walkthrough with Sam: an hour on how to use Claude Code and the Crads-AI app, the interview as homework, then 30 minutes on what it learned. Two sessions at least a day apart. A$350.
+- [Membership](https://crads-ai.com/membership): Crads membership: answers to your Claude questions within a working day, and a weekly hour with other business owners using it. A$99 a month, cancel any time.
 - [Setup and support](https://crads-ai.com/offer): Get it all out of your head: a walkthrough (1 hour + 30 min, A$350), a guided setup (1 hour + 2 hours, A$700), then A$233 an hour on request. Got one specific problem? An AI problem-solving roadmap is A$250. Free discovery call first.
 
 ## About

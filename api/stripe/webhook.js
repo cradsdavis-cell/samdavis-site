@@ -139,6 +139,13 @@ module.exports = async (req, res) => {
     res.status(200).json({ received: true, no_op: true, source: 'payment_link' });
     return;
   }
+  // The same for /membership's own checkout (api/membership.js): a
+  // subscription, no slot. The receipt comes from Stripe and the welcome from
+  // Sam; the cockpit reads the subscription from Stripe.
+  if (session.metadata && session.metadata.kind === 'membership') {
+    res.status(200).json({ received: true, no_op: true, source: 'membership' });
+    return;
+  }
   const { id: stripeSessionId, amount_total, payment_intent: paymentIntentId, metadata = {} } = session;
   const { sku, slot_iso, name, cal_event_type_id } = metadata;
 
