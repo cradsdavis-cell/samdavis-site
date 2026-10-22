@@ -130,6 +130,15 @@ module.exports = async (req, res) => {
   }
 
   const session = event.data.object;
+
+  // Stripe payment links (the A$150/mo membership, 2026-10-22) book nothing:
+  // no slot, no Cal event. The cockpit's slack-renewals job reads the
+  // subscription from Stripe directly. Without this, every membership payment
+  // tripped the missing-metadata alert below.
+  if (session.payment_link) {
+    res.status(200).json({ received: true, no_op: true, source: 'payment_link' });
+    return;
+  }
   const { id: stripeSessionId, amount_total, payment_intent: paymentIntentId, metadata = {} } = session;
   const { sku, slot_iso, name, cal_event_type_id } = metadata;
 
