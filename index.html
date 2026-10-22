@@ -6,7 +6,7 @@
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Make Claude know your business · Crads-AI</title>
-<meta name="description" content="Start with an AI roadmap: a 30-minute call on the pain points in your business, a written report on where AI could help and what to start with, then a second call to go through it. A$250 · up to 10 a week.">
+<meta name="description" content="For small consultancies and practices: Claude set up to know your business, so it drafts your follow-ups from your own inbox, in your own voice, and nothing goes until you say yes. Start with an AI roadmap. A$250 · up to 10 a week.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 <script type="application/ld+json">
@@ -67,6 +67,11 @@
   .doors .callout .small { flex: 1; }
   .doors .door-links { margin: var(--space-2) 0 0; font-family: var(--sans); font-size: 14.5px; line-height: 1.6; }
   .doors .door-links a { font-weight: 600; }
+  .doors .door-stat { margin: var(--space-2) 0 0; font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--accent-deep); }
+  #door-clients { border-top-width: 4px; }
+
+  /* Proof */
+  #proof .testimonials-strip { margin: 0 auto; }
 
   /* How the roadmap runs */
   .steps-grid { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
@@ -113,13 +118,13 @@
 <meta property="og:site_name" content="Crads-AI">
 <meta property="og:url" content="https://crads-ai.com/">
 <meta property="og:title" content="Make Claude know your business · Crads-AI">
-<meta property="og:description" content="Start with an AI roadmap: a 30-minute call on the pain points in your business, a written report on where AI could help and what to start with, then a second call to go through it.">
+<meta property="og:description" content="Claude set up to know your business, so it drafts your follow-ups from your own inbox, in your own voice. Start with an AI roadmap: two calls and a written report.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Make Claude know your business · Crads-AI">
-<meta name="twitter:description" content="Start with an AI roadmap: a 30-minute call on the pain points in your business, a written report on where AI could help and what to start with, then a second call to go through it.">
+<meta name="twitter:description" content="Claude set up to know your business, so it drafts your follow-ups from your own inbox, in your own voice. Start with an AI roadmap: two calls and a written report.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 <script type="application/ld+json">
 {
@@ -165,12 +170,12 @@
 </nav>
 
 <main>
-  <!-- 1. Hero: one button, the roadmap (bd session 21 Oct 2026) -->
+  <!-- 1. Hero: callout, the mechanism, door 1, one button (second pass, 22 Oct 2026) -->
   <section class="hero wrap" id="top">
     <div class="hero-copy">
-      <p class="eyebrow">AI roadmap · with Sam Davis</p>
+      <p class="eyebrow">For owners of small consultancies and practices</p>
       <h1>Make Claude know <em>your business.</em></h1>
-      <p class="lede">Start with an AI roadmap. On a 30-min call we go through all the pain points in your business and get properly into the weeds. I write up a report on where AI could help and what I'd start with, then we go through it together on a second call.</p>
+      <p class="lede">Then it can do the follow-ups you never get round to, from your own inbox, in your own voice. Nothing goes until you say yes. Start with an AI roadmap: we go through all the pain points in your business, and I write up what I'd start with.</p>
       <a class="cta-primary" href="/book/roadmap">Book an AI roadmap</a>
       <p class="cta-note">A$250 · up to 10 a week.</p>
     </div>
@@ -179,40 +184,72 @@
     </div>
   </section>
 
-  <!-- 2. The three doors (roadmap-pains-2026-10: clients, out of your head, showing up) -->
+  <!-- 2. The three doors, clients first (roadmap research, 21 Oct 2026: clients
+       the #1 want for 7 of 10; in-your-head raised by 9 of 10; posting by 8) -->
   <section class="section wrap" id="doors">
     <div class="read-col">
-      <h2 class="reveal-on-scroll">Where most people start</h2>
+      <h2 class="reveal-on-scroll">What came up in my last ten roadmaps</h2>
     </div>
     <div class="callout-grid doors interlude-bare stagger-grid">
       <div class="callout" id="door-clients">
         <div class="big">More of the right clients.</div>
-        <div class="small">Follow-ups and first emails drafted from your own inbox, in your own voice. You approve every one before it goes.</div>
+        <div class="small">Follow-ups and first emails from your own inbox, written the way you write, from what it knows about each person. You approve every one.</div>
+        <p class="door-stat">The first thing 7 of 10 asked for.</p>
       </div>
       <div class="callout" id="door-head">
         <div class="big">Everything out of your head.</div>
-        <div class="small">Your clients, the next steps from Tuesday's meeting, the quote you said you'd send: held by an assistant that knows your business, with a short brief each morning. Proposals start from your past work.</div>
-        <p class="door-links"><a href="/guides/claude-remember-your-business">Guide: why Claude forgets your business →</a><br><a href="/guides/ai-proposals-and-quotes">Guide: proposals and quotes →</a></p>
+        <div class="small">Clients, the next steps from Tuesday's meeting, the quote you said you'd send: kept in one place that remembers, with a brief each morning.</div>
+        <p class="door-links"><a href="/guides/claude-remember-your-business">Guide →</a></p>
       </div>
       <div class="callout" id="door-posts">
         <div class="big">Showing up every week.</div>
-        <div class="small">Each Friday it drafts a post from what actually happened in your week, and you edit it.</div>
-        <p class="door-links"><a href="/guides/ai-social-media-posts">Guide: social posts →</a></p>
+        <div class="small">Each Friday it drafts a post from what actually happened in your week. You edit it.</div>
+        <p class="door-links"><a href="/guides/ai-social-media-posts">Guide →</a></p>
       </div>
     </div>
   </section>
 
-  <!-- 3. How the roadmap runs, then the prices -->
+  <!-- 3. Proof. Real, consented words only (lib/testimonialsRender.js has the
+       full set and the honesty rule). Abbey: 21 Sep 2026 questionnaire,
+       "Yes, with my name" (first live on this page 23 Sep, PR #38). Nim: 21 Oct
+       2026 feedback form, "Yes, with my name" (PR #104); from the last two sentences
+       of her published quote. -->
+  <section class="section wrap" id="proof">
+    <div class="testimonials-strip reveal-on-scroll">
+      <h2>What clients say</h2>
+      <div class="grid">
+        <figure class="testimonial-card">
+          <blockquote>It helps me process ideas and has really helped me lift the mental load of juggling all the moving parts of my business when I'm the only person working on it full time.</blockquote>
+          <figcaption class="attribution">
+            <img class="testimonial-photo" src="/lib/img/abbey-pantano.jpg" alt="Abbey Pantano" width="52" height="52" loading="lazy">
+            <span class="attribution-text"><span class="t-name">Abbey Pantano</span><span class="t-role">Founder, The Impact Collab</span></span>
+          </figcaption>
+        </figure>
+        <figure class="testimonial-card">
+          <blockquote>The fact that it has all my context and remembers past conversations was the major game changer. I'm getting at least a day a week more work done.</blockquote>
+          <figcaption class="attribution">
+            <img class="testimonial-photo" src="/lib/img/nim-zappert.jpg" alt="Nim Zappert" width="52" height="52" loading="lazy">
+            <span class="attribution-text"><span class="t-name">Nim Zappert</span><span class="t-role">Founder, Authentic Selling and AfriBeads</span></span>
+          </figcaption>
+        </figure>
+        <!-- SLOT (client testimonial, door 1): a client who came in for more
+             clients, in their own words, with written consent ("Yes, with my
+             name" on the feedback form). Copy a figure above. Never invent one,
+             and never use roadmap-call words without that consent. -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. How the roadmap runs, then what comes after and the prices -->
   <section class="section wrap" id="how">
     <div class="read-col">
-      <p class="eyebrow reveal-on-scroll">How the roadmap runs</p>
       <h2 class="reveal-on-scroll">Two calls and a report, <em>then it's your call.</em></h2>
     </div>
     <ol class="steps-grid">
       <li>
         <span class="step-n">1</span>
         <h3>Call one, 30 minutes.</h3>
-        <p>You walk me through the business: what's slow, what's stuck, what's in your head. I record it with your OK.</p>
+        <p>You walk me through the business: what's slow, what's stuck, what's in your head.</p>
       </li>
       <li>
         <span class="step-n">2</span>
@@ -222,49 +259,38 @@
       <li>
         <span class="step-n">3</span>
         <h3>Call two, 30 minutes.</h3>
-        <p>We go through the report together.</p>
+        <p>We go through it together.</p>
       </li>
     </ol>
     <div class="price-strip reveal-on-scroll" id="prices">
-      <p class="then">Then it's up to you. Leave it there, take the report and do it yourself, or set it up with me:</p>
-      <p><span class="item">AI roadmap A$250</span><span class="sep">·</span><span class="item">Walkthrough A$350</span><span class="sep">·</span><span class="item">Guided setup A$700</span><span class="sep">·</span><span class="item">after 30 days, A$233 an hour if you want me back</span></p>
+      <p class="then">Then stop there, do it yourself, or set it up with me:</p>
+      <p><span class="item">AI roadmap A$250</span><span class="sep">·</span><span class="item">Walkthrough A$350</span><span class="sep">·</span><span class="item">Guided setup A$700</span><span class="sep">·</span><span class="item">after 30 days, A$233 an hour</span></p>
       <p class="more"><a href="/offer">What each one includes →</a></p>
     </div>
   </section>
 
-  <!-- 4. The mechanism -->
-  <section class="section wrap" id="onboarded">
-    <div class="read-col">
-      <h2 class="reveal-on-scroll">Claude, <em>onboarded to you.</em></h2>
-      <p class="reveal-on-scroll prose-lead" style="margin-top: var(--space-3);">Most people use Claude in a chat that forgets them every time. I set it up once so it knows your clients, how you work and how you write, connected to your email and calendar on limits you choose (drafts only, if that's what you want). It runs on your own Claude subscription and a small server in your own account, from about €6 a month, billed by the host. The software is free and open source. The only thing you'd pay me for is help setting it up.</p>
-    </div>
-  </section>
-
-  <!-- 5. What people ask first -->
+  <!-- 5. What people ask first: the mechanism, then the anxieties from the
+       roadmap research (not techy, another subscription, what if Sam stops) -->
   <section class="section wrap" id="questions">
     <div class="read-col">
       <h2 class="reveal-on-scroll">What people ask first</h2>
     </div>
     <ul class="qa reveal-on-scroll">
       <li>
-        <h3>I'm not technical.</h3>
-        <p>You don't need to be. On a guided setup we do it together, on screen, and I'm on Slack for 30 days after.</p>
+        <h3>I already use ChatGPT or Claude.</h3>
+        <p>In a chat that forgets you. I set Claude up once so it knows your clients, your work and how you write, and works in your email and calendar on limits you choose.</p>
       </li>
       <li>
-        <h3>Will it sound like AI?</h3>
-        <p>It learns from your own writing, and nothing goes out without you.</p>
+        <h3>I'm not technical.</h3>
+        <p>You don't need to be. We do it together on screen, and I'm on Slack for 30 days after.</p>
       </li>
       <li>
         <h3>Is this another subscription?</h3>
-        <p>No new AI subscription. It uses the Claude plan you have, plus the server.</p>
-      </li>
-      <li>
-        <h3>Not sure it's for you yet?</h3>
-        <p><a href="/book/discovery">Book a free 30-minute call</a> and we'll work out whether it fits.</p>
+        <p>No new AI subscription. It uses your Claude plan, plus a small server in your own account from about €6 a month.</p>
       </li>
       <li>
         <h3>What if you stop doing this?</h3>
-        <p>It's open source and it lives in your own accounts. If I stopped tomorrow, it would keep running, and it's yours. <a href="/docs/continuity">What happens if I stop →</a></p>
+        <p>It lives in your own accounts and keeps running without me. It's yours. <a href="/docs/continuity">How →</a></p>
       </li>
     </ul>
   </section>
@@ -274,12 +300,12 @@
     <p class="eyebrow reveal-on-scroll">Who you'd work with</p>
     <div class="who-card reveal-on-scroll" style="margin-top: var(--space-3);">
       <img src="/lib/img/sam-photo.jpg" width="280" height="280" alt="Sam Davis">
-      <p>I'm Sam Davis: a physicist by training with a PhD in environmental data science from the University of Sydney. I've built seven AI systems in twelve months, including the assistant that runs my own week. <a href="/about">More about me →</a></p>
+      <p>I'm Sam Davis, a physicist with a PhD in environmental data science from the University of Sydney. I've built seven AI systems in twelve months, including the assistant that runs my own week. <a href="/about">More about me →</a></p>
     </div>
     <div class="close reveal-on-scroll" id="final-cta">
       <a class="cta-primary" href="/book/roadmap">Book an AI roadmap</a>
       <p class="cta-note">A$250 · up to 10 a week.</p>
-      <p class="diy">Prefer to do it yourself? The software is free and open source. <a href="/download">Download</a> · <a href="/docs/first-hour">Your first hour</a></p>
+      <p class="diy">Not sure yet? <a href="/book/discovery">Book a free 30-minute call</a>. Rather do it yourself? <a href="/download">The software is free</a>.</p>
     </div>
   </section>
 </main>

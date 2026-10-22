@@ -1,8 +1,9 @@
 // tests/index.test.js - the front door sells the AI roadmap to small-business
 // owners (bd session, 21 Oct 2026; supersedes the product-first v4 page of
 // 2026-09-09): six sections, one button, prices shown, the free software in
-// the nav and one closing line. Assert destinations and headings, never
-// markup detail.
+// the nav and one closing line. Second pass 22 Oct 2026: clients first, proof
+// in, the mechanism folded into the questions. Assert destinations and
+// headings, never markup detail.
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert');
@@ -27,33 +28,52 @@ test('the head names the new headline and the roadmap', () => {
   assert.ok(html.includes('<link rel="canonical" href="https://crads-ai.com/">'));
 });
 
-test('the hero has the headline and one button: book an AI roadmap', () => {
+test('the hero calls out the owner, leads with door 1, and has one button', () => {
   const hero = section('top');
+  assert.match(hero, /For owners of small consultancies and practices/);
   assert.match(hero, /<h1>Make Claude know <em>your business\.<\/em><\/h1>/);
-  assert.match(hero, /On a 30-min call we go through all the pain points in your business/);
+  assert.match(hero, /follow-ups you never get round to, from your own inbox, in your own voice\. Nothing goes until you say yes\./);
+  assert.match(hero, /we go through all the pain points in your business/);
   const ctas = hero.match(/class="cta-primary"[^>]*>[^<]*</g) || [];
   assert.deepStrictEqual(ctas, ['class="cta-primary" href="/book/roadmap">Book an AI roadmap<'], 'exactly one hero button');
   assert.match(hero, /A\$250 · up to 10 a week\./);
-  assert.ok(!/href="\/download"/.test(hero), 'the download is not a hero button any more');
+  assert.ok(!/href="\/download"/.test(hero), 'the download is not a hero button');
 });
 
-test('six sections, in the order of the draft', () => {
-  const order = ['id="top"', 'id="doors"', 'id="how"', 'id="onboarded"', 'id="questions"', 'id="who"'].map((id) => main.indexOf(id));
+// Second pass (22 Oct 2026): the mechanism moved into the first question and
+// proof took its place. Still six sections.
+test('six sections, in order', () => {
+  const order = ['id="top"', 'id="doors"', 'id="proof"', 'id="how"', 'id="questions"', 'id="who"'].map((id) => main.indexOf(id));
   assert.ok(order.every((i) => i > -1), `a section is missing: ${order}`);
   assert.deepStrictEqual([...order].sort((a, b) => a - b), order, 'sections out of order');
   assert.strictEqual((main.match(/<section\b/g) || []).length, 6, 'six sections, no more');
 });
 
-test('the three doors: clients, out of your head, showing up', () => {
+test('the three doors: clients first, with the roadmap count behind it', () => {
   const doors = section('doors');
-  assert.match(doors, /Where most people start/);
+  assert.match(doors, /What came up in my last ten roadmaps/);
   const names = [...doors.matchAll(/<div class="big">([^<]*)<\/div>/g)].map((m) => m[1]);
   assert.deepStrictEqual(names, ['More of the right clients.', 'Everything out of your head.', 'Showing up every week.']);
-  for (const g of ['/guides/claude-remember-your-business', '/guides/ai-proposals-and-quotes', '/guides/ai-social-media-posts']) {
+  const clients = doors.slice(doors.indexOf('id="door-clients"'), doors.indexOf('id="door-head"'));
+  assert.match(clients, /The first thing 7 of 10 asked for\./);
+  assert.match(clients, /You approve every one\./);
+  assert.ok(!/<a\b/.test(clients), 'the clients door has no guide yet, so no link');
+  for (const g of ['/guides/claude-remember-your-business', '/guides/ai-social-media-posts']) {
     assert.ok(doors.includes(`href="${g}"`), `door links ${g}`);
   }
-  const clients = doors.slice(doors.indexOf('id="door-clients"'), doors.indexOf('id="door-head"'));
-  assert.ok(!/<a\b/.test(clients), 'the clients door has no guide yet, so no link');
+});
+
+test('proof: real, named, consented quotes only, plus a marked slot', () => {
+  const proof = section('proof');
+  const names = [...proof.matchAll(/<span class="t-name">([^<]*)<\/span>/g)].map((m) => m[1]);
+  assert.deepStrictEqual(names, ['Abbey Pantano', 'Nim Zappert']);
+  // Both quotes must match the consented source in lib/testimonialsRender.js or
+  // the 23 Sep homepage (PR #38): no paraphrase.
+  assert.match(proof, /lift the mental load of juggling all the moving parts of my business when I'm the only person working on it full time\./);
+  const render = fs.readFileSync(path.join(__dirname, '..', 'lib', 'testimonialsRender.js'), 'utf8');
+  const nim = proof.match(/<blockquote>(The fact that[^<]*)<\/blockquote>/)[1].replace(/\.$/, '');
+  assert.ok(render.includes(nim), 'Nim\'s words are a verbatim excerpt of her published quote');
+  assert.match(proof, /SLOT \(client testimonial, door 1\)/, 'the slot for a clients-door testimonial is marked');
 });
 
 test('how the roadmap runs, then the price strip', () => {
@@ -67,31 +87,24 @@ test('how the roadmap runs, then the price strip', () => {
   assert.match(how, /href="\/offer"/, 'the strip links the full offer');
 });
 
-test('the mechanism keeps the traced claims', () => {
-  const m = section('onboarded');
-  assert.match(m, /Claude, <em>onboarded to you\.<\/em>/);
-  assert.match(m, /drafts only, if that's what you want/);
-  assert.match(m, /from about €6 a month, billed by the host/);
-  assert.match(m, /The software is free and open source\./);
-});
-
-test('the questions carry the one discovery-call link', () => {
+test('the questions carry the mechanism and the traced claims', () => {
   const q = section('questions');
-  assert.strictEqual((q.match(/<h3>/g) || []).length, 5, 'five questions');
-  assert.match(q, /<a href="\/book\/discovery">Book a free 30-minute call<\/a>/);
-  assert.strictEqual((main.match(/href="\/book\/discovery"/g) || []).length, 1, 'discovery is one text link, never a button');
+  assert.strictEqual((q.match(/<h3>/g) || []).length, 4, 'four questions');
+  assert.match(q, /I set Claude up once so it knows your clients, your work and how you write/);
+  assert.match(q, /on limits you choose/);
+  assert.match(q, /from about €6 a month/);
   assert.match(q, /href="\/docs\/continuity"/);
 });
 
-test('the close: who you would work with, the button again, then do it yourself', () => {
+test('the close: who you would work with, the button again, discovery and do it yourself', () => {
   const who = section('who');
   assert.match(who, /PhD in environmental data science from the University of Sydney/);
   assert.match(who, /seven AI systems in twelve months/);
   assert.match(who, /href="\/about"/);
   assert.match(who, /class="cta-primary" href="\/book\/roadmap">Book an AI roadmap</);
-  assert.match(who, /Prefer to do it yourself\?/);
+  assert.match(who, /<a href="\/book\/discovery">Book a free 30-minute call<\/a>/);
+  assert.strictEqual((main.match(/href="\/book\/discovery"/g) || []).length, 1, 'discovery is one text link, never a button');
   assert.match(who, /href="\/download"/);
-  assert.match(who, /href="\/docs\/first-hour"/);
 });
 
 test('every button on the page books the roadmap', () => {

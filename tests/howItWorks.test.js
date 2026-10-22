@@ -38,26 +38,35 @@ test('how-it-works page renders the canonical nav with How it works marked curre
 });
 
 // 2026-09-09 (v4): the four-session coaching arc, the packs and the private
-// dashboard left this page with the Coaching Block. The four layers stay; the
-// page now ends on what you have once it is running and where Sam comes in.
-test('how-it-works page keeps the four layers and drops the coaching arc', () => {
+// dashboard left this page with the Coaching Block.
+// 2026-10-22 (second pass): the page explains it for a business owner first,
+// roadmap -> setup -> what you have after, with the roadmap as the one button;
+// the four layers and Where it lives move below as the software detail.
+test('how-it-works: roadmap, setup, after, then the software detail', () => {
   const html = readHIW();
+  const steps = html.slice(html.indexOf('id="the-steps"'), html.indexOf('id="the-four-layers"'));
+  assert.ok(html.indexOf('id="the-steps"') > -1 && html.indexOf('id="the-four-layers"') > html.indexOf('id="the-steps"'),
+    'the business steps come before the four layers');
+  const tags = [...steps.matchAll(/<span class="s-tag">([^<]*)<\/span>/g)].map((m) => m[1]);
+  assert.deepStrictEqual(tags.map((t) => t.split(' · ')[1]), ['The roadmap', 'The setup', 'After'], 'three steps, in order');
+  assert.match(steps, /all the pain points in your business and get properly into the weeds/, 'the roadmap described as it runs');
+  assert.match(steps, />What you have once it is running\.</, 'expected the after step');
+  assert.match(steps, /class="cta-primary" href="\/book\/roadmap">Book an AI roadmap</, 'the one button books the roadmap');
+  assert.strictEqual((html.match(/class="cta-primary"/g) || []).length, 1, 'one primary button on the page');
   for (const h of ['>Context<', '>Connections<', '>Capabilities<', '>Cadence<']) {
     assert.ok(html.includes(h), `expected layer heading ${h}`);
   }
-  assert.ok(html.includes('id="the-four-layers"'), 'expected the four-layers section');
   assert.match(html, />Where it lives</, 'expected the where-it-lives section');
-  assert.match(html, />What you have once it is running</, 'expected the after section');
-  assert.match(html, />Free software\. A hand laying the foundation, if you want one\.</, 'expected the where-Sam-comes-in card');
+  assert.ok(html.indexOf('>Where it lives<') > html.indexOf('id="the-four-layers"'), 'Where it lives sits with the software detail');
   for (const gone of ['The 4-session arc', 'Everything you get', 'Pack 0', 'Pack 1', 'Pack 2', 'Pack 3', 'private dashboard', 'Continuation Retainer', 'Coaching Block']) {
     assert.ok(!html.includes(gone), `${gone} should be gone`);
   }
   assert.ok(!html.includes('data-lead-capture'), 'lead-magnet capture form must stay removed');
   assert.ok(!/free install guide/i.test(html), 'free-install-guide lead-magnet copy must stay removed');
-  assert.match(html, /href="\/download"/, 'expected a Download CTA');
+  assert.match(html, /href="\/download"/, 'expected a download link');
 });
 
-test('how-it-works page contains CTAs to /offer and /book/discovery', () => {
+test('how-it-works page links /offer and /book/discovery', () => {
   const html = readHIW();
   assert.match(html, /href="\/offer"/, 'expected /offer link');
   assert.match(html, /href="\/book\/discovery"/, 'expected /book/discovery link');
