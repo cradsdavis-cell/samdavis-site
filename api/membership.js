@@ -3,8 +3,9 @@
 // GET  -> { tier, price_aud, founding_left }: what a new member pays right now.
 // POST -> { url }: a Stripe Checkout Session in subscription mode.
 //   body: { email, name, agreed_terms: true, invite?: <token> }
-//   With a valid invite (a setup buyer, link from Sam) the first 30 days are
-//   included and no card is needed to start. Without one, billing starts today.
+//   With a valid invite (a setup buyer, link from Sam) the first charge waits
+//   for the day their 30 days of support end (those are month 1). Without one,
+//   billing starts today.
 //
 // Nothing books a Cal slot and nothing creates a site account: Slack, the
 // drop-in and the library are set up by Sam (the cockpit's slack-renewals job
@@ -95,13 +96,13 @@ module.exports = async (req, res) => {
   try { body = parseBody(req); } catch { res.status(400).json({ error: 'invalid_json' }); return; }
 
   let email = String(body.email || '').trim().toLowerCase();
-  let included = false;
+  let startsAt = null;
   if (body.invite) {
     const v = verifyInvite(String(body.invite), process.env.MEMBERSHIP_INVITE_SECRET);
     if (v.error) { res.status(400).json({ error: v.error }); return; }
     // The invite names the member; the form can't swap in another address.
     email = v.email;
-    included = true;
+    startsAt = v.startsAt;
   }
   if (!email || !EMAIL_RE.test(email) || email.length > 254) { res.status(400).json({ error: 'invalid_email' }); return; }
   if (body.agreed_terms !== true) { res.status(400).json({ error: 'terms_not_accepted' }); return; }
@@ -114,7 +115,7 @@ module.exports = async (req, res) => {
       priceId: offer.priceId,
       tier: offer.tier,
       email,
-      included,
+      startsAt,
       baseUrl: process.env.BASE_URL || 'https://crads-ai.com',
       termsVersion: TERMS_VERSION,
       termsAcceptedAt: new Date().toISOString(),

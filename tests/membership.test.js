@@ -1,6 +1,6 @@
 'use strict';
 // The membership checkout. What matters most: the founding price closes at 10
-// for real, an included month only reaches someone holding Sam's invite for
+// for real, a delayed first charge only reaches someone holding Sam's invite for
 // that email, and nobody ends up with two memberships.
 const test = require('node:test');
 const assert = require('node:assert');
@@ -15,16 +15,16 @@ const handler = require('../api/membership');
 
 const NOW = 1_800_000_000;
 
-test('a founding place: live subs hold one, a trial that lapsed unpaid gives it back', () => {
+test('a founding place: live subs hold one, a cancel before the first charge gives it back', () => {
   assert.strictEqual(m.holdsFoundingPlace({ status: 'active' }), true);
   assert.strictEqual(m.holdsFoundingPlace({ status: 'trialing', trial_end: NOW }), true);
   assert.strictEqual(m.holdsFoundingPlace({ status: 'incomplete' }), false);
   assert.strictEqual(m.holdsFoundingPlace({ status: 'incomplete_expired' }), false);
   // Paid from day 1, then left: still counted (the 10 close for real).
   assert.strictEqual(m.holdsFoundingPlace({ status: 'canceled', trial_end: null, ended_at: NOW }), true);
-  // Included month ended with no card: Stripe cancels at trial end. Not counted.
+  // A setup buyer who cancelled before their first charge: not counted.
   assert.strictEqual(m.holdsFoundingPlace({ status: 'canceled', trial_end: NOW, ended_at: NOW }), false);
-  // Billed after the included month, then left: counted.
+  // Billed from the end of their support, then left: counted.
   assert.strictEqual(m.holdsFoundingPlace({ status: 'canceled', trial_end: NOW, ended_at: NOW + 40 * 86400 }), true);
 });
 
@@ -37,33 +37,37 @@ test('the offer switches to A$149 when the 10th founding place is taken', () => 
 
 test('invites: round trip, bound to the email, tamper and expiry refused', () => {
   const s = 'k';
-  const t = m.signInvite('Roger@Example.com', NOW + 86400, s);
-  assert.deepStrictEqual(m.verifyInvite(t, s, NOW), { email: 'roger@example.com' });
+  const t = m.signInvite('Roger@Example.com', NOW + 86400, NOW + 5 * 86400, s);
+  assert.deepStrictEqual(m.verifyInvite(t, s, NOW), { email: 'roger@example.com', startsAt: NOW + 5 * 86400 });
   assert.deepStrictEqual(m.verifyInvite(t, 'other', NOW), { error: 'invalid_invite' });
   assert.deepStrictEqual(m.verifyInvite(t, s, NOW + 2 * 86400), { error: 'invite_expired' });
   const [payload, sig] = t.split('.');
-  const forged = Buffer.from(`someone@else.com|${NOW + 86400}`).toString('base64url');
+  const forged = Buffer.from(`someone@else.com|${NOW + 86400}|${NOW + 5 * 86400}`).toString('base64url');
   assert.deepStrictEqual(m.verifyInvite(`${forged}.${sig}`, s, NOW), { error: 'invalid_invite' });
   assert.deepStrictEqual(m.verifyInvite(`${payload}.x`, s, NOW), { error: 'invalid_invite' });
   assert.deepStrictEqual(m.verifyInvite(t, '', NOW), { error: 'invites_off' });
   // An expiry further out than the policy allows is refused even if signed.
-  const far = m.signInvite('a@b.co', NOW + 400 * 86400, s);
+  const far = m.signInvite('a@b.co', NOW + 400 * 86400, NOW, s);
   assert.deepStrictEqual(m.verifyInvite(far, s, NOW), { error: 'invalid_invite' });
 });
 
-test('session params: DIY pays today; an invited setup buyer gets 30 days, no card, cancel if none added', () => {
-  const base = { priceId: 'price_f99', tier: 'founding', email: 'a@b.co', baseUrl: 'https://crads-ai.com', termsVersion: '0.13' };
-  const diy = m.sessionParams({ ...base, included: false });
+test('session params: DIY pays today; an invited setup buyer is first charged the day their support ends', () => {
+  const base = { priceId: 'price_f99', tier: 'founding', email: 'a@b.co', baseUrl: 'https://crads-ai.com', termsVersion: '0.13', nowUnix: NOW };
+  const diy = m.sessionParams({ ...base });
   assert.strictEqual(diy.mode, 'subscription');
-  assert.strictEqual(diy.subscription_data.trial_period_days, undefined);
-  assert.strictEqual(diy.payment_method_collection, undefined);
+  assert.strictEqual(diy.subscription_data.trial_end, undefined);
   assert.strictEqual(diy.metadata.kind, 'membership');
+  assert.strictEqual(diy.metadata.route, 'diy');
   assert.strictEqual(diy.subscription_data.metadata.tier, 'founding');
-  const inc = m.sessionParams({ ...base, included: true });
-  assert.strictEqual(inc.subscription_data.trial_period_days, 30);
-  assert.strictEqual(inc.payment_method_collection, 'if_required');
-  assert.deepStrictEqual(inc.subscription_data.trial_settings, { end_behavior: { missing_payment_method: 'cancel' } });
-  assert.strictEqual(inc.metadata.included, 'yes');
+  const setup = m.sessionParams({ ...base, startsAt: NOW + 5 * 86400 });
+  assert.strictEqual(setup.subscription_data.trial_end, NOW + 5 * 86400);
+  assert.strictEqual(setup.metadata.route, 'setup');
+  // The card is taken at signup: month 1 is the support they already have, not a free trial.
+  assert.strictEqual(setup.payment_method_collection, undefined);
+  assert.strictEqual(setup.subscription_data.trial_settings, undefined);
+  // Inside Stripe's 48-hour floor (or after the end), they just pay today.
+  assert.strictEqual(m.sessionParams({ ...base, startsAt: NOW + 86400 }).subscription_data.trial_end, undefined);
+  assert.strictEqual(m.sessionParams({ ...base, startsAt: NOW - 86400 }).subscription_data.trial_end, undefined);
 });
 
 // --- the handler, with a fake Stripe -------------------------------------
@@ -125,15 +129,16 @@ test('POST: terms must be ticked; a member cannot join twice', async () => {
   assert.strictEqual(r.body.error, 'already_member');
 });
 
-test('POST: an invite sets the included month and its own email wins over the form', async () => {
+test('POST: an invite delays the first charge to the support end, and its own email wins over the form', async () => {
   const s = fakeStripe();
   handler._stripe = s;
-  const invite = m.signInvite('roger@example.com', Math.floor(Date.now() / 1000) + 86400, process.env.MEMBERSHIP_INVITE_SECRET);
+  const now = Math.floor(Date.now() / 1000);
+  const invite = m.signInvite('roger@example.com', now + 20 * 86400, now + 5 * 86400, process.env.MEMBERSHIP_INVITE_SECRET);
   const r = res();
   await handler(post({ email: 'someone@else.com', invite, agreed_terms: true }), r);
   assert.strictEqual(r.statusCode, 200);
   assert.strictEqual(s.created[0].customer_email, 'roger@example.com');
-  assert.strictEqual(s.created[0].subscription_data.trial_period_days, 30);
+  assert.strictEqual(s.created[0].subscription_data.trial_end, now + 5 * 86400);
   const bad = res();
   await handler(post({ email: 'a@b.co', invite: 'nope.nope', agreed_terms: true }), bad);
   assert.strictEqual(bad.body.error, 'invalid_invite');
