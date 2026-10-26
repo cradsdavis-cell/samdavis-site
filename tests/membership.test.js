@@ -26,6 +26,9 @@ test('a founding place: live subs hold one, a cancel before the first charge giv
   assert.strictEqual(m.holdsFoundingPlace({ status: 'canceled', trial_end: NOW, ended_at: NOW }), false);
   // Billed from the end of their support, then left: counted.
   assert.strictEqual(m.holdsFoundingPlace({ status: 'canceled', trial_end: NOW, ended_at: NOW + 40 * 86400 }), true);
+  // The same with the billing anchor (how setup buyers are delayed now).
+  assert.strictEqual(m.holdsFoundingPlace({ status: 'canceled', billing_cycle_anchor: NOW, ended_at: NOW }), false);
+  assert.strictEqual(m.holdsFoundingPlace({ status: 'canceled', billing_cycle_anchor: NOW, ended_at: NOW + 40 * 86400 }), true);
 });
 
 test('the offer switches to A$149 when the 10th founding place is taken', () => {
@@ -55,19 +58,21 @@ test('session params: DIY pays today; an invited setup buyer is first charged th
   const base = { priceId: 'price_f99', tier: 'founding', email: 'a@b.co', baseUrl: 'https://crads-ai.com', termsVersion: '0.13', nowUnix: NOW };
   const diy = m.sessionParams({ ...base });
   assert.strictEqual(diy.mode, 'subscription');
-  assert.strictEqual(diy.subscription_data.trial_end, undefined);
+  assert.strictEqual(diy.subscription_data.billing_cycle_anchor, undefined);
   assert.strictEqual(diy.metadata.kind, 'membership');
   assert.strictEqual(diy.metadata.route, 'diy');
   assert.strictEqual(diy.subscription_data.metadata.tier, 'founding');
   const setup = m.sessionParams({ ...base, startsAt: NOW + 5 * 86400 });
-  assert.strictEqual(setup.subscription_data.trial_end, NOW + 5 * 86400);
+  assert.strictEqual(setup.subscription_data.billing_cycle_anchor, NOW + 5 * 86400);
+  assert.strictEqual(setup.subscription_data.proration_behavior, 'none');
+  assert.strictEqual(setup.subscription_data.trial_end, undefined);
   assert.strictEqual(setup.metadata.route, 'setup');
   // The card is taken at signup: month 1 is the support they already have, not a free trial.
   assert.strictEqual(setup.payment_method_collection, undefined);
   assert.strictEqual(setup.subscription_data.trial_settings, undefined);
-  // Inside Stripe's 48-hour floor (or after the end), they just pay today.
-  assert.strictEqual(m.sessionParams({ ...base, startsAt: NOW + 86400 }).subscription_data.trial_end, undefined);
-  assert.strictEqual(m.sessionParams({ ...base, startsAt: NOW - 86400 }).subscription_data.trial_end, undefined);
+  // A day out still waits (no 48-hour floor with an anchor); after the end, they pay today.
+  assert.strictEqual(m.sessionParams({ ...base, startsAt: NOW + 86400 }).subscription_data.billing_cycle_anchor, NOW + 86400);
+  assert.strictEqual(m.sessionParams({ ...base, startsAt: NOW - 86400 }).subscription_data.billing_cycle_anchor, undefined);
 });
 
 // --- the handler, with a fake Stripe -------------------------------------
@@ -138,7 +143,7 @@ test('POST: an invite delays the first charge to the support end, and its own em
   await handler(post({ email: 'someone@else.com', invite, agreed_terms: true }), r);
   assert.strictEqual(r.statusCode, 200);
   assert.strictEqual(s.created[0].customer_email, 'roger@example.com');
-  assert.strictEqual(s.created[0].subscription_data.trial_end, now + 5 * 86400);
+  assert.strictEqual(s.created[0].subscription_data.billing_cycle_anchor, now + 5 * 86400);
   const bad = res();
   await handler(post({ email: 'a@b.co', invite: 'nope.nope', agreed_terms: true }), bad);
   assert.strictEqual(bad.body.error, 'invalid_invite');
