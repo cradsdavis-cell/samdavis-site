@@ -196,7 +196,7 @@ module.exports = async (req, res) => {
     slotIso: slot_iso, name, email,
     calEventTypeId: cfg.cal_event_type_id, baseUrl: process.env.BASE_URL,
     termsVersion: TERMS_VERSION, termsAcceptedAt: new Date().toISOString(),
-    promotionCodeId,
+    promotionCodeId, promoCode: promotionCodeId ? code : '',
     couponId: refDiscount ? refDiscount.coupon : null,
     refDiscountAud: refDiscount ? refDiscount.aud : null,
     ref: ref ? ref.slug : null, refAt: ref ? ref.at : null,

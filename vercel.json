@@ -83,6 +83,11 @@
       "permanent": true
     },
     {
+      "source": "/roadmap",
+      "destination": "/book/roadmap",
+      "permanent": false
+    },
+    {
       "source": "/r",
       "destination": "/",
       "permanent": false

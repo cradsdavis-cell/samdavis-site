@@ -13,6 +13,7 @@ exists so the story is readable without archaeology.
 | `engineering/superpowers/` | Design specs, plans and reviews from the coaching-site era (May to Aug 2026). | 2026-09-09 |
 | `engineering/audit/` | The UI-audit loop (rubric, loop prompt, ledger) that hill-climbed the coaching pages. | 2026-09-09 |
 | `engineering/prepaid-booking.md` | A prepaid-booking design note that names a real client. | 2026-09-09 |
+| `2026-10-21-roadmap-front-door/` | `door-catalogue.png`, the annotated app screenshot from the software-first homepage. The homepage now sells the AI roadmap to small-business owners (bd session 21 Oct); the old page is in git history. | 2026-10-21 |
 
 Deleted outright on 2026-09-09 rather than archived (git has them): six
 publicly served `*.html.bak` files, three one-off KV backfill/seed scripts

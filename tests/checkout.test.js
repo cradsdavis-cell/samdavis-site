@@ -304,6 +304,7 @@ test('code: a valid code is resolved and passed through as promotionCodeId', asy
   await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'r@b.com', name: 'R', agreed_terms: true, code: 'goodcode' }), res);
   assert.strictEqual(res.statusCode, 200);
   assert.strictEqual(STRIPE_CALLS[0].promotionCodeId, 'promo_good');
+  assert.strictEqual(STRIPE_CALLS[0].promoCode, 'goodcode', 'the typed code rides on the session (host attribution, 2026-10-22)');
 });
 
 test('code: no code means no promotionCodeId', async () => {

@@ -289,6 +289,33 @@ test('/r/<slug> replaces a referral that has run past its 90 days', () => {
   assert.match(res.headers['set-cookie'], /^crads_ref=nim\./);
 });
 
+test('/r/<slug>?to=roadmap&code=X lands on the roadmap booking page with the code (host link)', () => {
+  const res = mockRes();
+  route({ query: { slug: 'nim', to: 'roadmap', code: 'PITCHCLUB' }, headers: {} }, res);
+  assert.strictEqual(res.headers.location, '/book/roadmap?code=PITCHCLUB');
+  assert.match(res.headers['set-cookie'], /^crads_ref=nim\./);
+});
+
+test('landingFor: only known pages, only well-formed codes; anything else goes home', () => {
+  assert.strictEqual(R.landingFor('roadmap', ''), '/book/roadmap');
+  assert.strictEqual(R.landingFor('guided-setup', 'X1'), '/book/guided-setup?code=X1');
+  assert.strictEqual(R.landingFor('roadmap', '<script>'), '/book/roadmap');
+  assert.strictEqual(R.landingFor('https://evil.example', 'X'), '/');
+  assert.strictEqual(R.landingFor(undefined, 'X'), '/');
+});
+
+test('planReferral: a host code alone credits the host; an earlier link still wins', () => {
+  const byCode = R.planReferral({ ...base, sku: 'guided-setup', codeRef: { slug: 'katie' }, meta: { promo_code: 'katie26' } });
+  assert.strictEqual(byCode.record.referrer, 'katie');
+  assert.strictEqual(byCode.record.via, 'code');
+  assert.strictEqual(byCode.record.status, 'pending-s1');
+  const linkFirst = R.planReferral({ ...base, sku: 'guided-setup', codeRef: { slug: 'katie' }, meta: { ref: 'nim', ref_at: '2026-10-01T00:00:00.000Z' } });
+  assert.strictEqual(linkFirst.record.referrer, 'nim');
+  const roadmap = R.planReferral({ ...base, sku: 'roadmap', codeRef: { slug: 'katie' }, meta: { promo_code: 'katie26' } });
+  assert.deepStrictEqual(roadmap.attribution, { slug: 'katie', at: base.nowIso, sku: 'roadmap', session: 'cs_1', code: 'KATIE26' });
+  assert.strictEqual(R.planReferral({ ...base, sku: 'roadmap', codeRef: { slug: 'retired-host' } }).attribution, null, 'an unknown slug credits nobody');
+});
+
 test('vercel.json routes /r/:slug to the handler', () => {
   const v = require('../vercel.json');
   assert.ok(v.rewrites.some((r) => r.source === '/r/:slug' && r.destination === '/api/r?slug=:slug'));

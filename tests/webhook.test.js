@@ -209,6 +209,18 @@ test('non-checkout.session.completed event returns 200 no-op', async () => {
   assert.strictEqual(res.statusCode, 200);
 });
 
+test('payment link (membership): 200 no-op, no booking, no alert', async () => {
+  const calls = [];
+  stripeStub = { constructWebhookEvent: () => fakeSessionEvent({ payment_link: 'plink_123', mode: 'subscription', metadata: {} }) };
+  calStub = { findBookingByStripeSession: async () => { calls.push('find'); }, createBooking: async () => { calls.push('book'); } };
+  emailStub = { sendSamAlert: async () => { calls.push('alert'); } };
+  const res = mockRes();
+  await handler(mockReq('{}'), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(res.body.source, 'payment_link');
+  assert.deepStrictEqual(calls, []);
+});
+
 // --- roadmap (2026-09-28): no account, one confirmation email instead ---
 function roadmapEvent() {
   return fakeSessionEvent({ metadata: { sku: 'roadmap', slot_iso: '2026-10-01T10:00:00+10:00', name: 'Rhi Jones', cal_event_type_id: '120' } });
@@ -333,6 +345,31 @@ test('referral: roadmap first, guided setup later on another device, still pays 
   const rec = JSON.parse(KV_STORE.get('referral:cs_gs'));
   assert.strictEqual(rec.referrer, 'nim');
   assert.strictEqual(rec.via, 'earlier-booking');
+});
+
+test('referral: a roadmap booked with a host code and no link credits the host, and carries to the setup', async () => {
+  KV_STORE.clear();
+  KV_STORE.set('ref_code:KATIE26', JSON.stringify({ slug: 'katie' }));
+  calStub = okCal();
+  emailStub = { sendRoadmapConfirmationEmail: async () => ({}), sendSamAlert: async () => {} };
+  stripeStub = { constructWebhookEvent: () => { const e = refEvent({ sku: 'roadmap', id: 'cs_code_rm', eventType: '200' }); e.data.object.metadata.promo_code = 'katie26'; return e; } };
+  await handler(mockReq('{}'), mockRes());
+  const attr = JSON.parse(KV_STORE.get('ref_attr:buyer@example.com'));
+  assert.strictEqual(attr.slug, 'katie');
+  assert.strictEqual(attr.code, 'KATIE26');
+
+  stripeStub = { constructWebhookEvent: () => refEvent({ id: 'cs_code_gs' }) };
+  await handler(mockReq('{}'), mockRes());
+  assert.strictEqual(JSON.parse(KV_STORE.get('referral:cs_code_gs')).referrer, 'katie');
+});
+
+test('referral: an ordinary discount code credits nobody', async () => {
+  KV_STORE.clear();
+  calStub = okCal();
+  emailStub = { sendRoadmapConfirmationEmail: async () => ({}), sendSamAlert: async () => {} };
+  stripeStub = { constructWebhookEvent: () => { const e = refEvent({ sku: 'roadmap', id: 'cs_plain_code', eventType: '200' }); e.data.object.metadata.promo_code = 'PAINKILLER26'; return e; } };
+  await handler(mockReq('{}'), mockRes());
+  assert.strictEqual(KV_STORE.has('ref_attr:buyer@example.com'), false);
 });
 
 test('referral: a "Who sent you?" answer alone is recorded needs-review', async () => {
