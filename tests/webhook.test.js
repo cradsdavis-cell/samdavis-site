@@ -286,9 +286,10 @@ test('setup SKUs unchanged: a walkthrough still creates the account and sends no
 
 // ---- partner referrals (2026-10-16) ----------------------------------------
 
-function refEvent({ sku = 'guided-setup', id = 'cs_ref_1', email = 'buyer@example.com', ref, text, eventType = '106' } = {}) {
+function refEvent({ sku = 'guided-setup', id = 'cs_ref_1', email = 'buyer@example.com', ref, text, eventType = '106', discount } = {}) {
   const metadata = { sku, slot_iso: '2026-10-20T10:00:00+10:00', name: 'Bea Buyer', cal_event_type_id: eventType };
   if (ref) { metadata.ref = ref; metadata.ref_at = '2026-10-10T00:00:00.000Z'; }
+  if (discount) metadata.ref_discount_aud = String(discount);
   return fakeSessionEvent({
     id, customer_email: email, metadata,
     custom_fields: text ? [{ key: 'referrer', text: { value: text } }] : [{ key: 'referrer', text: { value: null } }],
@@ -315,6 +316,19 @@ test('referral: a guided setup bought through /r/nim is recorded pending-s1 and 
   assert.strictEqual(rec.amount_aud, 100);
   assert.strictEqual(rec.buyer_email, 'buyer@example.com');
   assert.ok(alerts.some((a) => /referral recorded: nim/.test(a.subject)));
+});
+
+test('referral: two-sided (21 Oct), the record and the alert note the buyer\'s A$100 off', async () => {
+  KV_STORE.clear();
+  const alerts = [];
+  calStub = okCal();
+  emailStub = { sendSamAlert: async (a) => { alerts.push(a); } };
+  stripeStub = { constructWebhookEvent: () => refEvent({ id: 'cs_two', ref: 'nim', discount: 100 }) };
+  await handler(mockReq('{}'), mockRes());
+  const rec = JSON.parse(KV_STORE.get('referral:cs_two'));
+  assert.strictEqual(rec.buyer_discount_aud, 100);
+  assert.strictEqual(rec.amount_aud, 100);
+  assert.ok(alerts.some((a) => /buyer got A\$100 off/.test(a.body)));
 });
 
 test('referral: roadmap first, guided setup later on another device, still pays the partner', async () => {

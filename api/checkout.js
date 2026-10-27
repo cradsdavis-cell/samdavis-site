@@ -5,7 +5,7 @@ const { getSku, isPurchasable, DISCOVERY_EVENT_TYPE_ID } = require('../lib/skus'
 const { createCheckoutSession, findPromotionCode } = require('../lib/stripe');
 const { createBooking, findBookingByStripeSession } = require('../lib/cal');
 const { TERMS_VERSION } = require('../lib/terms');
-const { refFromCookie } = require('../lib/referrals');
+const { refFromCookie, buyerDiscountFor, referralCouponId, PAYING_SKUS } = require('../lib/referrals');
 const { cleanUtmSource } = require('../lib/attribution');
 const { cleanTimeZone } = require('../lib/timeZone');
 
@@ -28,6 +28,30 @@ function sanitize(name) {
     .replace(/\s+/g, ' ')                       // collapse whitespace
     .trim()
     .slice(0, NAME_MAX);
+}
+
+// The partner remembered against this email by an earlier roadmap booking
+// (kv ref_attr, which expires with the 90 days), as { slug }, or null. Best
+// effort: a KV failure means no discount, never a failed checkout.
+async function refFromEmail(email) {
+  try {
+    const { defaultKv } = require('../lib/kv');
+    const attr = await defaultKv().getRefAttribution(email);
+    return attr && attr.slug ? { slug: attr.slug, at: attr.at || null } : null;
+  } catch (err) {
+    console.error('[checkout] referral lookup failed', err && err.message);
+    return null;
+  }
+}
+
+// Best effort: an alert that fails never fails a checkout.
+async function alertSam(subject, body) {
+  try {
+    const { sendSamAlert } = require('../lib/email');
+    await sendSamAlert({ subject, body });
+  } catch (err) {
+    console.error('[checkout] Sam alert failed', err && err.message);
+  }
 }
 
 function validateBody({ sku, slot_iso, email, name }) {
@@ -156,17 +180,44 @@ module.exports = async (req, res) => {
   // A partner's referral cookie (/r/<slug>, 90 days, first touch). Rides on
   // the session metadata; the webhook decides what it is worth.
   const ref = refFromCookie(req.headers && req.headers.cookie);
+  // The buyer's side of a referral (2026-10-21): A$100 off a guided setup.
+  // Stripe takes one discount per session, so a code typed on the form
+  // takes its place rather than stacking (the booking page says so).
+  // Without the cookie, a referral carried from an earlier roadmap booking by
+  // the same email (ref_attr, the one that already pays the partner) counts.
+  let refDiscount = null;
+  if (!promotionCodeId) {
+    refDiscount = buyerDiscountFor(ref, sku);
+    if (!refDiscount && !ref && PAYING_SKUS.has(sku) && referralCouponId()) refDiscount = buyerDiscountFor(await refFromEmail(email), sku);
+  }
 
+  const args = {
+    sku, priceId: cfg.stripe_price_id, priceAud: cfg.price_aud, productName: cfg.label,
+    slotIso: slot_iso, name, email,
+    calEventTypeId: cfg.cal_event_type_id, baseUrl: process.env.BASE_URL,
+    termsVersion: TERMS_VERSION, termsAcceptedAt: new Date().toISOString(),
+    promotionCodeId, promoCode: promotionCodeId ? code : '',
+    couponId: refDiscount ? refDiscount.coupon : null,
+    refDiscountAud: refDiscount ? refDiscount.aud : null,
+    ref: ref ? ref.slug : null, refAt: ref ? ref.at : null,
+    utmSource, timeZone,
+  };
   try {
-    const session = await createCheckoutSession({
-      sku, priceId: cfg.stripe_price_id, priceAud: cfg.price_aud, productName: cfg.label,
-      slotIso: slot_iso, name, email,
-      calEventTypeId: cfg.cal_event_type_id, baseUrl: process.env.BASE_URL,
-      termsVersion: TERMS_VERSION, termsAcceptedAt: new Date().toISOString(),
-      promotionCodeId, promoCode: promotionCodeId ? code : '',
-      ref: ref ? ref.slug : null, refAt: ref ? ref.at : null,
-      utmSource, timeZone,
-    });
+    let session;
+    try {
+      session = await createCheckoutSession(args);
+    } catch (err) {
+      // A referral coupon Stripe refuses (deleted, expired, wrong product)
+      // must not cost the sale: book at full price and tell Sam, who owes
+      // the buyer A$100 back.
+      if (!refDiscount || !err || err.type !== 'StripeInvalidRequestError') throw err;
+      console.error('[checkout] referral coupon refused', refDiscount.coupon, err.message);
+      await alertSam(
+        `referral coupon REFUSED for ${email}`,
+        `Stripe refused the referral coupon "${refDiscount.coupon}" (STRIPE_REFERRAL_COUPON) for a ${sku} checkout by ${email} (${name}), referred by ${refDiscount.slug}: ${err.message}. The checkout went ahead at full price. If they pay, refund A$${refDiscount.aud} by hand, then fix the coupon or the env var.`,
+      );
+      session = await createCheckoutSession({ ...args, couponId: null, refDiscountAud: null });
+    }
     res.status(200).json({ checkout_url: session.url, session_id: session.id });
   } catch (err) {
     // A code that exists but does not apply (another product, run out) is

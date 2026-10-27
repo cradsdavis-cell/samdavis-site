@@ -108,7 +108,7 @@ Rules:
 
 Auth and portal: `SESSION_SECRET` (32+ chars), `REDIS_URL`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET` (redirect URI `https://crads-ai.com/api/auth/google/callback`), `CRON_SECRET` / `CRON_SECRET_2` (admin API bearer).
 
-Money and booking: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `CAL_API_KEY`, `CAL_EVENT_TYPE_DISCOVERY` (30 min, free), `CAL_EVENT_TYPE_WALKTHROUGH_S1` / `_S2` and `CAL_EVENT_TYPE_GUIDED_SETUP_S1` / `_S2` (optional overrides; the v5 event type IDs are hard-coded in `lib/skus.js`: 60 + 30 and 60 + 120 min), `CAL_EVENT_TYPE_WORKING_SESSION`, `CAL_EVENT_TYPE_SINGLE` and `CAL_EVENT_TYPE_BLOCK` (legacy portal bookings only), `BASE_URL`.
+Money and booking: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `CAL_API_KEY`, `CAL_EVENT_TYPE_DISCOVERY` (30 min, free), `CAL_EVENT_TYPE_WALKTHROUGH_S1` / `_S2` and `CAL_EVENT_TYPE_GUIDED_SETUP_S1` / `_S2` (optional overrides; the v5 event type IDs are hard-coded in `lib/skus.js`: 60 + 30 and 60 + 120 min), `CAL_EVENT_TYPE_WORKING_SESSION`, `CAL_EVENT_TYPE_SINGLE` and `CAL_EVENT_TYPE_BLOCK` (legacy portal bookings only), `BASE_URL`. `STRIPE_REFERRAL_COUPON`: the Stripe coupon id for a referred buyer's A$100 off a Guided Setup (two-sided referrals, 2026-10-21; unset means the buyer gets nothing off and no page mentions a discount). `SAM_ALERT_EMAIL`: where Sam's alerts go, including the "Who else could do this with you?" answers from `/thanks` (`api/who-else.js`).
 
 Changing env vars requires a redeploy.
 
