@@ -3197,3 +3197,44 @@ main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
 .how-it-works .session-block .s-tag { padding-left: 0; background: none; }
 /* thanks: the site's standalone-link pattern, label then arrow */
 .thanks-next .cta-secondary::after { content: " \2192"; white-space: pre; }
+
+/* ============================================================
+   UI loop 11: callouts rationed, one timeline, sticky booking card
+   ============================================================ */
+
+/* The tinted callout marks a decision only ("Which one is you?" on offer,
+   "Where to start" on how-it-works). Notes and repeated blocks are quiet
+   ruled sections: no fill, no bar, a hairline above. */
+.how-it-works .session-block, .discovery-card, .book-policy, .mem-invite {
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--rule);
+  border-radius: 0;
+  padding: var(--space-3) 0 0;
+}
+.how-it-works .session-block + .session-block { margin-top: var(--space-4); }
+.how-it-works .ready-card { background: var(--bg-soft); border-left: 3px solid var(--accent); border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+
+/* One timeline: booking steps take the home timeline's serif step titles */
+.book-steps h2 { font-family: var(--serif); font-size: var(--fs-3); font-weight: 700; letter-spacing: -0.005em; margin: 3px 0 4px; }
+
+/* One bullet token: an accent bullet with a hanging indent, everywhere a
+   marketing page lists things */
+.mem-list, .essay-product .essay-body ul { list-style: none; padding-left: 0; }
+.mem-list li, .essay-product .essay-body ul li { position: relative; padding-left: 1.1em; }
+.mem-list li::before, .essay-product .essay-body ul li::before { content: "\2022"; position: absolute; left: 0; color: var(--accent-ink); }
+
+/* Small list labels start a subsection: the same space above them everywhere */
+.rung-label, .book-more h2 { margin-top: var(--space-3); }
+.rung-head + .rung-body > .rung-label:first-child { margin-top: var(--space-3); }
+
+/* Guides index list sits on the heading edge */
+.essay-body .guide-list { padding-left: 0; }
+
+/* The booking card stays in view under the sticky nav while the steps scroll */
+@media (min-width: 901px) { .book-panel { position: sticky; top: calc(var(--nav-h) + var(--space-3)); align-self: start; } }
+/* the first ruled step sits under the section's own divider: no second rule */
+.how-it-works > .session-block:first-of-type { border-top: 0; padding-top: 0; }
+/* the note's rule spans the container; only its text keeps the reading measure */
+.book-policy { max-width: none; }
+.book-policy p { max-width: 68ch; }

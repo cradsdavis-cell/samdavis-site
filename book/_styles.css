@@ -161,7 +161,7 @@ body {
 .book-more h2 { font-family: var(--sans); font-size: var(--fs-micro); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); margin: var(--space-3) 0 0.5em; }
 
 .book-panel {
-  position: sticky; top: var(--space-3);
+  position: sticky; top: calc(var(--nav-h, 72px) + var(--space-3));
   background: var(--bg-main);
   border: 1px solid var(--rule);
   border-radius: var(--r-md);

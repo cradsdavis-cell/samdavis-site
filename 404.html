@@ -44,16 +44,11 @@
       gap: var(--space-2);
       justify-content: center;
     }
-    .nf-links a {
-      font-family: var(--sans);
-      font-size: var(--fs-small);
-      padding: 10px 18px;
-      border-radius: var(--r-md);
-      border: 1px solid var(--rule);
-      color: var(--ink-deep);
-      transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-    }
-    .nf-links a:hover { color: var(--accent-ink); border-color: var(--accent); background: var(--bg-soft); }
+    /* onward links: the site's standalone "Label →" pattern (UI loop 11); the primary stays a button */
+    .nf-links a:not(.nf-primary) { display: inline-flex; align-items: center; min-height: var(--tap); font-family: var(--sans); font-size: var(--fs-small); font-weight: 600; color: var(--accent-ink); }
+    /* "Book a session →" carries its own arrow in the copy; the other onward link gets one */
+    .nf-links a[href="/how-it-works"]::after { content: " \2192"; white-space: pre; }
+    .nf-links a:not(.nf-primary):hover { text-decoration: underline; text-underline-offset: 3px; }
   </style>
 <script defer src="/lib/site.js"></script>
 </head>
