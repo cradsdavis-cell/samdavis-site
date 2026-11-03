@@ -3317,3 +3317,43 @@ main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
 /* Home "What came up": every column ends on the same slot, top-aligned, so
    the bottoms line up whether it holds the figure or a Guide link */
 .doors .callout .small { text-wrap: pretty; }
+
+/* ============================================================
+   UI loop 14: offer chooser, prices, leads, measure, /book card
+   ============================================================ */
+
+/* the chooser is not a callout any more: no fill, no bar (offer page CSS draws the rules) */
+.decision-helper { background: none; border: 0; border-radius: 0; padding: 0; }
+@media (min-width: 761px) {
+  /* inline flow, so the option and its full stop stay together: the quote
+     takes the line less 18ch, the option sits in the right-hand 18ch */
+  .decision-helper li strong { display: inline-block; width: min(calc(100% - 18ch), 46ch); margin-right: var(--space-3); }
+}
+
+/* Offer membership card: body and meta at the same sizes as the price cards */
+.discovery-card p { font-size: var(--fs-small); line-height: 1.6; }
+.discovery-card .meta { font-family: var(--sans); font-size: var(--fs-small); letter-spacing: 0; color: var(--ink-soft); }
+/* one price figure: serif, display weight */
+.mem-price .big { font-weight: 800; }
+
+/* Lead paragraphs by content type: essays and guide articles keep the serif
+   italic dek; product pages and the newsletter use the sans lead in ink */
+.essay-product .essay-dek { font-family: var(--sans); font-style: normal; }
+.letter-tagline { color: var(--ink-soft); }
+.hero-sub { text-wrap: balance; }
+
+/* Measure: running paragraphs in wide sections stop at about 68 characters, at every width */
+/* (notes carry their own measure; price lines and card meta run their natural width) */
+/* 36em is about 70 characters of Inter at any size (68ch would be about 82: a ch is 0.6em) */
+.section p:not(.retainer-note):not(.book-policy):not(.meta):not(.price-strip p), .how-it-works .session-block p { max-width: 36em; }
+.price-strip p { max-width: none; }
+
+/* /book: the "Start here" card in two columns like offer's roadmap card:
+   name, meta and action left; what happens right */
+@media (min-width: 901px) {
+  .book-grid > .book-card-first { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--space-5); align-items: start; }
+  .book-grid > .book-card-first > h2 { grid-column: 1; grid-row: 1; }
+  .book-grid > .book-card-first > .meta { grid-column: 1; grid-row: 2; }
+  .book-grid > .book-card-first > .book-cta { grid-column: 1; grid-row: 3; align-self: start; justify-self: start; }
+  .book-grid > .book-card-first > .for { grid-column: 2; grid-row: 1 / span 3; margin: 0; }
+}

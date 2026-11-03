@@ -14,29 +14,20 @@
   .prose-lead { max-width: var(--read-col); margin-bottom: var(--space-3); }
 
   /* Decision helper: "Which one's right for you?" */
-  .decision-helper {
-    background: var(--bg-soft);
-    border-left: 4px solid var(--accent);
-    border-radius: var(--r-sm);
-    padding: var(--space-3) var(--space-4);
-    margin-bottom: var(--space-4);
-  }
+  /* the chooser is a ruled list: each line a quote and the option it points to (UI loop 14) */
+  .decision-helper { margin-bottom: var(--space-4); }
   .decision-helper h2 {
     margin: 0 0 var(--space-2);
     font-size: var(--fs-3);
   }
-  .decision-helper ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: var(--space-1);
-  }
+  .decision-helper ul { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--rule); }
   .decision-helper li {
     font-family: var(--sans);
     font-size: var(--fs-small);
     line-height: 1.6;
     color: var(--ink-soft);
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--rule);
   }
   .decision-helper li strong {
     color: var(--ink-deep);
