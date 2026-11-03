@@ -47,8 +47,32 @@
   let refDiscount = null;
   const refReady = !isPaid ? Promise.resolve() : fetch(`/api/referral?sku=${encodeURIComponent(sku)}`)
     .then(r => (r.ok ? r.json() : {}))
-    .then(j => { refDiscount = (j && j.discount) || null; showRefBanner(); })
+    .then(j => { refDiscount = (j && j.discount) || null; })
+    .catch(() => {})
+    .then(() => codeReady)
+    .then(showRefBanner);
+
+  // A ?code= link (2026-11-04): /api/code says what the code takes off, so
+  // the price pill reads "A$250, free with your code" instead of a list price
+  // the visitor was told they would not pay. A miss keeps the list price.
+  let codeQuote = null;
+  const linkCode = isPaid ? prefillCode() : '';
+  const codeReady = !linkCode ? Promise.resolve() : fetch(`/api/code?sku=${encodeURIComponent(sku)}&code=${encodeURIComponent(linkCode)}`)
+    .then(r => (r.ok ? r.json() : {}))
+    .then(j => { codeQuote = (j && j.quote) || null; showCodePrice(); })
     .catch(() => {});
+
+  function showCodePrice() {
+    const q = codeQuote;
+    const panel = root.closest('.book-panel');
+    const pill = panel && panel.querySelector('.book-panel-head .price');
+    if (!q || !pill) return;
+    const listed = pill.textContent.trim();
+    pill.textContent = q.pay_aud === 0 ? `${listed}, free with your code` : `${listed}, A$${q.pay_aud} with your code`;
+    pill.classList.add('price-coded');
+    const note = panel.querySelector('.book-panel-head + .field-note');
+    if (note) note.textContent = note.textContent.replace(/Got a code\?.*$/, 'Your code is already in the booking form.');
+  }
 
   function refLine() {
     const d = refDiscount;
@@ -59,7 +83,8 @@
     return `${who}. ${price}`;
   }
   function showRefBanner() {
-    if (!refDiscount) return;
+    // Codes don't combine, so a link code that applies wins over the referral.
+    if (!refDiscount || codeQuote) return;
     const p = document.createElement('p');
     p.className = 'ref-discount';
     p.textContent = refLine();
