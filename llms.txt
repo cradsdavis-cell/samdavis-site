@@ -19,7 +19,7 @@
 
 ## Start here
 
-- [Make Claude know your business](https://crads-ai.com/): For small consultancies and practices: Claude set up to know your business, so it drafts your follow-ups from your own inbox, in your own voice, and nothing goes until you say yes. Start with an AI roadmap. A$250 · up to 10 a week.
+- [Claude on steroids, but authentic](https://crads-ai.com/): For small consultancies and practices: Claude set up to know your business, so it drafts your follow-ups from your own inbox, in your own voice, and nothing goes until you say yes. Start with an AI roadmap. A$250 · up to 10 a week.
 - [Docs](https://crads-ai.com/docs): How Crads AI works: getting a mineral, working with it, connecting it, keeping it running, and the legal detail.
 - [Questions, answered straight](https://crads-ai.com/docs/faq): The questions people actually ask before and after getting a mineral, each answered in a few sentences with the deep page beside it.
 - [Self-hosted Claude: what runs where](https://crads-ai.com/docs/self-hosted-claude): You cannot run Claude itself on a machine you own. You can own everything around it. What runs on your mineral, what goes to Anthropic, and the honest alternative.

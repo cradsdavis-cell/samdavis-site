@@ -5,7 +5,7 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/lib/img/favicon.png">
 <link rel="icon" type="image/x-icon" href="/lib/img/favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Make Claude know your business · Crads-AI</title>
+<title>Claude on steroids, but authentic · Crads-AI</title>
 <meta name="description" content="For small consultancies and practices: Claude set up to know your business, so it drafts your follow-ups from your own inbox, in your own voice, and nothing goes until you say yes. Start with an AI roadmap. A$250 · up to 10 a week.">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
@@ -56,7 +56,11 @@
   .hero-shot { order: 2; margin-right: calc(-1 * var(--space-4)); }
   .hero-shot img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--rule);
     box-shadow: 0 18px 50px rgba(23, 61, 42, .16); background: #F6F3EA; }
-  .hero-copy h1 { margin: var(--space-3) 0; }
+  .hero-copy h1 { margin: var(--space-3) 0 var(--space-1); }
+  .hero-sub { font-family: var(--serif); font-size: clamp(21px, 2.3vw, 27px); font-weight: 600; line-height: 1.3; color: var(--ink-deep); margin: 0 0 var(--space-3); }
+  /* 3 Nov 2026: Sam's photo replaces the app screenshot (it moved to How it works) */
+  .hero-photo { justify-self: center; max-width: 400px; margin-right: 0; }
+  .hero-photo img { aspect-ratio: 4 / 5; object-fit: cover; border-radius: 18px; border: none; box-shadow: 0 22px 60px rgba(23, 61, 42, .28); }
   .hero-copy .lede { margin-bottom: var(--space-4); }
   .cta-note { font-family: var(--sans); font-size: 15px; color: var(--ink-faint); margin: var(--space-2) 0 0; }
 
@@ -93,8 +97,8 @@
   .qa p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--ink-soft); }
 
   /* Who you'd work with, and the close */
-  .who-card { display: grid; grid-template-columns: 120px 1fr; gap: var(--space-3); align-items: center; max-width: 760px; }
-  .who-card img { width: 120px; height: 120px; border-radius: 50%; display: block; border: 1px solid var(--rule); }
+  .who-card { display: grid; grid-template-columns: 320px 1fr; gap: var(--space-4); align-items: center; max-width: 900px; }
+  .who-card img { width: 320px; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; display: block; box-shadow: 0 12px 34px rgba(23, 61, 42, .14); }
   .who-card p { margin: 0; font-size: 17px; line-height: 1.6; color: var(--ink-soft); }
   .close { text-align: center; margin-top: var(--space-5); }
   .close .diy { font-size: 15px; color: var(--ink-soft); margin-top: var(--space-3); }
@@ -102,12 +106,13 @@
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; padding: var(--space-5) var(--space-4); gap: var(--space-4); background: linear-gradient(165deg, var(--bg-main) 0%, var(--bg-main) 50%, var(--grad-1) 72%, var(--grad-3) 100%); }
     .hero-shot { margin-right: 0; }
+    .hero-photo { max-width: 340px; }
     .steps-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 600px) {
     .hero .cta-primary { display: block; text-align: center; }
     .who-card { grid-template-columns: 1fr; justify-items: start; }
-    .who-card img { width: 96px; height: 96px; }
+    .who-card img { width: 100%; }
     .price-strip .sep { display: none; }
     .price-strip .item { display: block; }
   }
@@ -117,13 +122,13 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Crads-AI">
 <meta property="og:url" content="https://crads-ai.com/">
-<meta property="og:title" content="Make Claude know your business · Crads-AI">
+<meta property="og:title" content="Claude on steroids, but authentic · Crads-AI">
 <meta property="og:description" content="Claude set up to know your business, so it drafts your follow-ups from your own inbox, in your own voice. Start with an AI roadmap: two calls and a written report.">
 <meta property="og:image" content="https://crads-ai.com/lib/img/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Make Claude know your business · Crads-AI">
+<meta name="twitter:title" content="Claude on steroids, but authentic · Crads-AI">
 <meta name="twitter:description" content="Claude set up to know your business, so it drafts your follow-ups from your own inbox, in your own voice. Start with an AI roadmap: two calls and a written report.">
 <meta name="twitter:image" content="https://crads-ai.com/lib/img/og-card.png">
 <script type="application/ld+json">
@@ -194,46 +199,22 @@
 </nav>
 
 <main>
-  <!-- 1. Hero: callout, the mechanism, door 1, one button (second pass, 22 Oct 2026) -->
+  <!-- 1. Hero: Sam's headline and subline (3 Nov 2026), the mechanism, one button, his photo -->
   <section class="hero wrap" id="top">
     <div class="hero-copy">
       <p class="eyebrow">For owners of small consultancies and practices</p>
-      <h1>Make Claude know <em>your business.</em></h1>
-      <p class="lede">Then it can do the follow-ups you never get round to, from your own inbox, in your own voice. Nothing goes until you say yes. Start with an AI roadmap: we go through all the pain points in your business, and I write up what I'd start with.</p>
+      <h1>Claude on steroids, <em>but authentic.</em></h1>
+      <p class="hero-sub">Make Claude know you and your business.</p>
+      <p class="lede">It drafts the follow-ups you don't get round to, from your own inbox. Nothing goes until you say yes. Start with an AI roadmap: we go through all the pain points in your business, I write up a report, and we go through it together on a second call.</p>
       <a class="cta-primary" href="/book/roadmap">Book an AI roadmap</a>
       <p class="cta-note">A$250 · up to 10 a week.</p>
     </div>
-    <div class="hero-shot">
-      <img src="/lib/img/shots/overview.png" width="1280" height="1036" alt="The Crads-AI app on its Overview page: the assistant by name, the interview progress, the size of its brain, what it can do, and the jobs it runs by itself" class="float-gentle">
+    <div class="hero-shot hero-photo">
+      <img src="/lib/img/sam-cape-hauy.jpg" width="760" height="950" alt="Sam Davis on the cliffs at Cape Hauy, Tasmania, smiling back over his shoulder" fetchpriority="high">
     </div>
   </section>
 
-  <!-- 2. The three doors, clients first (roadmap research, 21 Oct 2026: clients
-       the #1 want for 7 of 10; in-your-head raised by 9 of 10; posting by 8) -->
-  <section class="section wrap" id="doors">
-    <div class="read-col">
-      <h2 class="reveal-on-scroll">What came up in my last ten roadmaps</h2>
-    </div>
-    <div class="callout-grid doors interlude-bare stagger-grid">
-      <div class="callout" id="door-clients">
-        <div class="big">More of the right clients.</div>
-        <div class="small">Follow-ups and first emails from your own inbox, written the way you write, from what it knows about each person. You approve every one.</div>
-        <p class="door-stat">The first thing 7 of 10 asked for.</p>
-      </div>
-      <div class="callout" id="door-head">
-        <div class="big">Everything out of your head.</div>
-        <div class="small">Clients, the next steps from Tuesday's meeting, the quote you said you'd send: kept in one place that remembers, with a brief each morning.</div>
-        <p class="door-links"><a href="/guides/claude-remember-your-business">Guide →</a></p>
-      </div>
-      <div class="callout" id="door-posts">
-        <div class="big">Showing up every week.</div>
-        <div class="small">Each Friday it drafts a post from what actually happened in your week. You edit it.</div>
-        <p class="door-links"><a href="/guides/ai-social-media-posts">Guide →</a></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. Proof. Real, consented words only (lib/testimonialsRender.js has the
+  <!-- 2. Proof, moved above the doors on 3 Nov 2026 for a reader who doesn't know Sam yet. Real, consented words only (lib/testimonialsRender.js has the
        full set and the honesty rule). Abbey: 21 Sep 2026 questionnaire,
        "Yes, with my name" (first live on this page 23 Sep, PR #38). Nim: 21 Oct
        2026 feedback form, "Yes, with my name" (PR #104); from the last two sentences
@@ -260,6 +241,32 @@
              clients, in their own words, with written consent ("Yes, with my
              name" on the feedback form). Copy a figure above. Never invent one,
              and never use roadmap-call words without that consent. -->
+      </div>
+    </div>
+  </section>
+
+
+  <!-- 3. The three doors, clients first (roadmap research, 21 Oct 2026: clients
+       the #1 want for 7 of 10; in-your-head raised by 9 of 10; posting by 8) -->
+  <section class="section wrap" id="doors">
+    <div class="read-col">
+      <h2 class="reveal-on-scroll">What came up in my last ten roadmaps</h2>
+    </div>
+    <div class="callout-grid doors interlude-bare stagger-grid">
+      <div class="callout" id="door-clients">
+        <div class="big">More of the right clients.</div>
+        <div class="small">Follow-ups and first emails from your own inbox, written the way you write, from what it knows about each person. You approve every one.</div>
+        <p class="door-stat">The first thing 7 of 10 asked for.</p>
+      </div>
+      <div class="callout" id="door-head">
+        <div class="big">Everything out of your head.</div>
+        <div class="small">Clients, the next steps from Tuesday's meeting, the quote you said you'd send: kept in one place that remembers, with a brief each morning.</div>
+        <p class="door-links"><a href="/guides/claude-remember-your-business">Guide →</a></p>
+      </div>
+      <div class="callout" id="door-posts">
+        <div class="big">Showing up every week.</div>
+        <div class="small">Each Friday it drafts a post from what actually happened in your week. You edit it.</div>
+        <p class="door-links"><a href="/guides/ai-social-media-posts">Guide →</a></p>
       </div>
     </div>
   </section>
@@ -305,6 +312,10 @@
         <p>In a chat that forgets you. I set Claude up once so it knows your clients, your work and how you write, and works in your email and calendar on limits you choose.</p>
       </li>
       <li>
+        <h3>Will it sound like AI?</h3>
+        <p>At first, a bit. It starts from real samples of your writing, taken when it's set up, and gets closer each time you edit a draft and show it what you changed. Nothing goes out until you've read it and said yes.</p>
+      </li>
+      <li>
         <h3>I'm not technical.</h3>
         <p>You don't need to be. We do it together on screen, and I'm on Slack for 30 days after.</p>
       </li>
@@ -323,8 +334,8 @@
   <section class="section wrap" id="who">
     <p class="eyebrow reveal-on-scroll">Who you'd work with</p>
     <div class="who-card reveal-on-scroll" style="margin-top: var(--space-3);">
-      <img src="/lib/img/sam-photo.jpg" width="280" height="280" alt="Sam Davis">
-      <p>I'm Sam Davis, a physicist with a PhD in environmental data science from the University of Sydney. I've built seven AI systems in twelve months, including the assistant that runs my own week. <a href="/about">More about me →</a></p>
+      <img src="/lib/img/sam-presenting.jpg" width="640" height="480" alt="Sam Davis presenting at a lectern, laptop open" loading="lazy">
+      <p>I'm Sam Davis, a physicist with a PhD in environmental data science from the University of Sydney. I've built seven AI systems in twelve months, including the assistant that runs my own week, and I run every roadmap call myself. <a href="/about">More about me →</a></p>
     </div>
     <div class="close reveal-on-scroll" id="final-cta">
       <a class="cta-primary" href="/book/roadmap">Book an AI roadmap</a>

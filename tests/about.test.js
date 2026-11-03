@@ -143,7 +143,7 @@ test('experience renders 9 accordion rows in reverse-chronological order', () =>
     'AMME, USYD',
     'DARE ARC',
     'Alan Turing Institute',
-    'Satellite Catapult',
+    'Satellite Applications Catapult',
     'Apadmi Ltd',
     'European Space Agency',
     'Harrow International School',
