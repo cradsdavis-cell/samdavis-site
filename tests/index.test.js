@@ -88,7 +88,7 @@ test('how the roadmap runs, then the price strip', () => {
   assert.match(how, /Two calls and a report/);
   assert.strictEqual((how.match(/<li>/g) || []).length, 3, 'three steps');
   assert.match(how, /within three working days/);
-  for (const price of ['AI roadmap A$250', 'Walkthrough A$350', 'Guided setup A$700', 'then membership, A$99 a month']) {
+  for (const price of ['AI roadmap A$250', 'Walkthrough A$350', 'Guided setup A$700', 'then <a href="/membership">membership</a>, A$99 a month']) {
     assert.ok(how.includes(price), `price strip shows ${price}`);
   }
   assert.match(how, /href="\/offer"/, 'the strip links the full offer');
