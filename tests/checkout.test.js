@@ -45,6 +45,11 @@ require.cache[require.resolve('../lib/cal')] = {
     findBookingByStripeSession: async () => ({ ok: true, status: 200, body: { data: [] } }),
   },
 };
+// Every discovery booking now touches the mailing list (3 Nov 2026), so no
+// test may reach a real Redis. The list tests below swap in their own rows.
+require.cache[require.resolve('../lib/kv')] = {
+  exports: { defaultKv: () => ({ getSubscriber: async () => null, setSubscriber: async () => {} }) },
+};
 const ALERTS = [];
 require.cache[require.resolve('../lib/email')] = {
   exports: { sendSamAlert: async (a) => { ALERTS.push(a); } },
@@ -339,9 +344,10 @@ test('code: a real code on the wrong product (Stripe refuses) is invalid_code, n
   assert.strictEqual(res.body.error, 'invalid_code');
 });
 
-// ---- discovery newsletter opt-in (2026-10-11) -------------------------------
-// The tick box adds the booker to the essay list; unticked (or anything but a
-// strict true) adds nobody, and a list failure never fails the booking.
+// ---- discovery bookings join the letter (2026-11-03) ------------------------
+// Every booking adds the booker, said next to the button (was an opt-in box
+// until 3 Nov). The basis is booking-notice; an unsubscriber is never re-added,
+// and a list failure never fails the booking.
 function stubKv(rows, { fail = false } = {}) {
   require.cache[require.resolve('../lib/kv')] = {
     exports: {
@@ -353,26 +359,26 @@ function stubKv(rows, { fail = false } = {}) {
   };
 }
 
-test('discovery booking with the opt-in ticked adds an express-booking subscriber', async () => {
-  const rows = {};
-  stubKv(rows);
-  const res = mockRes();
-  await handler(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, name: 'N', email: 'News@Example.com', newsletter: true }), res);
-  assert.strictEqual(res.statusCode, 200);
-  assert.strictEqual(rows['news@example.com'].status, 'subscribed');
-  assert.strictEqual(rows['news@example.com'].consent, 'express-booking');
-  assert.strictEqual(rows['news@example.com'].source, '/book/discovery');
+test('every discovery booking adds a booking-notice subscriber, tick box or not', async () => {
+  for (const newsletter of [undefined, false, true]) {
+    const rows = {};
+    stubKv(rows);
+    const res = mockRes();
+    await handler(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, name: 'N', email: 'News@Example.com', newsletter }), res);
+    assert.strictEqual(res.statusCode, 200);
+    assert.strictEqual(rows['news@example.com'].status, 'subscribed');
+    assert.strictEqual(rows['news@example.com'].consent, 'booking-notice');
+    assert.strictEqual(rows['news@example.com'].source, '/book/discovery');
+  }
 });
 
-test('discovery booking without the opt-in adds nobody', async () => {
-  const rows = {};
+test('a discovery booking never re-adds someone who unsubscribed', async () => {
+  const rows = { 'gone@example.com': { email: 'gone@example.com', status: 'unsubscribed', unsub_token: 't' } };
   stubKv(rows);
-  for (const newsletter of [undefined, false, 'true', 'yes']) {
-    const res = mockRes();
-    await handler(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, name: 'N', email: 'no@example.com', newsletter }), res);
-    assert.strictEqual(res.statusCode, 200);
-  }
-  assert.deepStrictEqual(rows, {});
+  const res = mockRes();
+  await handler(mockReq({ sku: 'discovery', slot_iso: FUTURE_SLOT, name: 'G', email: 'gone@example.com' }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(rows['gone@example.com'].status, 'unsubscribed');
 });
 
 test('a list failure never fails a discovery booking', async () => {

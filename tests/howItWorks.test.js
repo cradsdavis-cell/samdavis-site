@@ -66,10 +66,10 @@ test('how-it-works: roadmap, setup, after, then the software detail', () => {
   assert.match(html, /href="\/download"/, 'expected a download link');
 });
 
-test('how-it-works page links /offer and /book/discovery', () => {
+test('how-it-works page links /offer, and not the retired discovery call', () => {
   const html = readHIW();
   assert.match(html, /href="\/offer"/, 'expected /offer link');
-  assert.match(html, /href="\/book\/discovery"/, 'expected /book/discovery link');
+  assert.ok(!/href="\/book\/discovery"/.test(html), 'the discovery call is off the site (3 Nov 2026)');
 });
 
 test('how-it-works page renders the canonical site-footer', () => {
