@@ -3238,3 +3238,57 @@ main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
 /* the note's rule spans the container; only its text keeps the reading measure */
 .book-policy { max-width: none; }
 .book-policy p { max-width: 68ch; }
+
+/* ============================================================
+   UI loop 12: one note style, the membership card, about rows
+   ============================================================ */
+
+/* Fine print, one style everywhere: small, ink-soft, a hairline above, no
+   accent; links in it are ordinary inline links. (Booking errors keep their
+   own danger callout.) */
+.retainer-note, .book-policy, main .mem p.book-policy {
+  font-family: var(--sans);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  color: var(--ink-soft);
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--rule);
+  border-radius: 0;
+  padding: var(--space-2) 0 0;
+}
+.retainer-note p, .book-policy p { font-size: inherit; color: inherit; max-width: 68ch; }
+.retainer-note a, .book-policy a { font-weight: 500; }
+.retainer-note strong, .book-policy strong { color: var(--ink-deep); }
+
+/* Offer: the membership upsell is a card like the price cards above it, and
+   the "After the first month" note hangs straight off it */
+.discovery-card {
+  background: var(--bg-main);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  padding: var(--space-3);
+}
+.discovery-card + .retainer-note { border-top: 0; margin-top: var(--space-2); }
+
+/* About: the disclosure marker sits before the row title, not 600px away at
+   the right edge; at 390 the date stacks over the title */
+.about-row-header { grid-template-columns: 110px 20px minmax(0, 1fr); }
+.about-row-header .when { grid-column: 1; grid-row: 1; }
+.about-row-header .caret { grid-column: 2; grid-row: 1; justify-self: start; align-self: baseline; }
+.about-row-header > span:not(.when):not(.caret) { grid-column: 3; grid-row: 1; }
+.about-row-body { padding-left: calc(110px + 20px + 2 * var(--space-2)); }
+@media (max-width: 900px) {
+  .about-row-header { grid-template-columns: 80px 20px minmax(0, 1fr); }
+  .about-row-body { padding-left: calc(80px + 20px + 2 * var(--space-1)); }
+}
+@media (max-width: 600px) {
+  .about-row-header { grid-template-columns: 20px minmax(0, 1fr); row-gap: 2px; }
+  .about-row-header .when { grid-column: 2; grid-row: 1; }
+  .about-row-header .caret { grid-column: 1; grid-row: 1; }
+  .about-row-header > span:not(.when):not(.caret) { grid-column: 2; grid-row: 2; }
+  .about-row-body { padding-left: calc(20px + var(--space-1)); }
+}
+/* notes: the rule spans the container, the text keeps a 68ch measure, one gap under the rule */
+.retainer-note, .book-policy, main .mem p.book-policy { padding: var(--space-3) max(0px, calc(100% - 68ch)) 0 0; }
+.book-panel .book-policy { padding: var(--space-2) 0 0; }

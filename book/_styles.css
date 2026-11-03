@@ -204,7 +204,10 @@ body {
   .slot-days { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .book-panel { padding: var(--space-2); }
 }
-.book-list { margin: 0 0 0.8em; padding-left: 1.2em; color: var(--ink-soft); line-height: 1.6; }
+/* the site bullet token (UI loop 12) */
+.book-list { margin: 0 0 0.8em; padding-left: 0; list-style: none; color: var(--ink-soft); line-height: 1.6; }
+.book-list li { position: relative; padding-left: 1.1em; }
+.book-list li::before { content: "\2022"; position: absolute; left: 0; color: var(--accent-ink); }
 .group-email p { font-size: var(--fs-small); line-height: 1.55; color: var(--ink-soft); margin: 0 0 0.8em; }
 .group-email .book-cta { display: block; width: 100%; }
 .book-panel .slot-button:hover { border-color: var(--accent); }
