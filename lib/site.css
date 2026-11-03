@@ -185,6 +185,7 @@ a:hover { color: var(--accent-deep); }
 }
 
 /* the hairline between sections runs content edge to content edge, not into the gutters */
+.hero + .section,
 .section + .section {
   border-top: 0;
   background: linear-gradient(var(--rule), var(--rule)) no-repeat center top / calc(100% - 2 * var(--gutter)) 1px;
@@ -466,7 +467,7 @@ a:hover { color: var(--accent-deep); }
 
 .callout-grid .callout {
   padding: var(--space-3);
-  border-top: 2px solid var(--accent);
+  border-top: 2px solid var(--ink-deep);
   background: transparent;
 }
 
@@ -2746,3 +2747,90 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 /* one width for the issue card on /newsletter and the issue pages: the reading column */
 .newsletter-web table.container { width: var(--read) !important; max-width: 100% !important; }
 @media (max-width: 760px) { .newsletter-web table.container { width: 100% !important; } }
+
+/* Page header (UI loop 03): the plain-page counterpart of the home hero.
+   Eyebrow, h1 and lead on the container edge; the brand leaf redrawn as
+   hairlines sits to the right on wide screens. Replaces the floating raster
+   illustration on /offer and /how-it-works. */
+.page-head {
+  position: relative;
+  display: block;
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-5);
+  background: url(/lib/img/leaf-veins.svg) no-repeat right calc(var(--gutter) + 8px) center / auto 82%;
+}
+.page-head > img { display: none; }
+.page-head > div, .page-head > h1, .page-head > p { max-width: 860px; }
+@media (max-width: 900px) {
+  .page-head { background: none; padding-top: var(--space-5); padding-bottom: var(--space-4); }
+}
+
+/* Tap targets (UI loop 03): every standalone control is at least 44px tall.
+   Links inside sentences are exempt (WCAG 2.5.8 inline exception). */
+.site-nav-bar .brand { min-height: var(--tap); }
+.nav-toggle { width: var(--tap); height: var(--tap); }
+.site-footer .footer-col a,
+.site-footer .footer-contact a {
+  border-bottom: 0;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: var(--ink-faint);
+  text-underline-offset: 4px;
+}
+.site-footer .footer-col a { text-decoration-color: transparent; }
+.site-footer .footer-col a:hover, .site-footer .footer-contact a:hover { text-decoration-color: var(--accent); }
+/* 44px rows where fingers are used; desktop keeps the tighter list pitch */
+@media (max-width: 768px), (pointer: coarse) {
+  .site-footer .footer-col a, .site-footer .footer-contact a { display: inline-flex; align-items: center; min-height: var(--tap); }
+  .site-footer .footer-col li { line-height: 1.4; }
+}
+.cta-secondary, a.cta:not(.rung .cta) { display: inline-flex; align-items: center; min-height: var(--tap); }
+details > summary { padding-block: 10px; cursor: pointer; }
+.subscribe-form input[type="email"], .field input:not([type="checkbox"]):not([type="radio"]), .lead-capture-card input[type="email"] { min-height: 48px; }
+.field-check label { min-height: var(--tap); align-items: center; }
+/* Short standalone text links: vertical padding on the inline box widens
+   the hit area to 44px without moving the line. */
+.eyebrow a, .door-links a, .price-strip .more a, .about-sidebar .sb-item a,
+.newsletter-web a { padding-block: 14px; }
+
+/* One featured tag (UI loop 03): small, straddling the card's top edge,
+   sentence case, with clear space before the card's first line. */
+.rung .rung-badge, .book-card-first::before, .book-card-hero::before {
+  position: absolute;
+  top: -11px;
+  left: var(--space-3);
+  right: auto;
+  width: auto;
+  margin: 0;
+  background: var(--accent-deep);
+  color: var(--bg-main);
+  font-family: var(--sans);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  line-height: 22px;
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+}
+.rung { padding-top: var(--space-4); }
+.book-card-first, .book-card-hero { padding-top: var(--space-4); }
+
+/* One tinted callout (UI loop 03): soft fill, 3px accent rule on the left,
+   left-aligned text, no other border. Session blocks, the decision helper,
+   the membership invite, the offer's membership panel and the booking policy. */
+.how-it-works .session-block, .decision-helper, .mem-invite, .discovery-card, .book-policy {
+  background: var(--bg-soft);
+  border: 0;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+}
+.discovery-card p { margin-left: 0; margin-right: 0; }
+.book-panel .book-policy { background: none; border: 0; border-top: 1px solid var(--rule); border-radius: 0; padding: var(--space-2) 0 0; }
+@media (max-width: 600px) {
+  .how-it-works .session-block, .decision-helper, .mem-invite, .discovery-card, .book-policy { padding: var(--space-3); }
+}
+/* The highlighted card: the content card with a 2px accent border, same fill */
+.rung.featured, .book-card-first { border: 2px solid var(--accent); background: var(--bg-main); }

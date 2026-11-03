@@ -42,25 +42,32 @@
 }
 </script>
 <style>
+  /* UI loop 03: no gradient panel. Copy on the container edge; the photo sits
+     on an offset forest block carrying the leaf mark redrawn as hairlines. */
   .hero {
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
     align-items: center;
     gap: var(--space-5);
-    padding: var(--space-6) var(--space-5);
-    margin-top: var(--space-4);
-    max-width: var(--container);
-    background: linear-gradient(104deg, var(--bg-main) 0%, var(--bg-main) 44%, var(--grad-1) 60%, var(--grad-2) 80%, var(--grad-3) 100%);
-    border-radius: var(--r-md);
+    padding-top: var(--space-5);
+    padding-bottom: var(--space-5);
   }
   .hero-copy { order: 1; }
   .hero-shot { order: 2; margin-right: calc(-1 * var(--space-4)); }
   .hero-shot img { width: 100%; height: auto; display: block; border-radius: var(--r-md); border: 1px solid var(--rule);
     box-shadow: none; background: #F6F3EA; }
-  .hero-copy h1 { margin: var(--space-3) 0 var(--space-1); }
+  .hero-copy h1 { margin: var(--space-3) 0 var(--space-2); }
   .hero-sub { font-family: var(--serif); font-size: var(--fs-3); font-weight: 600; line-height: 1.3; color: var(--ink-deep); margin: 0 0 var(--space-3); }
   /* 3 Nov 2026: Sam's photo replaces the app screenshot (it moved to How it works) */
-  .hero-photo { justify-self: center; max-width: 560px; margin-right: 0; }
+  .hero-photo { justify-self: end; width: 100%; max-width: 520px; margin-right: 0; position: relative; isolation: isolate; padding: 0 18% 18% 0; }
+  .hero-photo::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 18% 0 0 18%;
+    border-radius: var(--r-md);
+    background: var(--ink-deep) url(/lib/img/leaf-veins-on-dark.svg) no-repeat right 4.5% bottom 6% / 11% auto;
+  }
   .hero-photo img { aspect-ratio: 5 / 4; object-fit: cover; border-radius: var(--r-md); border: none; box-shadow: none; }
   .hero-copy .lede { margin-bottom: var(--space-4); }
   .cta-note { font-family: var(--sans); font-size: var(--fs-small); color: var(--ink-faint); margin: var(--space-2) 0 0; }
@@ -72,20 +79,25 @@
   .doors .callout .small { flex: 1; }
   .doors .door-links { margin: var(--space-2) 0 0; font-family: var(--sans); font-size: var(--fs-small); line-height: 1.6; }
   .doors .door-links a { font-weight: 600; }
-  .doors .door-stat { margin: var(--space-2) 0 0; font-family: var(--sans); font-size: var(--fs-small); font-weight: 600; color: var(--accent-deep); }
-  #door-clients { border-top-width: 4px; }
+  .doors .door-stat { margin: var(--space-2) 0 0; font-family: var(--sans); font-size: var(--fs-small); font-weight: 600; color: var(--ink-deep); }
+  .doors .callout { padding-inline: 0; }
 
   /* Proof */
   #proof .testimonials-strip { margin: 0 auto; }
 
   /* How the roadmap runs */
-  .steps-grid { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
-  .steps-grid li { background: var(--bg-card); border-radius: var(--r-md); padding: var(--space-3); }
-  .steps-grid .step-n { display: inline-block; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff;
-    font-weight: 700; text-align: center; line-height: 30px; font-family: var(--sans); margin-bottom: var(--space-2); }
-  .steps-grid h3 { margin: 0 0 8px; font-size: var(--fs-3); }
-  .steps-grid p { margin: 0; font-size: var(--fs-small); line-height: 1.55; color: var(--ink-soft); }
-  .price-strip { margin: var(--space-4) auto 0; padding: var(--space-3); background: var(--bg-soft); border-radius: var(--r-md); text-align: center; max-width: 900px; }
+  /* UI loop 03: a timeline, not three cards. One line, three nodes drawn
+     like the leaf mark's vein ends; the report (the thing you get) is the
+     filled node. */
+  .steps-grid { --node: 32px; --step-gap: var(--space-4); list-style: none; margin: var(--space-4) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--step-gap); }
+  .steps-grid li { position: relative; padding-top: calc(var(--node) + var(--space-3)); }
+  .steps-grid li:not(:last-child)::before { content: ""; position: absolute; top: calc(var(--node) / 2); left: var(--node); right: calc(-1 * var(--step-gap)); height: 1.5px; background: var(--ink-deep); }
+  .steps-grid .step-n { position: absolute; top: 0; left: 0; width: var(--node); height: var(--node); border-radius: 50%; border: 1.5px solid var(--ink-deep);
+    background: var(--bg-main); color: var(--ink-deep); font-family: var(--mono); font-size: var(--fs-micro); font-weight: 600;
+    display: flex; align-items: center; justify-content: center; }
+  .steps-grid h3 { margin: 0 0 8px; font-size: var(--fs-3); max-width: 18ch; }
+  .steps-grid p { margin: 0; font-size: var(--fs-body); line-height: 1.55; color: var(--ink-soft); max-width: 32ch; }
+  .price-strip { margin: var(--space-5) 0 0; padding: var(--space-3) 0 0; border-top: 1px solid var(--rule); text-align: left; }
   .price-strip p { margin: 0; font-family: var(--sans); font-size: var(--fs-small); line-height: 1.7; color: var(--ink-deep); }
   .price-strip .sep { color: var(--ink-faint); padding: 0 6px; }
   .price-strip .then { font-size: var(--fs-small); color: var(--ink-soft); margin-bottom: var(--space-1); }
@@ -93,7 +105,7 @@
 
   /* What people ask first */
   .qa { list-style: none; margin: var(--space-3) 0 0; padding: 0; display: grid; gap: var(--space-3); max-width: var(--read-col); }
-  .qa li { border-left: 2px solid var(--accent); padding: 2px 0 2px var(--space-3); }
+  .qa li { border-left: 2px solid var(--rule); padding: 2px 0 2px var(--space-3); }
   .qa h3 { margin: 0 0 6px; font-family: var(--sans); font-size: var(--fs-body); font-weight: 600; color: var(--ink-deep); }
   .qa p { margin: 0; font-size: var(--fs-small); line-height: 1.6; color: var(--ink-soft); }
 
@@ -101,14 +113,19 @@
   .who-card { display: grid; grid-template-columns: 120px 1fr; gap: var(--space-3); align-items: center; max-width: 760px; }
   .who-card img { width: 120px; height: 120px; border-radius: 50%; display: block; border: 1px solid var(--rule); }
   .who-card p { margin: 0; font-size: var(--fs-body); line-height: 1.6; color: var(--ink-soft); }
-  .close { text-align: center; margin-top: var(--space-5); }
+  .close { margin-top: var(--space-5); }
   .close .diy { font-size: var(--fs-small); color: var(--ink-soft); margin-top: var(--space-3); }
 
   @media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; padding: var(--space-5) var(--space-4); gap: var(--space-4); background: linear-gradient(165deg, var(--bg-main) 0%, var(--bg-main) 50%, var(--grad-1) 72%, var(--grad-3) 100%); }
+    .hero { grid-template-columns: 1fr; gap: var(--space-4); padding-top: var(--space-4); padding-bottom: var(--space-5); }
     .hero-shot { margin-right: 0; }
-    .hero-photo { max-width: 100%; }
-    .steps-grid { grid-template-columns: 1fr; }
+    .hero-photo { max-width: 560px; justify-self: start; padding: 0 14% 14% 0; }
+    .hero-photo::before { inset: 14% 0 0 14%; background-size: 9% auto; }
+    /* vertical timeline */
+    .steps-grid { grid-template-columns: 1fr; --step-gap: var(--space-3); }
+    .steps-grid li { padding-top: 0; padding-left: calc(var(--node) + var(--space-3)); min-height: var(--node); }
+    .steps-grid li:not(:last-child)::before { top: var(--node); bottom: calc(-1 * var(--step-gap)); left: calc(var(--node) / 2); right: auto; width: 1.5px; height: auto; }
+    .steps-grid h3, .steps-grid p { max-width: none; }
   }
   @media (max-width: 600px) {
     .hero .cta-primary { display: flex; }

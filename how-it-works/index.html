@@ -10,15 +10,6 @@
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 <style>
-  .how-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 200px;
-    align-items: center;
-    gap: var(--space-4);
-    padding-top: var(--space-6);
-    padding-bottom: var(--space-4);
-  }
-  .how-hero img { width: 140px; height: auto; order: 2; justify-self: end; }
   .how-hero p.lead {
     max-width: var(--read-col);
     color: var(--ink-soft);
@@ -248,8 +239,6 @@
   }
 
   @media (max-width: 900px) {
-    .how-hero { grid-template-columns: 1fr; }
-    .how-hero img { display: none; }
     .fourc-row { grid-template-columns: 1fr; gap: var(--space-3); }
     .fourc-row .fc-img { order: 2; }
   }
@@ -323,7 +312,7 @@
 <main>
   <!-- Hero (second pass, 22 Oct 2026): for a business owner, roadmap -> setup ->
        what you have after; the software detail sits below. -->
-  <section class="how-hero wrap">
+  <section class="how-hero page-head wrap">
     <img src="/lib/img/sam-illustration.png" alt="" class="float-gentle">
     <div>
       <p class="eyebrow">How it works</p>

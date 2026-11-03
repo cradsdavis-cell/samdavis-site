@@ -29,12 +29,13 @@ body {
 }
 .book-header h1 em { color: var(--accent); font-style: italic; font-weight: 700; }
 .book-header p { font-size: var(--fs-3); color: var(--ink-soft); margin-top: 0; }
-.book-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+.book-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); margin-top: var(--space-4); }
+@media (max-width: 760px) { .book-grid { grid-template-columns: minmax(0, 1fr); } }
 .book-card {
-  background: var(--bg-soft);
+  background: var(--bg-main);
   border: 1px solid var(--rule);
   border-radius: var(--r-md);
-  padding: var(--space-4) var(--space-3);
+  padding: var(--space-3);
   display: flex;
   flex-direction: column;
 }
@@ -48,7 +49,7 @@ body {
 }
 .book-card .meta { color: var(--ink-soft); font-size: var(--fs-small); margin-bottom: 1rem; }
 .book-card .for { font-size: var(--fs-body); flex-grow: 1; margin-bottom: 1.5rem; color: var(--ink-soft); }
-.book-policy { margin-top: 3rem; padding: var(--space-3); background: var(--bg-soft); border: 1px solid var(--rule); border-radius: var(--r-md); font-size: var(--fs-body); color: var(--ink-soft); }
+.book-policy { margin-top: var(--space-5); font-size: var(--fs-body); color: var(--ink-soft); }
 
 /* slot picker */
 .slot-form { background: var(--bg-soft); padding: 2rem; border-radius: var(--r-md); border: 1px solid var(--rule); margin-top: 2rem; }
@@ -101,7 +102,7 @@ body {
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 .field-check label { display: flex; gap: 0.6rem; align-items: flex-start; font-size: var(--fs-small); line-height: 1.45; cursor: pointer; }
-.field-check input[type="checkbox"] { width: auto; flex: 0 0 auto; margin-top: 0.2rem; accent-color: var(--accent); }
+.field-check input[type="checkbox"] { width: 22px; height: 22px; flex: 0 0 auto; margin: 0; accent-color: var(--accent-deep); }
 .field-check a { color: var(--accent-deep, var(--accent)); }
 .field input:focus {
   outline: none;
@@ -143,12 +144,13 @@ body {
 .book-steps li::before {
   content: counter(step);
   position: absolute; left: 0; top: 0;
-  width: 34px; height: 34px; border-radius: 50%;
-  background: var(--bg-card); color: var(--ink-deep);
-  font-family: var(--serif); font-weight: 700; font-size: var(--fs-body);
+  width: 32px; height: 32px; border-radius: 50%; box-sizing: border-box;
+  background: var(--bg-main); color: var(--ink-deep); border: 1.5px solid var(--ink-deep);
+  font-family: var(--mono); font-weight: 600; font-size: var(--fs-micro);
   display: flex; align-items: center; justify-content: center;
 }
-.book-steps li:not(:last-child)::after { content: ""; position: absolute; left: 16px; top: 40px; bottom: 6px; width: 2px; background: var(--rule); }
+/* the same timeline node and line as the home page (UI loop 03) */
+.book-steps li:not(:last-child)::after { content: ""; position: absolute; left: 15.25px; top: 32px; bottom: 0; width: 1.5px; background: var(--ink-deep); }
 .book-steps h2 { font-family: var(--sans); font-size: var(--fs-body); font-weight: 600; color: var(--ink-deep); margin: 5px 0 4px; }
 .book-steps p { margin: 0; font-size: var(--fs-body); line-height: 1.6; color: var(--ink-soft); }
 .book-more { margin: 0 0 var(--space-3); }
