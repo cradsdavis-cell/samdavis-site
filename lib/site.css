@@ -3292,3 +3292,28 @@ main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
 /* notes: the rule spans the container, the text keeps a 68ch measure, one gap under the rule */
 .retainer-note, .book-policy, main .mem p.book-policy { padding: var(--space-3) max(0px, calc(100% - 68ch)) 0 0; }
 .book-panel .book-policy { padding: var(--space-2) 0 0; }
+
+/* ============================================================
+   UI loop 13: card levels, colour discipline, craft
+   ============================================================ */
+
+/* Two card levels on offer: the featured card (accent border, accent legend)
+   and standard cards (rule border, a quiet legend) */
+.rung:not([data-sku="roadmap"]) .rung-badge { color: var(--ink-soft); font-weight: 500; }
+
+/* Membership: the price is a priced line between rules, not a second box
+   that looks like the Join form */
+.mem-price { background: none; border: 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); border-radius: 0; padding: var(--space-3) 0; }
+
+/* Disabled reads as the primary switched off: neutral fill, a quiet solid edge, faint text */
+.cta-primary:disabled, .book-cta:disabled, .subscribe-form button:disabled, .lead-capture-card button[type="submit"]:disabled {
+  background: var(--bg-main); color: var(--ink-faint); box-shadow: none; border: 1px solid var(--rule); opacity: 1;
+}
+
+/* Nav hover: a lighter version of the active amber underline */
+.site-nav-bar .nav-links a.nav-trigger:hover,
+.site-nav-bar .nav-links a.nav-simple:not(.nav-cta):not(.current):hover { text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent); }
+
+/* Home "What came up": every column ends on the same slot, top-aligned, so
+   the bottoms line up whether it holds the figure or a Guide link */
+.doors .callout .small { text-wrap: pretty; }
