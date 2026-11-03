@@ -12,8 +12,11 @@
   }
   function fmtTime(iso) {
     const d = new Date(iso);
-    return d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    return d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
   }
+  // The day strip: "Wed" over "4 Nov".
+  function fmtWeekday(iso) { return new Date(iso).toLocaleDateString(undefined, { weekday: 'short' }); }
+  function fmtDayMonth(iso) { return new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short' }); }
   // The visitor's own zone. Slots come back from Cal in Sydney time; every
   // label, day heading and booking uses this zone instead.
   function visitorTimeZone() {
@@ -129,19 +132,37 @@
       (byDay[dayKey] = byDay[dayKey] || []).push(iso);
     }
     const dayKeys = Object.keys(byDay).sort();
+    // 2026-11-03: pick a day, then a time. Three weeks of every slot in one
+    // column was a wall (Sam: "I don't like the layout of the booking pages").
     let html = zoneNote();
+    html += '<div class="slot-days" role="group" aria-label="Choose a day">';
     for (const day of dayKeys) {
-      html += `<div class="slot-day">`;
-      html += `<div class="slot-day-label">${fmtDay(day + 'T12:00:00')}</div>`;
-      html += `<div class="slot-grid">`;
-      for (const iso of byDay[day]) {
-        html += `<button class="slot-button" data-iso="${iso}" aria-pressed="false">${fmtTime(iso)}</button>`;
-      }
-      html += `</div></div>`;
+      const noon = day + 'T12:00:00';
+      html += `<button type="button" class="slot-day-button" data-day="${day}" aria-pressed="false">`
+        + `<span class="slot-day-wd">${fmtWeekday(noon)}</span><span class="slot-day-dm">${fmtDayMonth(noon)}</span></button>`;
     }
+    html += '</div>';
+    html += '<div class="slot-times" id="slot-times" aria-live="polite"></div>';
     html += renderForm();
     root.innerHTML = html;
-    wireUp();
+    wireUp(byDay);
+    showDay(byDay, dayKeys[0]);
+  }
+
+  function showDay(byDay, day) {
+    document.querySelectorAll('.slot-day-button').forEach(b => {
+      const on = b.dataset.day === day;
+      b.classList.toggle('selected', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    const box = document.getElementById('slot-times');
+    let html = `<p class="slot-day-label">${fmtDay(day + 'T12:00:00')}</p><div class="slot-grid">`;
+    for (const iso of byDay[day]) {
+      html += `<button type="button" class="slot-button" data-iso="${iso}" aria-pressed="false">${fmtTime(iso)}</button>`;
+    }
+    box.innerHTML = html + '</div>';
+    const form = document.getElementById('slot-form');
+    if (form) form.style.display = 'none';
   }
 
   // ?code=XYZ on the booking page URL fills the discount field. Only
@@ -161,31 +182,33 @@
         <div class="field"><label for="bk-email">Email</label><input id="bk-email" type="email" name="email" autocomplete="email" required></div>
         <input type="hidden" name="slot_iso" id="slot-iso">
         ${isPaid ? `<div class="field"><label for="bk-code">Discount code (optional)</label><input id="bk-code" type="text" name="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" value="${prefillCode()}">${refDiscount ? `<p class="field-note">Codes don't combine: a code here replaces your A$${refDiscount.aud} referral discount.</p>` : ''}</div>` : ''}
-        ${sku === 'discovery' ? `<div class="field field-check"><label for="bk-news"><input id="bk-news" type="checkbox" name="newsletter" value="yes"><span>Send me new essays from <a href="/writing" target="_blank" rel="noopener">crads-ai.com/writing</a>. Unsubscribe any time.</span></label></div>` : ''}
         ${isPaid ? `<div class="field field-check"><label for="bk-terms"><input id="bk-terms" type="checkbox" name="agreed_terms" value="yes" required><span>I agree to the <a href="/docs/terms" target="_blank" rel="noopener">terms of service</a>.</span></label></div>` : ''}
         <button class="book-cta" type="submit" id="submit-btn">
           ${isPaid ? 'Book + Pay →' : 'Book →'}
         </button>
+        <p class="field-note list-note">Booking adds you to <a href="/newsletter" target="_blank" rel="noopener">Restless Optimist</a>, my weekly letter. Every issue has a one-click unsubscribe.</p>
         <p id="submit-error" class="slot-error" style="display:none; margin-top:1rem;"></p>
       </form>`;
   }
 
-  function wireUp() {
+  function wireUp(byDay) {
     const form = document.getElementById('slot-form');
     const slotInput = document.getElementById('slot-iso');
     const selectedLabel = document.getElementById('selected-label');
-    document.querySelectorAll('.slot-button').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelectorAll('.slot-button').forEach(b => { b.classList.remove('selected'); b.setAttribute('aria-pressed', 'false'); });
-        btn.classList.add('selected');
-        btn.setAttribute('aria-pressed', 'true');
-        const iso = btn.dataset.iso;
-        slotInput.value = iso;
-        selectedLabel.textContent = `${fmtDay(iso)} at ${fmtTime(iso)}`;
-        form.style.display = 'block';
-        form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      });
+    root.addEventListener('click', (e) => {
+      const dayBtn = e.target.closest('.slot-day-button');
+      if (dayBtn) { e.preventDefault(); showDay(byDay, dayBtn.dataset.day); return; }
+      const btn = e.target.closest('.slot-button');
+      if (!btn) return;
+      e.preventDefault();
+      document.querySelectorAll('.slot-button').forEach(b => { b.classList.remove('selected'); b.setAttribute('aria-pressed', 'false'); });
+      btn.classList.add('selected');
+      btn.setAttribute('aria-pressed', 'true');
+      const iso = btn.dataset.iso;
+      slotInput.value = iso;
+      selectedLabel.textContent = `${fmtDay(iso)} at ${fmtTime(iso)}`;
+      form.style.display = 'block';
+      form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
     form.addEventListener('submit', onSubmit);
   }
@@ -203,7 +226,6 @@
       name: fd.get('name'),
       email: fd.get('email'),
       agreed_terms: fd.get('agreed_terms') === 'yes',
-      newsletter: fd.get('newsletter') === 'yes',
       code: String(fd.get('code') || '').trim(),
       // The link's own tag (crads-ai.com/book/roadmap?utm_source=linkedin):
       // read from this page's address only, never stored (README, "Link tags").

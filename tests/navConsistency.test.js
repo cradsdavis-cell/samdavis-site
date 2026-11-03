@@ -42,7 +42,7 @@ test('NAV_ITEMS leads with the roadmap and keeps the software one click away', (
 
 test('the paid offer, the booking options, the letter and the docs are in the menus (2026-11-03)', () => {
   const hrefs = allNavHrefs();
-  for (const h of ['/offer', '/book', '/newsletter/1', '/docs', '/docs/faq']) assert.ok(hrefs.includes(h), `nav lacks ${h}`);
+  for (const h of ['/offer', '/book', '/newsletter', '/docs', '/docs/faq']) assert.ok(hrefs.includes(h), `nav lacks ${h}`);
 });
 
 test('unlisted pages stay out of the nav and footer', () => {

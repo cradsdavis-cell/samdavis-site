@@ -12,7 +12,8 @@
     "sitemap": "node scripts/build-sitemap.mjs",
     "nav": "node scripts/write-static-nav.js",
     "feed": "node scripts/build-feed.mjs",
-    "llms": "node scripts/build-llms.mjs"
+    "llms": "node scripts/build-llms.mjs",
+    "newsletter": "node scripts/build-newsletter-index.mjs"
   },
   "dependencies": {
     "google-auth-library": "^11.0.2",

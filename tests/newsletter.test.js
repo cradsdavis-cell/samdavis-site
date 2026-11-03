@@ -73,7 +73,7 @@ test('confirm link turns the pending signup into a subscriber, once', async () =
   const res = mockRes();
   await s.confirm({ method: 'GET', query: { token } }, res);
   assert.strictEqual(res.statusCode, 302);
-  assert.strictEqual(res.headers.location, '/writing?subscribed=1#subscribe');
+  assert.strictEqual(res.headers.location, '/newsletter?subscribed=1#subscribe');
   const sub = await s.kv.getSubscriber('reader@example.com');
   assert.strictEqual(sub.status, 'subscribed');
   assert.strictEqual(sub.source, '/writing/which-love');
@@ -81,7 +81,7 @@ test('confirm link turns the pending signup into a subscriber, once', async () =
 
   const again = mockRes();
   await s.confirm({ method: 'GET', query: { token } }, again);
-  assert.strictEqual(again.headers.location, '/writing?subscribed=expired#subscribe');
+  assert.strictEqual(again.headers.location, '/newsletter?subscribed=expired#subscribe');
 });
 
 test('bad or missing tokens redirect to the expired message', async () => {
@@ -89,7 +89,7 @@ test('bad or missing tokens redirect to the expired message', async () => {
   for (const query of [{}, { token: 'x' }, { token: 'a'.repeat(64) }]) {
     const res = mockRes();
     await s.confirm({ method: 'GET', query }, res);
-    assert.strictEqual(res.headers.location, '/writing?subscribed=expired#subscribe');
+    assert.strictEqual(res.headers.location, '/newsletter?subscribed=expired#subscribe');
   }
 });
 
@@ -147,12 +147,14 @@ test('source is kept only when it is a plain site path', () => {
   assert.strictEqual(cleanSource('/<script>'), '/writing');
 });
 
-test('site.js injects the box on /writing pages and posts to the API', () => {
+test('site.js injects the box on /writing and /newsletter pages and posts to the API', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'lib', 'site.js'), 'utf8');
   assert.match(src, /safe\(initSubscribe\)/);
   assert.match(src, /\/api\/newsletter\/subscribe/);
   assert.ok(!/—/.test(src.slice(src.indexOf('SUBSCRIBE_MSG'), src.indexOf('function initAboutAccordion'))), 'no em dashes in box copy');
-  const css = fs.readFileSync(path.join(__dirname, '..', 'writing', 'essay.css'), 'utf8');
+  assert.match(src, /path === '\/newsletter'/, 'the box also goes on /newsletter (3 Nov 2026)');
+  // The box's styles live in lib/site.css since it left the essays (3 Nov 2026).
+  const css = fs.readFileSync(path.join(__dirname, '..', 'lib', 'site.css'), 'utf8');
   assert.match(css, /\.subscribe-hp/, 'honeypot is hidden by CSS');
 });
 
@@ -170,7 +172,7 @@ test('unsubscribe link marks the row unsubscribed and keeps the record', async (
   const res = mockRes();
   await makeUnsubscribeHandler({ kv: s.kv })(unsubReq(unsubscribeUrl(await s.kv.getSubscriber('reader@example.com'))), res);
   assert.strictEqual(res.statusCode, 302);
-  assert.strictEqual(res.headers.location, '/writing?subscribed=unsubscribed#subscribe');
+  assert.strictEqual(res.headers.location, '/newsletter?subscribed=unsubscribed#subscribe');
   const row = await s.kv.getSubscriber('reader@example.com');
   assert.strictEqual(row.status, 'unsubscribed');
   assert.ok(row.unsubscribed_at);
@@ -195,7 +197,7 @@ test('a forged or swapped signature unsubscribes nobody', async () => {
   for (const url of [forged, 'https://crads-ai.com/api/newsletter/unsubscribe?e=a%40example.com&t=zz']) {
     const res = mockRes();
     await makeUnsubscribeHandler({ kv: s.kv })(unsubReq(url), res);
-    assert.strictEqual(res.headers.location, '/writing?subscribed=badlink#subscribe');
+    assert.strictEqual(res.headers.location, '/newsletter?subscribed=badlink#subscribe');
   }
   assert.strictEqual((await s.kv.getSubscriber('a@example.com')).status, 'subscribed');
 });

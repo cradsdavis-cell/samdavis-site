@@ -22,20 +22,25 @@ test('/roadmap redirects to the booking page (Vercel carries ?code= and utm tags
 test('/book/roadmap describes the roadmap as it runs, and stays paid with a code field', () => {
   const html = read('book/roadmap.html');
   assert.match(html, /<h1>AI roadmap<\/h1>/);
-  assert.match(html, /On a 30-min call we go through all the pain points in your business and get properly into the weeds\. I write up a report on where AI could help and what I'd start with, then we go through it together on a second call\./);
-  assert.match(html, /A\$250/);
-  assert.match(html, /A\$250 · up to 10 a week/);
+  // As it runs, in three steps (layout v5, 3 Nov 2026): call, report, call.
+  assert.match(html, /<h2>Call one, 30 minutes<\/h2><p>We go through all the pain points in your business and get properly into the weeds\./);
+  assert.match(html, /<h2>The report, within 3 business days<\/h2><p>Where AI could help and what I'd start with/);
+  assert.match(html, /<h2>Call two, 30 minutes<\/h2><p>We go through it together\./);
+  assert.match(html, /<li>A\$250<\/li>/);
+  assert.match(html, /<li>Up to 10 a week<\/li>/);
   assert.ok(!/one specific problem|two or three ways/i.test(html), 'the one-problem framing is gone');
   assert.match(html, /window\.SKU_SLUG='roadmap';window\.IS_PAID=true;/, 'still goes through Stripe checkout');
   assert.match(read('book/_slot-picker.js'), /Discount code \(optional\)/, 'the code field is still on paid booking forms');
 });
 
-test('/book lists the roadmap first and keeps the other three', () => {
+test('/book lists the roadmap first, then the two setups; no discovery card, no unbacked badge', () => {
   const html = read('book/index.html');
-  const order = ['/book/roadmap', '/book/discovery', '/book/walkthrough', '/book/guided-setup']
+  assert.ok(!html.includes('/book/discovery'), 'the discovery call is off the site (Sam, 3 Nov 2026)');
+  assert.ok(!html.includes('book-card-hero'), '"Most popular" needs evidence before it goes back');
+  const order = ['/book/roadmap', '/book/walkthrough', '/book/guided-setup']
     .map((h) => html.indexOf(`class="book-cta" href="${h}"`));
   assert.ok(order.every((i) => i > -1), `a booking card is missing: ${order}`);
-  assert.deepStrictEqual([...order].sort((a, b) => a - b), order, 'roadmap, discovery, walkthrough, guided setup');
+  assert.deepStrictEqual([...order].sort((a, b) => a - b), order, 'roadmap, walkthrough, guided setup');
 });
 
 test('/offer: roadmap, walkthrough, guided setup, by the hour; nothing about retired offers', () => {
@@ -45,6 +50,6 @@ test('/offer: roadmap, walkthrough, guided setup, by the hour; nothing about ret
   assert.ok(order.every((i) => i > -1), `an offer is missing: ${order}`);
   assert.deepStrictEqual([...order].sort((a, b) => a - b), order);
   assert.ok(!/What is no longer offered/.test(html));
-  assert.match(html, /href="\/book\/discovery"/, 'the free discovery call stays');
+  assert.ok(!/href="\/book\/discovery"/.test(html), 'the discovery call is off the site (3 Nov 2026)');
   assert.ok(!/one specific problem|two or three ways/i.test(html));
 });

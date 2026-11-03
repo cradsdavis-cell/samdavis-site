@@ -137,3 +137,93 @@ body {
 .field-note { margin: 0.35rem 0 0; font-size: 0.85rem; color: var(--ink-soft); }
 .who-else-form { margin-top: 0.5rem; }
 .who-else-form .book-cta { margin-top: 1rem; }
+
+/* ============================================================
+   v5 booking pages (2026-11-03): a two-column layout. What you get on the
+   left, a sticky booking panel on the right; pick a day, then a time.
+   ============================================================ */
+.book-layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: var(--space-5); align-items: start; }
+.book-intro h1 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(36px, 4.6vw, 54px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink-deep);
+  margin: 0 0 var(--space-2);
+}
+.book-lede { font-size: 1.15rem; line-height: 1.55; color: var(--ink-deep); margin: 0 0 var(--space-3); max-width: 46ch; }
+.book-facts { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0 0 var(--space-4); }
+.book-facts li { font-size: 0.9rem; font-weight: 500; color: var(--ink-deep); background: var(--bg-soft); border: 1px solid var(--rule); border-radius: 999px; padding: 5px 12px; }
+.book-steps { list-style: none; padding: 0; margin: 0 0 var(--space-3); counter-reset: step; }
+.book-steps li { position: relative; padding: 0 0 var(--space-3) 52px; counter-increment: step; }
+.book-steps li::before {
+  content: counter(step);
+  position: absolute; left: 0; top: 0;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--bg-card); color: var(--ink-deep);
+  font-family: var(--serif); font-weight: 700; font-size: 17px;
+  display: flex; align-items: center; justify-content: center;
+}
+.book-steps li:not(:last-child)::after { content: ""; position: absolute; left: 16px; top: 40px; bottom: 6px; width: 2px; background: var(--rule); }
+.book-steps h2 { font-family: var(--sans); font-size: 1.02rem; font-weight: 600; color: var(--ink-deep); margin: 5px 0 4px; }
+.book-steps p { margin: 0; font-size: 0.98rem; line-height: 1.6; color: var(--ink-soft); }
+.book-more { margin: 0 0 var(--space-3); }
+.book-more p { font-size: 0.98rem; line-height: 1.6; color: var(--ink-soft); margin: 0 0 0.7em; max-width: 60ch; }
+.book-more h2 { font-family: var(--sans); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin: var(--space-3) 0 0.5em; }
+
+.book-panel {
+  position: sticky; top: var(--space-3);
+  background: var(--bg-main);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  box-shadow: 0 12px 36px rgba(23, 61, 42, 0.08);
+  padding: var(--space-3) var(--space-3) var(--space-2);
+}
+.book-panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0 0 var(--space-1); }
+.book-panel-head h2 { font-family: var(--serif); font-weight: 700; font-size: 1.45rem; color: var(--ink-deep); margin: 0; }
+.book-panel-head .price { font-weight: 600; color: var(--ink-deep); white-space: nowrap; }
+.book-panel .book-policy { margin: var(--space-2) 0 0; padding: var(--space-2) 0 0; background: none; border: none; border-top: 1px solid var(--rule); border-radius: 0; font-size: 0.85rem; line-height: 1.5; }
+.book-panel .slot-zone { font-size: 0.85rem; color: var(--ink-faint); margin: 0 0 var(--space-2); }
+
+.slot-days { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.slot-day-button {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  padding: 8px 4px; border-radius: 8px;
+  background: var(--bg-soft); border: 1px solid transparent; cursor: pointer;
+  font-family: var(--sans); color: var(--ink-deep);
+}
+.slot-day-button:hover { border-color: var(--accent); }
+.slot-day-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.slot-day-wd { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+.slot-day-dm { font-size: 0.92rem; font-weight: 600; }
+.slot-day-button.selected { background: var(--ink-deep); color: var(--bg-main); }
+.slot-day-button.selected .slot-day-wd { color: var(--bg-card-hi); }
+.slot-times { margin-top: var(--space-2); }
+.book-panel .slot-day-label { font-size: 0.9rem; font-weight: 600; color: var(--ink-deep); margin: 0 0 8px; }
+.book-panel .slot-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 0; gap: 6px; }
+.book-panel .slot-button { background: var(--bg-main); border-color: var(--rule); border-radius: 8px; padding: 0.55rem 0.3rem; font-size: 0.92rem; font-weight: 500; color: var(--ink-deep); }
+.book-panel .slot-form { background: none; border: none; border-top: 1px solid var(--rule); border-radius: 0; padding: var(--space-2) 0 0; margin-top: var(--space-2); }
+.book-panel .slot-form .book-cta { width: 100%; margin-top: var(--space-2); font-weight: 600; }
+.list-note { margin-top: 0.75rem; }
+.list-note a { color: var(--accent-deep); }
+
+@media (max-width: 900px) {
+  .book-layout { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+  .book-panel { position: static; }
+}
+@media (max-width: 480px) {
+  .slot-days { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .book-panel { padding: var(--space-2); }
+}
+.book-list { margin: 0 0 0.8em; padding-left: 1.2em; color: var(--ink-soft); line-height: 1.6; }
+.group-email p { font-size: 0.95rem; line-height: 1.55; color: var(--ink-soft); margin: 0 0 0.8em; }
+.group-email .book-cta { display: block; width: 100%; }
+.book-panel .slot-button:hover { border-color: var(--accent); }
+.book-panel .slot-button.selected,
+.book-panel .slot-button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg-main); }
+/* phones: the panel sits under the description, so a jump to it */
+.book-jump { display: none; }
+@media (max-width: 900px) { .book-jump { display: block; margin: 0 0 var(--space-4); text-align: center; } }
+/* /book cards: the price line in the body font, not the code font (3 Nov 2026) */
+.book-card .meta { font-family: var(--sans); font-size: 0.95rem; font-weight: 500; letter-spacing: 0; color: var(--ink-soft); }
