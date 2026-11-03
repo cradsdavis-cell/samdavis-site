@@ -96,14 +96,13 @@ test('the questions carry the mechanism and the traced claims', () => {
   assert.match(q, /href="\/docs\/continuity"/);
 });
 
-test('the close: who you would work with, the button again, discovery and do it yourself', () => {
+test('the close: who you would work with, the button again, and do it yourself', () => {
   const who = section('who');
   assert.match(who, /PhD in environmental data science from the University of Sydney/);
   assert.match(who, /seven AI systems in twelve months/);
   assert.match(who, /href="\/about"/);
   assert.match(who, /class="cta-primary" href="\/book\/roadmap">Book an AI roadmap</);
-  assert.match(who, /<a href="\/book\/discovery">Book a free 30-minute call<\/a>/);
-  assert.strictEqual((main.match(/href="\/book\/discovery"/g) || []).length, 1, 'discovery is one text link, never a button');
+  assert.ok(!/href="\/book\/discovery"/.test(main), 'the discovery call is off the site (Sam, 3 Nov 2026); the roadmap is the one front door');
   assert.match(who, /href="\/download"/);
 });
 

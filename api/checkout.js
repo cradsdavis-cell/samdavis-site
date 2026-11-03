@@ -130,17 +130,17 @@ module.exports = async (req, res) => {
         }
         return;
       }
-      // The opt-in tick box on the discovery form (unticked by default).
-      // Strictly boolean true. Best effort: a list failure never fails a
-      // booking that Cal has already made.
-      if (body.newsletter === true) {
-        try {
-          const { addSubscriber } = require('../lib/newsletter');
-          const { defaultKv } = require('../lib/kv');
-          await addSubscriber(defaultKv(), email, { source: '/book/discovery', consent: 'express-booking' });
-        } catch (err) {
-          console.error('[checkout] newsletter opt-in failed', err && err.message);
-        }
+      // Every booking joins the letter, and the form says so next to the
+      // button (Sam, 3 Nov 2026; was an unticked opt-in box). Paid bookings
+      // are added by the hourly newsletter-sync job from Cal. Best effort: a
+      // list failure never fails a booking Cal has already made, and someone
+      // who unsubscribed is never re-added.
+      try {
+        const { addSubscriber } = require('../lib/newsletter');
+        const { defaultKv } = require('../lib/kv');
+        await addSubscriber(defaultKv(), email, { source: '/book/discovery', consent: 'booking-notice' });
+      } catch (err) {
+        console.error('[checkout] newsletter add failed', err && err.message);
       }
       res.status(200).json({ free: true, booked: true });
     } catch (err) {
