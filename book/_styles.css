@@ -137,10 +137,11 @@ body {
   margin: 0 0 var(--space-2);
 }
 .book-lede { font-size: var(--fs-3); line-height: 1.55; color: var(--ink-deep); margin: 0 0 var(--space-3); max-width: 46ch; }
-.book-facts { display: flex; flex-wrap: wrap; gap: 4px 0; list-style: none; padding: 0; margin: 0 0 var(--space-4); }
+.book-facts { display: flex; flex-wrap: wrap; gap: 4px 0; list-style: none; padding: 0; margin: 0 0 var(--space-4) -18px; clip-path: inset(0 0 0 18px); }
 /* facts are a meta line, not chips that look tappable (UI loop 07) */
 .book-facts li { font-size: var(--fs-small); font-weight: 500; color: var(--ink-soft); }
-.book-facts li:not(:last-child)::after { content: "·"; margin: 0 8px; color: var(--ink-faint); }
+/* each item opens with its separator; the one that would start a line falls into the clipped -18px margin */
+.book-facts li::before { content: "·"; display: inline-block; width: 18px; text-align: center; color: var(--ink-faint); }
 .book-steps { list-style: none; padding: 0; margin: 0 0 var(--space-3); counter-reset: step; }
 .book-steps li { position: relative; padding: 0 0 var(--space-3) 52px; counter-increment: step; }
 .book-steps li::before {

@@ -2963,3 +2963,38 @@ details > summary { padding-block: 10px; cursor: pointer; }
 
 /* book cards are a 6/6 pair, not a row to equalise: no reserved meta height */
 .book-card .meta { min-height: 0; margin-bottom: var(--space-2); }
+
+/* ============================================================
+   UI loop 08: meta lines, footer links, tablet, page end
+   ============================================================ */
+
+/* Meta separators never start a line: card meta lines bind each "·" to the
+   word before it (a non-breaking space in the markup); the booking facts list
+   clips the separator that would open a wrapped line (book/_styles.css). */
+
+/* Footer: one link treatment for both the contact links and the columns */
+.site-footer .footer-col a, .site-footer .footer-contact a { color: var(--ink-deep); text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 3px; text-decoration-thickness: 1px; transition: text-decoration-color 0.15s ease, color 0.15s ease; }
+.site-footer .footer-col a:hover, .site-footer .footer-contact a:hover { color: var(--accent-ink); text-decoration-color: var(--accent); }
+.site-footer .footer-contact a { text-decoration-color: var(--rule); }
+
+/* Tablet: price cards stack below 900 instead of leaving one card alone at
+   half width; stacked running text keeps a reading measure */
+@media (max-width: 900px) {
+  .pricing-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .rung .rung-meta, .rung .price-detail { min-height: 0; }
+}
+.hero-copy .lede, .doors .callout .small, .qa p, .steps-grid p, .page-head .lead, .book-card .for { max-width: 65ch; }
+
+/* Page end: one closing space before the footer on every template */
+:root { --page-end: clamp(72px, 8vw, 120px); }
+.essay, .writing-index, .mem, .book-container { padding-bottom: var(--page-end); }
+body > .section:last-of-type, main > .section:last-of-type { padding-bottom: var(--page-end); }
+.essay-body > :last-child, .writing-index > :last-child, .mem > :last-child, .book-container > :last-child, .subscribe:last-child { margin-bottom: 0; }
+
+/* Headings avoid one-word last lines */
+h2 { text-wrap: pretty; }
+.hero-sub { text-wrap: balance; }
+/* the section reset outranks page rules that give their blocks a bottom margin */
+.section.section > :last-child { margin-bottom: 0; }
+/* newsletter issue pages: main has no padding, so the appended subscribe box carries the page end */
+main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
