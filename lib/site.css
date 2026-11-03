@@ -125,8 +125,9 @@ p {
 
 /* Vertical rhythm (UI loop 02): headings carry their own space below;
    components that set margin keep theirs */
+h1 { margin-block-end: var(--space-2); }
 h2 { margin-block-end: var(--space-2); }
-h3 { margin-block-end: var(--space-1); }
+h3 { margin-block-end: var(--space-1); text-wrap: balance; }
 
 .lede {
   font-size: var(--fs-3);
@@ -135,13 +136,24 @@ h3 { margin-block-end: var(--space-1); }
   max-width: var(--read-col);
 }
 
+/* UI loop 04: a label, not a badge. Mono in sentence case, ink, with a
+   short accent rule leading in; the words are unchanged. */
 .eyebrow {
   font-family: var(--mono);
   font-size: var(--fs-micro);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--accent-ink);
-  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 1.5px;
+  margin-right: 10px;
+  vertical-align: middle;
+  background: var(--accent);
 }
 
 .meta {
@@ -433,10 +445,8 @@ a:hover { color: var(--accent-deep); }
 }
 
 @media (max-width: 600px) {
-  .interlude, .interlude-bare {
-    padding: var(--space-3) var(--space-2);
-    margin: var(--space-3) 0;
-  }
+  .interlude { padding: var(--space-3) var(--space-2); }
+  .interlude, .interlude-bare { margin: var(--space-3) 0; }
 }
 
 /* Typewriter reveal — used by .mock-terminal etc */
@@ -461,7 +471,7 @@ a:hover { color: var(--accent-deep); }
 
 .callout-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
   gap: var(--space-3);
 }
 
@@ -2834,3 +2844,49 @@ details > summary { padding-block: 10px; cursor: pointer; }
 }
 /* The highlighted card: the content card with a 2px accent border, same fill */
 .rung.featured, .book-card-first { border: 2px solid var(--accent); background: var(--bg-main); }
+
+/* Section rhythm (UI loop 04): a section's first and last children never add
+   to its padding, so the space between sections is the padding token alone. */
+.section > :first-child, .section > .read-col:first-child > :first-child { margin-top: 0; }
+.section > :last-child { margin-bottom: 0; }
+.page-head { padding-bottom: var(--space-4); }
+.page-head + .section { padding-top: var(--space-4); }
+.page-head h1 + p, .page-head .lead { margin-top: var(--space-2); }
+/* Ledes balance their last line instead of leaving one word */
+.lede, .lead, .essay-dek, .book-lede, .letter-what { text-wrap: pretty; }
+
+
+/* Surfaces (UI loop 04): one emphasis panel for every form and conversion
+   box (soft fill, 1px rule); outlined cream cards stay for list items. Fields
+   are white with a 3.2:1 border so they read as fields inside the panel. */
+.subscribe, .mem-price, .slot-form, .lead-capture-card { background: var(--bg-soft); border: 1px solid var(--rule); border-radius: var(--r-md); }
+.subscribe { margin-bottom: var(--space-5); }
+.lead-capture-card { margin-left: 0; margin-right: 0; }
+.subscribe h2, .essay-body .subscribe h2 { font-size: var(--fs-3); margin: 0 0 var(--space-1); }
+.letter-hero .subscribe { border: 0; padding: 0; background: none; }
+.subscribe-form input[type="email"], .field input:not([type="checkbox"]):not([type="radio"]), .lead-capture-card input[type="email"], .field textarea, .field select {
+  background: #FFFFFF;
+  border: 1px solid #7F8D80;
+}
+
+/* Booking messages in the palette: neutral surface, a left rule in the error
+   colour, body size. The words and the booking logic are unchanged. */
+:root { --danger: #9B3324; }
+/* the error callout: its own variant (danger tint, danger text), sized like the card text around it */
+.slot-error { color: #7A2418; background: #F7E9E4; border-left: 3px solid var(--danger); border-radius: 0 var(--r-sm) var(--r-sm) 0; padding: var(--space-2) var(--space-3); font-size: var(--fs-small); line-height: 1.55; }
+
+/* Mobile menu (UI loop 04): a sheet with a scrim below it, items on the page gutter */
+@media (max-width: 1000px) {
+  .site-nav-bar.nav-open .nav-links {
+    padding-inline: var(--gutter);
+    box-shadow: var(--shadow-pop), 0 0 0 100vmax rgba(23, 61, 42, 0.28);
+    clip-path: inset(0 -100vmax -100vmax -100vmax);
+  }
+  .site-nav-bar .nav-links > a.nav-simple:not(.nav-cta), .nav-links .nav-group .nav-trigger { padding-inline: 0; }
+}
+
+/* About: the closing sign-up sits on the main column, not the page gutter
+   (the sidebar column is 0.55 of the 0.55 + 1.45 split, after the gap) */
+@media (min-width: 901px) {
+  .about-page .lead-capture-section { padding-left: calc((100% - var(--space-5)) * 0.275 + var(--space-5)); }
+}
