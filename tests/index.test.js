@@ -37,7 +37,8 @@ test('the hero calls out the owner, carries Sam\'s headline and subline, and has
   assert.match(hero, /It drafts the follow-ups you don't get round to, from your own inbox\. Nothing goes until you say yes\./);
   // The roadmap as it runs: the pain points, a report, a second call.
   assert.match(hero, /we go through all the pain points in your business, I write up a report, and we go through it together on a second call\./);
-  assert.match(hero, /<img src="\/lib\/img\/sam-cape-hauy\.jpg"/, 'a real photo of Sam, not the app');
+  // Sam, 3 Nov 2026: the presenting photo, its screen showing the Crads-AI title slide (his call).
+  assert.match(hero, /<img src="\/lib\/img\/sam-presenting-crads\.jpg"/, 'Sam presenting, not the app');
   const ctas = hero.match(/class="cta-primary"[^>]*>[^<]*</g) || [];
   assert.deepStrictEqual(ctas, ['class="cta-primary" href="/book/roadmap">Book an AI roadmap<'], 'exactly one hero button');
   assert.match(hero, /A\$250 · up to 10 a week\./);
@@ -60,7 +61,8 @@ test('the three doors: clients first, with the roadmap count behind it', () => {
   const names = [...doors.matchAll(/<div class="big">([^<]*)<\/div>/g)].map((m) => m[1]);
   assert.deepStrictEqual(names, ['More of the right clients.', 'Everything out of your head.', 'Showing up every week.']);
   const clients = doors.slice(doors.indexOf('id="door-clients"'), doors.indexOf('id="door-head"'));
-  assert.match(clients, /The first thing 7 of 10 asked for\./);
+  // Re-tallied 3 Nov 2026 on the latest ten roadmaps (8 to 26 Oct), strict count.
+  assert.match(clients, /The first thing 6 of 10 asked for\./);
   assert.match(clients, /You approve every one\./);
   assert.ok(!/<a\b/.test(clients), 'the clients door has no guide yet, so no link');
   for (const g of ['/guides/claude-remember-your-business', '/guides/ai-social-media-posts']) {
@@ -107,9 +109,11 @@ test('the questions carry the mechanism and the traced claims', () => {
 test('the close: who you would work with, the button again, and do it yourself', () => {
   const who = section('who');
   assert.match(who, /PhD in environmental data science from the University of Sydney/);
-  assert.match(who, /seven AI systems in twelve months/);
+  // Sam, 3 Nov 2026: drop the number (three of the "seven" were specced, not built).
+  assert.match(who, /I build AI systems for clients and for myself, including the assistant that runs my own week/);
+  assert.ok(!/seven AI systems/.test(who), 'no build count');
   assert.match(who, /I run every roadmap call myself/);
-  assert.match(who, /src="\/lib\/img\/sam-presenting\.jpg"/, 'Sam at work: a real photo, cropped, never altered (3 Nov 2026)');
+  assert.match(who, /src="\/lib\/img\/sam-photo\.jpg"/, 'Sam\'s own headshot stays in the bio (Sam, 3 Nov 2026)');
   assert.match(who, /href="\/about"/);
   assert.match(who, /class="cta-primary" href="\/book\/roadmap">Book an AI roadmap</);
   assert.ok(!/href="\/book\/discovery"/.test(main), 'the discovery call is off the site (Sam, 3 Nov 2026); the roadmap is the one front door');

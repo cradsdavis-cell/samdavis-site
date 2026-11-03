@@ -59,8 +59,8 @@
   .hero-copy h1 { margin: var(--space-3) 0 var(--space-1); }
   .hero-sub { font-family: var(--serif); font-size: clamp(21px, 2.3vw, 27px); font-weight: 600; line-height: 1.3; color: var(--ink-deep); margin: 0 0 var(--space-3); }
   /* 3 Nov 2026: Sam's photo replaces the app screenshot (it moved to How it works) */
-  .hero-photo { justify-self: center; max-width: 400px; margin-right: 0; }
-  .hero-photo img { aspect-ratio: 4 / 5; object-fit: cover; border-radius: 18px; border: none; box-shadow: 0 22px 60px rgba(23, 61, 42, .28); }
+  .hero-photo { justify-self: center; max-width: 560px; margin-right: 0; }
+  .hero-photo img { aspect-ratio: 5 / 4; object-fit: cover; border-radius: 18px; border: none; box-shadow: 0 22px 60px rgba(23, 61, 42, .28); }
   .hero-copy .lede { margin-bottom: var(--space-4); }
   .cta-note { font-family: var(--sans); font-size: 15px; color: var(--ink-faint); margin: var(--space-2) 0 0; }
 
@@ -97,8 +97,8 @@
   .qa p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--ink-soft); }
 
   /* Who you'd work with, and the close */
-  .who-card { display: grid; grid-template-columns: 320px 1fr; gap: var(--space-4); align-items: center; max-width: 900px; }
-  .who-card img { width: 320px; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; display: block; box-shadow: 0 12px 34px rgba(23, 61, 42, .14); }
+  .who-card { display: grid; grid-template-columns: 120px 1fr; gap: var(--space-3); align-items: center; max-width: 760px; }
+  .who-card img { width: 120px; height: 120px; border-radius: 50%; display: block; border: 1px solid var(--rule); }
   .who-card p { margin: 0; font-size: 17px; line-height: 1.6; color: var(--ink-soft); }
   .close { text-align: center; margin-top: var(--space-5); }
   .close .diy { font-size: 15px; color: var(--ink-soft); margin-top: var(--space-3); }
@@ -106,13 +106,13 @@
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; padding: var(--space-5) var(--space-4); gap: var(--space-4); background: linear-gradient(165deg, var(--bg-main) 0%, var(--bg-main) 50%, var(--grad-1) 72%, var(--grad-3) 100%); }
     .hero-shot { margin-right: 0; }
-    .hero-photo { max-width: 340px; }
+    .hero-photo { max-width: 100%; }
     .steps-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 600px) {
     .hero .cta-primary { display: block; text-align: center; }
     .who-card { grid-template-columns: 1fr; justify-items: start; }
-    .who-card img { width: 100%; }
+    .who-card img { width: 96px; height: 96px; }
     .price-strip .sep { display: none; }
     .price-strip .item { display: block; }
   }
@@ -199,7 +199,7 @@
 </nav>
 
 <main>
-  <!-- 1. Hero: Sam's headline and subline (3 Nov 2026), the mechanism, one button, his photo -->
+  <!-- 1. Hero: Sam's headline and subline (3 Nov 2026), the mechanism, one button, the presenting photo with the Crads-AI title slide (Sam, 3 Nov 2026) -->
   <section class="hero wrap" id="top">
     <div class="hero-copy">
       <p class="eyebrow">For owners of small consultancies and practices</p>
@@ -210,7 +210,7 @@
       <p class="cta-note">A$250 · up to 10 a week.</p>
     </div>
     <div class="hero-shot hero-photo">
-      <img src="/lib/img/sam-cape-hauy.jpg" width="760" height="950" alt="Sam Davis on the cliffs at Cape Hauy, Tasmania, smiling back over his shoulder" fetchpriority="high">
+      <img src="/lib/img/sam-presenting-crads.jpg" width="650" height="520" alt="Sam Davis presenting Crads-AI from a lectern, the title slide on the screen behind him" fetchpriority="high">
     </div>
   </section>
 
@@ -246,8 +246,9 @@
   </section>
 
 
-  <!-- 3. The three doors, clients first (roadmap research, 21 Oct 2026: clients
-       the #1 want for 7 of 10; in-your-head raised by 9 of 10; posting by 8) -->
+  <!-- 3. The three doors, clients first. Re-tallied 3 Nov 2026 on the latest ten
+       roadmaps (8 to 26 Oct): clients the #1 want for 6 of 10 strictly (7 with a
+       looser read), raised by 9; in-your-head raised by 7; showing up by 6. -->
   <section class="section wrap" id="doors">
     <div class="read-col">
       <h2 class="reveal-on-scroll">What came up in my last ten roadmaps</h2>
@@ -256,7 +257,7 @@
       <div class="callout" id="door-clients">
         <div class="big">More of the right clients.</div>
         <div class="small">Follow-ups and first emails from your own inbox, written the way you write, from what it knows about each person. You approve every one.</div>
-        <p class="door-stat">The first thing 7 of 10 asked for.</p>
+        <p class="door-stat">The first thing 6 of 10 asked for.</p>
       </div>
       <div class="callout" id="door-head">
         <div class="big">Everything out of your head.</div>
@@ -334,8 +335,8 @@
   <section class="section wrap" id="who">
     <p class="eyebrow reveal-on-scroll">Who you'd work with</p>
     <div class="who-card reveal-on-scroll" style="margin-top: var(--space-3);">
-      <img src="/lib/img/sam-presenting.jpg" width="640" height="480" alt="Sam Davis presenting at a lectern, laptop open" loading="lazy">
-      <p>I'm Sam Davis, a physicist with a PhD in environmental data science from the University of Sydney. I've built seven AI systems in twelve months, including the assistant that runs my own week, and I run every roadmap call myself. <a href="/about">More about me →</a></p>
+      <img src="/lib/img/sam-photo.jpg" width="280" height="280" alt="Sam Davis">
+      <p>I'm Sam Davis, a physicist with a PhD in environmental data science from the University of Sydney. I build AI systems for clients and for myself, including the assistant that runs my own week, and I run every roadmap call myself. <a href="/about">More about me →</a></p>
     </div>
     <div class="close reveal-on-scroll" id="final-cta">
       <a class="cta-primary" href="/book/roadmap">Book an AI roadmap</a>
