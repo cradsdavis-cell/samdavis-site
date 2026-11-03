@@ -1,5 +1,5 @@
 // book/_slot-picker.js — vanilla JS slot picker for /book/<sku> pages
-// Window globals expected: SKU_SLUG (string), IS_PAID (boolean)
+// Window globals expected: SKU_SLUG (string), IS_PAID (boolean); optional EMPTY_SLOTS_HTML (string)
 (function () {
   'use strict';
   const root = document.getElementById('slot-picker');
@@ -117,7 +117,9 @@
   function renderSlots(raw) {
     const slots = normaliseSlots(raw);
     if (slots.length === 0) {
-      root.innerHTML = '<div class="slot-error">No availability in the next 3 weeks. Email cradsdavis@gmail.com to arrange.</div>';
+      // A page may set its own empty-state line (the group walkthrough opens
+      // only on cohort dates, so "no availability" reads wrong there).
+      root.innerHTML = window.EMPTY_SLOTS_HTML || '<div class="slot-error">No availability in the next 3 weeks. Email cradsdavis@gmail.com to arrange.</div>';
       return;
     }
     const byDay = {};

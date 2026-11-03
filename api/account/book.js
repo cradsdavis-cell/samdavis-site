@@ -126,14 +126,16 @@ function renderBookPage({ balance, sku, nextSession }) {
       <section class="panel"><div class="panel-content">${msg}</div></section>`;
   }
 
-  const v5Type = balance.activeBlock && (balance.activeBlock.type === 'guided-setup' || balance.activeBlock.type === 'walkthrough') ? balance.activeBlock.type : null;
+  const V5_S2_NAME = { 'walkthrough': 'walkthrough', 'group-walkthrough': 'group walkthrough', 'guided-setup': 'guided setup' };
+  const V5_S2_LENGTH = { 'walkthrough': '30 minutes', 'group-walkthrough': '30 minutes, with your group', 'guided-setup': 'two hours' };
+  const v5Type = balance.activeBlock && Object.prototype.hasOwnProperty.call(V5_S2_NAME, balance.activeBlock.type) ? balance.activeBlock.type : null;
   const sessionNumber = nextSessionNumber(balance);
   const earliest = earliestAllowedMs(balance.activeBlock);
-  const v5Length = v5Type === 'walkthrough' ? '30 minutes' : 'two hours';
+  const v5Length = V5_S2_LENGTH[v5Type];
   const balanceLine = balance.isRetainer
     ? `Retainer active: book your next session below.`
     : v5Type
-      ? `Your second ${v5Type === 'walkthrough' ? 'walkthrough' : 'guided setup'} session (${v5Length}). Pick a time at least a day after your first one${earliest ? ` (from ${escapeHtml(new Date(earliest).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Australia/Sydney' }))})` : ''}, so the interview between them has room.`
+      ? `Your second ${V5_S2_NAME[v5Type]} session (${v5Length}). Pick a time at least a day after your first one${earliest ? ` (from ${escapeHtml(new Date(earliest).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Australia/Sydney' }))})` : ''}, so the interview between them has room.`
       : `You have <strong>${balance.remaining}</strong> session${balance.remaining === 1 ? '' : 's'} left in your block (${balance.used} of ${balance.total} used).`;
   const nextLine = nextSession
     ? `<p class="subtitle">Next booked: ${escapeHtml(new Date(nextSession.date).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Australia/Sydney', timeZoneName: 'short' }))}.</p>`
