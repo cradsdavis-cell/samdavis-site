@@ -256,6 +256,9 @@
   .lives-list { list-style: none; padding: 0; margin: var(--space-3) 0 0; display: grid; gap: 12px; }
   .lives-list li { padding-left: 22px; position: relative; line-height: 1.55; }
   .lives-list li::before { content: ""; position: absolute; left: 0; top: 10px; width: 10px; height: 10px; border-radius: 50%; background: var(--good); }
+  .hiw-shot { margin: var(--space-3) 0 0; }
+  .hiw-shot img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--rule); box-shadow: 0 14px 40px rgba(23, 61, 42, .12); }
+  .hiw-shot figcaption { font-family: var(--sans); font-size: 14px; color: var(--ink-faint); margin-top: 10px; }
 </style>
 <!-- SEO: canonical + social cards -->
 <link rel="canonical" href="https://crads-ai.com/how-it-works">
@@ -347,6 +350,10 @@
       <h3>What you have once it is running.</h3>
       <p>An assistant that knows your clients, your work and how you write. Its first jobs come from your roadmap: follow-ups you approve before they go, a brief each morning, a post drafted each Friday from your actual week. You can talk to it from the Claude app on your phone, and it gets better the more you use it.</p>
       <p>I'm on Slack for 30 days. After that it's yours and keeps running without me, on your Claude plan plus a server from about €6 a month. The software is free and open source.</p>
+      <figure class="hiw-shot">
+        <img src="/lib/img/shots/overview.png" width="1280" height="1036" loading="lazy" alt="The Crads-AI app on its Overview page: the assistant by name, the interview progress, the size of its brain, what it can do, and the jobs it runs by itself">
+        <figcaption>The app's Overview page: your assistant, what it knows, what it can do and the jobs it runs by itself.</figcaption>
+      </figure>
     </div>
 
     <!-- Where Sam comes in -->
@@ -572,7 +579,7 @@
       <ul class="lives-list">
         <li><strong>The app, on your laptop.</strong> Windows or Mac. It builds the server, then it is how you open and steer your assistant.</li>
         <li><strong>The assistant, on your server.</strong> A small machine in your own hosting account. This is where it runs, and where its scheduled jobs happen while you sleep.</li>
-        <li><strong>The brain, on your GitHub.</strong> Everything it knows about you, as plain files in a private repository you own, pushed every night. Lose the server and you lose nothing.</li>
+        <li><strong>The brain, on your GitHub.</strong> Everything it knows about you, as plain files in a private repository you own, pushed every night. Lose the server and you lose at most a day.</li>
         <li><strong>Or on this computer, last on the list.</strong> A folder on your laptop instead of a server. Free, but no schedule, no phone, and it stops when your laptop sleeps. Move it to a server whenever you want the rest; it comes back the same way.</li>
       </ul>
     </div>

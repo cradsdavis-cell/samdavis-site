@@ -20,7 +20,7 @@ function section(id) {
 }
 
 test('the head names the new headline and the roadmap', () => {
-  assert.ok(html.includes('<title>Make Claude know your business · Crads-AI</title>'), 'title');
+  assert.ok(html.includes('<title>Claude on steroids, but authentic · Crads-AI</title>'), 'title (Sam, 3 Nov 2026)');
   const desc = html.match(/<meta name="description" content="([^"]*)">/)[1];
   assert.match(desc, /AI roadmap/);
   assert.ok(!/coach/i.test(desc), 'no coaching framing in the description');
@@ -28,12 +28,16 @@ test('the head names the new headline and the roadmap', () => {
   assert.ok(html.includes('<link rel="canonical" href="https://crads-ai.com/">'));
 });
 
-test('the hero calls out the owner, leads with door 1, and has one button', () => {
+test('the hero calls out the owner, carries Sam\'s headline and subline, and has one button', () => {
   const hero = section('top');
   assert.match(hero, /For owners of small consultancies and practices/);
-  assert.match(hero, /<h1>Make Claude know <em>your business\.<\/em><\/h1>/);
-  assert.match(hero, /follow-ups you never get round to, from your own inbox, in your own voice\. Nothing goes until you say yes\./);
-  assert.match(hero, /we go through all the pain points in your business/);
+  // Sam's own words, chosen 3 Nov 2026 over the outcome-led option.
+  assert.match(hero, /<h1>Claude on steroids, <em>but authentic\.<\/em><\/h1>/);
+  assert.match(hero, /<p class="hero-sub">Make Claude know you and your business\.<\/p>/);
+  assert.match(hero, /It drafts the follow-ups you don't get round to, from your own inbox\. Nothing goes until you say yes\./);
+  // The roadmap as it runs: the pain points, a report, a second call.
+  assert.match(hero, /we go through all the pain points in your business, I write up a report, and we go through it together on a second call\./);
+  assert.match(hero, /<img src="\/lib\/img\/sam-cape-hauy\.jpg"/, 'a real photo of Sam, not the app');
   const ctas = hero.match(/class="cta-primary"[^>]*>[^<]*</g) || [];
   assert.deepStrictEqual(ctas, ['class="cta-primary" href="/book/roadmap">Book an AI roadmap<'], 'exactly one hero button');
   assert.match(hero, /A\$250 · up to 10 a week\./);
@@ -41,9 +45,10 @@ test('the hero calls out the owner, leads with door 1, and has one button', () =
 });
 
 // Second pass (22 Oct 2026): the mechanism moved into the first question and
-// proof took its place. Still six sections.
+// proof took its place. 3 Nov 2026: proof moves above the doors, for a reader
+// who doesn't know Sam yet. Still six sections.
 test('six sections, in order', () => {
-  const order = ['id="top"', 'id="doors"', 'id="proof"', 'id="how"', 'id="questions"', 'id="who"'].map((id) => main.indexOf(id));
+  const order = ['id="top"', 'id="proof"', 'id="doors"', 'id="how"', 'id="questions"', 'id="who"'].map((id) => main.indexOf(id));
   assert.ok(order.every((i) => i > -1), `a section is missing: ${order}`);
   assert.deepStrictEqual([...order].sort((a, b) => a - b), order, 'sections out of order');
   assert.strictEqual((main.match(/<section\b/g) || []).length, 6, 'six sections, no more');
@@ -89,7 +94,10 @@ test('how the roadmap runs, then the price strip', () => {
 
 test('the questions carry the mechanism and the traced claims', () => {
   const q = section('questions');
-  assert.strictEqual((q.match(/<h3>/g) || []).length, 4, 'four questions');
+  assert.strictEqual((q.match(/<h3>/g) || []).length, 5, 'five questions');
+  // 3 of 10 roadmap owners feared it would sound like AI; the honest answer (docs/teach-it-your-voice).
+  assert.match(q, /<h3>Will it sound like AI\?<\/h3>\s*<p>At first, a bit\./);
+  assert.match(q, /Nothing goes out until you've read it and said yes\./);
   assert.match(q, /I set Claude up once so it knows your clients, your work and how you write/);
   assert.match(q, /on limits you choose/);
   assert.match(q, /from about €6 a month/);
@@ -100,6 +108,8 @@ test('the close: who you would work with, the button again, and do it yourself',
   const who = section('who');
   assert.match(who, /PhD in environmental data science from the University of Sydney/);
   assert.match(who, /seven AI systems in twelve months/);
+  assert.match(who, /I run every roadmap call myself/);
+  assert.match(who, /src="\/lib\/img\/sam-presenting\.jpg"/, 'Sam at work: a real photo, cropped, never altered (3 Nov 2026)');
   assert.match(who, /href="\/about"/);
   assert.match(who, /class="cta-primary" href="\/book\/roadmap">Book an AI roadmap</);
   assert.ok(!/href="\/book\/discovery"/.test(main), 'the discovery call is off the site (Sam, 3 Nov 2026); the roadmap is the one front door');
