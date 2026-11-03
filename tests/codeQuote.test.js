@@ -22,7 +22,7 @@ const calls = [];
 function FakeStripe() {
   return {
     promotionCodes: { list: async (q) => { calls.push(q); const p = PROMOS[q.code]; return { data: p ? [p] : [] }; } },
-    prices: { retrieve: async (id) => ({ id, product: id === 'price_roadmap' ? 'prod_roadmap' : 'prod_other' }) },
+    prices: { retrieve: async (id) => { if (id === 'price_unreadable') throw new Error('restricted key'); return { id, product: id === 'price_roadmap' ? 'prod_roadmap' : 'prod_other' }; } },
   };
 }
 require.cache[require.resolve('stripe')] = { exports: FakeStripe };
@@ -37,11 +37,26 @@ test('quotePromotionCode: what each kind of code takes off A$250', async () => {
   assert.deepStrictEqual(calls[0], { code: 'PITCHCLUB', active: true, limit: 1, expand: ['data.coupon.applies_to'] });
 });
 
+test('quotePromotionCode: a known product id matches without reading the price (production cannot)', async () => {
+  const before = calls.length;
+  assert.strictEqual(await quotePromotionCode('PITCHCLUB', { priceId: 'price_unreadable', productId: 'prod_roadmap', priceAud: 250 }), 250);
+  assert.strictEqual(calls.length, before + 1);
+});
+
+test('getSku: every purchasable SKU carries its Stripe product, dropped when an env var swaps the price', () => {
+  const { getSku } = require('../lib/skus');
+  assert.strictEqual(getSku('roadmap').stripe_product_id, 'prod_VLFUHh7IJfhOMb');
+  for (const sku of ['walkthrough', 'group-walkthrough', 'guided-setup']) assert.match(getSku(sku).stripe_product_id, /^prod_/);
+  process.env.STRIPE_PRICE_ROADMAP = 'price_other';
+  try { assert.strictEqual(getSku('roadmap').stripe_product_id, null); } finally { delete process.env.STRIPE_PRICE_ROADMAP; }
+});
+
 test('quotePromotionCode: unknown, invalid, wrong product, wrong currency or under the minimum is null', async () => {
   for (const code of ['NOPE', 'DEAD', 'GUIDED', 'USD50', 'BIGMIN']) {
     assert.strictEqual(await quotePromotionCode(code, ROADMAP), null, code);
   }
   // A product-restricted code cannot be matched to an inline price.
+  assert.strictEqual(await quotePromotionCode('PITCHCLUB', { priceId: null, productId: 'prod_guided', priceAud: 250 }), null);
   assert.strictEqual(await quotePromotionCode('PITCHCLUB', { priceId: null, priceAud: 250 }), null);
 });
 
