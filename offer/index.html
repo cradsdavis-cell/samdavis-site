@@ -13,20 +13,20 @@
 <style>
   .offer-hero {
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: minmax(0, 1fr) 200px;
     align-items: center;
     gap: var(--space-4);
     padding-top: var(--space-6);
     padding-bottom: var(--space-4);
   }
-  .offer-hero img { width: 140px; height: auto; }
+  .offer-hero img { width: 140px; height: auto; order: 2; justify-self: end; }
   .prose-lead { max-width: var(--read-col); margin-bottom: var(--space-3); }
 
   /* Decision helper: "Which one's right for you?" */
   .decision-helper {
     background: var(--bg-soft);
     border-left: 4px solid var(--accent);
-    border-radius: 4px;
+    border-radius: var(--r-sm);
     padding: var(--space-3) var(--space-4);
     margin-bottom: var(--space-4);
   }
@@ -80,7 +80,7 @@
     cursor: pointer;
     top: 0; left: 0; right: 0; bottom: 0;
     background-color: var(--bg-card);
-    border-radius: 28px;
+    border-radius: var(--r-md);
     transition: 0.2s;
   }
   .payment-toggle .slider::before {
@@ -114,15 +114,15 @@
     position: relative;
     background: var(--bg-main);
     border: 1px solid var(--rule);
-    border-radius: 6px;
+    border-radius: var(--r-md);
     padding: var(--space-3);
     display: flex;
     flex-direction: column;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
   .rung:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 20px rgba(143, 117, 48, 0.15);
+    
+    box-shadow: none;
     border-color: var(--accent);
   }
   .rung.featured {
@@ -141,7 +141,7 @@
     text-transform: uppercase;
     font-weight: 700;
     padding: 3px 10px;
-    border-radius: 4px;
+    border-radius: var(--r-sm);
   }
   .rung .rung-name {
     font-family: var(--mono);
@@ -190,7 +190,7 @@
 
   .discovery-card {
     background: var(--bg-soft);
-    border-radius: 6px;
+    border-radius: var(--r-md);
     padding: var(--space-4);
     text-align: center;
     margin-top: var(--space-5);
@@ -223,7 +223,7 @@
 
   @media (max-width: 900px) {
     .offer-hero { grid-template-columns: 1fr; }
-    .offer-hero img { margin: 0 auto; }
+    .offer-hero img { display: none; }
   }
 </style>
 <!-- SEO: canonical + social cards -->
