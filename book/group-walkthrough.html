@@ -49,7 +49,7 @@
   <div class="book-container">
     <div class="book-header">
       <h1>Group walkthrough</h1>
-      <p>1½ hours + 30 min, in a group of up to 3 · A$250 a seat · pick your group's time below.</p>
+      <p>1½ hours + 30 min, in a group of up to 3 · A$250 a seat · email me to book a seat.</p>
       <div class="book-blurb">
         <p>The walkthrough, run for up to three people at once. Each of you sets up your own assistant; the sessions are shared.</p>
         <p>Before session 1, you install the app and Claude Code and create your own mineral. The <a href="/docs/first-hour">docs</a> walk you through it and I'm on Slack if you get stuck. Please arrive with it done: in a group, one setup still installing holds up the other two.</p>
@@ -60,11 +60,26 @@
         <p>Bring: a laptop with the app and Claude Code installed, a Claude subscription, and your own mineral, on a small server in your own hosting account.</p>
       </div>
     </div>
-    <div id="slot-picker"></div>
+    <!-- Email first (Sam, 3 Nov): groups are put together by hand so everyone in a
+         session is at a similar stage. Sam opens the cohort's time in Cal, then replies
+         with this page's link plus ?cohort, which shows the picker and takes payment. -->
+    <div id="group-email" class="book-blurb">
+      <p>Groups are put together by email, so everyone in a session is at a similar stage. Send me a line about your business and whether you've installed the app yet, and I'll come back with a time and a link to book and pay for your seat.</p>
+      <p><a class="book-cta" href="mailto:cradsdavis@gmail.com?subject=Group%20walkthrough&amp;body=Hi%20Sam,%0A%0AI'd%20like%20a%20seat%20on%20a%20group%20walkthrough.%0A%0AName%20and%20business:%0AWhat%20I'd%20like%20my%20assistant%20to%20help%20with:%0AHave%20I%20installed%20the%20app%20and%20Claude%20Code%20yet%20(yes%20/%20not%20yet):%0ADays%20and%20times%20that%20suit%20me:%0A">Email Sam to book a seat →</a></p>
+      <p>Or write to <a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a> directly.</p>
+    </div>
+    <div id="slot-picker" hidden></div>
     <div class="book-policy">Pay once for your seat in both sessions. After payment you get a calendar invite for session 1, a receipt, a sign-in to book the follow-up, and a Slack invite before session 1. 24h cancellation policy: see the <a href="/docs/terms#10-paid-sessions-cancelling-and-refunds">terms of service</a>.</div>
   </div>
-  <script>window.SKU_SLUG='group-walkthrough';window.IS_PAID=true;window.EMPTY_SLOTS_HTML='<div class="slot-error">No group is open for booking right now. Email <a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a> and I&#39;ll tell you when the next one opens.</div>';</script>
-  <script src="/book/_slot-picker.js"></script>
+  <script>window.SKU_SLUG='group-walkthrough';window.IS_PAID=true;window.EMPTY_SLOTS_HTML='<div class="slot-error">Your group&#39;s time isn&#39;t open yet, or it&#39;s full. Email <a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a> and I&#39;ll sort it.</div>';</script>
+  <script>
+    // Booking link mode: only the link Sam sends (?cohort) shows the picker.
+    if (new URLSearchParams(location.search).has('cohort')) {
+      document.getElementById('group-email').hidden = true;
+      document.getElementById('slot-picker').hidden = false;
+      var sp = document.createElement('script'); sp.src = '/book/_slot-picker.js'; document.body.appendChild(sp);
+    }
+  </script>
 
 <footer class="site-footer wrap">
   <span class="wordmark">crads-<span class="accent">ai</span></span>
