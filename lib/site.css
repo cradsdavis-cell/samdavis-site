@@ -2998,3 +2998,153 @@ h2 { text-wrap: pretty; }
 .section.section > :last-child { margin-bottom: 0; }
 /* newsletter issue pages: main has no padding, so the appended subscribe box carries the page end */
 main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
+
+/* ============================================================
+   UI loop 09: editorial testimonials, offer row, motion, film
+   ============================================================ */
+
+/* Testimonials as editorial pull-quotes, not a wall of cards. The first quote
+   leads across the full width in the display serif; the rest follow as a
+   quieter two-column list. A pair (home) sits as two pull-quotes. */
+.testimonial-card blockquote { position: relative; }
+.testimonials-strip .grid > .testimonial-card:first-child {
+  column-span: all;
+  border: 0;
+  padding: 0 0 var(--space-4);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  background: none;
+}
+.testimonials-strip .grid > .testimonial-card:first-child blockquote {
+  font-family: var(--serif);
+  font-size: var(--fs-3);
+  line-height: 1.45;
+  color: var(--ink-deep);
+  max-width: 34em;
+  padding-left: 0.6em;
+}
+.testimonials-strip .grid > .testimonial-card:first-child blockquote::before {
+  content: "\201C";
+  position: absolute;
+  left: -0.05em;
+  top: -0.05em;
+  color: var(--accent);
+  font-size: 1.6em;
+  line-height: 1;
+}
+.testimonials-strip .grid > .testimonial-card:first-child .attribution { border-top: 0; padding-top: 0; margin-top: var(--space-2); padding-left: 0.6em; }
+/* a pair: two pull-quotes side by side, divided by a hairline, no cards */
+.testimonials-strip .grid:not(:has(> .testimonial-card:nth-child(3))) { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: var(--space-4); columns: auto; }
+.testimonials-strip .grid:not(:has(> .testimonial-card:nth-child(3))) > .testimonial-card {
+  border: 0; border-radius: 0; background: none; padding: 0 0 0 var(--space-3); margin: 0;
+  border-left: 2px solid var(--accent);
+}
+.testimonials-strip .grid:not(:has(> .testimonial-card:nth-child(3))) > .testimonial-card blockquote { font-family: var(--serif); font-size: var(--fs-3); line-height: 1.45; color: var(--ink-deep); padding-left: 0; }
+.testimonials-strip .grid:not(:has(> .testimonial-card:nth-child(3))) > .testimonial-card blockquote::before { content: none; }
+.testimonials-strip .grid:not(:has(> .testimonial-card:nth-child(3))) > .testimonial-card .attribution { border-top: 0; padding-top: 0; padding-left: 0; }
+
+/* Offer price row: the roadmap ("Start here") runs full width, its head and
+   action on the left and what you get on the right; walkthrough and guided
+   setup sit as an even pair below, rows aligned by subgrid. */
+.rung > .rung-body { flex-grow: 1; }
+.rung > .cta { margin-top: var(--space-3); align-self: flex-start; }
+.rung[data-sku="roadmap"] { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--space-5); align-items: start; }
+.rung[data-sku="roadmap"] > .rung-head { grid-column: 1; grid-row: 1; }
+.rung[data-sku="roadmap"] > .cta { grid-column: 1; grid-row: 2; justify-self: start; }
+.rung[data-sku="roadmap"] > .rung-body { grid-column: 2; grid-row: 1 / span 2; }
+.rung[data-sku="roadmap"] .rung-meta, .rung[data-sku="roadmap"] .price-detail { min-height: 0; }
+@media (min-width: 901px) {
+  .rung[data-sku="roadmap"] > .rung-body > .rung-label:first-child { margin-top: 0; }
+  .pricing-grid .rung:not([data-sku="roadmap"]) { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 0; align-content: start; }
+  .pricing-grid .rung:not([data-sku="roadmap"]) > .cta { align-self: end; justify-self: start; }
+}
+@media (max-width: 900px) {
+  .rung[data-sku="roadmap"] { display: flex; align-items: stretch; }
+  .rung > .cta { align-self: stretch; }
+}
+
+/* Primary buttons stay in the rust family on hover and press */
+.cta-primary:hover, .rung .cta:hover, .book-cta:hover, .nf-links a.nf-primary:hover, .subscribe-form button:hover, .lead-capture-card button[type="submit"]:hover,
+.site-nav-bar .nav-links a.nav-cta:hover { background: var(--accent-deeper); color: var(--bg-main); }
+.cta-primary:active, .rung .cta:active, .book-cta:active, .nf-links a.nf-primary:active, .subscribe-form button:active, .lead-capture-card button[type="submit"]:active {
+  background: #6E3A1C; box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* The how-it-works header leaf, inline so it can draw itself in once: outline,
+   then the centre vein, then each side vein and its node in turn, then the
+   amber node lands. Off under reduced motion (it simply appears drawn). */
+.how-hero.page-head { background: none; position: relative; }
+.leaf-draw { position: absolute; right: calc(var(--gutter) + 8px); top: 50%; height: 82%; width: auto; transform: translateY(-50%); overflow: visible; }
+.leaf-draw g { fill: none; stroke: #A9B89F; stroke-width: 0.28; stroke-linecap: round; stroke-linejoin: round; }
+.leaf-draw .leaf-node { fill: var(--accent); }
+@media (max-width: 900px) { .leaf-draw { display: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .leaf-draw g > * { stroke-dasharray: 1; stroke-dashoffset: 1; animation: leaf-draw 0.9s ease-out forwards; animation-delay: calc(0.5s + var(--i, -1) * 0.12s); }
+  .leaf-draw g > path { animation-duration: 1.2s; animation-delay: 0s; }
+  .leaf-draw g > line:first-of-type { animation-delay: 0.35s; }
+  .leaf-draw .leaf-node { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: leaf-node 0.4s cubic-bezier(.2, .8, .3, 1.3) 1.5s forwards; }
+}
+@keyframes leaf-draw { to { stroke-dashoffset: 0; } }
+@keyframes leaf-node { to { transform: scale(1); } }
+
+/* Home timeline: the line between steps draws left to right as the list
+   scrolls in (vertical at 900 and below). Off under reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .steps-grid.reveal-on-scroll li::before { transform: scaleX(0); transform-origin: left center; transition: transform 0.7s ease-out; }
+  .steps-grid.reveal-on-scroll li:nth-child(2)::before { transition-delay: 0.45s; }
+  .steps-grid.reveal-on-scroll.revealed li::before { transform: scaleX(1); }
+  @media (max-width: 900px) {
+    .steps-grid.reveal-on-scroll li::before { transform: scaleY(0); transform-origin: center top; }
+    .steps-grid.reveal-on-scroll.revealed li::before { transform: scaleY(1); }
+  }
+}
+
+/* The film: framed like the photography (8px radius, hairline), poster first,
+   nothing loads until play */
+.film-section { padding-top: 0; }
+.film { margin: 0; max-width: 860px; }
+.film video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: var(--ink-deep); border-radius: var(--r-md); border: 1px solid var(--rule); }
+.film figcaption { margin-top: var(--space-2); font-size: var(--fs-small); color: var(--ink-faint); max-width: 65ch; }
+
+/* Six of ten, drawn: ten squares, six filled, read before the sentence */
+.tally { display: flex; gap: 4px; margin: 0 0 var(--space-1); }
+.tally i { width: 12px; height: 12px; border-radius: 2px; border: 1.5px solid var(--accent-deep); }
+.tally i:nth-child(-n+6) { background: var(--accent-deep); }
+/* the paired offer cards are one line of meta each at desktop: no reserved height */
+@media (min-width: 901px) { .pricing-grid .rung .rung-meta, .pricing-grid .rung .price-detail { min-height: 0; } }
+
+/* Film player: poster plus one play button in the brand; native controls
+   only after play. Without JS the native controls stay and the button hides. */
+.film-frame { position: relative; }
+.film-play { display: none; }
+.film-ready .film-play {
+  position: absolute; left: var(--space-3); bottom: var(--space-3); width: 72px; height: 72px;
+  display: flex; align-items: center; justify-content: center;
+  border: 0; border-radius: 50%; background: var(--accent-deep); color: var(--bg-main); cursor: pointer;
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--bg-main) 70%, transparent);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+.film-ready .film-play svg { width: 28px; height: 28px; margin-left: 4px; fill: currentColor; }
+.film-ready .film-play:hover { background: var(--accent-deeper); }
+.film-ready .film-play:active { background: #6E3A1C; }
+.film-ready .film-play:focus-visible { outline: 2px solid var(--ink-deep); outline-offset: 8px; }
+@media (prefers-reduced-motion: no-preference) { .film-ready .film-play:hover { transform: scale(1.04); } }
+.film-playing .film-play { display: none; }
+@media (max-width: 600px) { .film-ready .film-play { width: 52px; height: 52px; left: 12px; bottom: 12px; } .film-ready .film-play svg { width: 22px; height: 22px; } }
+.film { max-width: none; }
+.film video { max-width: 100%; }
+
+/* Testimonials, two treatments only: the featured pull-quote (open, display
+   serif, hanging accent quote mark) and the supporting card. A pair (home)
+   is two featured pull-quotes side by side. */
+.testimonials-strip .grid:not(:has(> .testimonial-card:nth-child(3))) > .testimonial-card { border-left: 0; padding-left: 0.6em; }
+.testimonials-strip .grid:not(:has(> .testimonial-card:nth-child(3))) > .testimonial-card blockquote { padding-left: 0; }
+.testimonials-strip .grid:not(:has(> .testimonial-card:nth-child(3))) > .testimonial-card blockquote::before { content: "\201C"; position: absolute; left: -0.65em; top: -0.05em; color: var(--accent); font-size: 1.6em; line-height: 1; }
+/* in about's narrow column the featured quote stays under its section heading */
+.about-main .testimonials-strip .grid > .testimonial-card:first-child blockquote { font-size: var(--fs-body); line-height: 1.55; }
+/* a testimonials strip that is also a .wrap (book pages) keeps the container */
+.testimonials-strip.wrap { margin-inline: auto; padding-inline: var(--gutter); }
+/* the frame owns the edge: clip the video to it so no player background shows */
+.film-frame { border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--rule); background: var(--bg-main); }
+.film video { border: 0; border-radius: 0; background: var(--bg-main); }
