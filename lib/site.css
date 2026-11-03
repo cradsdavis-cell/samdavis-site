@@ -3148,3 +3148,52 @@ main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
 /* the frame owns the edge: clip the video to it so no player background shows */
 .film-frame { border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--rule); background: var(--bg-main); }
 .film video { border: 0; border-radius: 0; background: var(--bg-main); }
+
+/* ============================================================
+   UI loop 10: two label roles, type by content, booking pages
+   ============================================================ */
+
+/* Two label roles. Kicker: the mono .eyebrow with its accent stroke. List
+   label: sans 13px caps, ink-faint, 0.06em, heading a list or a column. */
+.rung-label, .site-footer .footer-head, .letter-section-head, .about-sidebar h2 {
+  font-family: var(--sans); font-size: var(--fs-micro); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); font-style: normal;
+}
+.about-sidebar h2 { border-bottom: 1px solid var(--rule); padding-bottom: 6px; }
+.nf-code { font-family: var(--mono); font-size: var(--fs-micro); font-weight: 500; letter-spacing: 0.02em; text-transform: none; color: var(--ink-soft); }
+.how-it-works .session-block .s-tag { font-family: var(--mono); font-size: var(--fs-micro); font-weight: 500; letter-spacing: 0.02em; text-transform: none; color: var(--ink-soft); padding-left: 30px; background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 calc(0.75em - 1px) / 20px 2px; }
+
+/* One accent on the offer row: the starting step carries it, as on /book */
+.rung.featured { border: 1px solid var(--rule); }
+.rung[data-sku="roadmap"] { border: 2px solid var(--accent); }
+
+/* Type by content: serif body for essays and guide articles; sans for
+   product pages and indexes (referrals, the guides index) */
+.essay-product .essay-body { font-family: var(--sans); line-height: 1.65; }
+
+/* Supporting testimonials under the lead quote: unboxed, a hairline above
+   each, so the section stops reading as a grid of identical cards */
+.testimonials-strip .grid:has(> .testimonial-card:nth-child(3)) > .testimonial-card:not(:first-child) {
+  border: 0; border-top: 1px solid var(--rule); border-radius: 0; background: none; padding: var(--space-3) 0 0;
+}
+.testimonials-strip .grid:has(> .testimonial-card:nth-child(3)) > .testimonial-card:not(:first-child) .attribution { border-top: 0; padding-top: var(--space-1); }
+
+/* /book: the pair below the roadmap card aligns rows so their buttons share a baseline */
+@media (min-width: 761px) {
+  .book-grid > .book-card:not(.book-card-first) { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; }
+  .book-grid > .book-card:not(.book-card-first) > .book-cta { align-self: end; justify-self: start; }
+}
+/* thanks: a way onward */
+.thanks-next { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin: var(--space-4) 0 0; }
+/* booking pages with testimonials after the booking block: one section gap
+   between them, and the testimonials carry the page end */
+.book-container:has(+ .testimonials-strip) { padding-bottom: var(--space-5); }
+.book-container + .testimonials-strip { margin-top: 0; margin-bottom: var(--page-end); }
+
+/* (10, after review) one rule per testimonial: the lead quote has no rule
+   under it, the supporting quotes keep their own hairline on top */
+.testimonials-strip .grid:has(> .testimonial-card:nth-child(3)) > .testimonial-card:first-child { border-bottom: 0; margin-bottom: var(--space-3); padding-bottom: var(--space-2); }
+/* step labels inside the accent-ruled how-it-works cards: no lead-in stroke
+   (the card's bar already does that job), so they fit on two lines at 390 */
+.how-it-works .session-block .s-tag { padding-left: 0; background: none; }
+/* thanks: the site's standalone-link pattern, label then arrow */
+.thanks-next .cta-secondary::after { content: " \2192"; white-space: pre; }

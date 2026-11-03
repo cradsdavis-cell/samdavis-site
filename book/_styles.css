@@ -158,7 +158,7 @@ body {
 .book-steps p { margin: 0; font-size: var(--fs-body); line-height: 1.6; color: var(--ink-soft); }
 .book-more { margin: 0 0 var(--space-3); }
 .book-more p { font-size: var(--fs-body); line-height: 1.6; color: var(--ink-soft); margin: 0 0 0.7em; max-width: 60ch; }
-.book-more h2 { font-family: var(--sans); font-size: var(--fs-small); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin: var(--space-3) 0 0.5em; }
+.book-more h2 { font-family: var(--sans); font-size: var(--fs-micro); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); margin: var(--space-3) 0 0.5em; }
 
 .book-panel {
   position: sticky; top: var(--space-3);
