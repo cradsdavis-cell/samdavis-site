@@ -7,7 +7,7 @@ const assert = require('node:assert');
 
 process.env.BASE_URL = 'https://crads-ai.com';
 process.env.STRIPE_PRICE_MEMBERSHIP_FOUNDING = 'price_f99';
-process.env.STRIPE_PRICE_MEMBERSHIP_STANDARD = 'price_s149';
+process.env.STRIPE_PRICE_MEMBERSHIP_STANDARD = 'price_later';
 process.env.MEMBERSHIP_INVITE_SECRET = 'test-secret-test-secret-test-secret';
 
 const m = require('../lib/membership');
@@ -31,11 +31,22 @@ test('a founding place: live subs hold one, a cancel before the first charge giv
   assert.strictEqual(m.holdsFoundingPlace({ status: 'canceled', billing_cycle_anchor: NOW, ended_at: NOW + 40 * 86400 }), true);
 });
 
-test('the offer switches to A$149 when the 10th founding place is taken', () => {
+test('no later price yet: both tiers default to the live A$99 price (Sam, 3 Nov)', () => {
+  const saved = [process.env.STRIPE_PRICE_MEMBERSHIP_FOUNDING, process.env.STRIPE_PRICE_MEMBERSHIP_STANDARD];
+  delete process.env.STRIPE_PRICE_MEMBERSHIP_FOUNDING;
+  delete process.env.STRIPE_PRICE_MEMBERSHIP_STANDARD;
+  try {
+    assert.deepStrictEqual(m.prices(), { founding: 'price_1UXZ6c2MeTK4rlQY4dPBkC0A', standard: 'price_1UXZ6c2MeTK4rlQY4dPBkC0A' });
+  } finally {
+    [process.env.STRIPE_PRICE_MEMBERSHIP_FOUNDING, process.env.STRIPE_PRICE_MEMBERSHIP_STANDARD] = saved;
+  }
+});
+
+test('the founding tier closes at the 10th place; the price stays A$99 until a later one is set', () => {
   assert.deepStrictEqual(m.currentOffer(0), { tier: 'founding', price_aud: 99, founding_left: 10 });
   assert.deepStrictEqual(m.currentOffer(9), { tier: 'founding', price_aud: 99, founding_left: 1 });
-  assert.deepStrictEqual(m.currentOffer(10), { tier: 'standard', price_aud: 149, founding_left: 0 });
-  assert.deepStrictEqual(m.currentOffer(12), { tier: 'standard', price_aud: 149, founding_left: 0 });
+  assert.deepStrictEqual(m.currentOffer(10), { tier: 'standard', price_aud: 99, founding_left: 0 });
+  assert.deepStrictEqual(m.currentOffer(12), { tier: 'standard', price_aud: 99, founding_left: 0 });
 });
 
 test('invites: round trip, bound to the email, tamper and expiry refused', () => {
@@ -108,7 +119,7 @@ test('GET reports the founding places left', async () => {
   assert.deepStrictEqual(r.body, { tier: 'founding', price_aud: 99, founding_left: 8, founding_cap: 10 });
 });
 
-test('POST: DIY on the founding price while places last, then A$149', async () => {
+test('POST: DIY on the founding price while places last, then the standard price', async () => {
   let s = fakeStripe();
   handler._stripe = s;
   let r = res();
@@ -120,7 +131,7 @@ test('POST: DIY on the founding price while places last, then A$149', async () =
   handler._stripe = s;
   r = res();
   await handler(post({ email: 'late@biz.com', agreed_terms: true }), r);
-  assert.strictEqual(s.created[0].line_items[0].price, 'price_s149');
+  assert.strictEqual(s.created[0].line_items[0].price, 'price_later');
 });
 
 test('POST: terms must be ticked; a member cannot join twice', async () => {

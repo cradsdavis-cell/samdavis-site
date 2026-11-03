@@ -51,13 +51,36 @@
     <span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>
   </button>
   <div class="nav-links" id="site-nav-links">
-    <a href="/docs" class="nav-simple">Docs</a>
     <a href="/how-it-works" class="nav-simple">How it works</a>
-    <a href="/offer" class="nav-simple">Setup and support</a>
+    <div class="nav-group" data-open="false">
+      <a href="/offer" class="nav-trigger">Work with me</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Work with me pages">▾</button>
+      <div class="nav-menu">
+        <a href="/book/roadmap">The AI roadmap</a>
+        <a href="/offer">Pricing</a>
+        <a href="/book">All booking options</a>
+      </div>
+    </div>
+    <div class="nav-group" data-open="false">
+      <a href="/guides" class="nav-trigger">Read</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show Read pages">▾</button>
+      <div class="nav-menu">
+        <a href="/guides">Guides</a>
+        <a href="/writing">Writing</a>
+        <a href="/newsletter">Restless Optimist</a>
+      </div>
+    </div>
+    <div class="nav-group" data-open="false">
+      <a href="/download" class="nav-trigger">The software</a>
+      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The software pages">▾</button>
+      <div class="nav-menu">
+        <a href="/download">Download</a>
+        <a href="/docs">Docs</a>
+        <a href="/docs/faq">FAQ</a>
+      </div>
+    </div>
     <a href="/about" class="nav-simple">About</a>
-    <a href="/writing" class="nav-simple">Writing</a>
-    <a href="/book" class="nav-simple nav-book">Book a call</a>
-    <a href="/download" class="nav-simple nav-cta">Download</a>
+    <a href="/book/roadmap" class="nav-simple nav-cta">Book a roadmap</a>
   </div>
 </nav>
 
@@ -81,12 +104,42 @@ How you run Claude (Crads, Projects, Cowork, Claude Code, other):</pre>
 </main>
 
 <footer class="site-footer wrap">
-  <span class="wordmark">crads-<span class="accent">ai</span></span>
-  <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
-  <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
-  <div>+61 0493 302 154</div>
-  <div><a href="/book">Book a 30-minute call →</a></div>
-  <div class="location">Coogee, Sydney.</div>
+  <div class="footer-contact">
+    <span class="wordmark">crads-<span class="accent">ai</span></span>
+    <div><a href="mailto:cradsdavis@gmail.com">cradsdavis@gmail.com</a></div>
+    <div><a href="https://linkedin.com/in/samuel-davis4" target="_blank" rel="noopener">linkedin.com/in/samuel-davis4</a></div>
+    <div>+61 0493 302 154</div>
+    <div class="location">Coogee, Sydney.</div>
+  </div>
+  <div class="footer-col">
+    <h2 class="footer-head">Work with me</h2>
+    <ul>
+      <li><a href="/book/roadmap">Book a roadmap</a></li>
+      <li><a href="/offer">Pricing</a></li>
+      <li><a href="/membership">Membership</a></li>
+      <li><a href="/book">All booking options</a></li>
+      <li><a href="/how-it-works">How it works</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h2 class="footer-head">Read</h2>
+    <ul>
+      <li><a href="/guides">Guides</a></li>
+      <li><a href="/writing">Writing</a></li>
+      <li><a href="/newsletter">Restless Optimist</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h2 class="footer-head">The software</h2>
+    <ul>
+      <li><a href="/download">Download</a></li>
+      <li><a href="/docs">Docs</a></li>
+      <li><a href="/docs/faq">FAQ</a></li>
+      <li><a href="/docs/terms">Terms</a></li>
+      <li><a href="/docs/privacy-policy">Privacy</a></li>
+    </ul>
+  </div>
 </footer>
 
 </body>
