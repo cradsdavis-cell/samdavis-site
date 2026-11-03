@@ -72,3 +72,21 @@ test('lineItemFor: a price id wins; otherwise inline AUD price_data; neither thr
   });
   assert.throws(() => lineItemFor({ priceId: null, priceAud: undefined, productName: 'X' }), /No Stripe price id/);
 });
+
+// 2026-11-03: the group walkthrough, sold by the seat, on two seated Cal types.
+test('group walkthrough: A$250 a seat, a 90 + 30 minute pair of seated types, two sessions a day apart', () => {
+  delete process.env.CAL_EVENT_TYPE_GROUP_WALKTHROUGH_S1;
+  delete process.env.CAL_EVENT_TYPE_GROUP_WALKTHROUGH_S2;
+  delete process.env.STRIPE_PRICE_GROUP_WALKTHROUGH;
+  const { getSku, calEventTypeIdFor, isPurchasable, createsAccount } = fresh();
+  const sku = getSku('group-walkthrough');
+  assert.ok(isPurchasable('group-walkthrough'));
+  assert.ok(createsAccount('group-walkthrough'), 'buyers get the account portal to book the follow-up');
+  assert.strictEqual(sku.price_aud, 250);
+  assert.strictEqual(sku.stripe_price_id, 'price_1UXXRG2MeTK4rlQY0FVB4gaB');
+  assert.deepStrictEqual(sku.sessions.map((s) => s.duration_min), [90, 30]);
+  assert.strictEqual(calEventTypeIdFor('group-walkthrough', 1), 7750358);
+  assert.strictEqual(calEventTypeIdFor('group-walkthrough', 2), 7750359);
+  const { sessionsForSku } = require('../lib/sessionBalance');
+  assert.strictEqual(sessionsForSku('group-walkthrough'), 2);
+});
