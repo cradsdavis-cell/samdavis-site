@@ -11,29 +11,29 @@
   <link rel="stylesheet" href="/lib/site.css">
   <style>
     .nf-wrap {
-      max-width: 640px;
+      max-width: 800px;
       margin: 0 auto;
       padding: clamp(64px, 14vh, 140px) var(--side-pad-mobile);
       text-align: center;
     }
     .nf-code {
       font-family: var(--mono);
-      font-size: 0.85em;
+      font-size: var(--fs-small);
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--accent);
+      color: var(--accent-ink);
       margin: 0 0 var(--space-2);
     }
     .nf-wrap h1 {
       font-family: var(--serif);
-      font-size: clamp(2rem, 6vw, 3rem);
+      font-size: var(--fs-1);
       color: var(--ink-deep);
       margin: 0 0 var(--space-2);
       line-height: 1.1;
     }
     .nf-wrap p {
       color: var(--ink-soft);
-      font-size: 1.05em;
+      font-size: var(--fs-body);
       line-height: 1.6;
       margin: 0 auto var(--space-3);
       max-width: 30em;
@@ -46,20 +46,14 @@
     }
     .nf-links a {
       font-family: var(--sans);
-      font-size: 0.95em;
+      font-size: var(--fs-small);
       padding: 10px 18px;
       border-radius: 6px;
       border: 1px solid var(--rule);
       color: var(--ink-deep);
       transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
     }
-    .nf-links a:hover { color: var(--accent); border-color: var(--accent); background: var(--bg-soft); }
-    .nf-links a.nf-primary {
-      background: var(--accent);
-      color: var(--bg-main);
-      border-color: var(--accent);
-    }
-    .nf-links a.nf-primary:hover { background: var(--accent-deep); color: var(--bg-main); }
+    .nf-links a:hover { color: var(--accent-ink); border-color: var(--accent); background: var(--bg-soft); }
   </style>
 <script defer src="/lib/site.js"></script>
 </head>

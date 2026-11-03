@@ -38,7 +38,7 @@
   .diagram svg { width: 100%; height: auto; display: block; }
   .diagram figcaption {
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.04em;
     color: var(--ink-faint);
     text-align: center;
@@ -54,10 +54,10 @@
   }
   .how-it-works .session-block .s-tag {
     font-family: var(--mono);
-    font-size: 11.5px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--accent-ink);
     font-weight: 600;
     display: block;
     margin-bottom: 6px;
@@ -65,7 +65,7 @@
   .how-it-works .session-block h3 {
     margin: 0 0 var(--space-2);
     font-family: var(--serif);
-    font-size: 22px;
+    font-size: var(--fs-3);
     color: var(--ink-deep);
   }
   .how-it-works .session-block p {
@@ -80,13 +80,13 @@
     padding-left: var(--space-3);
     border-left: 2px dashed var(--rule);
     color: var(--ink-faint);
-    font-size: 15px;
+    font-size: var(--fs-small);
   }
   .how-it-works .between strong { color: var(--ink-soft); }
   .pack-tag {
     display: inline-block;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.04em;
     color: var(--accent-deep);
     background: var(--bg-card);
@@ -120,14 +120,14 @@
   }
   .material .when {
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--accent-ink);
     font-weight: 600;
   }
-  .material h3 { font-family: var(--serif); font-size: 18px; margin: 6px 0; }
-  .material p { font-size: 14.5px; color: var(--ink-soft); margin: 0; max-width: none; }
+  .material h3 { font-family: var(--serif); font-size: var(--fs-body); margin: 6px 0; }
+  .material p { font-size: var(--fs-small); color: var(--ink-soft); margin: 0; max-width: none; }
 
   .how-it-works .ready-card {
     background: var(--bg-soft);
@@ -161,20 +161,20 @@
   }
   .fourc-row .fc-txt .cnum {
     font-family: var(--serif);
-    font-size: 20px;
-    color: var(--accent);
+    font-size: var(--fs-3);
+    color: var(--accent-ink);
     opacity: 0.55;
     margin-bottom: 4px;
   }
   .fourc-row .fc-txt h3 {
     font-family: var(--serif);
-    font-size: clamp(26px, 3vw, 34px);
+    font-size: var(--fs-2);
     color: var(--ink-deep);
     margin-bottom: 6px;
   }
   .fourc-row .fc-txt .fc-gloss {
     font-family: var(--serif);
-    font-size: clamp(19px, 2.2vw, 23px);
+    font-size: var(--fs-3);
     color: var(--accent-deep);
     font-style: italic;
     margin-bottom: var(--space-2);
@@ -186,7 +186,7 @@
   .fc-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: var(--space-2) 0; }
   .fc-chips .chip {
     font-family: var(--mono);
-    font-size: 12.5px;
+    font-size: var(--fs-micro);
     color: var(--ink-deep);
     background: var(--bg-soft);
     border: 1px solid var(--rule);
@@ -203,13 +203,13 @@
   .fc-ring  { fill: none; stroke: var(--good); stroke-width: 2; }
   .fc-spoke { stroke: var(--good); stroke-width: 2; }
   .fc-node  { fill: var(--bg-soft); stroke: var(--good); stroke-width: 1.5; }
-  .fc-node-t { font-family: var(--sans); font-size: 14px; fill: var(--ink-deep); }
+  .fc-node-t { font-family: var(--sans); font-size: var(--fs-small); fill: var(--ink-deep); }
   .fc-route { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: 7 7; }
   .fc-pill  { fill: var(--bg-main); stroke: var(--accent); stroke-width: 1.5; }
-  .fc-pill-t { font-family: var(--mono); font-size: 12.5px; fill: var(--accent-deep); }
+  .fc-pill-t { font-family: var(--mono); font-size: var(--fs-micro); fill: var(--accent-deep); }
   .fc-core  { fill: var(--accent); }
   .fc-core-halo { fill: var(--accent); opacity: 0.14; }
-  .fc-core-t { font-family: var(--serif); font-size: 15px; fill: var(--bg-main); }
+  .fc-core-t { font-family: var(--serif); font-size: var(--fs-small); fill: var(--bg-main); }
   .fc-pulse {
     fill: none; stroke: var(--accent); stroke-width: 3;
     transform-box: fill-box; transform-origin: center;
@@ -236,7 +236,7 @@
   .how-it-works .session-block .layer-tag {
     display: inline-block;
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--good);
@@ -258,7 +258,7 @@
   .lives-list li::before { content: ""; position: absolute; left: 0; top: 10px; width: 10px; height: 10px; border-radius: 50%; background: var(--good); }
   .hiw-shot { margin: var(--space-3) 0 0; }
   .hiw-shot img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--rule); box-shadow: 0 14px 40px rgba(23, 61, 42, .12); }
-  .hiw-shot figcaption { font-family: var(--sans); font-size: 14px; color: var(--ink-faint); margin-top: 10px; }
+  .hiw-shot figcaption { font-family: var(--sans); font-size: var(--fs-small); color: var(--ink-faint); margin-top: 10px; }
 </style>
 <!-- SEO: canonical + social cards -->
 <link rel="canonical" href="https://crads-ai.com/how-it-works">

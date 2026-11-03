@@ -32,7 +32,7 @@
   }
   .decision-helper h2 {
     margin: 0 0 var(--space-2);
-    font-size: 22px;
+    font-size: var(--fs-3);
   }
   .decision-helper ul {
     list-style: none;
@@ -43,7 +43,7 @@
   }
   .decision-helper li {
     font-family: var(--sans);
-    font-size: 15px;
+    font-size: var(--fs-small);
     line-height: 1.6;
     color: var(--ink-soft);
   }
@@ -61,7 +61,7 @@
     gap: var(--space-3);
     margin: var(--space-4) 0 var(--space-3);
     font-family: var(--sans);
-    font-size: 14.5px;
+    font-size: var(--fs-small);
     color: var(--ink-soft);
   }
   .payment-toggle .switch {
@@ -133,10 +133,10 @@
     position: absolute;
     top: -10px;
     left: 16px;
-    background: var(--accent);
+    background: var(--accent-deep);
     color: var(--bg-main);
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     font-weight: 700;
@@ -145,60 +145,46 @@
   }
   .rung .rung-name {
     font-family: var(--mono);
-    font-size: 11.5px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--accent-ink);
     font-weight: 600;
     margin-bottom: 6px;
   }
   .rung .rung-meta {
-    font-size: 13px;
+    font-size: var(--fs-micro);
     color: var(--ink-faint);
     margin-bottom: var(--space-2);
   }
   .rung .price {
     font-family: var(--serif);
-    font-size: 32px;
+    font-size: var(--fs-2);
     font-weight: 800;
     color: var(--ink-deep);
     line-height: 1;
     margin-bottom: 4px;
   }
   .rung .price .price-suffix {
-    font-size: 14px;
+    font-size: var(--fs-small);
     font-weight: 500;
     color: var(--ink-soft);
     font-family: var(--sans);
   }
   .rung .price-detail {
     font-family: var(--sans);
-    font-size: 13px;
+    font-size: var(--fs-micro);
     color: var(--ink-faint);
     margin-bottom: var(--space-2);
     min-height: 1.2em;
   }
   .rung .rung-pitch {
-    font-size: 14.5px;
+    font-size: var(--fs-small);
     line-height: 1.5;
     color: var(--ink-soft);
     margin-bottom: var(--space-3);
     flex-grow: 1;
   }
-  .rung .cta {
-    display: inline-block;
-    font-family: var(--sans);
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--bg-main);
-    background: var(--accent);
-    padding: 10px 18px;
-    border-radius: 4px;
-    text-align: center;
-    text-decoration: none;
-    transition: background 0.2s ease;
-  }
-  .rung .cta:hover { background: var(--accent-deep); }
 
   /* Testimonials / proof strip styling now lives in lib/site.css (shared). */
 
@@ -215,14 +201,14 @@
 
   .retainer-note {
     font-family: var(--sans);
-    font-size: 14.5px;
+    font-size: var(--fs-small);
     line-height: 1.6;
     color: var(--ink-faint);
     max-width: var(--read-col);
     margin: 0 auto var(--space-4);
     text-align: center;
   }
-  .retainer-note a { color: var(--accent); font-weight: 600; }
+  .retainer-note a { color: var(--accent-ink); font-weight: 600; }
   /* More options (Sam, 2026-10-14): the non-server option stays folded so the
      server is the only thing a buyer sees up front. */
   .more-options { margin-top: calc(-1 * var(--space-3)); }
@@ -233,7 +219,7 @@
   .more-options summary:hover { color: var(--ink-soft); }
   .more-options p { margin: var(--space-2) 0 0; font: inherit; color: inherit; max-width: none; }
   .nowrap { white-space: nowrap; }
-  .offer-byline { font-family: var(--sans); font-size: 13.5px; line-height: 1.5; color: var(--ink-faint); margin-top: var(--space-2); }
+  .offer-byline { font-family: var(--sans); font-size: var(--fs-small); line-height: 1.5; color: var(--ink-faint); margin-top: var(--space-2); }
 
   @media (max-width: 900px) {
     .offer-hero { grid-template-columns: 1fr; }

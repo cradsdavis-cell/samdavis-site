@@ -21,14 +21,14 @@ body {
 .book-header h1 {
   font-family: var(--serif);
   font-weight: 800;
-  font-size: clamp(36px, 5vw, 56px);
+  font-size: var(--fs-1);
   line-height: 1.1;
   letter-spacing: -0.015em;
   color: var(--ink-deep);
   margin-bottom: var(--space-3);
 }
 .book-header h1 em { color: var(--accent); font-style: italic; font-weight: 700; }
-.book-header p { font-size: 1.1rem; color: var(--ink-soft); margin-top: 0; }
+.book-header p { font-size: var(--fs-3); color: var(--ink-soft); margin-top: 0; }
 .book-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
 .book-card {
   background: var(--bg-soft);
@@ -41,30 +41,14 @@ body {
 .book-card h2 {
   font-family: var(--serif);
   font-weight: 700;
-  font-size: clamp(20px, 2vw, 24px);
+  font-size: var(--fs-3);
   color: var(--ink-deep);
   margin: 0 0 var(--space-2);
   letter-spacing: -0.005em;
 }
-.book-card .meta { color: var(--ink-soft); font-size: 0.95rem; margin-bottom: 1rem; }
-.book-card .for { font-size: 0.95rem; flex-grow: 1; margin-bottom: 1.5rem; color: var(--ink-soft); }
-.book-cta {
-  display: inline-block;
-  background: var(--accent);
-  color: var(--bg-main);
-  text-decoration: none;
-  padding: 0.75rem 1.25rem;
-  border-radius: 6px;
-  text-align: center;
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  font-family: var(--sans);
-}
-.book-cta:hover { background: var(--accent-deep); }
-.book-cta:disabled { opacity: 0.6; cursor: not-allowed; }
-.book-policy { margin-top: 3rem; padding: var(--space-3); background: var(--bg-soft); border: 1px solid var(--rule); border-radius: 6px; font-size: 0.95rem; color: var(--ink-soft); }
+.book-card .meta { color: var(--ink-soft); font-size: var(--fs-small); margin-bottom: 1rem; }
+.book-card .for { font-size: var(--fs-body); flex-grow: 1; margin-bottom: 1.5rem; color: var(--ink-soft); }
+.book-policy { margin-top: 3rem; padding: var(--space-3); background: var(--bg-soft); border: 1px solid var(--rule); border-radius: 6px; font-size: var(--fs-body); color: var(--ink-soft); }
 
 /* slot picker */
 .slot-form { background: var(--bg-soft); padding: 2rem; border-radius: 8px; border: 1px solid var(--rule); margin-top: 2rem; }
@@ -75,35 +59,34 @@ body {
   padding: 0.6rem;
   cursor: pointer;
   border-radius: 4px;
-  font-size: 0.9rem;
+  font-size: var(--fs-small);
   font-family: var(--sans);
 }
 .slot-button:hover { border-color: var(--accent); }
 .slot-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.slot-button.selected { background: var(--accent); color: var(--bg-main); border-color: var(--accent); }
-.slot-button[aria-pressed="true"] { background: var(--accent); color: var(--bg-main); border-color: var(--accent); }
-.book-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.slot-button.selected { background: var(--accent-deep); color: var(--bg-main); border-color: var(--accent); }
+.slot-button[aria-pressed="true"] { background: var(--accent-deep); color: var(--bg-main); border-color: var(--accent); }
 
 /* Hero card on /book menu — promote the most-popular SKU */
 .book-card-hero { border: 2px solid var(--accent); box-shadow: 0 4px 12px rgba(143,117,48,0.12); position: relative; }
-.book-card-hero::before { content: '★ Most popular'; position: absolute; top: -10px; left: 16px; background: var(--accent); color: var(--bg-main); font-size: 0.75rem; padding: 2px 10px; border-radius: 4px; letter-spacing: 0.02em; }
+.book-card-hero::before { content: '★ Most popular'; position: absolute; top: -10px; left: 16px; background: var(--accent-deep); color: var(--bg-main); font-size: 0.75rem; padding: 2px 10px; border-radius: 4px; letter-spacing: 0.02em; }
 
 /* The roadmap leads /book (21 Oct 2026): a full-width first row */
 .book-card-first { grid-column: 1 / -1; border: 2px solid var(--accent); position: relative; background: var(--bg-main); }
-.book-card-first::before { content: 'Start here'; position: absolute; top: -10px; left: 16px; background: var(--accent); color: var(--bg-main); font-size: 0.75rem; padding: 2px 10px; border-radius: 4px; letter-spacing: 0.02em; }
-.book-card-first .book-cta { align-self: flex-start; }
+.book-card-first::before { content: 'Start here'; position: absolute; top: -10px; left: 16px; background: var(--accent-deep); color: var(--bg-main); font-size: 0.75rem; padding: 2px 10px; border-radius: 4px; letter-spacing: 0.02em; }
+.book-card .book-cta { align-self: flex-start; }
 
 /* mobile: tighter slot grid */
 @media (max-width: 480px) {
   .slot-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.4rem; }
-  .slot-button { padding: 0.5rem 0.3rem; font-size: 0.85rem; }
+  .slot-button { padding: 0.5rem 0.3rem; font-size: var(--fs-small); }
   .book-container { padding: var(--space-4) var(--space-2) var(--space-3); }
 }
-.slot-zone { margin: 0 0 0.5rem; font-size: 0.95rem; color: var(--ink-soft); }
+.slot-zone { margin: 0 0 0.5rem; font-size: var(--fs-small); color: var(--ink-soft); }
 .slot-day { margin-top: 1.5rem; }
 .slot-day-label { font-weight: 600; margin-bottom: 0.5rem; color: var(--ink-soft); }
 .field { margin-top: 1rem; }
-.field label { display: block; font-size: 0.95rem; margin-bottom: 0.35rem; color: var(--ink-soft); }
+.field label { display: block; font-size: var(--fs-small); margin-bottom: 0.35rem; color: var(--ink-soft); }
 /* Canonical text control — matches the unified form style in lib/site.css */
 .field input {
   width: 100%;
@@ -113,11 +96,11 @@ body {
   border-radius: 6px;
   background: var(--bg-main);
   color: var(--ink-deep);
-  font-size: 1rem;
+  font-size: var(--fs-body);
   font-family: var(--sans);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-.field-check label { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.9rem; line-height: 1.45; cursor: pointer; }
+.field-check label { display: flex; gap: 0.6rem; align-items: flex-start; font-size: var(--fs-small); line-height: 1.45; cursor: pointer; }
 .field-check input[type="checkbox"] { width: auto; flex: 0 0 auto; margin-top: 0.2rem; accent-color: var(--accent); }
 .field-check a { color: var(--accent-deep, var(--accent)); }
 .field input:focus {
@@ -130,11 +113,11 @@ body {
 
 /* v4 booking pages: the paragraph block under the header line */
 .book-blurb { margin: 0 0 var(--space-3); }
-.book-blurb p { font-size: 1rem; line-height: 1.6; color: var(--ink-soft); margin: 0 0 0.6em; max-width: 62ch; }
+.book-blurb p { font-size: var(--fs-body); line-height: 1.6; color: var(--ink-soft); margin: 0 0 0.6em; max-width: 62ch; }
 
 /* Referral discount on a booking page, and the "Who else" ask on /thanks (2026-10-21) */
-.ref-discount { margin: 0 0 1.5rem; padding: 0.75rem 1rem; border: 1px solid var(--accent); border-radius: 6px; background: var(--bg-soft); color: var(--ink-deep); font-size: 0.95rem; }
-.field-note { margin: 0.35rem 0 0; font-size: 0.85rem; color: var(--ink-soft); }
+.ref-discount { margin: 0 0 1.5rem; padding: 0.75rem 1rem; border: 1px solid var(--accent); border-radius: 6px; background: var(--bg-soft); color: var(--ink-deep); font-size: var(--fs-small); }
+.field-note { margin: 0.35rem 0 0; font-size: var(--fs-small); color: var(--ink-soft); }
 .who-else-form { margin-top: 0.5rem; }
 .who-else-form .book-cta { margin-top: 1rem; }
 
@@ -146,15 +129,15 @@ body {
 .book-intro h1 {
   font-family: var(--serif);
   font-weight: 700;
-  font-size: clamp(36px, 4.6vw, 54px);
+  font-size: var(--fs-1);
   line-height: 1.08;
   letter-spacing: -0.02em;
   color: var(--ink-deep);
   margin: 0 0 var(--space-2);
 }
-.book-lede { font-size: 1.15rem; line-height: 1.55; color: var(--ink-deep); margin: 0 0 var(--space-3); max-width: 46ch; }
+.book-lede { font-size: var(--fs-3); line-height: 1.55; color: var(--ink-deep); margin: 0 0 var(--space-3); max-width: 46ch; }
 .book-facts { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0 0 var(--space-4); }
-.book-facts li { font-size: 0.9rem; font-weight: 500; color: var(--ink-deep); background: var(--bg-soft); border: 1px solid var(--rule); border-radius: 999px; padding: 5px 12px; }
+.book-facts li { font-size: var(--fs-small); font-weight: 500; color: var(--ink-deep); background: var(--bg-soft); border: 1px solid var(--rule); border-radius: 999px; padding: 5px 12px; }
 .book-steps { list-style: none; padding: 0; margin: 0 0 var(--space-3); counter-reset: step; }
 .book-steps li { position: relative; padding: 0 0 var(--space-3) 52px; counter-increment: step; }
 .book-steps li::before {
@@ -162,15 +145,15 @@ body {
   position: absolute; left: 0; top: 0;
   width: 34px; height: 34px; border-radius: 50%;
   background: var(--bg-card); color: var(--ink-deep);
-  font-family: var(--serif); font-weight: 700; font-size: 17px;
+  font-family: var(--serif); font-weight: 700; font-size: var(--fs-body);
   display: flex; align-items: center; justify-content: center;
 }
 .book-steps li:not(:last-child)::after { content: ""; position: absolute; left: 16px; top: 40px; bottom: 6px; width: 2px; background: var(--rule); }
-.book-steps h2 { font-family: var(--sans); font-size: 1.02rem; font-weight: 600; color: var(--ink-deep); margin: 5px 0 4px; }
-.book-steps p { margin: 0; font-size: 0.98rem; line-height: 1.6; color: var(--ink-soft); }
+.book-steps h2 { font-family: var(--sans); font-size: var(--fs-body); font-weight: 600; color: var(--ink-deep); margin: 5px 0 4px; }
+.book-steps p { margin: 0; font-size: var(--fs-body); line-height: 1.6; color: var(--ink-soft); }
 .book-more { margin: 0 0 var(--space-3); }
-.book-more p { font-size: 0.98rem; line-height: 1.6; color: var(--ink-soft); margin: 0 0 0.7em; max-width: 60ch; }
-.book-more h2 { font-family: var(--sans); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin: var(--space-3) 0 0.5em; }
+.book-more p { font-size: var(--fs-body); line-height: 1.6; color: var(--ink-soft); margin: 0 0 0.7em; max-width: 60ch; }
+.book-more h2 { font-family: var(--sans); font-size: var(--fs-small); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin: var(--space-3) 0 0.5em; }
 
 .book-panel {
   position: sticky; top: var(--space-3);
@@ -181,10 +164,10 @@ body {
   padding: var(--space-3) var(--space-3) var(--space-2);
 }
 .book-panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0 0 var(--space-1); }
-.book-panel-head h2 { font-family: var(--serif); font-weight: 700; font-size: 1.45rem; color: var(--ink-deep); margin: 0; }
+.book-panel-head h2 { font-family: var(--serif); font-weight: 700; font-size: var(--fs-3); color: var(--ink-deep); margin: 0; }
 .book-panel-head .price { font-weight: 600; color: var(--ink-deep); white-space: nowrap; }
-.book-panel .book-policy { margin: var(--space-2) 0 0; padding: var(--space-2) 0 0; background: none; border: none; border-top: 1px solid var(--rule); border-radius: 0; font-size: 0.85rem; line-height: 1.5; }
-.book-panel .slot-zone { font-size: 0.85rem; color: var(--ink-faint); margin: 0 0 var(--space-2); }
+.book-panel .book-policy { margin: var(--space-2) 0 0; padding: var(--space-2) 0 0; background: none; border: none; border-top: 1px solid var(--rule); border-radius: 0; font-size: var(--fs-small); line-height: 1.5; }
+.book-panel .slot-zone { font-size: var(--fs-small); color: var(--ink-faint); margin: 0 0 var(--space-2); }
 
 .slot-days { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
 .slot-day-button {
@@ -195,14 +178,14 @@ body {
 }
 .slot-day-button:hover { border-color: var(--accent); }
 .slot-day-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.slot-day-wd { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
-.slot-day-dm { font-size: 0.92rem; font-weight: 600; }
+.slot-day-wd { font-size: var(--fs-micro); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+.slot-day-dm { font-size: var(--fs-small); font-weight: 600; }
 .slot-day-button.selected { background: var(--ink-deep); color: var(--bg-main); }
 .slot-day-button.selected .slot-day-wd { color: var(--bg-card-hi); }
 .slot-times { margin-top: var(--space-2); }
-.book-panel .slot-day-label { font-size: 0.9rem; font-weight: 600; color: var(--ink-deep); margin: 0 0 8px; }
+.book-panel .slot-day-label { font-size: var(--fs-small); font-weight: 600; color: var(--ink-deep); margin: 0 0 8px; }
 .book-panel .slot-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 0; gap: 6px; }
-.book-panel .slot-button { background: var(--bg-main); border-color: var(--rule); border-radius: 8px; padding: 0.55rem 0.3rem; font-size: 0.92rem; font-weight: 500; color: var(--ink-deep); }
+.book-panel .slot-button { background: var(--bg-main); border-color: var(--rule); border-radius: 8px; padding: 0.55rem 0.3rem; font-size: var(--fs-small); font-weight: 500; color: var(--ink-deep); }
 .book-panel .slot-form { background: none; border: none; border-top: 1px solid var(--rule); border-radius: 0; padding: var(--space-2) 0 0; margin-top: var(--space-2); }
 .book-panel .slot-form .book-cta { width: 100%; margin-top: var(--space-2); font-weight: 600; }
 .list-note { margin-top: 0.75rem; }
@@ -217,13 +200,13 @@ body {
   .book-panel { padding: var(--space-2); }
 }
 .book-list { margin: 0 0 0.8em; padding-left: 1.2em; color: var(--ink-soft); line-height: 1.6; }
-.group-email p { font-size: 0.95rem; line-height: 1.55; color: var(--ink-soft); margin: 0 0 0.8em; }
+.group-email p { font-size: var(--fs-small); line-height: 1.55; color: var(--ink-soft); margin: 0 0 0.8em; }
 .group-email .book-cta { display: block; width: 100%; }
 .book-panel .slot-button:hover { border-color: var(--accent); }
 .book-panel .slot-button.selected,
-.book-panel .slot-button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg-main); }
+.book-panel .slot-button[aria-pressed="true"] { background: var(--accent-deep); border-color: var(--accent); color: var(--bg-main); }
 /* phones: the panel sits under the description, so a jump to it */
 .book-jump { display: none; }
-@media (max-width: 900px) { .book-jump { display: block; margin: 0 0 var(--space-4); text-align: center; } }
+@media (max-width: 900px) { .book-jump { display: flex; margin: 0 0 var(--space-4); } }
 /* /book cards: the price line in the body font, not the code font (3 Nov 2026) */
-.book-card .meta { font-family: var(--sans); font-size: 0.95rem; font-weight: 500; letter-spacing: 0; color: var(--ink-soft); }
+.book-card .meta { font-family: var(--sans); font-size: var(--fs-small); font-weight: 500; letter-spacing: 0; color: var(--ink-soft); }
