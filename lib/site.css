@@ -3357,3 +3357,26 @@ main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
   .book-grid > .book-card-first > .book-cta { grid-column: 1; grid-row: 3; align-self: start; justify-self: start; }
   .book-grid > .book-card-first > .for { grid-column: 2; grid-row: 1 / span 3; margin: 0; }
 }
+
+/* ============================================================
+   UI loop 15: prices hold together, one meaning per device, home rhythm
+   ============================================================ */
+
+/* Each price on the home price line stays on one line with its unit; below
+   900 the prices stack one per line (as at 390) instead of running into the gutter */
+.price-strip .item { white-space: nowrap; }
+@media (max-width: 900px) { .price-strip .sep { display: none; } .price-strip .item { display: block; } }
+
+/* The accent left bar is for quotes only. The how-it-works "Where to start"
+   panel is a plain tinted panel; FAQ answers sit on hairlines; booking errors
+   are a bordered danger box. */
+.how-it-works .ready-card { border-left: 0; border-radius: var(--r-md); }
+.qa li { border-left: 0; padding: var(--space-3) 0 0; border-top: 1px solid var(--rule); }
+.slot-error { border: 1px solid color-mix(in srgb, var(--danger) 45%, transparent); border-radius: var(--r-sm); }
+
+/* Amber as decoration goes neutral: about's timeline dates and markers */
+.about-row-header .when { color: var(--ink-faint); }
+.about-row-header .caret { color: var(--ink-faint); }
+
+/* Home rhythm: the closing call to action gets more room before the footer */
+#who.section { padding-bottom: var(--page-end); }

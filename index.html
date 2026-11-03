@@ -105,7 +105,8 @@
 
   /* What people ask first */
   .qa { list-style: none; margin: var(--space-3) 0 0; padding: 0; display: grid; gap: var(--space-3); max-width: var(--read-col); }
-  .qa li { border-left: 2px solid var(--rule); padding: 2px 0 2px var(--space-3); }
+  /* FAQ answers sit on hairlines (UI loop 15) */
+  .qa li { padding: var(--space-3) 0 0; border-top: 1px solid var(--rule); }
   .qa h3 { margin: 0 0 6px; font-family: var(--sans); font-size: var(--fs-body); font-weight: 600; color: var(--ink-deep); }
   .qa p { margin: 0; font-size: var(--fs-body); line-height: 1.6; color: var(--ink-soft); }
 
