@@ -26,15 +26,15 @@
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
   <style>
-    .mem { max-width: 46rem; margin: 0 auto; padding: 2.5rem 1.25rem 3rem; }
+    .mem { max-width: calc(var(--read) + 2 * var(--gutter)); margin: 0 auto; padding: var(--space-5) var(--gutter) var(--space-6); }
     .mem h1 { margin: 0.4rem 0 1rem; }
     .mem h2 { margin-top: 2.6rem; }
-    .mem .lead { font-size: 1.12rem; }
-    .mem-price { border: 1px solid var(--rule); background: var(--bg-soft); border-radius: 8px; padding: 1.4rem 1.5rem; margin: 2rem 0; }
-    .mem-price .big { font-size: 2rem; font-weight: 700; margin: 0; }
+    .mem .lead { font-size: var(--fs-3); }
+    .mem-price { padding: var(--space-3) 0; margin: var(--space-4) 0; }
+    .mem-price .big { font-family: var(--serif); font-size: var(--fs-2); font-weight: 700; margin: 0; }
     .mem-list { padding-left: 1.1rem; }
     .mem-list li { margin: 0.7rem 0; }
-    .mem-invite { border-left: 4px solid var(--accent); padding: 0.8rem 1rem; background: var(--bg-soft); margin: 1.5rem 0; }
+    .mem-invite { margin: var(--space-4) 0; }
     .mem .slot-form button { margin-top: 0.8rem; }
     .mem .form-error { color: #b3261e; margin-top: 0.8rem; }
   </style>

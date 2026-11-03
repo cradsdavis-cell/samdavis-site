@@ -10,15 +10,6 @@
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 <style>
-  .how-hero {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    align-items: center;
-    gap: var(--space-4);
-    padding-top: var(--space-6);
-    padding-bottom: var(--space-4);
-  }
-  .how-hero img { width: 140px; height: auto; }
   .how-hero p.lead {
     max-width: var(--read-col);
     color: var(--ink-soft);
@@ -38,26 +29,21 @@
   .diagram svg { width: 100%; height: auto; display: block; }
   .diagram figcaption {
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.04em;
     color: var(--ink-faint);
     text-align: center;
     margin-top: var(--space-2);
   }
 
-  .how-it-works .session-block {
-    background: var(--bg-soft);
-    border-left: 4px solid var(--accent);
-    border-radius: 4px;
-    padding: var(--space-3) var(--space-4);
-    margin-bottom: var(--space-3);
-  }
+  /* the step blocks are ruled sections; the look lives in lib/site.css (UI loop 11) */
+  .how-it-works .session-block { margin-bottom: var(--space-3); }
   .how-it-works .session-block .s-tag {
     font-family: var(--mono);
-    font-size: 11.5px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--accent-ink);
     font-weight: 600;
     display: block;
     margin-bottom: 6px;
@@ -65,7 +51,7 @@
   .how-it-works .session-block h3 {
     margin: 0 0 var(--space-2);
     font-family: var(--serif);
-    font-size: 22px;
+    font-size: var(--fs-3);
     color: var(--ink-deep);
   }
   .how-it-works .session-block p {
@@ -80,17 +66,17 @@
     padding-left: var(--space-3);
     border-left: 2px dashed var(--rule);
     color: var(--ink-faint);
-    font-size: 15px;
+    font-size: var(--fs-small);
   }
   .how-it-works .between strong { color: var(--ink-soft); }
   .pack-tag {
     display: inline-block;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.04em;
     color: var(--accent-deep);
     background: var(--bg-card);
-    border-radius: 999px;
+    border-radius: var(--r-sm);
     padding: 2px 10px;
     margin-left: 6px;
   }
@@ -115,37 +101,37 @@
   }
   .material {
     background: var(--bg-soft);
-    border-radius: 6px;
+    border-radius: var(--r-md);
     padding: var(--space-3);
   }
   .material .when {
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--accent-ink);
     font-weight: 600;
   }
-  .material h3 { font-family: var(--serif); font-size: 18px; margin: 6px 0; }
-  .material p { font-size: 14.5px; color: var(--ink-soft); margin: 0; max-width: none; }
+  .material h3 { font-family: var(--serif); font-size: var(--fs-body); margin: 6px 0; }
+  .material p { font-size: var(--fs-small); color: var(--ink-soft); margin: 0; max-width: none; }
 
   .how-it-works .ready-card {
     background: var(--bg-soft);
-    border-radius: 6px;
+    border-radius: var(--r-md);
     padding: var(--space-4);
-    text-align: center;
     margin-top: var(--space-5);
   }
   .how-it-works .ready-card h2 { margin-bottom: var(--space-2); }
   .how-it-works .ready-card p {
     max-width: 540px;
-    margin: 0 auto var(--space-3);
+    margin: 0 0 var(--space-3);
     color: var(--ink-soft);
   }
   .how-it-works .ready-card .ctas {
     display: flex;
     gap: var(--space-3);
-    justify-content: center;
+    justify-content: flex-start;
+    align-items: center;
     flex-wrap: wrap;
   }
 
@@ -161,20 +147,20 @@
   }
   .fourc-row .fc-txt .cnum {
     font-family: var(--serif);
-    font-size: 20px;
-    color: var(--accent);
+    font-size: var(--fs-3);
+    color: var(--accent-ink);
     opacity: 0.55;
     margin-bottom: 4px;
   }
   .fourc-row .fc-txt h3 {
     font-family: var(--serif);
-    font-size: clamp(26px, 3vw, 34px);
+    font-size: var(--fs-2);
     color: var(--ink-deep);
     margin-bottom: 6px;
   }
   .fourc-row .fc-txt .fc-gloss {
     font-family: var(--serif);
-    font-size: clamp(19px, 2.2vw, 23px);
+    font-size: var(--fs-3);
     color: var(--accent-deep);
     font-style: italic;
     margin-bottom: var(--space-2);
@@ -186,11 +172,11 @@
   .fc-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: var(--space-2) 0; }
   .fc-chips .chip {
     font-family: var(--mono);
-    font-size: 12.5px;
+    font-size: var(--fs-micro);
     color: var(--ink-deep);
     background: var(--bg-soft);
     border: 1px solid var(--rule);
-    border-radius: 999px;
+    border-radius: var(--r-sm);
     padding: 4px 13px;
   }
   .fc-chips .chip.alt {
@@ -203,13 +189,13 @@
   .fc-ring  { fill: none; stroke: var(--good); stroke-width: 2; }
   .fc-spoke { stroke: var(--good); stroke-width: 2; }
   .fc-node  { fill: var(--bg-soft); stroke: var(--good); stroke-width: 1.5; }
-  .fc-node-t { font-family: var(--sans); font-size: 14px; fill: var(--ink-deep); }
+  .fc-node-t { font-family: var(--sans); font-size: var(--fs-small); fill: var(--ink-deep); }
   .fc-route { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: 7 7; }
   .fc-pill  { fill: var(--bg-main); stroke: var(--accent); stroke-width: 1.5; }
-  .fc-pill-t { font-family: var(--mono); font-size: 12.5px; fill: var(--accent-deep); }
+  .fc-pill-t { font-family: var(--mono); font-size: var(--fs-micro); fill: var(--accent-deep); }
   .fc-core  { fill: var(--accent); }
   .fc-core-halo { fill: var(--accent); opacity: 0.14; }
-  .fc-core-t { font-family: var(--serif); font-size: 15px; fill: var(--bg-main); }
+  .fc-core-t { font-family: var(--serif); font-size: var(--fs-small); fill: var(--bg-main); }
   .fc-pulse {
     fill: none; stroke: var(--accent); stroke-width: 3;
     transform-box: fill-box; transform-origin: center;
@@ -236,20 +222,18 @@
   .how-it-works .session-block .layer-tag {
     display: inline-block;
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: var(--fs-micro);
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--good);
     background: var(--bg-card);
-    border-radius: 999px;
+    border-radius: var(--r-sm);
     padding: 2px 10px;
     margin-left: 8px;
     vertical-align: 1px;
   }
 
   @media (max-width: 900px) {
-    .how-hero { grid-template-columns: 1fr; }
-    .how-hero img { margin: 0 auto; }
     .fourc-row { grid-template-columns: 1fr; gap: var(--space-3); }
     .fourc-row .fc-img { order: 2; }
   }
@@ -257,8 +241,9 @@
   .lives-list li { padding-left: 22px; position: relative; line-height: 1.55; }
   .lives-list li::before { content: ""; position: absolute; left: 0; top: 10px; width: 10px; height: 10px; border-radius: 50%; background: var(--good); }
   .hiw-shot { margin: var(--space-3) 0 0; }
-  .hiw-shot img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--rule); box-shadow: 0 14px 40px rgba(23, 61, 42, .12); }
-  .hiw-shot figcaption { font-family: var(--sans); font-size: 14px; color: var(--ink-faint); margin-top: 10px; }
+  .hiw-shot img { width: 100%; height: auto; display: block; border-radius: var(--r-md); border: 1px solid var(--rule); box-shadow: none; }
+  @media (max-width: 600px) { .hiw-shot img { aspect-ratio: 4 / 3; object-fit: cover; object-position: left top; } }
+  .hiw-shot figcaption { font-family: var(--sans); font-size: var(--fs-small); color: var(--ink-faint); margin-top: 10px; }
 </style>
 <!-- SEO: canonical + social cards -->
 <link rel="canonical" href="https://crads-ai.com/how-it-works">
@@ -323,13 +308,28 @@
 <main>
   <!-- Hero (second pass, 22 Oct 2026): for a business owner, roadmap -> setup ->
        what you have after; the software detail sits below. -->
-  <section class="how-hero wrap">
+  <section class="how-hero page-head wrap">
     <img src="/lib/img/sam-illustration.png" alt="" class="float-gentle">
+    <svg class="leaf-draw" viewBox="12 6 40 50" aria-hidden="true" focusable="false">
+      <g><path pathLength="1" d="M32 8.32 A24.2 24.2 0 0 1 32 53.12 A24.2 24.2 0 0 1 32 8.32 Z"/><line pathLength="1" x1="32" y1="12.8" x2="32" y2="55.5"/><line pathLength="1" style="--i:0" x1="32" y1="21.76" x2="39.44" y2="19.09"/><line pathLength="1" style="--i:1" x1="32" y1="26.24" x2="25.07" y2="20.65"/><circle pathLength="1" style="--i:1" cx="23.27" cy="19.2" r="2.3"/><line pathLength="1" style="--i:2" x1="32" y1="31.62" x2="40.56" y2="25.3"/><circle pathLength="1" style="--i:2" cx="42.41" cy="23.94" r="2.3"/><line pathLength="1" style="--i:3" x1="32" y1="36.1" x2="22.84" y2="29.17"/><circle pathLength="1" style="--i:3" cx="21" cy="27.78" r="2.3"/><line pathLength="1" style="--i:4" x1="32" y1="41.47" x2="41.01" y2="33.98"/><circle pathLength="1" style="--i:4" cx="42.78" cy="32.51" r="2.3"/><line pathLength="1" style="--i:5" x1="32" y1="45.95" x2="23.87" y2="37.97"/><circle pathLength="1" style="--i:5" cx="22.22" cy="36.35" r="2.3"/></g>
+      <circle class="leaf-node" cx="42.7" cy="17.92" r="2.3"/>
+    </svg>
     <div>
       <p class="eyebrow">How it works</p>
       <h1>From one call to an assistant <em>that knows your business.</em></h1>
       <p class="lead">A roadmap finds where AI would help. A setup builds it with you. Then you have an assistant you own, and it keeps learning.</p>
     </div>
+  </section>
+
+  <!-- The film (UI loop 09): the same film the docs open with -->
+  <section class="section section-tight wrap film-section">
+    <figure class="film" data-film>
+      <div class="film-frame">
+        <video controls playsinline preload="none" poster="/lib/video/posters/an-assistant-that-knows-you-title.jpg" aria-label="An assistant that knows you: why I built it, what it is, the four Cs, and how you get one. Three and a half minutes, captions, no voice."><source src="/lib/video/an-assistant-that-knows-you.mp4" type="video/mp4"></video>
+        <button class="film-play" type="button" aria-label="Play the film"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l11-6.5z"/></svg></button>
+      </div>
+      <figcaption>An assistant that knows you: why I built it, what it is, the four Cs, and how you get one. Three and a half minutes, captions, no voice.</figcaption>
+    </figure>
   </section>
 
   <!-- The three steps, for a business owner -->

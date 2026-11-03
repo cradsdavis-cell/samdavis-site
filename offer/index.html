@@ -11,41 +11,23 @@
 <script defer src="/lib/site.js"></script>
 <script defer src="/lib/testimonialsRender.js"></script>
 <style>
-  .offer-hero {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    align-items: center;
-    gap: var(--space-4);
-    padding-top: var(--space-6);
-    padding-bottom: var(--space-4);
-  }
-  .offer-hero img { width: 140px; height: auto; }
   .prose-lead { max-width: var(--read-col); margin-bottom: var(--space-3); }
 
   /* Decision helper: "Which one's right for you?" */
-  .decision-helper {
-    background: var(--bg-soft);
-    border-left: 4px solid var(--accent);
-    border-radius: 4px;
-    padding: var(--space-3) var(--space-4);
-    margin-bottom: var(--space-4);
-  }
+  /* the chooser is a ruled list: each line a quote and the option it points to (UI loop 14) */
+  .decision-helper { margin-bottom: var(--space-4); }
   .decision-helper h2 {
     margin: 0 0 var(--space-2);
-    font-size: 22px;
+    font-size: var(--fs-3);
   }
-  .decision-helper ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: var(--space-1);
-  }
+  .decision-helper ul { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--rule); }
   .decision-helper li {
     font-family: var(--sans);
-    font-size: 15px;
+    font-size: var(--fs-small);
     line-height: 1.6;
     color: var(--ink-soft);
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--rule);
   }
   .decision-helper li strong {
     color: var(--ink-deep);
@@ -61,7 +43,7 @@
     gap: var(--space-3);
     margin: var(--space-4) 0 var(--space-3);
     font-family: var(--sans);
-    font-size: 14.5px;
+    font-size: var(--fs-small);
     color: var(--ink-soft);
   }
   .payment-toggle .switch {
@@ -80,7 +62,7 @@
     cursor: pointer;
     top: 0; left: 0; right: 0; bottom: 0;
     background-color: var(--bg-card);
-    border-radius: 28px;
+    border-radius: var(--r-md);
     transition: 0.2s;
   }
   .payment-toggle .slider::before {
@@ -106,7 +88,7 @@
   /* Pricing grid: roadmap, walkthrough, guided setup */
   .pricing-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-3);
     margin-bottom: var(--space-4);
   }
@@ -114,130 +96,55 @@
     position: relative;
     background: var(--bg-main);
     border: 1px solid var(--rule);
-    border-radius: 6px;
-    padding: var(--space-3);
+    border-radius: var(--r-md);
+    padding: var(--space-4) var(--space-3) var(--space-3);
     display: flex;
     flex-direction: column;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
   .rung:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 20px rgba(143, 117, 48, 0.15);
+    
+    box-shadow: none;
     border-color: var(--accent);
-  }
-  .rung.featured {
-    border: 2px solid var(--accent);
-    background: var(--bg-soft);
-  }
-  .rung .rung-badge {
-    position: absolute;
-    top: -10px;
-    left: 16px;
-    background: var(--accent);
-    color: var(--bg-main);
-    font-family: var(--mono);
-    font-size: 10.5px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 4px;
-  }
-  .rung .rung-name {
-    font-family: var(--mono);
-    font-size: 11.5px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent);
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-  .rung .rung-meta {
-    font-size: 13px;
-    color: var(--ink-faint);
-    margin-bottom: var(--space-2);
   }
   .rung .price {
     font-family: var(--serif);
-    font-size: 32px;
+    font-size: var(--fs-2);
     font-weight: 800;
     color: var(--ink-deep);
     line-height: 1;
     margin-bottom: 4px;
   }
   .rung .price .price-suffix {
-    font-size: 14px;
+    font-size: var(--fs-small);
     font-weight: 500;
     color: var(--ink-soft);
     font-family: var(--sans);
   }
-  .rung .price-detail {
-    font-family: var(--sans);
-    font-size: 13px;
-    color: var(--ink-faint);
-    margin-bottom: var(--space-2);
-    min-height: 1.2em;
-  }
-  .rung .rung-pitch {
-    font-size: 14.5px;
-    line-height: 1.5;
-    color: var(--ink-soft);
-    margin-bottom: var(--space-3);
-    flex-grow: 1;
-  }
-  .rung .cta {
-    display: inline-block;
-    font-family: var(--sans);
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--bg-main);
-    background: var(--accent);
-    padding: 10px 18px;
-    border-radius: 4px;
-    text-align: center;
-    text-decoration: none;
-    transition: background 0.2s ease;
-  }
-  .rung .cta:hover { background: var(--accent-deep); }
+  .rung .rung-pitch { font-size: var(--fs-small); line-height: 1.5; color: var(--ink-soft); margin: var(--space-2) 0 0; }
 
   /* Testimonials / proof strip styling now lives in lib/site.css (shared). */
 
-  .discovery-card {
-    background: var(--bg-soft);
-    border-radius: 6px;
-    padding: var(--space-4);
-    text-align: center;
-    margin-top: var(--space-5);
-  }
+  .discovery-card { margin-top: var(--space-5); }
   .discovery-card h2 { margin-bottom: var(--space-2); }
   .discovery-card .meta { display: inline-block; margin-bottom: var(--space-3); }
-  .discovery-card p { max-width: 540px; margin: 0 auto var(--space-3); color: var(--ink-soft); }
+  .discovery-card p { max-width: 62ch; margin: 0 0 var(--space-3); color: var(--ink-soft); }
 
-  .retainer-note {
-    font-family: var(--sans);
-    font-size: 14.5px;
-    line-height: 1.6;
-    color: var(--ink-faint);
-    max-width: var(--read-col);
-    margin: 0 auto var(--space-4);
-    text-align: center;
-  }
-  .retainer-note a { color: var(--accent); font-weight: 600; }
+  /* fine print uses the shared note style in lib/site.css (UI loop 12) */
+  .retainer-note { margin: 0 0 var(--space-4); }
   /* More options (Sam, 2026-10-14): the non-server option stays folded so the
      server is the only thing a buyer sees up front. */
   .more-options { margin-top: calc(-1 * var(--space-3)); }
-  .more-options summary { cursor: pointer; display: inline-block; text-decoration: underline; text-underline-offset: 2px; list-style: none; }
+  .more-options summary { cursor: pointer; display: inline-flex; align-items: center; min-height: var(--tap); list-style: none; }
   .more-options summary::-webkit-details-marker { display: none; }
   .more-options summary::before { content: "\25B8\00A0"; }
   .more-options[open] summary::before { content: "\25BE\00A0"; }
-  .more-options summary:hover { color: var(--ink-soft); }
+
   .more-options p { margin: var(--space-2) 0 0; font: inherit; color: inherit; max-width: none; }
   .nowrap { white-space: nowrap; }
-  .offer-byline { font-family: var(--sans); font-size: 13.5px; line-height: 1.5; color: var(--ink-faint); margin-top: var(--space-2); }
+  .offer-byline { font-family: var(--sans); font-size: var(--fs-small); line-height: 1.5; color: var(--ink-faint); margin-top: var(--space-2); }
 
   @media (max-width: 900px) {
-    .offer-hero { grid-template-columns: 1fr; }
-    .offer-hero img { margin: 0 auto; }
   }
 </style>
 <!-- SEO: canonical + social cards -->
@@ -302,7 +209,7 @@
 
 <main>
   <!-- Hero -->
-  <section class="offer-hero wrap">
+  <section class="offer-hero page-head wrap">
     <img src="/lib/img/sam-illustration.png" alt="" class="float-gentle">
     <div>
       <p class="eyebrow">What it costs</p>
@@ -327,65 +234,77 @@
     <!-- The roadmap first (21 Oct 2026), then the two ways to set it up -->
     <div class="pricing-grid stagger-grid">
       <article class="rung" data-sku="roadmap" id="roadmap">
-        <span class="rung-badge">Start here</span>
-        <h3 class="rung-name">AI roadmap</h3>
-        <p class="rung-meta">30 min + written report + 30 min · 1:1 · video call · up to 10 a week</p>
-        <p class="price">A$250</p>
-        <p class="price-detail">Fixed. Pay once. Have a code? It comes off at checkout.</p>
-        <p class="rung-label">You leave with</p>
-        <ul class="rung-includes rung-outcomes">
-          <li>All the pain points in your business, gone through properly, into the weeds.</li>
-          <li>A written report within 3 business days: where AI could help, and what I'd start with.</li>
-          <li>A second call to go through it together.</li>
-        </ul>
-        <p class="rung-pitch">Then it's your call: stop there, do it yourself, or set it up with me.</p>
+        <div class="rung-head">
+          <span class="rung-badge">Start here</span>
+          <h3 class="rung-name">AI roadmap</h3>
+          <p class="rung-meta">30 min + written report + 30 min&nbsp;· 1:1&nbsp;· video call&nbsp;· up to 10 a week</p>
+          <p class="price">A$250</p>
+          <p class="price-detail">Fixed. Pay once. Have a code? It comes off at checkout.</p>
+        </div>
+        <div class="rung-body">
+          <p class="rung-label">You leave with</p>
+          <ul class="rung-includes rung-outcomes">
+            <li>All the pain points in your business, gone through properly, into the weeds.</li>
+            <li>A written report within 3 business days: where AI could help, and what I'd start with.</li>
+            <li>A second call to go through it together.</li>
+          </ul>
+          <p class="rung-pitch">Then it's your call: stop there, do it yourself, or set it up with me.</p>
+        </div>
         <a class="cta" href="/book/roadmap">Book an AI roadmap →</a>
       </article>
 
       <article class="rung" data-sku="walkthrough">
-        <h3 class="rung-name">Walkthrough</h3>
-        <p class="rung-meta">1 hour + 30 min · 1:1 · screen shared · at least a day apart</p>
-        <p class="price">A$350</p>
-        <p class="price-detail">Fixed. Pay once for both sessions.</p>
-        <p class="rung-label">You leave with</p>
-        <ul class="rung-includes rung-outcomes">
-          <li>An assistant that knows your clients, projects and how you like things done, and what it must never touch.</li>
-          <li>One of your real problems solved in the session, so you have a working example.</li>
-          <li>CRIT, the method for briefing it, so you can solve the next one yourself.</li>
-          <li>Written docs, and your <a href="/membership">first month of membership</a>: answers on Slack within a working day, and the weekly drop-in call.</li>
-        </ul>
-        <p class="rung-label">How it runs</p>
-        <ul class="rung-includes">
-          <li><strong>Before session 1:</strong> you install the app and set up your assistant. The <a href="/docs/first-hour">first-hour guide</a> walks you through it, and session 1 finishes it if you get stuck.</li>
-          <li><strong>Session 1 (60 min):</strong> how to use Claude Code and the Crads-AI app.</li>
-          <li><strong>Homework, about an hour:</strong> the onboarding interview, which writes the first version of what it knows about you.</li>
-          <li><strong>Session 2 (30 min, a day or more later):</strong> we fix the gaps and solve one real problem with it.</li>
-        </ul>
-        <p class="rung-pitch">By the end you can solve your own business problems with Claude.</p>
+        <div class="rung-head">
+          <h3 class="rung-name">Walkthrough</h3>
+          <p class="rung-meta">1 hour + 30 min&nbsp;· 1:1&nbsp;· screen shared&nbsp;· at least a day apart</p>
+          <p class="price">A$350</p>
+          <p class="price-detail">Fixed. Pay once for both sessions.</p>
+        </div>
+        <div class="rung-body">
+          <p class="rung-label">You leave with</p>
+          <ul class="rung-includes rung-outcomes">
+            <li>An assistant that knows your clients, projects and how you like things done, and what it must never touch.</li>
+            <li>One of your real problems solved in the session, so you have a working example.</li>
+            <li>CRIT, the method for briefing it, so you can solve the next one yourself.</li>
+            <li>Written docs, and your <a href="/membership">first month of membership</a>: answers on Slack within a working day, and the weekly drop-in call.</li>
+          </ul>
+          <p class="rung-label">How it runs</p>
+          <ul class="rung-includes">
+            <li><strong>Before session 1:</strong> you install the app and set up your assistant. The <a href="/docs/first-hour">first-hour guide</a> walks you through it, and session 1 finishes it if you get stuck.</li>
+            <li><strong>Session 1 (60 min):</strong> how to use Claude Code and the Crads-AI app.</li>
+            <li><strong>Homework, about an hour:</strong> the onboarding interview, which writes the first version of what it knows about you.</li>
+            <li><strong>Session 2 (30 min, a day or more later):</strong> we fix the gaps and solve one real problem with it.</li>
+          </ul>
+          <p class="rung-pitch">By the end you can solve your own business problems with Claude.</p>
+        </div>
         <a class="cta" href="/book/walkthrough">Book a walkthrough →</a>
       </article>
 
       <article class="rung featured" data-sku="guided-setup">
-        <span class="rung-badge">The full setup</span>
-        <h3 class="rung-name">Guided setup</h3>
-        <p class="rung-meta">1 hour + 2 hours · 1:1 · screen shared · at least a day apart</p>
-        <p class="price">A$700</p>
-        <p class="price-detail">Fixed. Pay once for both sessions.</p>
-        <p class="rung-label">You leave with</p>
-        <ul class="rung-includes rung-outcomes">
-          <li>Everything in the walkthrough.</li>
-          <li>Your email, calendar and Slack or WhatsApp connected, on limits you choose (drafts only and never sends, if that's what you want).</li>
-          <li>Your first skills, built around the jobs you repeat every week: follow-ups, proposals, posts, notes.</li>
-          <li>A morning brief that reads your day and tells you what matters, and jobs that run on a schedule.</li>
-          <li>Written docs, and your <a href="/membership">first month of membership</a>: answers on Slack within a working day, and the weekly drop-in call.</li>
-        </ul>
-        <p class="rung-label">How it runs</p>
-        <ul class="rung-includes">
-          <li><strong>Session 1 (60 min):</strong> we build your server in your own hosting account, and I show you the app.</li>
-          <li><strong>Homework, about an hour:</strong> the onboarding interview.</li>
-          <li><strong>Session 2 (120 min, a day or more later):</strong> I connect your tools, build your first skills around the work you actually do, and switch on the morning brief.</li>
-        </ul>
-        <p class="rung-pitch">By the end your business has an assistant that runs without you.</p>
+        <div class="rung-head">
+          <span class="rung-badge">The full setup</span>
+          <h3 class="rung-name">Guided setup</h3>
+          <p class="rung-meta">1 hour + 2 hours&nbsp;· 1:1&nbsp;· screen shared&nbsp;· at least a day apart</p>
+          <p class="price">A$700</p>
+          <p class="price-detail">Fixed. Pay once for both sessions.</p>
+        </div>
+        <div class="rung-body">
+          <p class="rung-label">You leave with</p>
+          <ul class="rung-includes rung-outcomes">
+            <li>Everything in the walkthrough.</li>
+            <li>Your email, calendar and Slack or WhatsApp connected, on limits you choose (drafts only and never sends, if that's what you want).</li>
+            <li>Your first skills, built around the jobs you repeat every week: follow-ups, proposals, posts, notes.</li>
+            <li>A morning brief that reads your day and tells you what matters, and jobs that run on a schedule.</li>
+            <li>Written docs, and your <a href="/membership">first month of membership</a>: answers on Slack within a working day, and the weekly drop-in call.</li>
+          </ul>
+          <p class="rung-label">How it runs</p>
+          <ul class="rung-includes">
+            <li><strong>Session 1 (60 min):</strong> we build your server in your own hosting account, and I show you the app.</li>
+            <li><strong>Homework, about an hour:</strong> the onboarding interview.</li>
+            <li><strong>Session 2 (120 min, a day or more later):</strong> I connect your tools, build your first skills around the work you actually do, and switch on the morning brief.</li>
+          </ul>
+          <p class="rung-pitch">By the end your business has an assistant that runs without you.</p>
+        </div>
         <a class="cta" href="/book/guided-setup">Book a guided setup →</a>
       </article>
     </div>
@@ -399,7 +318,7 @@
     </details>
     <div class="discovery-card reveal-on-scroll" id="membership">
       <h2>Keep going: membership</h2>
-      <p class="meta">A$99 a month · cancel any time</p>
+      <p class="meta">A$99 a month&nbsp;· cancel any time</p>
       <p>Ask me anything in Slack and get an answer within a working day, and bring whatever you're stuck on to a weekly hour with other business owners using Claude, Thursdays at 4pm Sydney time. Every session is recorded, so a missed week costs you nothing. It's for anyone using Claude in their business, whether we set it up together or you did it yourself.</p>
       <p>Done a walkthrough or guided setup? Your first month is already included.</p>
       <a class="cta" href="/membership">See the membership →</a>
