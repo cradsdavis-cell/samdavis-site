@@ -14,12 +14,13 @@ const { ROOT, servedHtml, urlOf } = require('../scripts/served.js');
 const { NAV_ITEMS, FOOTER_GROUPS, navHTML, footerHTML, normalisePath } = require('../lib/site.js');
 
 const INCLUDE_DOCS = true;   // flipped 2026-09-09: the app repo's shell emits navHTML() verbatim
-// 2026-10-21: the nav changed here first (the roadmap front door). The docs
-// pages keep the app repo shell's copy until that shell is updated and the
-// docs republished; site.js swaps in the current nav at runtime, so a visitor
-// with JS sees the new one. Until then docs pages are held to one nav, not to
-// byte identity. Set back to true once the shell's NAV matches navHTML('/docs').
-const DOCS_BYTE_IDENTICAL = false;
+// 2026-10-21: the nav changed here first (the roadmap front door), and the docs
+// pages were held to one nav, not to byte identity, until the app repo's shell
+// caught up. 2026-11-03: the shell now renders navHTML() and footerHTML() for
+// each page's path (ai-os PR 10) and the docs carry them, so byte identity is
+// back on. If the nav changes here again, update the shell's copy and
+// republish, or set this false until that lands.
+const DOCS_BYTE_IDENTICAL = true;
 const NAV_RE = /<nav class="site-nav-bar"[^>]*>[\s\S]*?<\/nav>/g;
 
 function pages() {
