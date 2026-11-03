@@ -20,7 +20,7 @@ function section(id) {
 }
 
 test('the head names the new headline and the roadmap', () => {
-  assert.ok(html.includes('<title>Claude on steroids, but authentic · Crads-AI</title>'), 'title (Sam, 3 Nov 2026)');
+  assert.ok(html.includes('<title>Claude on steroids, but authentically you · Crads-AI</title>'), 'title (Sam, 3 Nov 2026)');
   const desc = html.match(/<meta name="description" content="([^"]*)">/)[1];
   assert.match(desc, /AI roadmap/);
   assert.ok(!/coach/i.test(desc), 'no coaching framing in the description');
@@ -32,7 +32,7 @@ test('the hero calls out the owner, carries Sam\'s headline and subline, and has
   const hero = section('top');
   assert.match(hero, /For owners of small consultancies and practices/);
   // Sam's own words, chosen 3 Nov 2026 over the outcome-led option.
-  assert.match(hero, /<h1>Claude on steroids, <em>but authentic\.<\/em><\/h1>/);
+  assert.match(hero, /<h1>Claude on steroids, <em>but authentically you\.<\/em><\/h1>/);
   assert.match(hero, /<p class="hero-sub">Make Claude know you and your business\.<\/p>/);
   assert.match(hero, /It drafts the follow-ups you don't get round to, from your own inbox\. Nothing goes until you say yes\./);
   // The roadmap as it runs: the pain points, a report, a second call.
