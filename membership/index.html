@@ -32,7 +32,6 @@
     .mem .lead { font-size: 1.12rem; }
     .mem-price { border: 1px solid var(--rule); background: var(--bg-soft); border-radius: 8px; padding: 1.4rem 1.5rem; margin: 2rem 0; }
     .mem-price .big { font-size: 2rem; font-weight: 700; margin: 0; }
-    .mem-price .places { font-weight: 600; color: var(--accent); margin: 0.6rem 0 0; }
     .mem-list { padding-left: 1.1rem; }
     .mem-list li { margin: 0.7rem 0; }
     .mem-invite { border-left: 4px solid var(--accent); padding: 0.8rem 1rem; background: var(--bg-soft); margin: 1.5rem 0; }
@@ -90,8 +89,7 @@
 
   <div class="mem-price">
     <p class="big"><span id="mem-price">A$99</span> a month</p>
-    <p>Cancel any time. <span id="mem-founding-line">The first 10 members keep A$99 for as long as they stay.</span></p>
-    <p class="places" id="mem-places" hidden></p>
+    <p>Cancel any time.</p>
   </div>
 
   <h2>Your questions get answered within a working day</h2>
@@ -209,12 +207,6 @@
   fetch('/api/membership').then(function (r) { return r.ok ? r.json() : null; }).then(function (o) {
     if (!o) return;
     setPrice(o.price_aud);
-    if (o.tier === 'founding') {
-      $('mem-places').textContent = o.founding_left + ' of ' + o.founding_cap + ' founding places left.';
-      $('mem-places').hidden = false;
-    } else {
-      $('mem-founding-line').textContent = 'The 10 founding places are taken.';
-    }
   }).catch(function () {});
 
   var MESSAGES = {
