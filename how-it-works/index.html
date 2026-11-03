@@ -247,6 +247,7 @@
   .lives-list li::before { content: ""; position: absolute; left: 0; top: 10px; width: 10px; height: 10px; border-radius: 50%; background: var(--good); }
   .hiw-shot { margin: var(--space-3) 0 0; }
   .hiw-shot img { width: 100%; height: auto; display: block; border-radius: var(--r-md); border: 1px solid var(--rule); box-shadow: none; }
+  @media (max-width: 600px) { .hiw-shot img { aspect-ratio: 4 / 3; object-fit: cover; object-position: left top; } }
   .hiw-shot figcaption { font-family: var(--sans); font-size: var(--fs-small); color: var(--ink-faint); margin-top: 10px; }
 </style>
 <!-- SEO: canonical + social cards -->

@@ -116,20 +116,6 @@
     box-shadow: none;
     border-color: var(--accent);
   }
-  .rung .rung-name {
-    font-family: var(--mono);
-    font-size: var(--fs-micro);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--accent-ink);
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-  .rung .rung-meta {
-    font-size: var(--fs-micro);
-    color: var(--ink-faint);
-    margin-bottom: var(--space-2);
-  }
   .rung .price {
     font-family: var(--serif);
     font-size: var(--fs-2);
@@ -143,13 +129,6 @@
     font-weight: 500;
     color: var(--ink-soft);
     font-family: var(--sans);
-  }
-  .rung .price-detail {
-    font-family: var(--sans);
-    font-size: var(--fs-micro);
-    color: var(--ink-faint);
-    margin-bottom: var(--space-2);
-    min-height: 1.2em;
   }
   .rung .rung-pitch {
     font-size: var(--fs-small);
@@ -178,11 +157,11 @@
   /* More options (Sam, 2026-10-14): the non-server option stays folded so the
      server is the only thing a buyer sees up front. */
   .more-options { margin-top: calc(-1 * var(--space-3)); }
-  .more-options summary { cursor: pointer; display: inline-flex; align-items: center; min-height: var(--tap); text-decoration: underline; text-underline-offset: 2px; list-style: none; }
+  .more-options summary { cursor: pointer; display: inline-flex; align-items: center; min-height: var(--tap); list-style: none; }
   .more-options summary::-webkit-details-marker { display: none; }
   .more-options summary::before { content: "\25B8\00A0"; }
   .more-options[open] summary::before { content: "\25BE\00A0"; }
-  .more-options summary:hover { color: var(--ink-soft); }
+
   .more-options p { margin: var(--space-2) 0 0; font: inherit; color: inherit; max-width: none; }
   .nowrap { white-space: nowrap; }
   .offer-byline { font-family: var(--sans); font-size: var(--fs-small); line-height: 1.5; color: var(--ink-faint); margin-top: var(--space-2); }

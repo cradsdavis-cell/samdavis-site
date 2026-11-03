@@ -146,15 +146,7 @@ h3 { margin-block-end: var(--space-1); text-wrap: balance; }
   color: var(--ink-soft);
   font-weight: 500;
 }
-.eyebrow::before {
-  content: "";
-  display: inline-block;
-  width: 20px;
-  height: 1.5px;
-  margin-right: 10px;
-  vertical-align: middle;
-  background: var(--accent);
-}
+/* its accent lead-in: a whole-pixel stroke hanging in the margin (UI loop 07, end of file) */
 
 .meta {
   font-family: var(--mono);
@@ -2890,3 +2882,84 @@ details > summary { padding-block: 10px; cursor: pointer; }
 @media (min-width: 901px) {
   .about-page .lead-capture-section { padding-left: calc((100% - var(--space-5)) * 0.275 + var(--space-5)); }
 }
+
+/* ============================================================
+   UI loop 07: legend labels, no pills, two link styles, states
+   ============================================================ */
+
+/* Kicker stroke: 20x2px, whole pixels, hanging in the margin so a wrapped
+   line starts under the text */
+.eyebrow { padding-left: 30px; background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 calc(0.75em - 1px) / 20px 2px; }
+
+/* Featured label: set into the card's top border like a legend. Not a pill,
+   and it takes no row inside the card, so titles line up across a row. */
+.rung .rung-badge, .book-card-first::before, .book-card-hero::before {
+  position: absolute;
+  top: -0.8em;
+  left: calc(var(--space-3) - 8px);
+  right: auto;
+  width: auto;
+  margin: 0;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 0;
+  background: var(--bg-main);
+  color: var(--accent-ink);
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+.rung, .book-card-first, .book-card-hero { padding-top: var(--space-3); }
+
+/* No pills: the newsletter item tags read as mono meta; about's side-practice
+   flag is a group label */
+.newsletter-web span[style*="border-radius:999px"] { background: none !important; padding: 0 !important; border-radius: 0 !important; font-family: var(--mono) !important; font-weight: 500 !important; color: var(--ink-soft) !important; }
+.about-row .side-practice-label { background: none; padding: 0; border-radius: 0; color: var(--ink-faint); font-family: var(--sans); font-weight: 600; letter-spacing: 0.06em; }
+
+/* Two link styles.
+   Inline (inside a sentence): accent text with a quiet underline.
+   Standalone (an arrow link on its own line): accent, semibold, no underline
+   until hover. Footer links are ink with an underline on hover. */
+/* zero specificity, so any component's own link style wins; links inside
+   sentences anywhere on site pages (not nav, footer, list rows or docs) */
+:where(p, dd, blockquote, figcaption, .book-policy, .field-check label span, .sb-item .detail, .rung-includes li, .essay-body li, .mem-list li, .qa li p) a:where(:not([class])):where(:not(.site-nav-bar *, .site-footer *, .docs-page *, .door-links *, .more *)) { text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent); text-underline-offset: 3px; }
+:where(p, dd, blockquote, figcaption, .book-policy, .field-check label span, .sb-item .detail, .rung-includes li, .essay-body li, .mem-list li, .qa li p) a:where(:not([class])):where(:not(.site-nav-bar *, .site-footer *, .docs-page *, .door-links *, .more *)):hover { text-decoration-color: var(--accent); }
+.cta-secondary, a.cta:not(.rung .cta), .door-links a, .price-strip .more a, .more-options summary {
+  font-family: var(--sans);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--accent-ink);
+  border-bottom: 0;
+  text-decoration: none;
+}
+.cta-secondary { padding-bottom: 0; }
+.cta-secondary:hover, a.cta:not(.rung .cta):hover, .door-links a:hover, .price-strip .more a:hover, .more-options summary:hover { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+.site-footer .footer-col a { color: var(--ink-deep); text-decoration: none; }
+.site-footer .footer-contact a { color: var(--accent-ink); text-decoration: none; }
+.site-footer .footer-col a:hover, .site-footer .footer-contact a:hover { color: var(--accent-ink); text-decoration: underline; text-decoration-style: solid; text-underline-offset: 3px; }
+
+/* Pressed: visibly deeper than hover, with a 1px inset */
+.cta-primary:active, .rung .cta:active, .book-cta:active, .nf-links a.nf-primary:active, .subscribe-form button:active, .lead-capture-card button[type="submit"]:active {
+  background: color-mix(in srgb, var(--ink-deep) 70%, #000);
+  box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.25);
+}
+/* Disabled reads as unavailable, not as a faded primary */
+.cta-primary:disabled, .book-cta:disabled, .subscribe-form button:disabled, .lead-capture-card button[type="submit"]:disabled {
+  opacity: 1; background: var(--bg-card); color: var(--ink-faint); box-shadow: inset 0 0 0 1px var(--rule); cursor: not-allowed;
+}
+/* Home roadmap columns: one column below 900, three at desktop */
+@media (max-width: 900px) { .doors.callout-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* One price-card header (offer and book): serif name, sans meta, serif
+   price, a plain detail line */
+.rung .rung-name, .book-card h2 { font-family: var(--serif); font-size: var(--fs-3); font-weight: 700; letter-spacing: -0.005em; text-transform: none; color: var(--ink-deep); margin: 0 0 var(--space-1); }
+.rung .rung-meta, .book-card .meta { font-family: var(--sans); font-size: var(--fs-small); line-height: 1.5; color: var(--ink-soft); margin: 0 0 var(--space-3); min-height: 3em; }
+.rung .price { font-family: var(--serif); font-size: var(--fs-2); font-weight: 800; color: var(--ink-deep); line-height: 1.1; margin: 0; }
+.rung .price-detail { font-family: var(--sans); font-size: var(--fs-small); line-height: 1.5; font-style: normal; color: var(--ink-faint); margin: var(--space-1) 0 0; min-height: 3em; }
+@media (max-width: 760px) { .rung .rung-meta, .rung .price-detail, .book-card .meta { min-height: 0; } }
+
+/* book cards are a 6/6 pair, not a row to equalise: no reserved meta height */
+.book-card .meta { min-height: 0; margin-bottom: var(--space-2); }
