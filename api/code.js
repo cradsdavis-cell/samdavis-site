@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
   try {
     const def = getSku(sku);
     priceAud = def.price_aud;
-    offAud = await quotePromotionCode(code, { priceId: def.stripe_price_id, priceAud });
+    offAud = await quotePromotionCode(code, { priceId: def.stripe_price_id, productId: def.stripe_product_id, priceAud });
   } catch (err) {
     console.error('[code] quote failed', err && err.message);
   }
