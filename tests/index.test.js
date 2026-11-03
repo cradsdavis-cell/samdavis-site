@@ -60,7 +60,8 @@ test('the three doors: clients first, with the roadmap count behind it', () => {
   const names = [...doors.matchAll(/<div class="big">([^<]*)<\/div>/g)].map((m) => m[1]);
   assert.deepStrictEqual(names, ['More of the right clients.', 'Everything out of your head.', 'Showing up every week.']);
   const clients = doors.slice(doors.indexOf('id="door-clients"'), doors.indexOf('id="door-head"'));
-  assert.match(clients, /The first thing 7 of 10 asked for\./);
+  // Re-tallied 3 Nov 2026 on the latest ten roadmaps (8 to 26 Oct), strict count.
+  assert.match(clients, /The first thing 6 of 10 asked for\./);
   assert.match(clients, /You approve every one\./);
   assert.ok(!/<a\b/.test(clients), 'the clients door has no guide yet, so no link');
   for (const g of ['/guides/claude-remember-your-business', '/guides/ai-social-media-posts']) {
@@ -107,7 +108,9 @@ test('the questions carry the mechanism and the traced claims', () => {
 test('the close: who you would work with, the button again, and do it yourself', () => {
   const who = section('who');
   assert.match(who, /PhD in environmental data science from the University of Sydney/);
-  assert.match(who, /seven AI systems in twelve months/);
+  // Sam, 3 Nov 2026: drop the number (three of the "seven" were specced, not built).
+  assert.match(who, /I build AI systems for clients and for myself, including the assistant that runs my own week/);
+  assert.ok(!/seven AI systems/.test(who), 'no build count');
   assert.match(who, /I run every roadmap call myself/);
   assert.match(who, /src="\/lib\/img\/sam-presenting\.jpg"/, 'Sam at work: a real photo, cropped, never altered (3 Nov 2026)');
   assert.match(who, /href="\/about"/);
