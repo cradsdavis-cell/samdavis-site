@@ -242,26 +242,47 @@
   <section class="section section-tight wrap" id="proof">
     <div class="testimonials-strip reveal-on-scroll">
       <h2>What changed for them, in their words</h2>
-      <div class="grid">
-        <figure class="testimonial-card">
-          <blockquote>It helps me process ideas and has really helped me lift the mental load of juggling all the moving parts of my business when I'm the only person working on it full time.</blockquote>
-          <figcaption class="attribution">
-            <img class="testimonial-photo" src="/lib/img/abbey-pantano.jpg" alt="Abbey Pantano" width="52" height="52" loading="lazy">
-            <span class="attribution-text"><span class="t-name">Abbey Pantano</span><span class="t-role">Founder, The Impact Collab</span></span>
-          </figcaption>
-        </figure>
-        <figure class="testimonial-card">
-          <blockquote>The fact that it has all my context and remembers past conversations was the major game changer. I'm getting at least a day a week more work done.</blockquote>
-          <figcaption class="attribution">
-            <img class="testimonial-photo" src="/lib/img/nim-zappert.jpg" alt="Nim Zappert" width="52" height="52" loading="lazy">
-            <span class="attribution-text"><span class="t-name">Nim Zappert</span><span class="t-role">Founder, Authentic Selling and AfriBeads</span></span>
-          </figcaption>
-        </figure>
-        <!-- SLOT (client testimonial, door 1): a client who came in for more
-             clients, in their own words, with written consent ("Yes, with my
-             name" on the feedback form). Copy a figure above. Never invent one,
-             and never use roadmap-call words without that consent. -->
+      <!-- A slow drift (4 Nov 2026, Sam: "More testimonials on the front page that
+           slowly carousel around"). initCarousel in lib/site.js clones the cards
+           once (aria-hidden, inert) for a seamless loop and shows the Pause button;
+           without JS or under prefers-reduced-motion it is a still row you swipe. -->
+      <div class="t-carousel" data-carousel>
+        <div class="t-track">
+          <figure class="testimonial-card">
+            <blockquote>It helps me process ideas and has really helped me lift the mental load of juggling all the moving parts of my business when I'm the only person working on it full time.</blockquote>
+            <figcaption class="attribution">
+              <img class="testimonial-photo" src="/lib/img/abbey-pantano.jpg" alt="Abbey Pantano" width="52" height="52" loading="lazy">
+              <span class="attribution-text"><span class="t-name">Abbey Pantano</span><span class="t-role">Founder, The Impact Collab</span></span>
+            </figcaption>
+          </figure>
+          <figure class="testimonial-card">
+            <blockquote>The fact that it has all my context and remembers past conversations was the major game changer. I'm getting at least a day a week more work done.</blockquote>
+            <figcaption class="attribution">
+              <img class="testimonial-photo" src="/lib/img/nim-zappert.jpg" alt="Nim Zappert" width="52" height="52" loading="lazy">
+              <span class="attribution-text"><span class="t-name">Nim Zappert</span><span class="t-role">Founder, Authentic Selling and AfriBeads</span></span>
+            </figcaption>
+          </figure>
+          <figure class="testimonial-card">
+            <blockquote>I came in a confident ChatGPT user, new to what AI could really do for my business. A few sessions later I'm building production shotlists with moodboards, quote templates and pitch decks from scratch, on real client work, and saving myself a good 10 hours a week. Sam meets you exactly where you are.</blockquote>
+            <figcaption class="attribution">
+              <img class="testimonial-photo" src="/lib/img/alex-mills.jpg" alt="Alex Mills" width="52" height="52" loading="lazy">
+              <span class="attribution-text"><span class="t-name">Alex Mills</span><span class="t-role">Founder, Alex Mills Social</span></span>
+            </figcaption>
+          </figure>
+          <figure class="testimonial-card">
+            <blockquote>After my first block with Sam I booked a second one on the spot, and told him to put his price up. For what he helps you do, he's worth a lot more than he charges.</blockquote>
+            <figcaption class="attribution">
+              <img class="testimonial-photo" src="/lib/img/samantha-philpot.jpg" alt="Samantha Philpot" width="52" height="52" loading="lazy">
+              <span class="attribution-text"><span class="t-name">Samantha Philpot</span><span class="t-role">Founder, Find Your People</span></span>
+            </figcaption>
+          </figure>
+        </div>
       </div>
+      <button class="t-carousel-toggle" type="button" aria-pressed="false" hidden>Pause</button>
+      <!-- SLOT (client testimonial, door 1): a client who came in for more
+             clients, in their own words, with written consent ("Yes, with my
+             name" on the feedback form). Copy a figure into the track above. Never invent one,
+             and never use roadmap-call words without that consent. -->
     </div>
   </section>
 
