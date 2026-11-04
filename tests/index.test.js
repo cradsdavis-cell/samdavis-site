@@ -61,7 +61,8 @@ test('six sections, in order', () => {
 
 test('the three doors: clients first, with the roadmap count behind it', () => {
   const doors = section('doors');
-  assert.match(doors, /What came up in my last ten roadmaps/);
+  // Sam, 4 Nov 2026: the heading says what the cards are (the want, then what it does).
+  assert.match(doors, /What owners asked for in my last ten roadmaps, and what it does about each/);
   const names = [...doors.matchAll(/<div class="big">([^<]*)<\/div>/g)].map((m) => m[1]);
   assert.deepStrictEqual(names, ['More of the right clients.', 'Everything out of your head.', 'Showing up every week.']);
   const clients = doors.slice(doors.indexOf('id="door-clients"'), doors.indexOf('id="door-head"'));
@@ -107,7 +108,9 @@ test('the questions carry the mechanism and the traced claims', () => {
   // 3 of 10 roadmap owners feared it would sound like AI; the honest answer (docs/teach-it-your-voice).
   assert.match(q, /<h3>Will it sound like AI\?<\/h3>\s*<p>At first, a bit\./);
   assert.match(q, /Nothing goes out until you've read it and said yes\./);
-  assert.match(q, /I set Claude up once so it knows your clients, your work and how you write/);
+  // Sam, 4 Nov 2026: no "a chat that forgets you" (both ChatGPT and Claude have memory) and no repeat of the hero.
+  assert.match(q, /So did almost everyone I've done a roadmap with\. Set up once, it knows your clients, your work and how you write/);
+  assert.ok(!/forgets you/.test(q));
   assert.match(q, /on limits you choose/);
   assert.match(q, /from about €6 a month/);
   assert.match(q, /href="\/docs\/continuity"/);
