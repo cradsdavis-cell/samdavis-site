@@ -34,9 +34,13 @@ test('the hero calls out the owner, carries Sam\'s headline and subline, and has
   // Sam's own words, chosen 3 Nov 2026 over the outcome-led option.
   assert.match(hero, /<h1>Claude on steroids, <em>but authentically you\.<\/em><\/h1>/);
   assert.match(hero, /<p class="hero-sub">Make Claude know you and your business\.<\/p>/);
-  assert.match(hero, /It drafts the follow-ups you don't get round to, from your own inbox\. Nothing goes until you say yes\./);
-  // The roadmap as it runs: the pain points, a report, a second call.
-  assert.match(hero, /we go through all the pain points in your business, I write up a report, and we go through it together on a second call\./);
+  // Sam, 4 Nov 2026 ("A"): the old mechanism line "doesn't really make sense and sounds too AI".
+  // "Almost every", not a count: the latest ten aren't all tallied for prior AI use (9 of the first 10 were).
+  assert.match(hero, /Almost every owner I've done a roadmap with already used AI, spread across chats that don't share what they know\./);
+  assert.match(hero, /I set Claude up once so it knows your clients and how you write\./);
+  // The roadmap as it runs: everything that's slow or stuck, then the report (the second call is in the steps below).
+  assert.match(hero, /The first step is a roadmap: a call on everything that's slow or stuck in your business, then a written report on where AI could help\./);
+  assert.ok(!/pick one thing/i.test(hero), 'never "pick one thing" (public-copy-claims)');
   // Sam, 3 Nov 2026: the presenting photo, its screen showing the Crads-AI title slide (his call).
   assert.match(hero, /<img src="\/lib\/img\/sam-presenting-crads\.jpg"/, 'Sam presenting, not the app');
   const ctas = hero.match(/class="cta-primary"[^>]*>[^<]*</g) || [];
