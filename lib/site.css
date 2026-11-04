@@ -3380,3 +3380,52 @@ main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
 
 /* Home rhythm: the closing call to action gets more room before the footer */
 #who.section { padding-bottom: var(--page-end); }
+
+/* Testimonial carousel (home, 4 Nov 2026): one slow, continuous drift of the
+   real quotes. lib/site.js (initCarousel) clones the cards once for a seamless
+   loop, sets the duration from the row's width (about 28px a second) and adds
+   .is-moving. It pauses on hover, on keyboard focus inside it, and with the
+   Pause button (WCAG 2.2.2). Without JS, or under prefers-reduced-motion, it is
+   a still row you scroll sideways. */
+.t-carousel {
+  --t-gap: var(--space-3);
+  --t-card: min(360px, 78vw);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+  padding-block: 2px;
+}
+.t-track { display: flex; align-items: flex-start; gap: var(--t-gap); width: max-content; }
+.t-track > .testimonial-card { flex: 0 0 var(--t-card); scroll-snap-align: start; }
+/* Moving: soft edges so cards drift in and out rather than being cut. Still,
+   the next card peeks at the edge, the cue that the row scrolls. */
+.t-carousel.is-moving {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
+}
+.t-carousel.is-moving .t-track { will-change: transform; animation: t-drift var(--t-duration, 60s) linear infinite; }
+.t-carousel.is-moving:hover .t-track,
+.t-carousel.is-moving:focus-within .t-track,
+.t-carousel.is-paused .t-track { animation-play-state: paused; }
+@keyframes t-drift { to { transform: translateX(calc(-50% - var(--t-gap) / 2)); } }
+@media (prefers-reduced-motion: reduce) {
+  .t-carousel.is-moving .t-track { animation: none; }
+}
+.t-carousel-toggle {
+  display: block;
+  margin: var(--space-2) 0 0 auto;
+  min-height: var(--tap);
+  padding: 0 var(--space-2);
+  font-family: var(--sans);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+.t-carousel-toggle:hover { color: var(--ink-deep); border-color: var(--ink-faint); }
+.t-carousel-toggle[hidden] { display: none; }
