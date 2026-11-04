@@ -1,0 +1,72 @@
+{
+    "$schema": "https://fundingjson.org/schema/v1.1.0.json",
+    "version": "v1.1.0",
+    "entity": {
+        "type": "individual",
+        "role": "owner",
+        "name": "Samuel Davis",
+        "email": "hello@crads-ai.com",
+        "description": "I'm Sam Davis, the sole developer and maintainer of Crads-AI. I have a PhD in environmental data science from the University of Sydney, and I'm based in Sydney. I earn a living from services around it (guided setups and support), never from the software, which stays free.",
+        "webpageUrl": {
+            "url": "https://crads-ai.com"
+        }
+    },
+    "projects": [
+        {
+            "guid": "crads-ai",
+            "name": "Crads-AI",
+            "description": "Free, open-source, self-hosted AI assistant infrastructure. A desktop app provisions a small cloud server in the user's own account (their own API token, their own SSH key) and connects to it. The server runs a persistent brain of plain Markdown files in git, backed up to the user's own private GitHub repo, plus a scheduler, skills, and Claude Code as the assistant working inside it, on the user's own Claude subscription. Nothing central: no accounts, billing or servers run by the project. Communities share skills and prompts through a plain git repository, and nothing shared runs on a member's server unless they install it. Public under AGPL-3.0 since September 2026.",
+            "webpageUrl": {
+                "url": "https://crads-ai.com"
+            },
+            "repositoryUrl": {
+                "url": "https://github.com/cradsdavis-cell/crads-ai",
+                "wellKnown": "https://github.com/cradsdavis-cell/crads-ai/blob/main/.well-known/funding-manifest-urls"
+            },
+            "licenses": ["spdx:AGPL-3.0-only"],
+            "tags": ["ai", "self-hosted", "personal-assistant", "claude", "knowledge-management", "markdown", "git", "desktop-app", "privacy"]
+        }
+    ],
+    "funding": {
+        "channels": [
+            {
+                "guid": "bank-au",
+                "type": "bank",
+                "address": "",
+                "description": "Bank transfer to Samuel Davis, Australia. Account details by email to hello@crads-ai.com."
+            }
+        ],
+        "plans": [
+            {
+                "guid": "maintainer-time",
+                "status": "active",
+                "name": "Maintainer time",
+                "description": "Pays for development and maintenance time: security fixes, keeping the server images and the desktop app current, hosting providers beyond Hetzner and DigitalOcean, and documentation.",
+                "amount": 25000,
+                "currency": "USD",
+                "frequency": "yearly",
+                "channels": ["bank-au"]
+            },
+            {
+                "guid": "signing-and-infra",
+                "status": "active",
+                "name": "Code signing and project costs",
+                "description": "The Windows open-source code-signing certificate, an Apple Developer membership so the macOS app can be signed, and the test servers each release is checked on.",
+                "amount": 500,
+                "currency": "USD",
+                "frequency": "yearly",
+                "channels": ["bank-au"]
+            },
+            {
+                "guid": "any-amount",
+                "status": "active",
+                "name": "One-off support",
+                "description": "Any amount, once.",
+                "amount": 0,
+                "currency": "USD",
+                "frequency": "one-time",
+                "channels": ["bank-au"]
+            }
+        ]
+    }
+}
