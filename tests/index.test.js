@@ -96,7 +96,10 @@ test('how the roadmap runs, then the price strip', () => {
 
 test('the questions carry the mechanism and the traced claims', () => {
   const q = section('questions');
-  assert.strictEqual((q.match(/<h3>/g) || []).length, 5, 'five questions');
+  assert.strictEqual((q.match(/<h3>/g) || []).length, 6, 'six questions');
+  // Where the data goes, in the safe wording (public-copy-claims: never "your data stays with you").
+  assert.match(q, /What you type goes to Claude, on Anthropic's servers\. I never hold it\./);
+  assert.ok(!/data stays with you/i.test(q));
   // 3 of 10 roadmap owners feared it would sound like AI; the honest answer (docs/teach-it-your-voice).
   assert.match(q, /<h3>Will it sound like AI\?<\/h3>\s*<p>At first, a bit\./);
   assert.match(q, /Nothing goes out until you've read it and said yes\./);
