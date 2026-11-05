@@ -3075,12 +3075,19 @@ main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
    then the centre vein, then each side vein and its node in turn, then the
    amber node lands. Off under reduced motion (it simply appears drawn). */
 .how-hero.page-head { background: none; position: relative; }
-.page-head > img.leaf-draw { display: block; position: absolute; right: calc(var(--gutter) + 24px); top: 50%; height: min(80%, 240px); width: auto; transform: translateY(-50%); }
-@media (max-width: 900px) { .page-head > img.leaf-draw { display: none; } }
+.leaf-draw { position: absolute; right: calc(var(--gutter) + 24px); top: 50%; height: min(80%, 240px); width: auto; transform: translateY(-50%); overflow: visible; }
+.leaf-draw .leaf-outline { fill: none; stroke: var(--ink-deep); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+.leaf-draw .leaf-tree { fill: var(--ink-deep); fill-rule: evenodd; }
+.leaf-draw .leaf-seed { fill: var(--accent); fill-rule: evenodd; }
+@media (max-width: 900px) { .leaf-draw { display: none; } }
 @media (prefers-reduced-motion: no-preference) {
-  .page-head > img.leaf-draw { opacity: 0; animation: leaf-in 0.9s ease-out 0.2s forwards; }
+  .leaf-draw .leaf-outline { stroke-dasharray: 1; stroke-dashoffset: 1; animation: leaf-draw 1.3s ease-out 0.1s forwards; }
+  .leaf-draw .leaf-seed { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: leaf-pop 0.45s cubic-bezier(.2, .8, .3, 1.3) 0.35s forwards; }
+  .leaf-draw .leaf-grow { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: leaf-grow 1.5s cubic-bezier(.45, .05, .35, 1) 0.6s forwards; }
 }
-@keyframes leaf-in { from { opacity: 0; transform: translateY(calc(-50% + 8px)); } to { opacity: 1; transform: translateY(-50%); } }
+@keyframes leaf-draw { to { stroke-dashoffset: 0; } }
+@keyframes leaf-pop { to { transform: scale(1); } }
+@keyframes leaf-grow { to { transform: scale(1); } }
 
 /* Home timeline: the line between steps draws left to right as the list
    scrolls in (vertical at 900 and below). Off under reduced motion. */
