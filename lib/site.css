@@ -3075,18 +3075,12 @@ main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
    then the centre vein, then each side vein and its node in turn, then the
    amber node lands. Off under reduced motion (it simply appears drawn). */
 .how-hero.page-head { background: none; position: relative; }
-.leaf-draw { position: absolute; right: calc(var(--gutter) + 24px); top: 50%; height: min(80%, 240px); width: auto; transform: translateY(-50%); overflow: visible; }
-.leaf-draw g { fill: none; stroke: var(--ink-deep); stroke-width: 2.69; stroke-linecap: round; stroke-linejoin: round; }
-.leaf-draw .leaf-node { fill: var(--accent); stroke: var(--accent-deep); stroke-width: 2.69; }
-@media (max-width: 900px) { .leaf-draw { display: none; } }
+.page-head > img.leaf-draw { display: block; position: absolute; right: calc(var(--gutter) + 24px); top: 50%; height: min(80%, 240px); width: auto; transform: translateY(-50%); }
+@media (max-width: 900px) { .page-head > img.leaf-draw { display: none; } }
 @media (prefers-reduced-motion: no-preference) {
-  .leaf-draw g > * { stroke-dasharray: 1; stroke-dashoffset: 1; animation: leaf-draw 0.9s ease-out forwards; animation-delay: calc(0.5s + var(--i, -1) * 0.12s); }
-  .leaf-draw g > path:first-child { animation-duration: 1.2s; animation-delay: 0s; }
-  .leaf-draw g > line:first-of-type { animation-delay: 0.35s; }
-  .leaf-draw .leaf-node { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: leaf-node 0.4s cubic-bezier(.2, .8, .3, 1.3) 1.5s forwards; }
+  .page-head > img.leaf-draw { opacity: 0; animation: leaf-in 0.9s ease-out 0.2s forwards; }
 }
-@keyframes leaf-draw { to { stroke-dashoffset: 0; } }
-@keyframes leaf-node { to { transform: scale(1); } }
+@keyframes leaf-in { from { opacity: 0; transform: translateY(calc(-50% + 8px)); } to { opacity: 1; transform: translateY(-50%); } }
 
 /* Home timeline: the line between steps draws left to right as the list
    scrolls in (vertical at 900 and below). Off under reduced motion. */
