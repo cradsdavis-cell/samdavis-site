@@ -53,7 +53,7 @@
 - [Get a DigitalOcean API token](https://crads-ai.com/docs/get-a-digitalocean-api-token): The five-minute walk from no account to the token the setup wizard asks for when you pick DigitalOcean, and what that token actually is.
 - [Get a Hetzner API token](https://crads-ai.com/docs/get-a-hetzner-api-token): The five-minute walk from no account to the token the setup wizard asks for, and what that token actually is.
 - [The words](https://crads-ai.com/docs/glossary): A plain glossary of the terms these docs use, with the page where each one first matters.
-- [Let someone look at your mineral](https://crads-ai.com/docs/grant-support-access): Granting support access: what it opens, when it closes, and how to end it early.
+- [Let someone look at your mineral](https://crads-ai.com/docs/grant-support-access): Helper access: approving a request, what it opens, when it closes, what is recorded, and how to end it early.
 - [Grow the brain](https://crads-ai.com/docs/grow-the-brain): The everyday habits that turn a seeded brain into one that knows your business: correct it, tell it things, capture, and bring documents in.
 - [How updates reach you](https://crads-ai.com/docs/how-updates-reach-you): Your mineral restarts nightly onto new software, what that does and does not touch, and how to tell what you are running.
 - [How your assistant thinks](https://crads-ai.com/docs/how-your-assistant-thinks): The one picture behind every page of these docs: a mind that is rented, a memory that is yours, and senses you add one at a time.
