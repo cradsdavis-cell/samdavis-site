@@ -630,7 +630,7 @@
       <li><a href="/docs/when-something-looks-wrong">When something looks wrong</a></li>
       <li><a href="/docs/devices-and-access">Machines that can open your mineral</a></li>
       <li><a href="/docs/add-another-computer">Add another computer</a></li>
-      <li><a href="/docs/grant-support-access">Let someone look at your mineral</a></li>
+      <li><a href="/docs/grant-support-access">Let someone work on your mineral</a></li>
       </ul>
     </details>
     <details class="navgrp">
@@ -664,10 +664,10 @@
 <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="/docs">Docs</a><span class="sep">/</span><span class="here">Legal</span></nav>
 <h1>Privacy policy</h1>
 <p class="docs-lede">What is stored, where it runs, what leaves your mineral, and why almost none of this page is about us any more.</p>
-<p class="legal-stamp">Version 0.24, effective 2026-11-03. Samuel Davis trading as Crads AI.</p>
+<p class="legal-stamp">Version 0.25, effective 2026-11-10. Samuel Davis trading as Crads AI.</p>
 <h2 id="who-this-is">Who this is<a class="anchor" href="#who-this-is" aria-label="Link to this section">#</a></h2>
 <p>Crads AI is operated by Samuel Davis, trading as Crads AI, <strong>ABN 26 929 349 775</strong>, in Coogee, New South Wales, Australia. Contact: cradsdavis@gmail.com.</p>
-<p>This is version 0.24, effective 3 November 2026. The version and date at the top of this page change whenever the text does, and prior versions stay on the record.</p>
+<p>This is version 0.25, effective 10 November 2026. The version and date at the top of this page change whenever the text does, and prior versions stay on the record.</p>
 <p>What changed in each version is listed under <a href="#changes">Changes</a> at the end.</p>
 <h2 id="the-short-version">The short version<a class="anchor" href="#the-short-version" aria-label="Link to this section">#</a></h2>
 <p>Your mineral is a machine in your own hosting account, in a location you chose, opened only by your own keys, running your assistant on your own Claude account. Your brain lives on it as ordinary files. <strong>Nobody at Crads AI reads your notes</strong>, and under this design the sentence is structural rather than behavioural: nothing of yours routes through us, and we hold no account, record or credential about your mineral. It is your data, on your machine, end to end.</p>
@@ -721,16 +721,17 @@
 <p>Three ways, all bounded.</p>
 <p><strong>Software updates.</strong> A pebble restarts nightly onto the latest published software. That updates the machinery, not your files, and you can switch it off. An update is a restart onto a published image; it is not a door, and nothing about it can read your machine.</p>
 <p><strong>Anyone signed in to your Claude account.</strong> With Remote Control on, a phone or browser signed in to your Claude account can start a session on your mineral with the same reach as you at the desktop: your brain, your skills, your connected services. So your Claude sign-in now guards your mineral as well as your chats. Keep the email or Google account you sign in to Claude with secure, and consider Claude's &quot;Require trusted devices&quot; setting (in beta), which asks each new device to confirm with a passkey or your fingerprint or face. Switch Remote Control off and this way in closes.</p>
-<p><strong>Support access, only if you grant it.</strong> If something is broken and you want help on the machine itself, you grant access explicitly. The grant <strong>expires on a clock</strong> enforced by the mineral's own door, and its lifecycle (that it was enabled, when, until when, and any revoke) is recorded on your own mineral where you can read it. What is not captured is a per-command transcript of the session itself; that is a real limit and we would rather name it than imply a log that does not exist. Nobody can add themselves to your mineral without you granting it, and there is no standing key: a mineral made by the wizard is born holding only your own. Remote Control is not a key: it is your Claude account.</p>
-<h2 id="what-a-support-session-can-see">What a support session can see<a class="anchor" href="#what-a-support-session-can-see" aria-label="Link to this section">#</a></h2>
+<p><strong>Helper access, only if you grant it.</strong> If you want someone to work on your mineral, for a fix from us or for a build by someone you have hired, they send you a request and you approve it in the app. The request names the person, what the access is for and how long it lasts (up to 72 hours for a fix, up to 30 days for a project), and it is signed by Crads AI so it can't be forged or pointed at another mineral. Each grant <strong>expires on a clock</strong> enforced by the mineral's own door, you can end it at any moment, and while it lasts we remind you once a week. The grant (who, why, from when, until when, the consent you saw, and any end) is recorded on your own mineral where you can read it. On a server set up since 8 November 2026, every session a helper opens is also recorded on the server itself, outside the part their access reaches, and you can read it in the app. On an older server only the grant is recorded, and the approve screen says so before you decide. Nobody can add themselves to your mineral without you granting it, and there is no standing key: a mineral made by the wizard is born holding only your own. Remote Control is not a key: it is your Claude account.</p>
+<p><strong>A helper who is not us.</strong> If you let in someone who does not work for Crads AI, they are not acting for us, and we do not see what they see. What they do with your data is between you and them, under your own agreement with them. We provide the door, the request, the consent screen and the record.</p>
+<h2 id="what-a-helper-can-see">What a helper can see<a class="anchor" href="#what-a-helper-can-see" aria-label="Link to this section">#</a></h2>
 <p>Worth being exact about, because &quot;someone can look at your mineral&quot; and &quot;someone can read your saved passwords&quot; are different sentences and you should know which one you are agreeing to.</p>
 <p>Your mineral stores secrets in two tiers:</p>
 <ul>
-<li><strong>Available to the box</strong> (the default for anything a scheduled job needs at 3am). Stored as a value on your disk. Encrypting it there would be theatre, because the box would have to keep the key on the same disk to use it at 3am. <strong>Anyone with access to the server can read these, and that includes a support session you have granted.</strong></li>
-<li><strong>Sealed to your devices.</strong> Stored as an envelope only your own enrolled machines can open. There is deliberately no code on your mineral that can decrypt these, so a support session cannot read them, and neither can a scheduled job.</li>
+<li><strong>Available to the box</strong> (the default for anything a scheduled job needs at 3am). Stored as a value on your disk. Encrypting it there would be theatre, because the box would have to keep the key on the same disk to use it at 3am. <strong>Anyone with access to the server can read these, and that includes a helper you have let in.</strong></li>
+<li><strong>Sealed to your devices.</strong> Stored as an envelope only your own enrolled machines can open. There is deliberately no code on your mineral that can decrypt these, so a helper cannot read them, and neither can a scheduled job.</li>
 </ul>
 <p>The <a href="/docs/secrets-page">Secrets page</a> in the app lists every entry grouped by what it is for. The rule that decides the tier is the one above: anything a scheduled job needs while you are asleep is available to the box.</p>
-<p>The same is true of your brain during a support session. A granted session is server access, and server access can read files. The honest statement is that the protection during an active grant is the grant record and the clock, not an inability: the mineral records that the window was open and when it closed, not each thing done inside it. If a credential would be damaging in someone else's hands and nothing scheduled needs it, seal it; if you change your mind about a grant, revoke it, and it ends immediately.</p>
+<p>The same is true of your brain while a helper's access is open. A grant is access to the whole mineral, and that can read files. The protection during a grant is who you chose, the clock, and the record, not an inability. A session record shows the work; it cannot stop someone set on misusing full access, so only let in people you trust. If a credential would be damaging in someone else's hands and nothing scheduled needs it, seal it; if you change your mind about a grant, end it, and it ends immediately.</p>
 <h2 id="taking-your-data-and-deletion">Taking your data, and deletion<a class="anchor" href="#taking-your-data-and-deletion" aria-label="Link to this section">#</a></h2>
 <p>Your brain is a folder of readable files in a git repository on a machine you hold, mirrored to a repository in your own account. There is no export step, because there is nothing to export from: it is already yours, in a portable format, everywhere it exists.</p>
 <p>Deleting your mineral is deleting your server, in your own hosting console, which destroys the machine and its disk under your contract with your host. Nothing needs our involvement and we hold no record of the machine to delete at our end. Copies you hold, including your backup repository, remain yours.</p>
@@ -739,6 +740,7 @@
 <h2 id="complaints">Complaints<a class="anchor" href="#complaints" aria-label="Link to this section">#</a></h2>
 <p>Write to cradsdavis@gmail.com. If you are in Australia and unsatisfied, you can complain to the Office of the Australian Information Commissioner.</p>
 <h2 id="changes">Changes<a class="anchor" href="#changes" aria-label="Link to this section">#</a></h2>
+<p><em>Changed in 0.25: support access became helper access: named people, by signed request, up to 30 days for a project with a weekly reminder; session records on servers set up since 8 November 2026; a helper who is not Crads AI acts under your own agreement with them.</em></p>
 <p><em>Changed in 0.24: the membership. &quot;What we hold about you&quot; says what we keep when you join, including the join link a setup client gets, and a new paragraph says how the weekly drop-in is recorded and who can watch the recordings.</em></p>
 <p><em>Changed in 0.23: the essay mailing list is now Restless Optimist, the weekly letter. Every booking, paid or free, adds you to it, and the booking forms say so (a discovery call used to need a ticked box). The ways to join now include people we have been in touch with about AI and their work.</em></p>
 <p><em>Changed in 0.22: partner referrals are two-sided. &quot;What we hold about you&quot; says the person a partner sent gets A$100 off a Guided Setup, and that the discount is kept on the referral record; a new paragraph says what happens to a name and email given at &quot;Who else could do this with you?&quot; after buying a Guided Setup.</em></p>
@@ -761,7 +763,7 @@
   <li><a href="#what-leaves-your-mineral">What leaves your mineral</a></li>
   <li><a href="#services-you-connect">Services you connect</a></li>
   <li><a href="#when-anyone-can-reach-your-mineral">When anyone can reach your mineral</a></li>
-  <li><a href="#what-a-support-session-can-see">What a support session can see</a></li>
+  <li><a href="#what-a-helper-can-see">What a helper can see</a></li>
   <li><a href="#taking-your-data-and-deletion">Taking your data, and deletion</a></li>
   <li><a href="#breaches">Breaches</a></li>
   <li><a href="#complaints">Complaints</a></li>
