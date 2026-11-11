@@ -6,9 +6,13 @@
 // metadata: <title> (minus " · Sam Davis"), meta description, canonical URL and
 // the Article JSON-LD datePublished. Newest first. Output is deterministic
 // (lastBuildDate = newest datePublished), so the freshness test is stable.
+// Each item also carries the full essay as <content:encoded> (scripts/syndicate.mjs:
+// portable HTML, diagrams as PNGs, drafting note first), so feed readers and the
+// Substack importer get the whole essay, not just the description.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { syndicationHtml } from './syndicate.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WRITING = path.join(ROOT, 'writing');
@@ -39,6 +43,8 @@ export function feedItems() {
       link: pick(src, /<link rel="canonical" href="([^"]+)"/, 'canonical', rel),
       date: pick(src, /"datePublished":"(\d{4}-\d{2}-\d{2})"/, 'datePublished', rel),
     });
+    const it = items[items.length - 1];
+    it.content = syndicationHtml(src, { slug, url: it.link, rel });
   }
   return items.sort((a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug));
 }
@@ -55,7 +61,7 @@ export function render() {
   const items = feedItems();
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">',
+    '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">',
     '<channel>',
     '  <title>Sam Davis · Writing</title>',
     `  <link>${HOST}/writing</link>`,
@@ -73,6 +79,7 @@ export function render() {
       `    <pubDate>${rfc822(it.date)}</pubDate>`,
       '    <dc:creator>Sam Davis</dc:creator>',
       `    <description>${esc(it.description)}</description>`,
+      `    <content:encoded><![CDATA[${it.content.replace(/]]>/g, ']]]]><![CDATA[>')}]]></content:encoded>`,
       '  </item>',
     );
   }
