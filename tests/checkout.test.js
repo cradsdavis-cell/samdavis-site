@@ -13,6 +13,7 @@ process.env.CAL_EVENT_TYPE_GUIDED_SETUP_S2 = '107';
 process.env.CAL_EVENT_TYPE_WALKTHROUGH_S1 = '109';
 process.env.CAL_EVENT_TYPE_WALKTHROUGH_S2 = '110';
 process.env.CAL_EVENT_TYPE_DISCOVERY = '100';
+process.env.PARTNER_MAX_CAL = 'maxime-debus/roadmap';
 
 // Stub lib/stripe + lib/cal BEFORE requiring handler.
 // We capture stripe call args via a shared object so individual tests can
@@ -21,7 +22,7 @@ const STRIPE_CALLS = [];
 function resetStripeCalls() { STRIPE_CALLS.length = 0; }
 require.cache[require.resolve('../lib/stripe')] = {
   exports: {
-    findPromotionCode: async (code) => (String(code).toUpperCase() === 'GOODCODE' ? 'promo_good' : null),
+    findPromotionCode: async (code) => (String(code).toUpperCase() === 'GOODCODE' ? 'promo_good' : String(code).toUpperCase() === 'MAJ-01' ? 'promo_maj' : null),
     createCheckoutSession: async (args) => {
       if (args.promotionCodeId === 'promo_good' && args.sku === 'walkthrough') {
         const e = new Error('This promotion code cannot be applied'); e.type = 'StripeInvalidRequestError'; throw e;
@@ -34,6 +35,7 @@ require.cache[require.resolve('../lib/stripe')] = {
     },
   },
 };
+let PARTNER_SLOTS = async () => ({ ok: true, status: 200, body: { data: {} } });
 const CAL_CALLS = [];
 function resetCalCalls() { CAL_CALLS.length = 0; }
 require.cache[require.resolve('../lib/cal')] = {
@@ -43,6 +45,7 @@ require.cache[require.resolve('../lib/cal')] = {
       return { ok: true, status: 201, body: { data: { id: 555, _args: args } } };
     },
     findBookingByStripeSession: async () => ({ ok: true, status: 200, body: { data: [] } }),
+    getPublicSlots: async (a) => PARTNER_SLOTS(a),
   },
 };
 // Every discovery booking now touches the mailing list (3 Nov 2026), so no
@@ -582,4 +585,25 @@ test('referral discount by email: a refused coupon alert names the partner from 
     assert.strictEqual(res.statusCode, 200);
     assert.match(ALERTS[0].body, /referred by nim/);
   } finally { delete process.env.STRIPE_REFERRAL_COUPON; }
+});
+
+// A partner's code typed on the form (2026-11-11): the partner joins the call.
+test('roadmap + partner code: a time the partner is busy is refused; a free one goes to checkout', async () => {
+  resetStripeCalls();
+  PARTNER_SLOTS = async () => ({ ok: true, status: 200, body: { data: { d: [{ start: new Date(Date.parse(FUTURE_SLOT) + 1800000).toISOString() }] } } });
+  let res = mockRes();
+  await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'r@b.com', name: 'R', agreed_terms: true, code: 'maj-01' }), res);
+  assert.strictEqual(res.statusCode, 409);
+  assert.strictEqual(res.body.error, 'partner_busy');
+  assert.strictEqual(STRIPE_CALLS.length, 0);
+  PARTNER_SLOTS = async () => ({ ok: true, status: 200, body: { data: { d: [{ start: FUTURE_SLOT }] } } });
+  res = mockRes();
+  await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'r@b.com', name: 'R', agreed_terms: true, code: 'MAJ-01' }), res);
+  assert.strictEqual(res.statusCode, 200);
+  assert.strictEqual(STRIPE_CALLS[0].promoCode, 'MAJ-01');
+  // The partner calendar unreadable: the booking is not blocked.
+  PARTNER_SLOTS = async () => ({ ok: false, status: 500, body: {} });
+  res = mockRes();
+  await handler(mockReq({ sku: 'roadmap', slot_iso: FUTURE_SLOT, email: 'r@b.com', name: 'R', agreed_terms: true, code: 'MAJ-01' }), res);
+  assert.strictEqual(res.statusCode, 200);
 });

@@ -440,3 +440,20 @@ test('booking source: the dropdown answer and utm_source reach the Cal booking',
   assert.strictEqual(bookingArgs.heardFrom, 'whatsapp');
   assert.strictEqual(bookingArgs.utmSource, 'linkedin');
 });
+
+// A roadmap on a partner's code invites the partner as a Cal guest (2026-11-11).
+test('roadmap + partner code: the partner email from env is a Cal guest; other codes add none', async () => {
+  process.env.PARTNER_MAX_EMAIL = 'max@example.com';
+  try {
+    for (const [code, want] of [['MAJ-02', ['max@example.com']], ['LINKEDIN26', undefined], ['', undefined]]) {
+      let bookingArgs = null;
+      stripeStub = { constructWebhookEvent: () => fakeSessionEvent({ metadata: { sku: 'roadmap', slot_iso: '2026-10-01T10:00:00+10:00', name: 'Rhi Jones', cal_event_type_id: '120', promo_code: code } }) };
+      calStub = { ...okCal(), createBooking: async (a) => { bookingArgs = a; return { ok: true, status: 201, body: { data: { id: 1 } } }; } };
+      emailStub = { sendRoadmapConfirmationEmail: async () => ({ id: 'em' }) };
+      const res = mockRes();
+      await handler(mockReq('{}'), res);
+      assert.strictEqual(res.statusCode, 200, code);
+      assert.deepStrictEqual(bookingArgs.guests, want, code);
+    }
+  } finally { delete process.env.PARTNER_MAX_EMAIL; }
+});

@@ -1,6 +1,6 @@
 // api/code.js: GET /api/code?sku=<slug>&code=<code>, asked by the booking page
 // (2026-11-04) when it opens from a ?code= link, so the price pill can say
-// "A$250, free with your code" instead of a bare list price the visitor was
+// "A$250" struck through then "A$0", instead of a bare list price the visitor was
 // told they would not pay. Every miss (bad format, unknown SKU, a code that
 // does not apply, Stripe down) answers { quote: null } and the page keeps the
 // list price; checkout re-checks the code either way.

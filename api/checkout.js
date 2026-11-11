@@ -3,7 +3,8 @@
 
 const { getSku, isPurchasable, DISCOVERY_EVENT_TYPE_ID } = require('../lib/skus');
 const { createCheckoutSession, findPromotionCode } = require('../lib/stripe');
-const { createBooking, findBookingByStripeSession } = require('../lib/cal');
+const { createBooking, findBookingByStripeSession, getPublicSlots } = require('../lib/cal');
+const { partnerForCode, partnerCal, slotInPartnerSlots } = require('../lib/partners');
 const { TERMS_VERSION } = require('../lib/terms');
 const { refFromCookie, buyerDiscountFor, referralCouponId, PAYING_SKUS } = require('../lib/referrals');
 const { cleanUtmSource } = require('../lib/attribution');
@@ -175,6 +176,17 @@ module.exports = async (req, res) => {
     try { promotionCodeId = await findPromotionCode(code); }
     catch (err) { console.error('[checkout] promotion code lookup failed', err && err.message); res.status(500).json({ error: 'stripe_failed' }); return; }
     if (!promotionCodeId) { res.status(400).json({ error: 'invalid_code' }); return; }
+    // A partner's code typed on the form (2026-11-11): the partner joins the
+    // calls, so refuse a time they're busy. The ?code= link already hides those.
+    const pcal = sku === 'roadmap' ? partnerCal(partnerForCode(code)) : null;
+    if (pcal) {
+      const t = Date.parse(slot_iso);
+      const theirs = await getPublicSlots({ ...pcal, startDate: new Date(t - 3600000).toISOString(), endDate: new Date(t + 3600000).toISOString() }).catch(() => null);
+      if (theirs && theirs.ok && !slotInPartnerSlots(slot_iso, theirs.body.data)) {
+        res.status(409).json({ error: 'partner_busy' });
+        return;
+      }
+    }
   }
 
   // A partner's referral cookie (/r/<slug>, 90 days, first touch). Rides on
