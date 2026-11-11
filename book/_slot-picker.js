@@ -53,7 +53,7 @@
     .then(showRefBanner);
 
   // A ?code= link (2026-11-04): /api/code says what the code takes off, so
-  // the price pill reads "A$250, free with your code" instead of a list price
+  // the price pill reads "A$250" struck through, then "A$0", instead of a list price
   // the visitor was told they would not pay. A miss keeps the list price.
   let codeQuote = null;
   const linkCode = isPaid ? prefillCode() : '';
@@ -67,8 +67,14 @@
     const panel = root.closest('.book-panel');
     const pill = panel && panel.querySelector('.book-panel-head .price');
     if (!q || !pill) return;
+    // The list price struck through, then what they pay (Sam, 11 Nov): "A$250 A$0".
     const listed = pill.textContent.trim();
-    pill.textContent = q.pay_aud === 0 ? `${listed}, free with your code` : `${listed}, A$${q.pay_aud} with your code`;
+    const was = document.createElement('s');
+    was.className = 'price-was';
+    was.textContent = listed;
+    pill.textContent = '';
+    pill.append(was, ' ', `A$${q.pay_aud}`);
+    pill.setAttribute('aria-label', `${listed}, A$${q.pay_aud} with your code`);
     pill.classList.add('price-coded');
     const note = panel.querySelector('.book-panel-head + .field-note');
     if (note) note.textContent = note.textContent.replace(/Got a code\?.*$/, 'Your code is already in the booking form.');
@@ -116,7 +122,8 @@
     const now = new Date();
     const start = now.toISOString();
     const end = new Date(now.getTime() + 21 * 86400000).toISOString();
-    const url = `/api/cal/availability?sku=${encodeURIComponent(sku)}&startDate=${encodeURIComponent(start)}&endDate=${encodeURIComponent(end)}`;
+    // The link's code rides along: a partner's code shows only shared free times.
+    const url = `/api/cal/availability?sku=${encodeURIComponent(sku)}&startDate=${encodeURIComponent(start)}&endDate=${encodeURIComponent(end)}${linkCode ? `&code=${encodeURIComponent(linkCode)}` : ''}`;
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -295,7 +302,9 @@
       if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
       window.location.href = json.checkout_url;
     } catch (err) {
-      errBox.textContent = err.message === 'invalid_code'
+      errBox.textContent = err.message === 'partner_busy'
+        ? "The person who sent you joins this call, and they aren't free then. Pick another time."
+        : err.message === 'invalid_code'
         ? "That discount code isn't valid, or it has been used up. Check it, or clear the box to book at the full price."
         : `Couldn't proceed: ${err.message}. Try a different slot or email cradsdavis@gmail.com.`;
       errBox.style.display = 'block';

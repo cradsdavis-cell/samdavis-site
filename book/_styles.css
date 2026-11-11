@@ -173,9 +173,10 @@ body {
 .book-panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0 0 var(--space-1); }
 .book-panel-head h2 { font-family: var(--serif); font-weight: 700; font-size: var(--fs-3); color: var(--ink-deep); margin: 0; }
 .book-panel-head .price { font-weight: 600; color: var(--ink-deep); white-space: nowrap; }
-/* "A$250, free with your code" (a ?code= link) stays one phrase: on a narrow
+/* "A$250" struck through, then "A$0" (a ?code= link) stays one phrase: on a narrow
    panel it drops under the heading instead of splitting both. */
 .book-panel-head:has(.price-coded) { flex-wrap: wrap; row-gap: 2px; }
+.book-panel-head .price .price-was { font-weight: 400; color: var(--ink-soft); margin-right: 0.15em; }
 .book-panel .book-policy { margin: var(--space-2) 0 0; padding: var(--space-2) 0 0; background: none; border: none; border-top: 1px solid var(--rule); border-radius: 0; font-size: var(--fs-small); line-height: 1.5; }
 .book-panel .slot-zone { font-size: var(--fs-small); color: var(--ink-faint); margin: 0 0 var(--space-2); }
 

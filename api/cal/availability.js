@@ -1,7 +1,8 @@
 // api/cal/availability.js — proxies Cal slot lookup, keeps API key server-side
 'use strict';
 
-const { getAvailableSlots } = require('../../lib/cal');
+const { getAvailableSlots, getPublicSlots } = require('../../lib/cal');
+const { partnerForCode, partnerCal, intersectSlots } = require('../../lib/partners');
 const { calEventTypeIdFor, DISCOVERY_EVENT_TYPE_ID } = require('../../lib/skus');
 
 const MAX_WINDOW_MS = 31 * 86400000; // 31 days
@@ -72,7 +73,21 @@ module.exports = async (req, res) => {
     res.status(502).json({ error: 'upstream' });
     return;
   }
-  const slotsByDate = (cal.body && cal.body.data && cal.body.data.slots) || cal.body;
+  let slotsByDate = (cal.body && cal.body.data && cal.body.data.slots) || cal.body;
+
+  // A partner's code on the link (2026-11-11): only the times both Sam and the
+  // partner are free. If the partner's calendar can't be read, Sam's times
+  // stand (checkout checks again) rather than an empty page.
+  const pcal = sku === 'roadmap' ? partnerCal(partnerForCode(req.query.code)) : null;
+  if (pcal) {
+    try {
+      const theirs = await getPublicSlots({ ...pcal, startDate, endDate });
+      if (theirs.ok) slotsByDate = intersectSlots(slotsByDate, theirs.body.data);
+      else console.error('[availability] partner slots error', theirs.status, JSON.stringify(theirs.body).slice(0, 300));
+    } catch (err) {
+      console.error('[availability] partner slots failed', err && err.message);
+    }
+  }
   // Slot availability is dynamic but changes-per-minute, not per-second.
   // 60s public cache cuts Cal API quota burn from polling clients.
   res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=60');

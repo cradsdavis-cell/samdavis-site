@@ -101,6 +101,7 @@ test('/api/code: bad format, unknown SKU, a miss or Stripe failing all answer qu
 test('the booking page asks /api/code for a link code and keeps the referral banner out of its way', () => {
   const js = fs.readFileSync(path.join(__dirname, '..', 'book', '_slot-picker.js'), 'utf8');
   assert.match(js, /\/api\/code\?sku=/);
-  assert.match(js, /free with your code/);
+  assert.match(js, /was.className = .price-was.;/);
+  assert.match(js, /pill.append\(was, . ., `A\$\$\{q.pay_aud\}`\);/);
   assert.match(js, /if \(!refDiscount \|\| codeQuote\) return;/);
 });

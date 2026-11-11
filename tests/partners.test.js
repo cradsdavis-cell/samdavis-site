@@ -29,11 +29,11 @@ test('roadmap confirmation: the partner line only appears for a partner code', (
   const { roadmapConfirmationText } = require('../lib/email');
   const slotIso = '2026-11-20T04:00:00.000Z';
   const withMax = roadmapConfirmationText({ name: 'Jo Bloggs', slotIso, promoCode: 'MAJ-02' });
-  assert.match(withMax, /Max Debus from Majordome, who sent you my way, will join both calls too\./);
+  assert.match(withMax, /Maxime Debus from Majordome, who sent you my way, will join both calls too\./);
   assert.ok(!withMax.includes('—'));
   for (const promoCode of [undefined, '', 'LINKEDIN26']) {
     const t = roadmapConfirmationText({ name: 'Jo Bloggs', slotIso, promoCode });
-    assert.ok(!t.includes('Max Debus'), String(promoCode));
+    assert.ok(!t.includes('Maxime Debus'), String(promoCode));
     assert.strictEqual(t, roadmapConfirmationText({ name: 'Jo Bloggs', slotIso }));
   }
 });

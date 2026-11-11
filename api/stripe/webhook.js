@@ -6,6 +6,15 @@
 
 const { constructWebhookEvent, refundSession, retrievePaymentIntent, updatePaymentIntentMetadata } = require('../../lib/stripe');
 const { findBookingByStripeSession, createBooking } = require('../../lib/cal');
+const { partnerForCode, partnerGuestEmail } = require('../../lib/partners');
+
+// A roadmap booked on a partner's code invites the partner too (2026-11-11),
+// so they get the calendar invite and the Meet link for the call they join.
+function partnerGuests(sku, promoCode) {
+  if (sku !== 'roadmap') return [];
+  const e = partnerGuestEmail(partnerForCode(promoCode));
+  return e ? [e] : [];
+}
 const { sendRaceLossEmail, sendRoadmapConfirmationEmail, sendSamAlert, getResendClient } = require('../../lib/email');
 const { createsAccount } = require('../../lib/skus');
 const { createOrUpdateUser } = require('../../lib/createOrUpdateUser');
@@ -202,6 +211,7 @@ module.exports = async (req, res) => {
     stripeSessionId,
     sku,
     ...(metadata.time_zone ? { timeZone: metadata.time_zone } : {}),
+    ...(partnerGuests(sku, metadata.promo_code).length ? { guests: partnerGuests(sku, metadata.promo_code) } : {}),
     ...(metadata.ref ? { ref: metadata.ref } : {}),
     ...(heardFromValue(session) ? { heardFrom: heardFromValue(session) } : {}),
     ...(cleanUtmSource(metadata.utm_source) ? { utmSource: cleanUtmSource(metadata.utm_source) } : {}),
