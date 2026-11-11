@@ -8,7 +8,7 @@
 
 const { quotePromotionCode } = require('../lib/stripe');
 const { getSku, isPurchasable } = require('../lib/skus');
-const { partnerForCode } = require('../lib/partners');
+const { partnerForCode, partnerForPage } = require('../lib/partners');
 
 const CODE_RE = /^[A-Za-z0-9-]{1,40}$/;
 
@@ -20,8 +20,7 @@ module.exports = async (req, res) => {
   const code = String((req.query && req.query.code) || '').trim();
   if (!isPurchasable(sku) || !CODE_RE.test(code)) { res.status(200).json({ quote: null }); return; }
   // A partner's code (lib/partners.js, 2026-11-11) also names who sent them.
-  const p = partnerForCode(code);
-  const partner = p ? { line: p.pageLine } : undefined;
+  const partner = partnerForPage(partnerForCode(code));
   let offAud = null;
   let priceAud = null;
   try {
