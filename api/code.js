@@ -8,6 +8,7 @@
 
 const { quotePromotionCode } = require('../lib/stripe');
 const { getSku, isPurchasable } = require('../lib/skus');
+const { partnerForCode } = require('../lib/partners');
 
 const CODE_RE = /^[A-Za-z0-9-]{1,40}$/;
 
@@ -18,6 +19,9 @@ module.exports = async (req, res) => {
   const sku = String((req.query && req.query.sku) || '');
   const code = String((req.query && req.query.code) || '').trim();
   if (!isPurchasable(sku) || !CODE_RE.test(code)) { res.status(200).json({ quote: null }); return; }
+  // A partner's code (lib/partners.js, 2026-11-11) also names who sent them.
+  const p = partnerForCode(code);
+  const partner = p ? { line: p.pageLine } : undefined;
   let offAud = null;
   let priceAud = null;
   try {
@@ -27,6 +31,6 @@ module.exports = async (req, res) => {
   } catch (err) {
     console.error('[code] quote failed', err && err.message);
   }
-  if (!(Number.isInteger(offAud) && offAud > 0 && Number.isInteger(priceAud))) { res.status(200).json({ quote: null }); return; }
-  res.status(200).json({ quote: { price_aud: priceAud, off_aud: offAud, pay_aud: priceAud - offAud } });
+  if (!(Number.isInteger(offAud) && offAud > 0 && Number.isInteger(priceAud))) { res.status(200).json({ quote: null, ...(partner ? { partner } : {}) }); return; }
+  res.status(200).json({ quote: { price_aud: priceAud, off_aud: offAud, pay_aud: priceAud - offAud }, ...(partner ? { partner } : {}) });
 };
