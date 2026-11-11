@@ -58,9 +58,9 @@ async function safeCreateOrUpdateUser({ session, sku, customerEmail, slotIso }) 
 
 // Roadmap buyers get no account: one short confirmation email instead. Best-
 // effort like the account path: a failed send alerts Sam, never fails the webhook.
-async function safeRoadmapConfirmation({ customerEmail, name, slotIso, stripeSessionId, timeZone }) {
+async function safeRoadmapConfirmation({ customerEmail, name, slotIso, stripeSessionId, timeZone, promoCode }) {
   try {
-    await sendRoadmapConfirmationEmail({ to: customerEmail, name, slotIso, ...(timeZone ? { timeZone } : {}) });
+    await sendRoadmapConfirmationEmail({ to: customerEmail, name, slotIso, ...(timeZone ? { timeZone } : {}), ...(promoCode ? { promoCode } : {}) });
   } catch (err) {
     await safeAlert(
       `roadmap confirmation email FAILED for ${customerEmail}`,
@@ -216,7 +216,7 @@ module.exports = async (req, res) => {
     if (createsAccount(sku)) {
       await safeCreateOrUpdateUser({ session, sku, customerEmail, slotIso: slot_iso });
     } else {
-      await safeRoadmapConfirmation({ customerEmail, name, slotIso: slot_iso, stripeSessionId, timeZone: metadata.time_zone });
+      await safeRoadmapConfirmation({ customerEmail, name, slotIso: slot_iso, stripeSessionId, timeZone: metadata.time_zone, promoCode: metadata.promo_code });
     }
     await safeRecordReferral({ session, sku, customerEmail, name, slotIso: slot_iso });
     res.status(200).json({ received: true, booked: true });

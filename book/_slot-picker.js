@@ -59,7 +59,7 @@
   const linkCode = isPaid ? prefillCode() : '';
   const codeReady = !linkCode ? Promise.resolve() : fetch(`/api/code?sku=${encodeURIComponent(sku)}&code=${encodeURIComponent(linkCode)}`)
     .then(r => (r.ok ? r.json() : {}))
-    .then(j => { codeQuote = (j && j.quote) || null; showCodePrice(); })
+    .then(j => { codeQuote = (j && j.quote) || null; showCodePrice(); showPartnerLine(j && j.partner); })
     .catch(() => {});
 
   function showCodePrice() {
@@ -74,6 +74,15 @@
     if (note) note.textContent = note.textContent.replace(/Got a code\?.*$/, 'Your code is already in the booking form.');
   }
 
+  // A partner's code (2026-11-11, lib/partners.js): one line naming who sent
+  // the visitor, above the slots. The text comes from the server, set as text.
+  function showPartnerLine(partner) {
+    if (!partner || !partner.line) return;
+    const p = document.createElement('p');
+    p.className = 'ref-discount partner-line';
+    p.textContent = partner.line;
+    root.parentNode.insertBefore(p, root);
+  }
   function refLine() {
     const d = refDiscount;
     const who = d.name ? `A$${d.aud} off, thanks to ${d.name}` : `Referral discount: A$${d.aud} off`;
