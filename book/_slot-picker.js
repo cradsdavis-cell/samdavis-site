@@ -80,7 +80,18 @@
     if (!partner || !partner.line) return;
     const p = document.createElement('p');
     p.className = 'ref-discount partner-line';
-    p.textContent = partner.line;
+    // The logo path comes from lib/partners.js and is checked again here.
+    if (partner.logo && /^\/lib\/img\/partners\/[a-z0-9-]+\.(svg|png)$/.test(partner.logo)) {
+      const img = document.createElement('img');
+      img.src = partner.logo;
+      img.alt = partner.logo_alt || '';
+      img.width = 44; img.height = 44;
+      img.className = 'partner-logo';
+      p.appendChild(img);
+    }
+    const span = document.createElement('span');
+    span.textContent = partner.line;
+    p.appendChild(span);
     root.parentNode.insertBefore(p, root);
   }
   function refLine() {

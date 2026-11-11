@@ -8,7 +8,7 @@ const assert = require('node:assert');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const { partnerForCode, PARTNERS } = require('../lib/partners');
+const { partnerForCode, partnerForPage, PARTNERS } = require('../lib/partners');
 
 test('partnerForCode: Max owns MAJORDOME and MAJ-<n>, any case; nothing else matches', () => {
   for (const c of ['MAJORDOME', 'majordome', ' MAJ-01 ', 'MAJ-2', 'maj-123']) assert.strictEqual(partnerForCode(c).id, 'max', c);
@@ -59,12 +59,13 @@ function withQuote(fn, run) {
 test('/api/code: a partner code carries the page line, valid or used up; other codes carry none', () =>
   withQuote(async (code, { priceAud }) => (/^(MAJ-01|PITCHCLUB)$/.test(code) ? priceAud : null), async (api) => {
     const line = partnerForCode('MAJ-01').pageLine;
+    const logo = '/lib/img/partners/majordome-mark.svg';
     let res = jsonRes();
     await api({ method: 'GET', query: { sku: 'roadmap', code: 'MAJ-01' } }, res);
-    assert.deepStrictEqual(res.body, { quote: { price_aud: 250, off_aud: 250, pay_aud: 0 }, partner: { line } });
+    assert.deepStrictEqual(res.body, { quote: { price_aud: 250, off_aud: 250, pay_aud: 0 }, partner: { line, logo, logo_alt: 'Majordome' } });
     res = jsonRes();
     await api({ method: 'GET', query: { sku: 'roadmap', code: 'MAJ-03' } }, res);
-    assert.deepStrictEqual(res.body, { quote: null, partner: { line } });
+    assert.deepStrictEqual(res.body, { quote: null, partner: { line, logo, logo_alt: 'Majordome' } });
     res = jsonRes();
     await api({ method: 'GET', query: { sku: 'roadmap', code: 'PITCHCLUB' } }, res);
     assert.deepStrictEqual(res.body, { quote: { price_aud: 250, off_aud: 250, pay_aud: 0 } });
@@ -73,10 +74,24 @@ test('/api/code: a partner code carries the page line, valid or used up; other c
 test('the booking page shows the partner line as text, not HTML', () => {
   const js = fs.readFileSync(path.join(__dirname, '..', 'book', '_slot-picker.js'), 'utf8');
   assert.match(js, /showPartnerLine\(j && j\.partner\)/);
-  assert.match(js, /p\.textContent = partner\.line;/);
+  assert.match(js, /span\.textContent = partner\.line;/);
+  assert.match(js, /img\.src = partner\.logo;/);
 });
 
 test('the webhook passes the typed code to the roadmap confirmation', () => {
   const js = fs.readFileSync(path.join(__dirname, '..', 'api', 'stripe', 'webhook.js'), 'utf8');
   assert.match(js, /promoCode: metadata\.promo_code/);
+});
+
+test('partner logos: a site path that exists; anything else is dropped', () => {
+  for (const p of PARTNERS) {
+    if (!p.logo) continue;
+    assert.ok(fs.existsSync(path.join(__dirname, '..', p.logo)), p.logo);
+    assert.strictEqual(partnerForPage(p).logo, p.logo);
+  }
+  const bad = { pageLine: 'x', org: 'X', logo: 'https://evil.example/x.svg' };
+  assert.deepStrictEqual(partnerForPage(bad), { line: 'x' });
+  assert.strictEqual(partnerForPage(null), undefined);
+  const svg = fs.readFileSync(path.join(__dirname, '..', 'lib', 'img', 'partners', 'majordome-mark.svg'), 'utf8');
+  assert.ok(!/<script|on[a-z]+=/i.test(svg), 'no script in the partner SVG');
 });

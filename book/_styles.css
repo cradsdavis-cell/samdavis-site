@@ -118,6 +118,8 @@ body {
 
 /* Referral discount on a booking page, and the "Who else" ask on /thanks (2026-10-21) */
 .ref-discount { margin: 0 0 1.5rem; padding: 0.75rem 1rem; border: 1px solid var(--accent); border-radius: var(--r-md); background: var(--bg-soft); color: var(--ink-deep); font-size: var(--fs-small); }
+.partner-line { display: flex; align-items: center; gap: 0.85rem; }
+.partner-line .partner-logo { flex: none; width: 44px; height: 44px; border-radius: 50%; background: #fff; }
 .field-note { margin: 0.35rem 0 0; font-size: var(--fs-small); color: var(--ink-soft); }
 .who-else-form { margin-top: 0.5rem; }
 .who-else-form .book-cta { margin-top: 1rem; }
