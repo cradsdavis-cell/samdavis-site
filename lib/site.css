@@ -3066,10 +3066,10 @@ main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
   background: #6E3A1C; box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.25);
 }
 
-/* The how-it-works header leaf, inline so it can draw itself in once: outline,
+/* The how-it-works and pricing header leaf, inline so it can draw itself in once: outline,
    then the centre vein, then each side vein and its node in turn, then the
    amber node lands. Off under reduced motion (it simply appears drawn). */
-.how-hero.page-head { background: none; position: relative; }
+.how-hero.page-head, .offer-hero.page-head { background: none; position: relative; }
 .leaf-draw { position: absolute; right: calc(var(--gutter) + 24px); top: 50%; height: min(80%, 240px); width: auto; transform: translateY(-50%); overflow: visible; }
 .leaf-draw .leaf-outline { fill: none; stroke: var(--ink-deep); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
 .leaf-draw .leaf-tree { fill: var(--ink-deep); fill-rule: evenodd; }
