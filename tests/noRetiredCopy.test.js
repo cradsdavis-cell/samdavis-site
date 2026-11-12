@@ -44,7 +44,7 @@ test('no page carries a retired-offers block', () => {
 // A$200 roadmap in front of them, A$250 from the same day. Nothing else.
 // Membership (Sam, 3 Nov 2026): a setup's first month is month 1 of membership,
 // then A$99 a month. A$233 stays as the one-off hourly rate on /offer and /book.
-const V5_PRICES = new Set(['A$250', 'A$350', 'A$700', 'A$233', 'A$99']);
+const V5_PRICES = new Set(['A$250', 'A$350', 'A$700', 'A$1,500', 'A$233', 'A$99']);
 test('the v5 prices are the only prices on the offer and book pages', () => {
   for (const rel of ['offer/index.html', 'book/index.html', 'index.html']) {
     const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');
