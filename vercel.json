@@ -3,6 +3,11 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/book",
+      "destination": "/offer",
+      "permanent": false
+    },
+    {
       "source": "/book/ea-basic-build",
       "destination": "/book/discovery",
       "permanent": true

@@ -33,19 +33,15 @@ test('/book/roadmap describes the roadmap as it runs, and stays paid with a code
   assert.match(read('book/_slot-picker.js'), /Discount code \(optional\)/, 'the code field is still on paid booking forms');
 });
 
-test('/book lists the roadmap first, then the two setups; no discovery card, no unbacked badge', () => {
-  const html = read('book/index.html');
-  assert.ok(!html.includes('/book/discovery'), 'the discovery call is off the site (Sam, 3 Nov 2026)');
-  assert.ok(!html.includes('book-card-hero'), '"Most popular" needs evidence before it goes back');
-  const order = ['/book/roadmap', '/book/walkthrough', '/book/guided-setup']
-    .map((h) => html.indexOf(`class="book-cta" href="${h}"`));
-  assert.ok(order.every((i) => i > -1), `a booking card is missing: ${order}`);
-  assert.deepStrictEqual([...order].sort((a, b) => a - b), order, 'roadmap, walkthrough, guided setup');
+test('/book is retired: it redirects to /offer, the one page that lists every offer (Sam, 12 Nov 2026)', () => {
+  assert.ok(!fs.existsSync(path.join(__dirname, '..', 'book', 'index.html')), 'book/index.html is archived, not served');
+  const cfg = JSON.parse(read('vercel.json'));
+  assert.ok(cfg.redirects.some((r) => r.source === '/book' && r.destination === '/offer'));
 });
 
 test('/offer: roadmap, walkthrough, guided setup, by the hour; nothing about retired offers', () => {
   const html = read('offer/index.html');
-  const order = ['data-sku="roadmap"', 'data-sku="walkthrough"', 'data-sku="guided-setup"', 'A$233 an hour</strong>']
+  const order = ['data-sku="roadmap"', 'data-sku="walkthrough"', 'data-sku="guided-setup"', 'A$300 an hour</strong>']
     .map((s) => html.indexOf(s));
   assert.ok(order.every((i) => i > -1), `an offer is missing: ${order}`);
   assert.deepStrictEqual([...order].sort((a, b) => a - b), order);

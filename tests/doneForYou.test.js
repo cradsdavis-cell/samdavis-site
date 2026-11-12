@@ -79,12 +79,12 @@ test('done for you: the portal hero names the call and the handover', () => {
   assert.doesNotMatch(html, /interview|Session 1 of 2/);
 });
 
-test('done for you: the booking page, the offer card, the booking index and the nav all point at it', () => {
+test('done for you: the booking page, the offer card, the roadmap page and the nav all point at it', () => {
   const page = fs.readFileSync(path.join(ROOT, 'book/done-for-you.html'), 'utf8');
   assert.match(page, /window\.SKU_SLUG='done-for-you'/);
   assert.match(page, /A\$1,500/);
   assert.doesNotMatch(page, /—/);
-  for (const rel of ['offer/index.html', 'book/index.html', 'book/roadmap.html']) {
+  for (const rel of ['offer/index.html', 'book/roadmap.html']) {
     assert.match(fs.readFileSync(path.join(ROOT, rel), 'utf8'), /href="\/book\/done-for-you"/, `${rel} links the page`);
   }
   const { navHTML } = require('../lib/site');

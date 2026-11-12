@@ -3,8 +3,8 @@
 // The lines come from the offers one-pager's "You end with" row (second-brain
 // client-deliverables/crads-offers/offers-one-pager.html), Sam's source of
 // truth for the offers since 12 Nov 2026. Each line shows on the /offer card,
-// in the /offer comparison table, on the /book card and as the booking page's
-// lede. Change the one-pager first, then every place this test names.
+// in the /offer comparison table and as the booking page's lede. (The /book
+// index that also carried them was retired 12 Nov 2026.) Change the one-pager first, then every place this test names.
 const test = require('node:test');
 const assert = require('node:assert');
 const fs = require('node:fs');
@@ -22,7 +22,6 @@ const OUTCOMES = {
 };
 
 const offer = read('offer/index.html');
-const book = read('book/index.html');
 
 for (const [sku, o] of Object.entries(OUTCOMES)) {
   test(`${sku}: the outcome line matches on every page`, () => {
@@ -33,7 +32,6 @@ for (const [sku, o] of Object.entries(OUTCOMES)) {
       const row = offer.match(/<tr class="outcome">[\s\S]*?<\/tr>/);
       assert.ok(row && row[0].includes(`>${o.line}</td>`), `/offer table carries the ${sku} outcome`);
     }
-    assert.ok(book.includes(`<p class="outcome">${o.line}</p>`), `/book card carries the ${sku} outcome`);
     if (o.page) assert.ok(read(o.page).includes(`<p class="book-lede">${o.line}</p>`), `${o.page} leads with the outcome`);
   });
 }
@@ -47,7 +45,7 @@ test('the walkthrough connects no tools and builds no skills (Sam, 12 Nov 2026)'
 });
 
 test('the done for you form is not called short', () => {
-  for (const rel of ['offer/index.html', 'book/index.html', 'book/done-for-you.html']) {
+  for (const rel of ['offer/index.html', 'book/done-for-you.html']) {
     assert.ok(!/short form/.test(read(rel)), `${rel} still says "short form"`);
   }
 });

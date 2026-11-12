@@ -42,7 +42,9 @@ test('NAV_ITEMS leads with the roadmap and keeps the software one click away', (
 
 test('the paid offer, the booking options, the letter and the docs are in the menus (2026-11-03)', () => {
   const hrefs = allNavHrefs();
-  for (const h of ['/offer', '/book', '/newsletter', '/docs', '/docs/faq']) assert.ok(hrefs.includes(h), `nav lacks ${h}`);
+  for (const h of ['/offer', '/newsletter', '/docs', '/docs/faq']) assert.ok(hrefs.includes(h), `nav lacks ${h}`);
+  assert.ok(!hrefs.includes('/book'), '"All booking options" is retired (12 Nov 2026): /offer lists every offer');
+  assert.ok(!FOOTER_GROUPS.flatMap((g) => g.links.map((l) => l.href)).includes('/book'), 'and it is out of the footer');
 });
 
 test('unlisted pages stay out of the nav and footer', () => {
@@ -66,8 +68,9 @@ test('navHTML marks the right item current', () => {
   assert.match(navHTML('/guides/ai-social-media-posts'), menuItem('/guides'));
   assert.match(navHTML('/writing/which-love'), menuItem('/writing'));
   assert.match(navHTML('/offer'), trigger('Work with me'));
-  assert.match(navHTML('/book/discovery'), menuItem('/book'));
-  assert.match(navHTML('/book'), menuItem('/book'));
+  assert.match(navHTML('/book/discovery'), menuItem('/offer'), 'the booking pages belong to Pricing');
+  assert.match(navHTML('/book/walkthrough'), menuItem('/offer'));
+  assert.match(navHTML('/book/done-for-you'), menuItem('/book/done-for-you'), 'an exact match beats the /book/ prefix');
   assert.match(navHTML('/book/roadmap'), menuItem('/book/roadmap'));
   assert.match(navHTML('/book/roadmap'), /href="\/book\/roadmap" class="[^"]*nav-cta current"/);
   assert.doesNotMatch(navHTML('/booking-failed'), /\bcurrent\b/, '/booking-failed is not a /book page');
