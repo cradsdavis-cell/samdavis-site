@@ -3046,21 +3046,22 @@ main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
 
 /* Offer price row: the roadmap ("Start here") runs full width, its head and
    action on the left and what you get on the right; walkthrough and guided
-   setup sit as an even pair below, rows aligned by subgrid. */
+   setup sit as an even pair below, rows aligned by subgrid; done for you
+   (2026-11-12) runs full width below them, laid out like the roadmap. */
 .rung > .rung-body { flex-grow: 1; }
 .rung > .cta { margin-top: var(--space-3); align-self: flex-start; }
-.rung[data-sku="roadmap"] { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--space-5); align-items: start; }
-.rung[data-sku="roadmap"] > .rung-head { grid-column: 1; grid-row: 1; }
-.rung[data-sku="roadmap"] > .cta { grid-column: 1; grid-row: 2; justify-self: start; }
-.rung[data-sku="roadmap"] > .rung-body { grid-column: 2; grid-row: 1 / span 2; }
-.rung[data-sku="roadmap"] .rung-meta, .rung[data-sku="roadmap"] .price-detail { min-height: 0; }
+.rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--space-5); align-items: start; }
+.rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) > .rung-head { grid-column: 1; grid-row: 1; }
+.rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) > .cta { grid-column: 1; grid-row: 2; justify-self: start; }
+.rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) > .rung-body { grid-column: 2; grid-row: 1 / span 2; }
+.rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) .rung-meta, .rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) .price-detail { min-height: 0; }
 @media (min-width: 901px) {
-  .rung[data-sku="roadmap"] > .rung-body > .rung-label:first-child { margin-top: 0; }
-  .pricing-grid .rung:not([data-sku="roadmap"]) { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 0; align-content: start; }
-  .pricing-grid .rung:not([data-sku="roadmap"]) > .cta { align-self: end; justify-self: start; }
+  .rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) > .rung-body > .rung-label:first-child { margin-top: 0; }
+  .pricing-grid .rung:not([data-sku="roadmap"]):not([data-sku="done-for-you"]) { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 0; align-content: start; }
+  .pricing-grid .rung:not([data-sku="roadmap"]):not([data-sku="done-for-you"]) > .cta { align-self: end; justify-self: start; }
 }
 @media (max-width: 900px) {
-  .rung[data-sku="roadmap"] { display: flex; align-items: stretch; }
+  .rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) { display: flex; align-items: stretch; }
   .rung > .cta { align-self: stretch; }
 }
 
