@@ -2724,6 +2724,8 @@ body:has(.docs-page) .site-nav-bar { padding-inline: var(--side-pad-desktop); }
 .testimonials-strip .grid > * { break-inside: avoid; margin-bottom: var(--space-3); }
 .testimonial-card blockquote { max-width: 62ch; }
 /* about: the same masonry as home and offer, inside the main column */
+/* A grid item: without min-width 0 the testimonial carousel's track (max-content) widens the column and the page scrolls sideways on phones (12 Nov 2026). */
+.about-main { min-width: 0; }
 .about-main .testimonials-strip { max-width: none; }
 .about-main .testimonials-strip .grid { columns: 2 260px; }
 
