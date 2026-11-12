@@ -30,7 +30,8 @@ function bookingSkuFor(balance) {
 }
 
 // A v5 engagement's session 2 sits at least a day after session 1 (the
-// onboarding interview, the homework, lives in that gap). Session 1's slot is
+// onboarding interview, the homework, lives in that gap; a week for done for
+// you, where Sam builds in the gap). Session 1's slot is
 // stamped on the engagement by the Stripe webhook; records without it
 // (admin-created) are not gated. Returns the earliest allowed ms, or null when
 // no gap applies.
@@ -126,8 +127,8 @@ function renderBookPage({ balance, sku, nextSession }) {
       <section class="panel"><div class="panel-content">${msg}</div></section>`;
   }
 
-  const V5_S2_NAME = { 'walkthrough': 'walkthrough', 'group-walkthrough': 'group walkthrough', 'guided-setup': 'guided setup' };
-  const V5_S2_LENGTH = { 'walkthrough': '30 minutes', 'group-walkthrough': '30 minutes, with your group', 'guided-setup': 'two hours' };
+  const V5_S2_NAME = { 'walkthrough': 'walkthrough', 'group-walkthrough': 'group walkthrough', 'guided-setup': 'guided setup', 'done-for-you': 'done for you' };
+  const V5_S2_LENGTH = { 'walkthrough': '30 minutes', 'group-walkthrough': '30 minutes, with your group', 'guided-setup': 'two hours', 'done-for-you': 'the 30-minute handover' };
   const v5Type = balance.activeBlock && Object.prototype.hasOwnProperty.call(V5_S2_NAME, balance.activeBlock.type) ? balance.activeBlock.type : null;
   const sessionNumber = nextSessionNumber(balance);
   const earliest = earliestAllowedMs(balance.activeBlock);
@@ -135,7 +136,9 @@ function renderBookPage({ balance, sku, nextSession }) {
   const balanceLine = balance.isRetainer
     ? `Retainer active: book your next session below.`
     : v5Type
-      ? `Your second ${V5_S2_NAME[v5Type]} session (${v5Length}). Pick a time at least a day after your first one${earliest ? ` (from ${escapeHtml(new Date(earliest).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Australia/Sydney' }))})` : ''}, so the interview between them has room.`
+      ? v5Type === 'done-for-you'
+        ? `Your handover (30 minutes). Pick a time at least a week after our call${earliest ? ` (from ${escapeHtml(new Date(earliest).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Australia/Sydney' }))})` : ''}, so the build has room.`
+        : `Your second ${V5_S2_NAME[v5Type]} session (${v5Length}). Pick a time at least a day after your first one${earliest ? ` (from ${escapeHtml(new Date(earliest).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Australia/Sydney' }))})` : ''}, so the interview between them has room.`
       : `You have <strong>${balance.remaining}</strong> session${balance.remaining === 1 ? '' : 's'} left in your block (${balance.used} of ${balance.total} used).`;
   const nextLine = nextSession
     ? `<p class="subtitle">Next booked: ${escapeHtml(new Date(nextSession.date).toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Australia/Sydney', timeZoneName: 'short' }))}.</p>`
@@ -197,7 +200,7 @@ function renderBookPage({ balance, sku, nextSession }) {
           var sb=document.getElementById('sb');sb.disabled=true;sb.textContent='Booking…';
           fetch('/api/account/book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slot_iso:iso,time_zone:tz()})})
             .then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j};});})
-            .then(function(res){if(!res.ok)throw new Error(res.j.error==='too_soon'?'that is too close to your first session; pick a slot at least a day later':(res.j.message||res.j.error||'failed'));window.location.href='/account/sessions?booked=1';})
+            .then(function(res){if(!res.ok)throw new Error(res.j.error==='too_soon'?'that is too close to your first session; pick a later slot':(res.j.message||res.j.error||'failed'));window.location.href='/account/sessions?booked=1';})
             .catch(function(err){er.textContent='Could not book: '+err.message+'. Pick another time or email cradsdavis@gmail.com.';er.style.display='block';sb.disabled=false;sb.textContent='Book this session →';});
         });
       }
