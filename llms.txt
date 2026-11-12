@@ -109,6 +109,7 @@
 - [Restless Optimist, No. 1](https://crads-ai.com/newsletter/1): The first Crads-AI letter: where AI goes after agents, plus five bits of AI news worth knowing.
 - [Restless Optimist, No. 2](https://crads-ai.com/newsletter/2): On wisdom, and whether a machine can know when to stop, plus three bits of AI news worth your time.
 - [Restless Optimist, No. 3](https://crads-ai.com/newsletter/3): What it would take to trust a mind smarter than us, plus three bits of AI news worth your time.
+- [Restless Optimist, No. 4](https://crads-ai.com/newsletter/4): Where the line sits between a crazy idea and a crazy person, and what it means for AI. Plus three bits of AI news worth your time.
 - [Writing on AI ethics](https://crads-ai.com/writing): Essays by Sam Davis on the questions underneath AI: what these systems will want, whose values they'll carry, and what we owe them.
 - [Crazy Idea or Crazy Person?](https://crads-ai.com/writing/crazy-idea-or-crazy-person): On subjective truth, delusion, creativity, and whether an AI would need a little of its own reality.
 - [Is Ten Percent a Lot?](https://crads-ai.com/writing/is-ten-percent-a-lot): AI researchers put the chance of AI ending humanity at around one in ten. Is that a lot?
