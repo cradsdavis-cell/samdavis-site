@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const { ROOT, servedFiles } = require('../scripts/served.js');
 
-const RETIRED = /A\$300\b|A\$1,000|A\$1,100|A\$650|\$300 AUD|\$1,000 AUD|\$650|pay[- ]in[- ]4|plan=pay4|Continuation Retainer|Coaching Block|Group Block|EA Basic Build|4 × 90|Working session|working-session|2 × 60|90 min/;
+const RETIRED = /A\$1,000|A\$1,100|A\$650|\$300 AUD|\$1,000 AUD|\$650|pay[- ]in[- ]4|plan=pay4|Continuation Retainer|Coaching Block|Group Block|EA Basic Build|4 × 90|Working session|working-session|2 × 60|90 min/;
 
 // Pages and the two JS files that render public copy. lib/*.js server modules
 // (journeyTracker, skus) legitimately name the retired products for clients
@@ -43,16 +43,18 @@ test('no page carries a retired-offers block', () => {
 // the 30 days, and the "about A$20 a month" server line (A$10 until 13 Oct, when Hetzner stopped selling its cheapest x86 servers and the wizard moved to Arm cax21, ~€10.49; then about €35 from 15 Oct, Sam's figure, once cax21 stopped selling and the Standard size came out near €35; then from about €6 from 16 Oct, once Standard dropped to 4 GB on cax11). 2026-09-28: plus the
 // A$200 roadmap in front of them, A$250 from the same day. Nothing else.
 // Membership (Sam, 3 Nov 2026): a setup's first month is month 1 of membership,
-// then A$99 a month. A$233 stays as the one-off hourly rate on /offer and /book.
-const V5_PRICES = new Set(['A$250', 'A$350', 'A$700', 'A$1,500', 'A$233', 'A$99']);
+// then A$99 a month. The one-off hourly rate is on /offer: A$233 until
+// 12 Nov 2026, then a round A$300 (Sam). A$300 was a retired session price
+// before that, so it left the RETIRED list the same day.
+const V5_PRICES = new Set(['A$250', 'A$350', 'A$700', 'A$1,500', 'A$300', 'A$99']);
 test('the v5 prices are the only prices on the offer and book pages', () => {
-  for (const rel of ['offer/index.html', 'book/index.html', 'index.html']) {
+  for (const rel of ['offer/index.html', 'index.html']) {
     const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');
     const prices = new Set([...src.matchAll(/A\$[\d,]+/g)].map((m) => m[0]));
     for (const p of prices) assert.ok(V5_PRICES.has(p), `${rel}: unexpected price ${p}`);
     assert.ok(prices.has('A$250') && prices.has('A$700') && prices.has('A$350') && prices.has('A$99'), `${rel}: the roadmap, the two v5 prices and membership expected`);
-    if (rel !== 'index.html') assert.ok(prices.has('A$233'), `${rel}: the hourly rate expected`);
-    if (rel !== 'book/index.html') assert.match(src, /from about €6 a month/, `${rel}: the server line says from about €6 a month`);
+    if (rel !== 'index.html') assert.ok(prices.has('A$300'), `${rel}: the hourly rate expected`);
+    assert.match(src, /from about €6 a month/, `${rel}: the server line says from about €6 a month`);
     assert.ok(!/€35/.test(src), `${rel}: the retired €35 server price is gone`);
   }
 });

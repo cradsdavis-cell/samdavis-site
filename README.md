@@ -62,7 +62,7 @@ The software is free. Two SKUs are purchasable (`lib/skus.js`), both two session
 - **Walkthrough, A$350.** Session 1 60 min (how to use Claude Code and the app; the client installs both and creates their mineral beforehand), the onboarding interview as homework, session 2 30 min (what it learned, the CRIT method, one real problem).
 - **Guided setup, A$700.** Session 1 60 min (same, plus building the server in the client's own hosting account), the interview, session 2 120 min (email, calendar, Slack or WhatsApp connected; first skills; the morning brief and a first scheduled job).
 
-Both include written docs and 30 days of Slack support. The assistant always lives on a small server in the client's own hosting account (local mode, "On this computer", was retired from the offer and the copy on 2026-10-13). After 30 days, extra time is A$233 an hour on request: not a SKU.
+Both include written docs and 30 days of Slack support. The assistant always lives on a small server in the client's own hosting account (local mode, "On this computer", was retired from the offer and the copy on 2026-10-13). After 30 days, extra time is A$300 an hour on request: not a SKU.
 
 Retired 2026-09-11: the Working session (90 min, A$350). Its Stripe price is reused as the walkthrough price (the Stripe product is still named "Working session"; renaming it is a Stripe-side chore, not a code change). Retired 2026-09-09 and never purchasable again: the Coaching Block (4 × 90), Single Session, Continuation Retainer (subscription), pay-in-4, Group Block, EA Basic Build. Their Cal event types survive in `LEGACY_SKU_DEFS` (env only, no default) so a client mid-engagement can still book from the portal.
 
@@ -114,7 +114,7 @@ Changing env vars requires a redeploy.
 
 ## Deploy gate
 
-Before merging to `main`: `npm test` green; open the branch preview on desktop and mobile and check one nav, the Download pill, the v5 prices only (A$350, A$700, A$233 an hour), no Sign in; `curl -sI` every redirect source in `vercel.json` (308 + a 200 destination); `/download/windows` and `/download/mac` 302 to assets that answer 200; a smoke booking through `/book/walkthrough` with a 100% coupon, then delete the Cal booking and the coupon. After deploy, watch the Vercel runtime logs for 500s on `/api/checkout`, `/api/stripe/webhook` and `/api/download`.
+Before merging to `main`: `npm test` green; open the branch preview on desktop and mobile and check one nav, the Download pill, the v5 prices only (A$350, A$700, A$300 an hour), no Sign in; `curl -sI` every redirect source in `vercel.json` (308 + a 200 destination); `/download/windows` and `/download/mac` 302 to assets that answer 200; a smoke booking through `/book/walkthrough` with a 100% coupon, then delete the Cal booking and the coupon. After deploy, watch the Vercel runtime logs for 500s on `/api/checkout`, `/api/stripe/webhook` and `/api/download`.
 
 ## Marketing screenshots
 

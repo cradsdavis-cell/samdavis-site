@@ -64,10 +64,12 @@ test('the URLs clients already hold still resolve: rewrites and static pages sur
   // /offer); 2026-09-11 (v5): working-session joined them (-> walkthrough, and
   // single-session repointed there so no redirect chains). A held link still
   // lands somewhere true. The pages that must exist are the v5 ones.
-  for (const page of ['book/index.html', 'book/walkthrough.html', 'book/guided-setup.html', 'thanks.html']) {
+  for (const page of ['book/walkthrough.html', 'book/guided-setup.html', 'thanks.html']) {
     assert.ok(existsSync(join(ROOT, page)), `${page} was deleted`);
   }
   const redirected = new Set(cfg.redirects.map((r) => r.source));
+  // 2026-11-12: /book ("All booking options") retired; a held link lands on /offer.
+  assert.ok(cfg.redirects.some((r) => r.source === '/book' && r.destination === '/offer'), '/book redirects to /offer');
   for (const url of ['/book/single-session', '/book/working-session', '/book/coaching-block', '/book/continuation-retainer']) {
     assert.ok(redirected.has(url), `${url} neither exists nor redirects: a client's link would 404`);
   }

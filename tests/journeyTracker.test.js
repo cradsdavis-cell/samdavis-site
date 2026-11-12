@@ -37,7 +37,7 @@ test('between-s3-s4 hero unlocks Pack 3', () => {
 test('post-s4-decision hero offers the hourly rate (the retainer and the working session are retired, v5)', () => {
   const user = { state: 'post-s4-decision', email: 'a@b.com' };
   const html = renderHeroCard({ user, nextSession: null });
-  assert.match(html, /A\$233 an hour/);
+  assert.match(html, /A\$300 an hour/);
   assert.doesNotMatch(html, /working session|book\/working-session/i);
   assert.match(html, /href="mailto:cradsdavis@gmail\.com"/);
   assert.doesNotMatch(html, /\$650|Retainer/);
@@ -69,7 +69,7 @@ test('guided-setup client sees the two-session hero, not pack copy', () => {
   const done = renderHeroCard({ user: { ...user, state: 'between-s1-s2', engagements: [{ type: 'guided-setup', sessions_total: 2, sessions_used: 2 }] },
     nextSession: null, balance: { ...balance, remaining: 0, used: 2, activeBlock: null } });
   assert.match(done, /Both sessions booked/);
-  assert.match(done, /A\$233 an hour/);
+  assert.match(done, /A\$300 an hour/);
   assert.match(done, /href="mailto:cradsdavis@gmail\.com"/);
 });
 
@@ -88,5 +88,5 @@ test('walkthrough client sees the same two-session hero as guided setup, labelle
     nextSession: null, balance: { ...balance, remaining: 0, used: 2, activeBlock: null } });
   assert.match(done, /Both sessions booked/);
   assert.match(done, /invite Sam back into the chat/);
-  assert.match(done, /A\$233 an hour/);
+  assert.match(done, /A\$300 an hour/);
 });
