@@ -3044,24 +3044,16 @@ main.newsletter-web > .subscribe:last-child { margin-bottom: var(--page-end); }
 .testimonials-strip .grid:not(:has(> .testimonial-card:nth-child(3))) > .testimonial-card blockquote::before { content: none; }
 .testimonials-strip .grid:not(:has(> .testimonial-card:nth-child(3))) > .testimonial-card .attribution { border-top: 0; padding-top: 0; padding-left: 0; }
 
-/* Offer price row: the roadmap ("Start here") runs full width, its head and
-   action on the left and what you get on the right; walkthrough and guided
-   setup sit as an even pair below, rows aligned by subgrid; done for you
-   (2026-11-12) runs full width below them, laid out like the roadmap. */
-.rung > .rung-body { flex-grow: 1; }
+/* Offer cards (2026-11-12): each is an expandable card. The roadmap and the
+   membership run full width; walkthrough, guided setup, done for you and
+   bespoke sit in a two-by-two grid. A card's head, its fold and its button
+   stack; opening one card does not stretch its neighbour. */
+.rung > .rung-head { flex-grow: 1; }
 .rung > .cta { margin-top: var(--space-3); align-self: flex-start; }
-.rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--space-5); align-items: start; }
-.rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) > .rung-head { grid-column: 1; grid-row: 1; }
-.rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) > .cta { grid-column: 1; grid-row: 2; justify-self: start; }
-.rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) > .rung-body { grid-column: 2; grid-row: 1 / span 2; }
-.rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) .rung-meta, .rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) .price-detail { min-height: 0; }
-@media (min-width: 901px) {
-  .rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) > .rung-body > .rung-label:first-child { margin-top: 0; }
-  .pricing-grid .rung:not([data-sku="roadmap"]):not([data-sku="done-for-you"]) { display: grid; grid-row: span 3; grid-template-rows: subgrid; row-gap: 0; align-content: start; }
-  .pricing-grid .rung:not([data-sku="roadmap"]):not([data-sku="done-for-you"]) > .cta { align-self: end; justify-self: start; }
-}
+.rung:is([data-sku="roadmap"], [data-sku="membership"]) { grid-column: 1 / -1; }
+.rung:is([data-sku="roadmap"], [data-sku="membership"]) .rung-meta, .rung:is([data-sku="roadmap"], [data-sku="membership"]) .price-detail { min-height: 0; }
+.pricing-grid { align-items: start; }
 @media (max-width: 900px) {
-  .rung:is([data-sku="roadmap"], [data-sku="done-for-you"]) { display: flex; align-items: stretch; }
   .rung > .cta { align-self: stretch; }
 }
 

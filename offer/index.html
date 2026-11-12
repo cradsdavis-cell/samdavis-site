@@ -146,6 +146,48 @@
 
   @media (max-width: 900px) {
   }
+  /* Outcome line: the one-pager's "You end with" row, first thing on each card (12 Nov 2026) */
+  .rung .rung-outcome { font-family: var(--serif); font-size: var(--fs-3); font-weight: 700; line-height: 1.2; letter-spacing: -0.005em; color: var(--accent-ink); margin: 0 0 var(--space-2); }
+  .rung .rung-part { font-size: var(--fs-small); line-height: 1.5; color: var(--ink-soft); margin: 0 0 var(--space-3); }
+  .rung-wide { margin-bottom: var(--space-4); }
+  /* Expandable cards (Sam, 12 Nov 2026): the outcome line, price and button
+     always show; what you end with and how it runs fold away. */
+  .rung-more { margin-top: var(--space-2); border-top: 1px solid var(--rule); }
+  .rung-more > summary { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); min-height: var(--tap, 44px); font-family: var(--sans); font-size: var(--fs-small); font-weight: 600; color: var(--accent-ink); }
+  .rung-more > summary::-webkit-details-marker { display: none; }
+  .rung-more > summary::after { content: ""; flex: none; width: 8px; height: 8px; margin: -4px 4px 0 0; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform .2s ease, margin .2s ease; }
+  .rung-more[open] > summary::after { margin-top: 4px; transform: rotate(225deg); }
+  .rung-more > .rung-body { padding-top: var(--space-1); }
+
+  /* The comparison table, from the offers one-pager */
+  .compare { margin: 0 0 var(--space-4); }
+  .compare h2 { font-size: var(--fs-3); margin: 0 0 var(--space-3); }
+  .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; font-family: var(--sans); font-size: var(--fs-small); }
+  .compare-table th, .compare-table td { text-align: left; vertical-align: middle; padding: 10px 12px; border-top: 1px solid var(--rule); }
+  .compare-table thead tr:first-child th, .compare-table thead tr:first-child td { border-top: 0; vertical-align: top; }
+  .compare-table thead tr:first-child th a { display: block; font-family: var(--serif); font-size: var(--fs-3); font-weight: 700; color: var(--ink-deep); text-decoration: none; line-height: 1.15; }
+  .compare-table thead tr:first-child th span { display: block; margin-top: 4px; font-weight: 600; color: var(--ink-deep); line-height: 1.35; }
+  .compare-table tbody th { font-weight: 400; color: var(--ink-deep); width: 30%; padding-left: 0; line-height: 1.4; }
+  .compare-table tr.outcome th, .compare-table tr.outcome td { border-top: 1.5px solid var(--ink-deep); vertical-align: top; }
+  .compare-table tr.outcome th { font-family: var(--mono, monospace); font-size: 12px; font-weight: 500; color: var(--accent-ink); padding-left: 0; }
+  .compare-table tr.outcome td { font-family: var(--serif); font-size: 1.12rem; font-weight: 700; line-height: 1.2; color: var(--ink-deep); }
+  .compare-table tr.price th { font-weight: 600; }
+  .compare-table tr.price td { font-weight: 700; color: var(--ink-deep); }
+  .compare-table .hl { background: var(--bg-card); }
+  .compare-table .cell { display: flex; align-items: center; gap: 8px; }
+  .compare-table .cell small { font-size: 12px; line-height: 1.25; color: var(--ink-faint); }
+  .d { flex: none; display: inline-block; width: 15px; height: 15px; border-radius: 50%; border: 1.5px solid var(--ink-deep); }
+  .d.us { background: var(--ink-deep); }
+  .d.with { background: linear-gradient(90deg, var(--ink-deep) 50%, transparent 50%); }
+  .d.none { width: 6px; height: 6px; border: 0; background: var(--rule); margin-left: 4px; }
+  .compare-key { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin: var(--space-2) 0 0; font-family: var(--sans); font-size: var(--fs-small); color: var(--ink-soft); }
+  .compare-key span { display: inline-flex; align-items: center; gap: 8px; }
+  .compare-pdf { margin: var(--space-1) 0 0; font-family: var(--sans); font-size: var(--fs-small); }
+  @media (max-width: 900px) {
+    .compare-scroll, .compare-key span { display: none; }
+    .compare h2 { margin-bottom: var(--space-1); }
+    .compare-key { display: none; }
+  }
 </style>
 <!-- SEO: canonical + social cards -->
 <link rel="canonical" href="https://crads-ai.com/offer">
@@ -226,87 +268,131 @@
       <h2>Which one is you?</h2>
       <ul>
         <li><strong>"Show me where AI could help in my business."</strong> AI roadmap.</li>
-        <li><strong>"I've installed it. Show me how to use it."</strong> Walkthrough.</li>
-        <li><strong>"Set it up with me and connect it to my email."</strong> Guided setup.</li>
+        <li><strong>"Show me how to use it."</strong> Walkthrough.</li>
+        <li><strong>"Set it up with me, on the call."</strong> Guided setup.</li>
         <li><strong>"Build it for me. Here's an hour."</strong> Done for you.</li>
+        <li><strong>"Solve the problems I pick."</strong> Bespoke.</li>
         <li><strong>"It's set up. I want help using it, week to week."</strong> <a href="#membership">Membership</a>.</li>
       </ul>
     </div>
 
-    <!-- The roadmap first (21 Oct 2026), then the two ways to set it up -->
-    <div class="pricing-grid stagger-grid">
-      <article class="rung" data-sku="roadmap" id="roadmap">
-        <div class="rung-head">
-          <span class="rung-badge">Start here</span>
-          <h3 class="rung-name">AI roadmap</h3>
-          <p class="rung-meta">30 min + written report + 30 min&nbsp;· 1:1&nbsp;· video call&nbsp;· up to 10 a week</p>
-          <p class="price">A$250</p>
-          <p class="price-detail">Fixed. Pay once. Have a code? It comes off at checkout.</p>
-        </div>
+    <!-- The roadmap first (21 Oct 2026), then the four ways forward. Each card
+         opens with its outcome line, the one-pager's "You end with" row. -->
+    <article class="rung rung-wide" data-sku="roadmap" id="roadmap">
+      <div class="rung-head">
+        <span class="rung-badge">Start here</span>
+        <h3 class="rung-name">AI roadmap</h3>
+        <p class="rung-outcome">Know where AI fits, and what to do first.</p>
+        <p class="rung-meta">30 min + written report + 30 min&nbsp;· 1:1&nbsp;· video call&nbsp;· up to 10 a week</p>
+        <p class="price">A$250</p>
+        <p class="price-detail">Fixed. Pay once. Have a partner's code? It comes off at checkout.</p>
+      </div>
+      <details class="rung-more">
+        <summary>What you end with</summary>
         <div class="rung-body">
-          <p class="rung-label">You leave with</p>
-          <ul class="rung-includes rung-outcomes">
-            <li>All the pain points in your business, gone through properly, into the weeds.</li>
-            <li>A written report within 3 business days: where AI could help, and what I'd start with.</li>
-            <li>A second call to go through it together.</li>
-          </ul>
-          <p class="rung-pitch">The report is yours to keep, whatever you decide next.</p>
-        </div>
-        <a class="cta" href="/book/roadmap">Book an AI roadmap →</a>
-      </article>
+        <p class="rung-label">You end with</p>
+        <ul class="rung-includes rung-outcomes">
+          <li>Every pain point in your week, gone through properly on a 30-minute call, into the weeds.</li>
+          <li>A written report within 3 business days: where AI could help, and what I'd start with.</li>
+          <li>A second call to go through it together. The report is yours to keep, whatever you decide next.</li>
+        </ul>
+        <p class="rung-part"><strong>Your part:</strong> two 30-minute calls.</p>
+      </div>
+      </details>
+      <a class="cta" href="/book/roadmap">Book an AI roadmap →</a>
+    </article>
 
-      <article class="rung" data-sku="walkthrough">
+    <!-- The four ways forward, as one table. Mirrors the offers one-pager
+         (second-brain client-deliverables/crads-offers/offers-one-pager.html),
+         Sam's source of truth since 12 Nov 2026: change it there first. On
+         phones the table hides and the cards below carry the same rows. -->
+    <section class="compare reveal-on-scroll" aria-labelledby="compare-title">
+      <p class="eyebrow">After your roadmap</p>
+      <h2 id="compare-title">Four ways to get it working, from you-led to done for you</h2>
+      <div class="compare-scroll">
+      <table class="compare-table">
+        <thead>
+          <tr><td></td><th scope="col"><a href="#walkthrough">Walkthrough</a><span>"Show me how to use it."</span></th><th scope="col"><a href="#guided-setup">Guided setup</a><span>"Set it up with me, on the call."</span></th><th scope="col" class="hl"><a href="#done-for-you">Done for you</a><span>"Build it for me. Here's an hour."</span></th><th scope="col"><a href="#bespoke">Bespoke</a><span>"Solve the problems I pick."</span></th></tr>
+          <tr class="outcome"><th scope="row">You end with</th><td>Set up, and you can drive it.</td><td>Working in your inbox and calendar.</td><td class="hl">Built and working. Your part: one form, two calls.</td><td>Your biggest problems, solved.</td></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Shown how to use the app and Claude Code</th><td><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td><td><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td><td class="hl"><span class="cell"><i class="d us" role="img" aria-label="We do it"></i><small>at the handover</small></span></td><td><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td></tr>
+          <tr><th scope="row">Installed on your own server or computer, and connected to your Claude account</th><td><span class="cell"><i class="d with" role="img" aria-label="You do it, with us"></i><small>together, in session 1</small></span></td><td><span class="cell"><i class="d with" role="img" aria-label="You do it, with us"></i><small>together, in session 1</small></span></td><td class="hl"><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td><td><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td></tr>
+          <tr><th scope="row">It knows your business: who you serve, how you work, how you sound</th><td><span class="cell"><i class="d with" role="img" aria-label="You do it, with us"></i><small>your interview, checked together</small></span></td><td><span class="cell"><i class="d with" role="img" aria-label="You do it, with us"></i><small>your interview, checked together</small></span></td><td class="hl"><span class="cell"><i class="d us" role="img" aria-label="We do it"></i><small>written in from your form</small></span></td><td><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td></tr>
+          <tr><th scope="row">Backed up to your own private GitHub</th><td><span class="cell"><i class="d with" role="img" aria-label="You do it, with us"></i></span></td><td><span class="cell"><i class="d with" role="img" aria-label="You do it, with us"></i></span></td><td class="hl"><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td><td><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td></tr>
+          <tr><th scope="row">Email, calendar and the other tools you work in, connected on limits you choose</th><td><span class="cell"><i class="d none" role="img" aria-label="Not included"></i></span></td><td><span class="cell"><i class="d with" role="img" aria-label="You do it, with us"></i></span></td><td class="hl"><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td><td><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td></tr>
+          <tr><th scope="row">Skills for the jobs you repeat every week</th><td><span class="cell"><i class="d none" role="img" aria-label="Not included"></i></span></td><td><span class="cell"><i class="d with" role="img" aria-label="You do it, with us"></i><small>one, built with you</small></span></td><td class="hl"><span class="cell"><i class="d us" role="img" aria-label="We do it"></i><small>two, picked on the call</small></span></td><td><span class="cell"><i class="d us" role="img" aria-label="We do it"></i><small>as many as we scope</small></span></td></tr>
+          <tr><th scope="row">A morning brief, and jobs that run on a schedule</th><td><span class="cell"><i class="d none" role="img" aria-label="Not included"></i></span></td><td><span class="cell"><i class="d with" role="img" aria-label="You do it, with us"></i></span></td><td class="hl"><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td><td><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td></tr>
+          <tr><th scope="row">The bigger problems from your roadmap, built end to end</th><td><span class="cell"><i class="d none" role="img" aria-label="Not included"></i></span></td><td><span class="cell"><i class="d none" role="img" aria-label="Not included"></i></span></td><td class="hl"><span class="cell"><i class="d none" role="img" aria-label="Not included"></i></span></td><td><span class="cell"><i class="d us" role="img" aria-label="We do it"></i><small>custom connections included</small></span></td></tr>
+          <tr><th scope="row">Written docs, and your first month of membership</th><td><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td><td><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td><td class="hl"><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td><td><span class="cell"><i class="d us" role="img" aria-label="We do it"></i></span></td></tr>
+          <tr class="price"><th scope="row">Price</th><td>A$350</td><td>A$700</td><td class="hl">A$1,500</td><td>Quoted per project</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="compare-key"><span><i class="d us"></i>We do it</span><span><i class="d with"></i>You do it, with us</span><span><i class="d none"></i>Not included</span></p>
+      <p class="compare-pdf"><a href="/lib/offers-one-pager.pdf" download>Download the one-pager (PDF)</a></p>
+    </section>
+
+    <div class="pricing-grid stagger-grid">
+      <article class="rung" data-sku="walkthrough" id="walkthrough">
         <div class="rung-head">
           <h3 class="rung-name">Walkthrough</h3>
+          <p class="rung-outcome">Set up, and you can drive it.</p>
           <p class="rung-meta">1 hour + 30 min&nbsp;· 1:1&nbsp;· screen shared&nbsp;· at least a day apart</p>
           <p class="price">A$350</p>
           <p class="price-detail">Fixed. Pay once for both sessions.</p>
         </div>
-        <div class="rung-body">
-          <p class="rung-label">You leave with</p>
+        <details class="rung-more">
+          <summary>What you end with, and how it runs</summary>
+          <div class="rung-body">
+          <p class="rung-label">You end with</p>
           <ul class="rung-includes rung-outcomes">
-            <li>An assistant that knows your clients, projects and how you like things done, and what it must never touch.</li>
-            <li>One of your real problems solved in the session, so you have a working example.</li>
-            <li>A simple way to brief it (I call it CRIT), so you can solve the next one yourself.</li>
+            <li>Crads-AI installed on your own server or computer and connected to your Claude account, together in session 1.</li>
+            <li>An assistant that knows who you serve, how you work and how you sound, from your interview, checked together.</li>
+            <li>Everything it knows backed up to your own private GitHub.</li>
+            <li>Shown how to use the app and Claude Code.</li>
             <li>Written docs, and your <a href="/membership">first month of membership</a>: answers on Slack within a working day, and the weekly drop-in call.</li>
           </ul>
+          <p class="rung-part"><strong>Not included:</strong> connecting your email, calendar or other tools, skills, or the morning brief. That's the guided setup.</p>
           <p class="rung-label">How it runs</p>
           <ul class="rung-includes">
-            <li><strong>Before session 1:</strong> you install the app and set up your assistant. The <a href="/docs/first-hour">first-hour guide</a> walks you through it, and session 1 finishes it if you get stuck.</li>
-            <li><strong>Session 1 (60 min):</strong> how to use the Crads-AI app, and Claude Code, the part of Claude that works on your files.</li>
+            <li><strong>Session 1 (60 min):</strong> we install it on your own server or computer together, connect it to your Claude account, and I show you the app and Claude Code, the part of Claude that works on your files.</li>
             <li><strong>Homework, about an hour:</strong> the onboarding interview, which writes the first version of what it knows about you.</li>
-            <li><strong>Session 2 (30 min, a day or more later):</strong> we fix the gaps and solve one real problem with it.</li>
+            <li><strong>Session 2 (30 min, a day or more later):</strong> we check what it learned, fix the gaps, and back it all up to your own private GitHub.</li>
           </ul>
-          <p class="rung-pitch">By the end you can solve your own business problems with Claude.</p>
         </div>
+        </details>
         <a class="cta" href="/book/walkthrough">Book a walkthrough →</a>
       </article>
 
-      <article class="rung featured" data-sku="guided-setup">
+      <article class="rung featured" data-sku="guided-setup" id="guided-setup">
         <div class="rung-head">
           <span class="rung-badge">The full setup</span>
           <h3 class="rung-name">Guided setup</h3>
+          <p class="rung-outcome">Working in your inbox and calendar.</p>
           <p class="rung-meta">1 hour + 2 hours&nbsp;· 1:1&nbsp;· screen shared&nbsp;· at least a day apart</p>
           <p class="price">A$700</p>
           <p class="price-detail">Fixed. Pay once for both sessions.</p>
         </div>
-        <div class="rung-body">
-          <p class="rung-label">You leave with</p>
+        <details class="rung-more">
+          <summary>What you end with, and how it runs</summary>
+          <div class="rung-body">
+          <p class="rung-label">You end with</p>
           <ul class="rung-includes rung-outcomes">
             <li>Everything in the walkthrough.</li>
-            <li>Your email, calendar and Slack or WhatsApp connected, on limits you choose (drafts only and never sends, if that's what you want).</li>
-            <li>Your first skills, built around the jobs you repeat every week: follow-ups, proposals, posts, notes.</li>
+            <li>Your email, calendar and the other tools you work in connected, on limits you choose (drafts only and never sends, if you want that).</li>
+            <li>One skill for a job you repeat every week, built with you.</li>
             <li>A morning brief that reads your day and tells you what matters, and jobs that run on a schedule.</li>
             <li>Written docs, and your <a href="/membership">first month of membership</a>: answers on Slack within a working day, and the weekly drop-in call.</li>
           </ul>
           <p class="rung-label">How it runs</p>
           <ul class="rung-includes">
-            <li><strong>Session 1 (60 min):</strong> we build your server in your own hosting account, and I show you the app.</li>
+            <li><strong>Session 1 (60 min):</strong> we build your server in your own hosting account, connect it to your Claude account, and I show you the app.</li>
             <li><strong>Homework, about an hour:</strong> the onboarding interview.</li>
-            <li><strong>Session 2 (120 min, a day or more later):</strong> I connect your tools, build your first skills around the work you actually do, and switch on the morning brief.</li>
+            <li><strong>Session 2 (120 min, a day or more later):</strong> we back it up to your own private GitHub, connect your tools, build your first skill around a job you actually do, and switch on the morning brief.</li>
           </ul>
-          <p class="rung-pitch">By the end your business has an assistant that works on a schedule, within the limits you set.</p>
         </div>
+        </details>
         <a class="cta" href="/book/guided-setup">Book a guided setup →</a>
       </article>
 
@@ -314,28 +400,56 @@
         <div class="rung-head">
           <span class="rung-badge">I build it</span>
           <h3 class="rung-name">Done for you</h3>
+          <p class="rung-outcome">Built and working. Your part: one form, two calls.</p>
           <p class="rung-meta">1 hour + 30 min&nbsp;· 1:1&nbsp;· I do the building&nbsp;· about a week apart</p>
           <p class="price">A$1,500</p>
           <p class="price-detail">Fixed. Pay once.</p>
         </div>
-        <div class="rung-body">
-          <p class="rung-label">You leave with</p>
+        <details class="rung-more">
+          <summary>What you end with, and how it runs</summary>
+          <div class="rung-body">
+          <p class="rung-label">You end with</p>
           <ul class="rung-includes rung-outcomes">
-            <li>Your assistant built and running on your own server, knowing your business from the form and from your tools.</li>
+            <li>Installed on your own server, connected to Claude and backed up to your GitHub, all by me.</li>
+            <li>It knows your business, written in from your form.</li>
             <li>Your email, calendar and the other tools you work in, like Notion or Google Drive, connected on limits you choose.</li>
-            <li>Two skills built for jobs you do every week, and a morning brief.</li>
+            <li>Two skills for jobs you repeat every week, picked on the call, and a morning brief.</li>
+            <li>A handover showing you how to use it day to day.</li>
             <li>Written docs, and your <a href="/membership">first month of membership</a>: answers on Slack within a working day, and the weekly drop-in call.</li>
           </ul>
           <p class="rung-label">How it runs</p>
           <ul class="rung-includes">
-            <li><strong>Before the call:</strong> a short form about your business.</li>
+            <li><strong>Before the call:</strong> a form about your business.</li>
             <li><strong>The call (60 min):</strong> we go through how you work and pick the two jobs it takes on first.</li>
             <li><strong>The build, about a week:</strong> you let me onto your server from the app with one tap, and close that access any time.</li>
             <li><strong>Handover (30 min):</strong> I show you how it all works day to day.</li>
           </ul>
-          <p class="rung-pitch">By the end it's running, and you didn't have to build it.</p>
         </div>
+        </details>
         <a class="cta" href="/book/done-for-you">Book done for you →</a>
+      </article>
+
+      <article class="rung" data-sku="bespoke" id="bespoke">
+        <div class="rung-head">
+          <h3 class="rung-name">Bespoke</h3>
+          <p class="rung-outcome">Your biggest problems, solved.</p>
+          <p class="rung-meta">Scoped from your roadmap&nbsp;· usually after a setup</p>
+          <p class="price">Quoted per project</p>
+          <p class="price-detail">Scoped and quoted before I start.</p>
+        </div>
+        <details class="rung-more">
+          <summary>What you end with</summary>
+          <div class="rung-body">
+          <p class="rung-label">You end with</p>
+          <ul class="rung-includes rung-outcomes">
+            <li>The bigger problems from your roadmap, built end to end, custom connections included.</li>
+            <li>As many skills as we scope.</li>
+            <li>Written docs, and your <a href="/membership">first month of membership</a>: answers on Slack within a working day, and the weekly drop-in call.</li>
+          </ul>
+          <p class="rung-part"><strong>Your part:</strong> tell me which problems from your roadmap you want solved, and we scope it together.</p>
+        </div>
+        </details>
+        <a class="cta" href="mailto:cradsdavis@gmail.com?subject=Bespoke">Email me about bespoke →</a>
       </article>
     </div>
 
@@ -346,13 +460,29 @@
       <summary>More options</summary>
       <p>Or it can run on Claude's own cloud, inside your Claude plan, with no server bill. Your brain (everything it knows about you) lives in a private GitHub repository, a folder only you can open, and Anthropic runs each job on a fresh machine. Jobs run at most hourly, and your files and conversations sit with Anthropic, not on a server you own. Same price, decided in session 1.</p>
     </details>
-    <div class="discovery-card reveal-on-scroll" id="membership">
-      <h2>Keep going: membership</h2>
-      <p class="meta">A$99 a month&nbsp;· cancel any time</p>
-      <p>Ask me anything in Slack and get an answer within a working day, and bring whatever you're stuck on to a weekly hour with other business owners using Claude, Thursdays at 2pm Sydney time. Every session is recorded, so a missed week costs you nothing. It's for anyone using Claude in their business, whether we set it up together or you did it yourself.</p>
-      <p>Done a walkthrough, guided setup or done for you? Your first month is already included.</p>
+    <article class="rung rung-wide" data-sku="membership" id="membership">
+      <div class="rung-head">
+        <span class="rung-badge">Keep going</span>
+        <h3 class="rung-name">Membership</h3>
+        <p class="rung-outcome">Never stay stuck.</p>
+        <p class="rung-meta">Slack answers within a working day&nbsp;· a weekly drop-in hour</p>
+        <p class="price">A$99<span class="price-suffix"> a month</span></p>
+        <p class="price-detail">Cancel any time. Done a walkthrough, guided setup or done for you? Your first month is already included.</p>
+      </div>
+      <details class="rung-more">
+        <summary>What you end with</summary>
+        <div class="rung-body">
+          <p class="rung-label">You end with</p>
+          <ul class="rung-includes rung-outcomes">
+            <li>Answers to anything you ask in Slack, within a working day.</li>
+            <li>A weekly hour with me and other business owners using Claude, Thursdays at 2pm Sydney time: bring whatever you're stuck on.</li>
+            <li>Every session recorded, so a missed week costs you nothing.</li>
+          </ul>
+          <p class="rung-part"><strong>Who it's for:</strong> anyone using Claude in their business, whether we set it up together or you did it yourself.</p>
+        </div>
+      </details>
       <a class="cta" href="/membership">See the membership →</a>
-    </div>
+    </article>
 
     <p class="retainer-note reveal-on-scroll">
       After the first month it's yours either way. Stay on as a <a href="/membership">member</a> at <strong>A$99 a month</strong>, cancel any time, or invite me back for one-off help at <strong>A$233 an hour</strong>: <a href="mailto:cradsdavis@gmail.com">email me</a> with what you're stuck on.
@@ -363,6 +493,19 @@
 
   </section>
 </main>
+<script>
+  // A link to a card (#walkthrough, from the table) opens its details.
+  (function () {
+    function openFromHash() {
+      var id = location.hash.slice(1);
+      var card = id && document.getElementById(id);
+      var more = card && card.querySelector('details.rung-more');
+      if (more) more.open = true;
+    }
+    window.addEventListener('hashchange', openFromHash);
+    openFromHash();
+  })();
+</script>
 
 <footer class="site-footer wrap">
   <div class="footer-contact">
