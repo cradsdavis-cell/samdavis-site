@@ -93,7 +93,7 @@
 
 - [Book](https://crads-ai.com/book): Book an AI roadmap with Sam (A$250 · up to 10 a week), a walkthrough or a guided setup.
 - [Discovery Call, Sam Davis](https://crads-ai.com/book/discovery): Book a free 30-minute Discovery call with Sam Davis, scope whether an AI executive assistant build fits your shape.
-- [Done for you](https://crads-ai.com/book/done-for-you): Done for you: fill in a short form, give me a one-hour call, and I build your Crads-AI assistant on your own server. Then a 30-minute handover. A$1,500.
+- [Done for you](https://crads-ai.com/book/done-for-you): Done for you: fill in a form about your business, give me a one-hour call, and I build your Crads-AI assistant on your own server. Then a 30-minute handover. A$1,500.
 - [Guided setup](https://crads-ai.com/book/guided-setup): Guided setup with Sam: an hour on how to use Claude Code and the app, the interview as homework, then two hours wiring it into your email, calendar and Slack or WhatsApp. Two sessions at least a day apart. A$700.
 - [AI roadmap](https://crads-ai.com/book/roadmap): AI roadmap with Sam: a 30-minute call on all the pain points in your business, a written report on where AI could help and what to start with, then a second 30-minute call to go through it together. A$250 · up to 10 a week.
 - [Walkthrough](https://crads-ai.com/book/walkthrough): Walkthrough with Sam: an hour on how to use Claude Code and the Crads-AI app, the interview as homework, then 30 minutes on what it learned. Two sessions at least a day apart. A$350.
