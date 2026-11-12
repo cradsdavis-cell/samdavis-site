@@ -56,3 +56,18 @@ test('the one-pager PDF the table links to is shipped', () => {
   assert.match(offer, /href="\/lib\/offers-one-pager\.pdf"/);
   assert.ok(fs.statSync(path.join(ROOT, 'lib/offers-one-pager.pdf')).size > 10000);
 });
+
+test('every offer on /offer is an expandable card, closed, with its outcome outside the fold (Sam, 12 Nov 2026)', () => {
+  const cards = offer.match(/<article class="rung[^"]*" data-sku="[^"]+"[\s\S]*?<\/article>/g);
+  const skus = cards.map((c) => c.match(/data-sku="([^"]+)"/)[1]);
+  assert.deepStrictEqual(skus, ['roadmap', 'walkthrough', 'guided-setup', 'done-for-you', 'bespoke', 'membership']);
+  for (const c of cards) {
+    const folds = c.match(/<details class="rung-more"[^>]*>/g) || [];
+    assert.strictEqual(folds.length, 1, 'one fold per card');
+    assert.ok(!/\bopen\b/.test(folds[0]), 'closed by default');
+    const head = c.slice(0, c.indexOf('<details'));
+    assert.match(head, /<p class="rung-outcome">[^<]+<\/p>/, 'the outcome line shows without opening');
+    assert.match(head, /<p class="price">/, 'so does the price');
+    assert.match(c.slice(c.indexOf('</details>')), /<a class="cta"/, 'and the button');
+  }
+});

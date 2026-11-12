@@ -150,6 +150,14 @@
   .rung .rung-outcome { font-family: var(--serif); font-size: var(--fs-3); font-weight: 700; line-height: 1.2; letter-spacing: -0.005em; color: var(--accent-ink); margin: 0 0 var(--space-2); }
   .rung .rung-part { font-size: var(--fs-small); line-height: 1.5; color: var(--ink-soft); margin: 0 0 var(--space-3); }
   .rung-wide { margin-bottom: var(--space-4); }
+  /* Expandable cards (Sam, 12 Nov 2026): the outcome line, price and button
+     always show; what you end with and how it runs fold away. */
+  .rung-more { margin-top: var(--space-2); border-top: 1px solid var(--rule); }
+  .rung-more > summary { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); min-height: var(--tap, 44px); font-family: var(--sans); font-size: var(--fs-small); font-weight: 600; color: var(--accent-ink); }
+  .rung-more > summary::-webkit-details-marker { display: none; }
+  .rung-more > summary::after { content: ""; flex: none; width: 8px; height: 8px; margin: -4px 4px 0 0; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform .2s ease, margin .2s ease; }
+  .rung-more[open] > summary::after { margin-top: 4px; transform: rotate(225deg); }
+  .rung-more > .rung-body { padding-top: var(--space-1); }
 
   /* The comparison table, from the offers one-pager */
   .compare { margin: 0 0 var(--space-4); }
@@ -279,7 +287,9 @@
         <p class="price">A$250</p>
         <p class="price-detail">Fixed. Pay once. Have a partner's code? It comes off at checkout.</p>
       </div>
-      <div class="rung-body">
+      <details class="rung-more">
+        <summary>What you end with</summary>
+        <div class="rung-body">
         <p class="rung-label">You end with</p>
         <ul class="rung-includes rung-outcomes">
           <li>Every pain point in your week, gone through properly on a 30-minute call, into the weeds.</li>
@@ -288,6 +298,7 @@
         </ul>
         <p class="rung-part"><strong>Your part:</strong> two 30-minute calls.</p>
       </div>
+      </details>
       <a class="cta" href="/book/roadmap">Book an AI roadmap →</a>
     </article>
 
@@ -331,7 +342,9 @@
           <p class="price">A$350</p>
           <p class="price-detail">Fixed. Pay once for both sessions.</p>
         </div>
-        <div class="rung-body">
+        <details class="rung-more">
+          <summary>What you end with, and how it runs</summary>
+          <div class="rung-body">
           <p class="rung-label">You end with</p>
           <ul class="rung-includes rung-outcomes">
             <li>Crads-AI installed on your own server or computer and connected to your Claude account, together in session 1.</li>
@@ -348,6 +361,7 @@
             <li><strong>Session 2 (30 min, a day or more later):</strong> we check what it learned, fix the gaps, and back it all up to your own private GitHub.</li>
           </ul>
         </div>
+        </details>
         <a class="cta" href="/book/walkthrough">Book a walkthrough →</a>
       </article>
 
@@ -360,7 +374,9 @@
           <p class="price">A$700</p>
           <p class="price-detail">Fixed. Pay once for both sessions.</p>
         </div>
-        <div class="rung-body">
+        <details class="rung-more">
+          <summary>What you end with, and how it runs</summary>
+          <div class="rung-body">
           <p class="rung-label">You end with</p>
           <ul class="rung-includes rung-outcomes">
             <li>Everything in the walkthrough.</li>
@@ -376,6 +392,7 @@
             <li><strong>Session 2 (120 min, a day or more later):</strong> we back it up to your own private GitHub, connect your tools, build your first skill around a job you actually do, and switch on the morning brief.</li>
           </ul>
         </div>
+        </details>
         <a class="cta" href="/book/guided-setup">Book a guided setup →</a>
       </article>
 
@@ -388,7 +405,9 @@
           <p class="price">A$1,500</p>
           <p class="price-detail">Fixed. Pay once.</p>
         </div>
-        <div class="rung-body">
+        <details class="rung-more">
+          <summary>What you end with, and how it runs</summary>
+          <div class="rung-body">
           <p class="rung-label">You end with</p>
           <ul class="rung-includes rung-outcomes">
             <li>Installed on your own server, connected to Claude and backed up to your GitHub, all by me.</li>
@@ -406,6 +425,7 @@
             <li><strong>Handover (30 min):</strong> I show you how it all works day to day.</li>
           </ul>
         </div>
+        </details>
         <a class="cta" href="/book/done-for-you">Book done for you →</a>
       </article>
 
@@ -417,7 +437,9 @@
           <p class="price">Quoted per project</p>
           <p class="price-detail">Scoped and quoted before I start.</p>
         </div>
-        <div class="rung-body">
+        <details class="rung-more">
+          <summary>What you end with</summary>
+          <div class="rung-body">
           <p class="rung-label">You end with</p>
           <ul class="rung-includes rung-outcomes">
             <li>The bigger problems from your roadmap, built end to end, custom connections included.</li>
@@ -426,6 +448,7 @@
           </ul>
           <p class="rung-part"><strong>Your part:</strong> tell me which problems from your roadmap you want solved, and we scope it together.</p>
         </div>
+        </details>
         <a class="cta" href="mailto:cradsdavis@gmail.com?subject=Bespoke">Email me about bespoke →</a>
       </article>
     </div>
@@ -437,13 +460,29 @@
       <summary>More options</summary>
       <p>Or it can run on Claude's own cloud, inside your Claude plan, with no server bill. Your brain (everything it knows about you) lives in a private GitHub repository, a folder only you can open, and Anthropic runs each job on a fresh machine. Jobs run at most hourly, and your files and conversations sit with Anthropic, not on a server you own. Same price, decided in session 1.</p>
     </details>
-    <div class="discovery-card reveal-on-scroll" id="membership">
-      <h2>Keep going: membership</h2>
-      <p class="meta">A$99 a month&nbsp;· cancel any time</p>
-      <p>Ask me anything in Slack and get an answer within a working day, and bring whatever you're stuck on to a weekly hour with other business owners using Claude, Thursdays at 2pm Sydney time. Every session is recorded, so a missed week costs you nothing. It's for anyone using Claude in their business, whether we set it up together or you did it yourself.</p>
-      <p>Done a walkthrough, guided setup or done for you? Your first month is already included.</p>
+    <article class="rung rung-wide" data-sku="membership" id="membership">
+      <div class="rung-head">
+        <span class="rung-badge">Keep going</span>
+        <h3 class="rung-name">Membership</h3>
+        <p class="rung-outcome">Never stay stuck.</p>
+        <p class="rung-meta">Slack answers within a working day&nbsp;· a weekly drop-in hour</p>
+        <p class="price">A$99<span class="price-suffix"> a month</span></p>
+        <p class="price-detail">Cancel any time. Done a walkthrough, guided setup or done for you? Your first month is already included.</p>
+      </div>
+      <details class="rung-more">
+        <summary>What you end with</summary>
+        <div class="rung-body">
+          <p class="rung-label">You end with</p>
+          <ul class="rung-includes rung-outcomes">
+            <li>Answers to anything you ask in Slack, within a working day.</li>
+            <li>A weekly hour with me and other business owners using Claude, Thursdays at 2pm Sydney time: bring whatever you're stuck on.</li>
+            <li>Every session recorded, so a missed week costs you nothing.</li>
+          </ul>
+          <p class="rung-part"><strong>Who it's for:</strong> anyone using Claude in their business, whether we set it up together or you did it yourself.</p>
+        </div>
+      </details>
       <a class="cta" href="/membership">See the membership →</a>
-    </div>
+    </article>
 
     <p class="retainer-note reveal-on-scroll">
       After the first month it's yours either way. Stay on as a <a href="/membership">member</a> at <strong>A$99 a month</strong>, cancel any time, or invite me back for one-off help at <strong>A$233 an hour</strong>: <a href="mailto:cradsdavis@gmail.com">email me</a> with what you're stuck on.
@@ -454,6 +493,19 @@
 
   </section>
 </main>
+<script>
+  // A link to a card (#walkthrough, from the table) opens its details.
+  (function () {
+    function openFromHash() {
+      var id = location.hash.slice(1);
+      var card = id && document.getElementById(id);
+      var more = card && card.querySelector('details.rung-more');
+      if (more) more.open = true;
+    }
+    window.addEventListener('hashchange', openFromHash);
+    openFromHash();
+  })();
+</script>
 
 <footer class="site-footer wrap">
   <div class="footer-contact">
