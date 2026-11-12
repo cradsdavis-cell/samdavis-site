@@ -27,3 +27,13 @@ test('the homepage carousel carries every testimonial', () => {
   const shown = [...proof.matchAll(/<span class="t-name">([^<]*)<\/span>/g)].map((m) => m[1]);
   assert.deepStrictEqual([...shown].sort(), [...allNames].sort());
 });
+
+test('every rendered strip is the homepage carousel (Sam, 12 Nov 2026)', () => {
+  assert.match(render, /class="t-carousel" data-carousel><div class="t-track">/, 'strips render as a carousel');
+  assert.match(render, /class="t-carousel-toggle"/, 'with the Pause button');
+  assert.match(render, /window\.cradsInitCarousel\(\)/, 'and start it once drawn');
+  assert.ok(!/class="grid"/.test(render), 'no static grid of quotes any more');
+  const site = fs.readFileSync(path.join(ROOT, 'lib', 'site.js'), 'utf8');
+  assert.match(site, /window\.cradsInitCarousel = /);
+  assert.match(site, /data-carousel-ready/, 'a carousel is set up once, however often it is called');
+});
