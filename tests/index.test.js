@@ -40,8 +40,8 @@ test('the hero calls out the reader, carries Sam\'s headline and subline, and ha
   assert.match(hero, /<p class="eyebrow">For purpose-led businesses, charities and NFPs included<\/p>/);
   // Alina Iurina's "AI brain built for you" (17 Nov call), Sam's pick of option A on 19 Nov 2026.
   assert.match(hero, /<h1>Your AI brain, <em>built for you\.<\/em><\/h1>/);
-  // Claude stays named above the fold; "learn how you write", since the FAQ says it sounds a bit like AI at first.
-  assert.match(hero, /<p class="hero-sub">Claude, set up to know your business and learn how you write\.<\/p>/);
+  // Claude stays named above the fold. Sam, 19 Nov 2026: the capability is problem solving, not just writing.
+  assert.match(hero, /<p class="hero-sub">Claude, set up to know your business, so you can point it at your hardest problems\.<\/p>/);
   // Sam, 4 Nov 2026 ("A"): the old mechanism line "doesn't really make sense and sounds too AI".
   // "Almost every", not a count: the latest ten aren't all tallied for prior AI use (9 of the first 10 were).
   assert.match(hero, /Almost every owner I've done a roadmap with already used AI, spread across chats that don't share what they know\./);
@@ -60,12 +60,22 @@ test('the hero calls out the reader, carries Sam\'s headline and subline, and ha
 // Second pass (22 Oct 2026): the mechanism moved into the first question and
 // proof took its place. 3 Nov 2026: proof moves above the doors, for a reader
 // who doesn't know Sam yet. 19 Nov 2026: the commitments block follows the
-// proof, so seven sections.
-test('seven sections, in order', () => {
-  const order = ['id="top"', 'id="proof"', 'id="conscious"', 'id="doors"', 'id="how"', 'id="questions"', 'id="who"'].map((id) => main.indexOf(id));
+// proof, and an anonymous "what one owner built" follows it, so eight sections.
+test('eight sections, in order', () => {
+  const order = ['id="top"', 'id="proof"', 'id="conscious"', 'id="built"', 'id="doors"', 'id="how"', 'id="questions"', 'id="who"'].map((id) => main.indexOf(id));
   assert.ok(order.every((i) => i > -1), `a section is missing: ${order}`);
   assert.deepStrictEqual([...order].sort((a, b) => a - b), order, 'sections out of order');
-  assert.strictEqual((main.match(/<section\b/g) || []).length, 7, 'seven sections, no more');
+  assert.strictEqual((main.match(/<section\b/g) || []).length, 8, 'eight sections, no more');
+});
+
+test('what one owner built: anonymous, facts only, no hours-saved figure', () => {
+  const b = section('built');
+  assert.match(b, /What one owner built on it <em>in under a month\.<\/em>/);
+  const items = [...b.matchAll(/<li>([^<]*)<\/li>/g)].map((m) => m[1]);
+  assert.strictEqual(items.length, 5);
+  // Sam, 19 Nov 2026: "keep people anonymous". No names, no business or site names, no quotes.
+  assert.ok(!/\bAri\b|Nikolopoulos|Omni Energy|cheaperbusinessenergy/.test(b) && !/<blockquote/.test(b), 'anonymous');
+  assert.ok(!/hours/i.test(b), 'no unverified time-saved figure');
 });
 
 test('conscious AI, in practice: the three commitments, in the safe data wording', () => {
