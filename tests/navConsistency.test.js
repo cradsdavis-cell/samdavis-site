@@ -20,7 +20,11 @@ const INCLUDE_DOCS = true;   // flipped 2026-09-09: the app repo's shell emits n
 // each page's path (ai-os PR 10) and the docs carry them, so byte identity is
 // back on. If the nav changes here again, update the shell's copy and
 // republish, or set this false until that lands.
-const DOCS_BYTE_IDENTICAL = true;
+// 2026-11-19: off again. "The software" menu folded here first; the app repo's
+// shell (ai-os docs/product/pipeline/shell.mjs) still carries the old copy, and
+// site.js swaps the current nav into the docs pages at runtime meanwhile.
+// Turn back on after the shell copy is updated and the docs republished.
+const DOCS_BYTE_IDENTICAL = false;
 const NAV_RE = /<nav class="site-nav-bar"[^>]*>[\s\S]*?<\/nav>/g;
 
 function pages() {
@@ -33,7 +37,8 @@ const FOOTER_RE = /<footer class="site-footer[^"]*"[^>]*>[\s\S]*?<\/footer>/g;
 
 test('NAV_ITEMS leads with the roadmap and keeps the software one click away', () => {
   const hrefs = allNavHrefs();
-  for (const h of ['/how-it-works', '/guides', '/writing', '/about', '/download', '/book/roadmap']) assert.ok(hrefs.includes(h), `nav lacks ${h}`);
+  // 2026-11-19: /download left the bar with "The software" menu (it is in the footer); Docs is under Read.
+  for (const h of ['/how-it-works', '/guides', '/writing', '/about', '/docs', '/book/roadmap']) assert.ok(hrefs.includes(h), `nav lacks ${h}`);
   const cta = NAV_ITEMS.filter((i) => /\bnav-cta\b/.test(i.cls || ''));
   assert.deepStrictEqual(cta.map((i) => i.href), ['/book/roadmap'], 'the one filled button books a roadmap');
   assert.ok(!hrefs.includes('/account/login'), 'Sign in is not in the nav');
@@ -42,7 +47,11 @@ test('NAV_ITEMS leads with the roadmap and keeps the software one click away', (
 
 test('the paid offer, the booking options, the letter and the docs are in the menus (2026-11-03)', () => {
   const hrefs = allNavHrefs();
-  for (const h of ['/offer', '/newsletter', '/docs', '/docs/faq']) assert.ok(hrefs.includes(h), `nav lacks ${h}`);
+  for (const h of ['/offer', '/newsletter', '/docs']) assert.ok(hrefs.includes(h), `nav lacks ${h}`);
+  // 2026-11-19: "The software" menu folded; Download and FAQ live in the footer.
+  assert.ok(!NAV_ITEMS.some((i) => i.label === 'The software'), '"The software" is out of the bar (19 Nov 2026)');
+  const footerHrefs = FOOTER_GROUPS.flatMap((g) => g.links.map((l) => l.href));
+  for (const h of ['/download', '/docs/faq']) assert.ok(footerHrefs.includes(h), `footer lacks ${h}`);
   assert.ok(!hrefs.includes('/book'), '"All booking options" is retired (12 Nov 2026): /offer lists every offer');
   assert.ok(!FOOTER_GROUPS.flatMap((g) => g.links.map((l) => l.href)).includes('/book'), 'and it is out of the footer');
 });
@@ -59,9 +68,8 @@ test('navHTML marks the right item current', () => {
   const trigger = (label) => new RegExp(`class="nav-trigger current">${label}<`);
   const menuItem = (href) => new RegExp(`href="${href.replace(/\//g, '\\/')}" class="current"`);
   assert.match(navHTML('/about'), /href="\/about" class="[^"]*\bcurrent\b/);
-  assert.match(navHTML('/docs/faq'), trigger('The software'), 'the docs belong to The software');
-  assert.match(navHTML('/docs/faq'), menuItem('/docs/faq'), 'an exact match beats the /docs/ prefix');
-  assert.doesNotMatch(navHTML('/docs/faq'), menuItem('/docs'));
+  assert.match(navHTML('/docs/faq'), trigger('Read'), 'the docs sit under Read (19 Nov 2026)');
+  assert.match(navHTML('/docs/faq'), menuItem('/docs'), 'every docs page marks Docs current');
   assert.match(navHTML('/docs'), menuItem('/docs'));
   assert.match(navHTML('/docs/first-hour'), menuItem('/docs'));
   assert.match(navHTML('/guides/ai-social-media-posts'), trigger('Read'));

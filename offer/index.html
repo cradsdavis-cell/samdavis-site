@@ -233,15 +233,7 @@
         <a href="/guides">Guides</a>
         <a href="/writing">Writing</a>
         <a href="/newsletter">Restless Optimist</a>
-      </div>
-    </div>
-    <div class="nav-group" data-open="false">
-      <a href="/download" class="nav-trigger">The software</a>
-      <button class="nav-caret" type="button" aria-expanded="false" aria-label="Show The software pages">▾</button>
-      <div class="nav-menu">
-        <a href="/download">Download</a>
         <a href="/docs">Docs</a>
-        <a href="/docs/faq">FAQ</a>
       </div>
     </div>
     <a href="/about" class="nav-simple">About</a>
@@ -275,9 +267,9 @@
       <h2>Which one is you?</h2>
       <ul>
         <li><strong>"Show me where AI could help in my business."</strong> AI roadmap.</li>
-        <li><strong>"Show me how to use it."</strong> Walkthrough.</li>
-        <li><strong>"Set it up with me, on the call."</strong> Guided setup.</li>
         <li><strong>"Build it for me. Here's an hour."</strong> Done for you.</li>
+        <li><strong>"Set it up with me, on the call."</strong> Guided setup.</li>
+        <li><strong>"Show me how to use it."</strong> Walkthrough.</li>
         <li><strong>"Solve the problems I pick."</strong> Bespoke.</li>
         <li><strong>"It's set up. I want help using it, week to week."</strong> <a href="#membership">Membership</a>.</li>
       </ul>
@@ -341,69 +333,10 @@
     </section>
 
     <div class="pricing-grid stagger-grid">
-      <article class="rung" data-sku="walkthrough" id="walkthrough">
-        <div class="rung-head">
-          <h3 class="rung-name">Walkthrough</h3>
-          <p class="rung-outcome">Set up, and you can drive it.</p>
-          <p class="rung-meta">1 hour + 30 min&nbsp;· 1:1&nbsp;· screen shared&nbsp;· at least a day apart</p>
-          <p class="price">A$350</p>
-          <p class="price-detail">Fixed. Pay once for both sessions.</p>
-        </div>
-        <details class="rung-more">
-          <summary>What you end with, and how it runs</summary>
-          <div class="rung-body">
-          <p class="rung-label">You end with</p>
-          <ul class="rung-includes rung-outcomes">
-            <li>Crads-AI installed on your own server or computer and connected to your Claude account, together in session 1.</li>
-            <li>An assistant that knows who you serve, how you work and how you sound, from your interview, checked together.</li>
-            <li>Everything it knows backed up to your own private GitHub.</li>
-            <li>Shown how to use the app and Claude Code.</li>
-            <li>Written docs, and your <a href="/membership">first month of membership</a>: answers on Slack within a working day, and the weekly drop-in call.</li>
-          </ul>
-          <p class="rung-part"><strong>Not included:</strong> connecting your email, calendar or other tools, skills, or the morning brief. That's the guided setup.</p>
-          <p class="rung-label">How it runs</p>
-          <ul class="rung-includes">
-            <li><strong>Session 1 (60 min):</strong> we install it on your own server or computer together, connect it to your Claude account, and I show you the app and Claude Code, the part of Claude that works on your files.</li>
-            <li><strong>Homework, about an hour:</strong> the onboarding interview, which writes the first version of what it knows about you.</li>
-            <li><strong>Session 2 (30 min, a day or more later):</strong> we check what it learned, fix the gaps, and back it all up to your own private GitHub.</li>
-          </ul>
-        </div>
-        </details>
-        <a class="cta" href="/book/walkthrough">Book a walkthrough →</a>
-      </article>
-
-      <article class="rung featured" data-sku="guided-setup" id="guided-setup">
-        <div class="rung-head">
-          <span class="rung-badge">The full setup</span>
-          <h3 class="rung-name">Guided setup</h3>
-          <p class="rung-outcome">Working in your inbox and calendar.</p>
-          <p class="rung-meta">1 hour + 2 hours&nbsp;· 1:1&nbsp;· screen shared&nbsp;· at least a day apart</p>
-          <p class="price">A$700</p>
-          <p class="price-detail">Fixed. Pay once for both sessions.</p>
-        </div>
-        <details class="rung-more">
-          <summary>What you end with, and how it runs</summary>
-          <div class="rung-body">
-          <p class="rung-label">You end with</p>
-          <ul class="rung-includes rung-outcomes">
-            <li>Everything in the walkthrough.</li>
-            <li>Your email, calendar and the other tools you work in connected, on limits you choose (drafts only and never sends, if you want that).</li>
-            <li>One skill for a job you repeat every week, built with you.</li>
-            <li>A morning brief that reads your day and tells you what matters, and jobs that run on a schedule.</li>
-            <li>Written docs, and your <a href="/membership">first month of membership</a>: answers on Slack within a working day, and the weekly drop-in call.</li>
-          </ul>
-          <p class="rung-label">How it runs</p>
-          <ul class="rung-includes">
-            <li><strong>Session 1 (60 min):</strong> we build your server in your own hosting account, connect it to your Claude account, and I show you the app.</li>
-            <li><strong>Homework, about an hour:</strong> the onboarding interview.</li>
-            <li><strong>Session 2 (120 min, a day or more later):</strong> we back it up to your own private GitHub, connect your tools, build your first skill around a job you actually do, and switch on the morning brief.</li>
-          </ul>
-        </div>
-        </details>
-        <a class="cta" href="/book/guided-setup">Book a guided setup →</a>
-      </article>
-
-      <article class="rung" data-sku="done-for-you" id="done-for-you">
+      <!-- 19 Nov 2026 (Sam): Done for you leads, straight after the roadmap,
+           and carries the highlight; guided setup next, then walkthrough and
+           bespoke. The comparison table above keeps the one-pager's order. -->
+      <article class="rung featured" data-sku="done-for-you" id="done-for-you">
         <div class="rung-head">
           <span class="rung-badge">I build it</span>
           <h3 class="rung-name">Done for you</h3>
@@ -434,6 +367,68 @@
         </div>
         </details>
         <a class="cta" href="/book/done-for-you">Book done for you →</a>
+      </article>
+
+      <article class="rung" data-sku="guided-setup" id="guided-setup">
+        <div class="rung-head">
+          <span class="rung-badge">The full setup</span>
+          <h3 class="rung-name">Guided setup</h3>
+          <p class="rung-outcome">Working in your inbox and calendar.</p>
+          <p class="rung-meta">1 hour + 2 hours&nbsp;· 1:1&nbsp;· screen shared&nbsp;· at least a day apart</p>
+          <p class="price">A$700</p>
+          <p class="price-detail">Fixed. Pay once for both sessions.</p>
+        </div>
+        <details class="rung-more">
+          <summary>What you end with, and how it runs</summary>
+          <div class="rung-body">
+          <p class="rung-label">You end with</p>
+          <ul class="rung-includes rung-outcomes">
+            <li>Everything in the walkthrough.</li>
+            <li>Your email, calendar and the other tools you work in connected, on limits you choose (drafts only and never sends, if you want that).</li>
+            <li>One skill for a job you repeat every week, built with you.</li>
+            <li>A morning brief that reads your day and tells you what matters, and jobs that run on a schedule.</li>
+            <li>Written docs, and your <a href="/membership">first month of membership</a>: answers on Slack within a working day, and the weekly drop-in call.</li>
+          </ul>
+          <p class="rung-label">How it runs</p>
+          <ul class="rung-includes">
+            <li><strong>Session 1 (60 min):</strong> we build your server in your own hosting account, connect it to your Claude account, and I show you the app.</li>
+            <li><strong>Homework, about an hour:</strong> the onboarding interview.</li>
+            <li><strong>Session 2 (120 min, a day or more later):</strong> we back it up to your own private GitHub, connect your tools, build your first skill around a job you actually do, and switch on the morning brief.</li>
+          </ul>
+        </div>
+        </details>
+        <a class="cta" href="/book/guided-setup">Book a guided setup →</a>
+      </article>
+
+      <article class="rung" data-sku="walkthrough" id="walkthrough">
+        <div class="rung-head">
+          <h3 class="rung-name">Walkthrough</h3>
+          <p class="rung-outcome">Set up, and you can drive it.</p>
+          <p class="rung-meta">1 hour + 30 min&nbsp;· 1:1&nbsp;· screen shared&nbsp;· at least a day apart</p>
+          <p class="price">A$350</p>
+          <p class="price-detail">Fixed. Pay once for both sessions.</p>
+        </div>
+        <details class="rung-more">
+          <summary>What you end with, and how it runs</summary>
+          <div class="rung-body">
+          <p class="rung-label">You end with</p>
+          <ul class="rung-includes rung-outcomes">
+            <li>Crads-AI installed on your own server or computer and connected to your Claude account, together in session 1.</li>
+            <li>An assistant that knows who you serve, how you work and how you sound, from your interview, checked together.</li>
+            <li>Everything it knows backed up to your own private GitHub.</li>
+            <li>Shown how to use the app and Claude Code.</li>
+            <li>Written docs, and your <a href="/membership">first month of membership</a>: answers on Slack within a working day, and the weekly drop-in call.</li>
+          </ul>
+          <p class="rung-part"><strong>Not included:</strong> connecting your email, calendar or other tools, skills, or the morning brief. That's the guided setup.</p>
+          <p class="rung-label">How it runs</p>
+          <ul class="rung-includes">
+            <li><strong>Session 1 (60 min):</strong> we install it on your own server or computer together, connect it to your Claude account, and I show you the app and Claude Code, the part of Claude that works on your files.</li>
+            <li><strong>Homework, about an hour:</strong> the onboarding interview, which writes the first version of what it knows about you.</li>
+            <li><strong>Session 2 (30 min, a day or more later):</strong> we check what it learned, fix the gaps, and back it all up to your own private GitHub.</li>
+          </ul>
+        </div>
+        </details>
+        <a class="cta" href="/book/walkthrough">Book a walkthrough →</a>
       </article>
 
       <article class="rung" data-sku="bespoke" id="bespoke">
