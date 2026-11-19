@@ -39,9 +39,10 @@ test('/book is retired: it redirects to /offer, the one page that lists every of
   assert.ok(cfg.redirects.some((r) => r.source === '/book' && r.destination === '/offer'));
 });
 
-test('/offer: roadmap, walkthrough, guided setup, by the hour; nothing about retired offers', () => {
+test('/offer: roadmap, Done for you, guided setup, walkthrough, by the hour; nothing about retired offers', () => {
   const html = read('offer/index.html');
-  const order = ['data-sku="roadmap"', 'data-sku="walkthrough"', 'data-sku="guided-setup"', 'A$300 an hour</strong>']
+  // 19 Nov 2026 (Sam): Done for you straight after the roadmap.
+  const order = ['data-sku="roadmap"', 'data-sku="done-for-you"', 'data-sku="guided-setup"', 'data-sku="walkthrough"', 'A$300 an hour</strong>']
     .map((s) => html.indexOf(s));
   assert.ok(order.every((i) => i > -1), `an offer is missing: ${order}`);
   assert.deepStrictEqual([...order].sort((a, b) => a - b), order);

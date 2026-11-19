@@ -52,7 +52,12 @@ test('the v5 prices are the only prices on the offer and book pages', () => {
     const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');
     const prices = new Set([...src.matchAll(/A\$[\d,]+/g)].map((m) => m[0]));
     for (const p of prices) assert.ok(V5_PRICES.has(p), `${rel}: unexpected price ${p}`);
-    assert.ok(prices.has('A$250') && prices.has('A$700') && prices.has('A$350') && prices.has('A$99'), `${rel}: the roadmap, the two v5 prices and membership expected`);
+    if (rel === 'index.html') {
+      // 19 Nov 2026 (Sam): the homepage shows the roadmap, Done for you and guided setup only.
+      assert.ok(prices.has('A$250') && prices.has('A$1,500') && prices.has('A$700'), `${rel}: the roadmap, Done for you and guided setup expected`);
+    } else {
+      assert.ok(prices.has('A$250') && prices.has('A$700') && prices.has('A$350') && prices.has('A$99'), `${rel}: the roadmap, the two v5 prices and membership expected`);
+    }
     if (rel !== 'index.html') assert.ok(prices.has('A$300'), `${rel}: the hourly rate expected`);
     assert.match(src, /from about €6 a month/, `${rel}: the server line says from about €6 a month`);
     assert.ok(!/€35/.test(src), `${rel}: the retired €35 server price is gone`);

@@ -4,6 +4,11 @@
 // the nav and one closing line. Second pass 22 Oct 2026: clients first, proof
 // in, the mechanism folded into the questions. Assert destinations and
 // headings, never markup detail.
+// 19 Nov 2026 (Sam, after Alina Iurina's "offer and audience unclear"): the
+// reader is purpose-led businesses, charities and NFPs included; the headline
+// is "Your AI brain, built for you."; a "Conscious AI, in practice" block of
+// three commitments follows the proof; Done for you leads the price strip with
+// guided setup as the smaller option; the free software is one quiet line.
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert');
@@ -20,7 +25,8 @@ function section(id) {
 }
 
 test('the head names the new headline and the roadmap', () => {
-  assert.ok(html.includes('<title>Claude on steroids, but authentically you · Crads-AI</title>'), 'title (Sam, 3 Nov 2026)');
+  assert.ok(html.includes('<title>Your AI brain, built for you · Crads-AI</title>'), 'title (Sam, 19 Nov 2026)');
+  assert.ok(!/steroids/.test(html.slice(0, html.indexOf('<main>'))), 'the 3 Nov headline is gone from the head');
   const desc = html.match(/<meta name="description" content="([^"]*)">/)[1];
   assert.match(desc, /AI roadmap/);
   assert.ok(!/coach/i.test(desc), 'no coaching framing in the description');
@@ -28,12 +34,14 @@ test('the head names the new headline and the roadmap', () => {
   assert.ok(html.includes('<link rel="canonical" href="https://crads-ai.com/">'));
 });
 
-test('the hero calls out the owner, carries Sam\'s headline and subline, and has one button', () => {
+test('the hero calls out the reader, carries Sam\'s headline and subline, and has one button', () => {
   const hero = section('top');
-  assert.match(hero, /For owners of small consultancies and practices/);
-  // Sam's own words, chosen 3 Nov 2026 over the outcome-led option.
-  assert.match(hero, /<h1>Claude on steroids, <em>but authentically you\.<\/em><\/h1>/);
-  assert.match(hero, /<p class="hero-sub">Make Claude know you and your business\.<\/p>/);
+  // Sam, 19 Nov 2026: "purpose-led businesses (charities and NFPs included)", never "small businesses and charities".
+  assert.match(hero, /<p class="eyebrow">For purpose-led businesses, charities and NFPs included<\/p>/);
+  // Alina Iurina's "AI brain built for you" (17 Nov call), Sam's pick of option A on 19 Nov 2026.
+  assert.match(hero, /<h1>Your AI brain, <em>built for you\.<\/em><\/h1>/);
+  // Claude stays named above the fold; "learn how you write", since the FAQ says it sounds a bit like AI at first.
+  assert.match(hero, /<p class="hero-sub">Claude, set up to know your business and learn how you write\.<\/p>/);
   // Sam, 4 Nov 2026 ("A"): the old mechanism line "doesn't really make sense and sounds too AI".
   // "Almost every", not a count: the latest ten aren't all tallied for prior AI use (9 of the first 10 were).
   assert.match(hero, /Almost every owner I've done a roadmap with already used AI, spread across chats that don't share what they know\./);
@@ -51,12 +59,27 @@ test('the hero calls out the owner, carries Sam\'s headline and subline, and has
 
 // Second pass (22 Oct 2026): the mechanism moved into the first question and
 // proof took its place. 3 Nov 2026: proof moves above the doors, for a reader
-// who doesn't know Sam yet. Still six sections.
-test('six sections, in order', () => {
-  const order = ['id="top"', 'id="proof"', 'id="doors"', 'id="how"', 'id="questions"', 'id="who"'].map((id) => main.indexOf(id));
+// who doesn't know Sam yet. 19 Nov 2026: the commitments block follows the
+// proof, so seven sections.
+test('seven sections, in order', () => {
+  const order = ['id="top"', 'id="proof"', 'id="conscious"', 'id="doors"', 'id="how"', 'id="questions"', 'id="who"'].map((id) => main.indexOf(id));
   assert.ok(order.every((i) => i > -1), `a section is missing: ${order}`);
   assert.deepStrictEqual([...order].sort((a, b) => a - b), order, 'sections out of order');
-  assert.strictEqual((main.match(/<section\b/g) || []).length, 6, 'six sections, no more');
+  assert.strictEqual((main.match(/<section\b/g) || []).length, 7, 'seven sections, no more');
+});
+
+test('conscious AI, in practice: the three commitments, in the safe data wording', () => {
+  const c = section('conscious');
+  assert.match(c, /Conscious AI, <em>in practice\.<\/em>/);
+  const heads = [...c.matchAll(/<h3>([^<]*)<\/h3>/g)].map((m) => m[1]);
+  assert.deepStrictEqual(heads, [
+    'I never hold your data.',
+    'AI before you hire, never instead of hiring.',
+    'You sign off everything that goes out in your name.',
+  ]);
+  // public-copy-claims: never "your data stays with you"; what you type goes to Claude.
+  assert.match(c, /What you type goes to Claude, on Anthropic's servers\./);
+  assert.ok(!/data stays with you|stays local|never leaves/i.test(c));
 });
 
 test('the three doors: clients first, with the roadmap count behind it', () => {
@@ -112,10 +135,16 @@ test('how the roadmap runs, then the price strip', () => {
   assert.match(how, /Two calls and a report/);
   assert.strictEqual((how.match(/<li>/g) || []).length, 3, 'three steps');
   assert.match(how, /within three working days/);
-  for (const price of ['AI roadmap A$250', 'Walkthrough A$350', 'Guided setup A$700', 'then <a href="/membership">membership</a>, A$99 a month']) {
-    assert.ok(how.includes(price), `price strip shows ${price}`);
-  }
+  // Sam, 19 Nov 2026: Done for you leads, guided setup is the smaller option;
+  // walkthrough, bespoke and membership live on /offer.
+  assert.match(how, /<a href="\/book\/done-for-you"><strong>Done for you, A\$1,500\.<\/strong><\/a> Built and working\. Your part: one form, two calls\./);
+  assert.match(how, /Rather set it up together\? <a href="\/book\/guided-setup">Guided setup, A\$700<\/a>\./);
+  assert.ok(how.indexOf('Done for you, A$1,500') < how.indexOf('Guided setup, A$700'), 'Done for you first');
+  assert.ok(!/Walkthrough A\$350|Bespoke/.test(how), 'walkthrough and bespoke stay on /offer');
   assert.match(how, /href="\/offer"/, 'the strip links the full offer');
+  // 16 Nov 2026 ruling: charities pay through grant-ready work, no discount.
+  assert.match(how, /Charity or NFP\? Say so when you book, and I'll write the report so it can go straight into a capacity-building grant application\./);
+  assert.ok(!/discount/i.test(how), 'no charity discount');
 });
 
 test('the questions carry the mechanism and the traced claims', () => {
@@ -135,18 +164,20 @@ test('the questions carry the mechanism and the traced claims', () => {
   assert.match(q, /href="\/docs\/continuity"/);
 });
 
-test('the close: who you would work with, the button again, and do it yourself', () => {
+test('the close: who you would work with, the button again, and one quiet software line', () => {
   const who = section('who');
   assert.match(who, /PhD in environmental data science from the University of Sydney/);
   // Sam, 3 Nov 2026: drop the number (three of the "seven" were specced, not built).
-  assert.match(who, /I build AI systems for clients and for myself, including the assistant that runs my own week/);
+  // "AI brain" on sales pages (Sam, 19 Nov 2026); the docs and app keep "assistant".
+  assert.match(who, /I build AI systems for clients and for myself, including the AI brain that runs my own week/);
   assert.ok(!/seven AI systems/.test(who), 'no build count');
   assert.match(who, /I run every roadmap call myself/);
   assert.match(who, /src="\/lib\/img\/sam-photo\.jpg"/, 'Sam\'s own headshot stays in the bio (Sam, 3 Nov 2026)');
   assert.match(who, /href="\/about"/);
   assert.match(who, /class="cta-primary" href="\/book\/roadmap">Book an AI roadmap</);
   assert.ok(!/href="\/book\/discovery"/.test(main), 'the discovery call is off the site (Sam, 3 Nov 2026); the roadmap is the one front door');
-  assert.match(who, /href="\/download"/);
+  // Sam, 19 Nov 2026: one quiet line; the download lives in the footer.
+  assert.match(who, /<p class="diy">Runs on Crads-AI, free and open source\. <a href="\/docs">Docs →<\/a><\/p>/);
 });
 
 test('every button on the page books the roadmap', () => {

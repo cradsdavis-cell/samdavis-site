@@ -58,7 +58,8 @@ test('the one-pager PDF the table links to is shipped', () => {
 test('every offer on /offer is an expandable card, closed, with its outcome outside the fold (Sam, 12 Nov 2026)', () => {
   const cards = offer.match(/<article class="rung[^"]*" data-sku="[^"]+"[\s\S]*?<\/article>/g);
   const skus = cards.map((c) => c.match(/data-sku="([^"]+)"/)[1]);
-  assert.deepStrictEqual(skus, ['roadmap', 'walkthrough', 'guided-setup', 'done-for-you', 'bespoke', 'membership']);
+  // 19 Nov 2026 (Sam): Done for you straight after the roadmap.
+  assert.deepStrictEqual(skus, ['roadmap', 'done-for-you', 'guided-setup', 'walkthrough', 'bespoke', 'membership']);
   for (const c of cards) {
     const folds = c.match(/<details class="rung-more"[^>]*>/g) || [];
     assert.strictEqual(folds.length, 1, 'one fold per card');
