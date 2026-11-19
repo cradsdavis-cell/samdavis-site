@@ -20,11 +20,7 @@ const INCLUDE_DOCS = true;   // flipped 2026-09-09: the app repo's shell emits n
 // each page's path (ai-os PR 10) and the docs carry them, so byte identity is
 // back on. If the nav changes here again, update the shell's copy and
 // republish, or set this false until that lands.
-// 2026-11-19: off again. "The software" menu folded here first; the app repo's
-// shell (ai-os docs/product/pipeline/shell.mjs) still carries the old copy, and
-// site.js swaps the current nav into the docs pages at runtime meanwhile.
-// Turn back on after the shell copy is updated and the docs republished.
-const DOCS_BYTE_IDENTICAL = false;
+const DOCS_BYTE_IDENTICAL = true;
 const NAV_RE = /<nav class="site-nav-bar"[^>]*>[\s\S]*?<\/nav>/g;
 
 function pages() {
