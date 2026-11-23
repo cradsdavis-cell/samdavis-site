@@ -113,10 +113,10 @@ FIGURES = {"[FIGURE: hours]": hours_figure}
 # Fetched from Wikimedia Commons, 24 Nov 2026. Licence checked on each file page.
 BY_SA = '<a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener">CC BY-SA 2.0</a>'
 PHOTOS = {
-    "windmill-holmeswood.jpg": dict(w=960, h=638, cls="wide",
-        alt="A brick tower windmill without its sails beside a line of trees, across a wet ploughed field with rows of young crops",
-        caption="The windmill at Windmill Farm, Holmeswood, November 2015.",
-        credit=f'Photo: Mike Pennington, via <a href="https://commons.wikimedia.org/wiki/File:The_eponymous_windmill_at_Windmill_Farm,_Holmeswood_-_geograph.org.uk_-_4743487.jpg" target="_blank" rel="noopener">Geograph</a>, {BY_SA}'),
+    "pig-stirling.jpg": dict(w=1280, h=855, cls="wide",
+        alt="A ginger Tamworth pig standing in a muddy field by a wire fence, staring at the camera with grass in its mouth",
+        caption="A Tamworth pig near Stirling, Loch Lomond and The Trossachs National Park, April 2019.",
+        credit='Photo: Benoit Brummer (Trougnouf), via <a href="https://commons.wikimedia.org/wiki/File:Farm_pig_in_Stirling_(DSCF0095).jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>'),
     "orwell-bbc-1940.jpg": dict(w=768, h=1069, cls="portrait",
         alt="George Orwell in a tweed jacket, half smiling, seated at a BBC microphone",
         caption="George Orwell at the BBC, 1940.",
@@ -212,7 +212,7 @@ PAGE = f"""<!DOCTYPE html>
 <meta property="og:image" content="{OG_IMG}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="The title Snowball or Napoleon? beside a line chart of hours worked per worker since 1870, still far above a fifteen-hour week">
+<meta property="og:image:alt" content="The title Snowball or Napoleon? beside a ginger pig staring at the camera with grass in its mouth">
 <meta name="author" content="Sam Davis">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{e_title}">
