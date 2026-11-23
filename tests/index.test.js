@@ -44,7 +44,7 @@ test('the hero calls out the reader, carries Sam\'s headline and subline, and ha
   assert.match(hero, /<p class="hero-sub">Claude, set up to know your business, so you can point it at your hardest problems\.<\/p>/);
   // Sam, 4 Nov 2026 ("A"): the old mechanism line "doesn't really make sense and sounds too AI".
   // "Almost every", not a count: the latest ten aren't all tallied for prior AI use (9 of the first 10 were).
-  assert.match(hero, /Almost every owner I've done a roadmap with already used AI, spread across chats that don't share what they know\./);
+  assert.match(hero, /Almost everyone I've done a roadmap with already used AI, spread across chats that don't share what they know\./);
   assert.match(hero, /I set Claude up once so it knows your clients and how you write\./);
   // The roadmap as it runs: everything that's slow or stuck, then the report (the second call is in the steps below).
   assert.match(hero, /The first step is a roadmap: a call on everything that's slow or stuck in your business, then a written report on where AI could help\./);
@@ -80,7 +80,7 @@ test('what one owner built: anonymous, facts only, no hours-saved figure', () =>
 
 test('conscious AI, in practice: the three commitments, in the safe data wording', () => {
   const c = section('conscious');
-  assert.match(c, /Conscious AI, <em>in practice\.<\/em>/);
+  assert.match(c, /Three rules <em>I work by\.<\/em>/, 'Sam, 23 Nov 2026: was "Conscious AI, in practice."');
   const heads = [...c.matchAll(/<h3>([^<]*)<\/h3>/g)].map((m) => m[1]);
   assert.deepStrictEqual(heads, [
     'I never hold your data.',
@@ -114,8 +114,9 @@ test('proof: real, named, consented quotes only, plus a marked slot', () => {
   // Sam, 4 Nov 2026: more quotes, in a slow carousel, all public with consent
   // (Abbey and Nim: "Yes, with my name"; Alex and Samantha: the published set in
   // lib/testimonialsRender.js). Sam, 12 Nov 2026: every testimonial is listed, so
-  // the two anonymous quotes from the published set join them.
-  assert.deepStrictEqual(names, ['Abbey Pantano', 'Nim Zappert', 'Alex Mills', 'Samantha Philpot', 'Anonymous client', 'Anonymous client']);
+  // the two anonymous quotes from the published set join them. Sam, 23 Nov 2026:
+  // the two anonymous quotes are held back (readers discounted the named ones).
+  assert.deepStrictEqual(names, ['Abbey Pantano', 'Nim Zappert', 'Alex Mills', 'Samantha Philpot']);
   // Both quotes must match the consented source in lib/testimonialsRender.js or
   // the 23 Sep homepage (PR #38): no paraphrase.
   assert.match(proof, /lift the mental load of juggling all the moving parts of my business when I'm the only person working on it full time\./);
@@ -161,7 +162,7 @@ test('the questions carry the mechanism and the traced claims', () => {
   const q = section('questions');
   assert.strictEqual((q.match(/<h3>/g) || []).length, 6, 'six questions');
   // Where the data goes, in the safe wording (public-copy-claims: never "your data stays with you").
-  assert.match(q, /What you type goes to Claude, on Anthropic's servers\. I never hold it\./);
+  assert.match(q, /What you type goes to Claude, on Anthropic's servers, under <a href="https:\/\/www\.anthropic\.com\/legal\/privacy"[^>]*>Anthropic's privacy policy<\/a>\. I never hold it\./, 'Sam, 23 Nov 2026: link Anthropic\'s own terms, never paraphrase them');
   assert.ok(!/data stays with you/i.test(q));
   // 3 of 10 roadmap owners feared it would sound like AI; the honest answer (docs/teach-it-your-voice).
   assert.match(q, /<h3>Will it sound like AI\?<\/h3>\s*<p>At first, a bit\./);
