@@ -153,7 +153,7 @@ test('how the roadmap runs, then the price strip', () => {
   assert.ok(!/Walkthrough A\$350|Bespoke/.test(how), 'walkthrough and bespoke stay on /offer');
   assert.match(how, /href="\/offer"/, 'the strip links the full offer');
   // 16 Nov 2026 ruling: charities pay through grant-ready work, no discount.
-  assert.match(how, /Charity or NFP\? Say so when you book, and I'll write the report so it can go straight into a capacity-building grant application\./);
+  assert.match(how, /Charity or NFP\? Tell me on the first call, and I'll write the report to go straight into a capacity-building grant application\./);
   assert.ok(!/discount/i.test(how), 'no charity discount');
 });
 
