@@ -1,7 +1,8 @@
 // tests/certificates.test.js - the Crads AI completion certificate (lib/certificates.js,
 // scripts/certificate-page.js). Pins the wording guardrails (completion certificate,
-// never accredited / certification / qualification), the ID format, and the privacy
-// rule: every certificate page is noindex and nothing in certificates/ lists holders.
+// never accredited / certification / qualification; it records a completed program,
+// so never "showed" or "assessed"), the ID format, and the privacy rule: every
+// certificate page is noindex and nothing in certificates/ lists holders.
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert');
@@ -14,18 +15,24 @@ const { navHTML } = require('../lib/site.js');
 const DIR = path.join(__dirname, '..', 'certificates');
 const sample = { id: 'CA-7K3M9Q', name: 'Ana Example', program: 'guided-setup', issued: '2026-11-23' };
 
-test('every program has a title, an offer, a format and criteria', () => {
+test('every program has a title, an offer, a format and what it covers', () => {
   for (const [key, p] of Object.entries(C.PROGRAMS)) {
     assert.ok(p.title && p.offer && p.format, `${key} incomplete`);
-    assert.ok(Array.isArray(p.criteria) && p.criteria.length >= 3, `${key} needs real criteria`);
+    assert.ok(Array.isArray(p.covers) && p.covers.length >= 3, `${key} needs what it covers`);
   }
-  assert.deepStrictEqual(Object.keys(C.PROGRAMS).sort(), ['group-walkthrough', 'guided-setup', 'walkthrough']);
+  assert.deepStrictEqual(Object.keys(C.PROGRAMS).sort(), ['coaching-block', 'group-walkthrough', 'guided-setup', 'walkthrough']);
+  // Programs that share a title must cover the same thing, or the index would mislabel one.
+  const byTitle = {};
+  for (const p of Object.values(C.PROGRAMS)) {
+    if (byTitle[p.title]) assert.deepStrictEqual(p.covers, byTitle[p.title], `${p.title}: same title, different content`);
+    byTitle[p.title] = p.covers;
+  }
 });
 
 test('wording never claims accreditation, a certification or a qualification', () => {
   const claims = [
-    ...Object.values(C.PROGRAMS).flatMap((p) => [p.title, p.format, ...p.criteria]),
-    C.PASS_MARK, C.EXPIRY,
+    ...Object.values(C.PROGRAMS).flatMap((p) => [p.title, p.format, ...p.covers]),
+    C.AWARDED, C.EXPIRY,
   ].join(' ');
   assert.doesNotMatch(claims, /accredit|certification|qualification|certified/i);
   // The one place these words may appear is the plain statement of what it is not.
@@ -51,7 +58,8 @@ test('a certificate page is noindex, canonical, carries its own nav and escapes 
   assert.ok(!html.includes('<script>alert'), 'name must be escaped');
   assert.ok(html.includes('Ana &lt;script&gt;'));
   assert.ok(!html.includes('—'), 'no em dashes');
-  for (const c of C.PROGRAMS['guided-setup'].criteria) assert.ok(html.includes(c.replace(/,/g, ',')), `criterion missing: ${c}`);
+  for (const c of C.PROGRAMS['guided-setup'].covers) assert.ok(html.includes(c), `covered item missing: ${c}`);
+  assert.doesNotMatch(html, /showed|assessed|shown live/i, 'no certificate claims an assessment that never happened');
   assert.match(html, /Valid\. Issued by Crads AI\./);
   assert.ok(html.includes('linkedin.com/profile/add?startTask=CERTIFICATION_NAME'));
 });
@@ -83,6 +91,7 @@ test('validate rejects bad input before anything is written', () => {
 test('the index page explains every program and is current', () => {
   const html = indexPage();
   for (const p of Object.values(C.PROGRAMS)) assert.ok(html.includes(p.title));
+  assert.doesNotMatch(html, /showed|assessed|shown live|turning up/i);
   assert.ok(!html.includes('—'));
   assert.strictEqual(fs.readFileSync(path.join(DIR, 'index.html'), 'utf8'), html,
     'certificates/index.html is stale: run node scripts/certificate-page.js index');
