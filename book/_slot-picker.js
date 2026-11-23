@@ -78,6 +78,12 @@
     pill.classList.add('price-coded');
     const note = panel.querySelector('.book-panel-head + .field-note');
     if (note) note.textContent = note.textContent.replace(/Got a code\?.*$/, 'Your code is already in the booking form.');
+    // A$0 with the code: Checkout takes no card (payment_method_collection if_required;
+    // every A$0 roadmap checkout since Sep 2026 completed with no payment), and Stripe
+    // sends no receipt for nothing paid (Sam, 23 Nov 2026).
+    const policy = q.pay_aud === 0 && panel.querySelector('.book-policy');
+    const first = policy && policy.firstChild;
+    if (first && first.nodeType === 3) first.textContent = first.textContent.replace('Pay once. After payment you get a calendar invite, a receipt, and', 'No card needed with your code. After booking you get a calendar invite and');
   }
 
   // A partner's code (2026-11-11, lib/partners.js): one line naming who sent

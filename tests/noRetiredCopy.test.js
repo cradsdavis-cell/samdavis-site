@@ -47,11 +47,14 @@ test('no page carries a retired-offers block', () => {
 // 12 Nov 2026, then a round A$300 (Sam). A$300 was a retired session price
 // before that, so it left the RETIRED list the same day.
 const V5_PRICES = new Set(['A$250', 'A$350', 'A$700', 'A$1,500', 'A$300', 'A$99']);
+// Running costs, not prices (Sam, 23 Nov 2026): the server in A$ beside "about €6",
+// Claude Pro in Australia, and the two together.
+const RUNNING_COSTS = new Set(['A$11', 'A$34', 'A$45']);
 test('the v5 prices are the only prices on the offer and book pages', () => {
   for (const rel of ['offer/index.html', 'index.html']) {
     const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');
     const prices = new Set([...src.matchAll(/A\$[\d,]+/g)].map((m) => m[0]));
-    for (const p of prices) assert.ok(V5_PRICES.has(p), `${rel}: unexpected price ${p}`);
+    for (const p of prices) assert.ok(V5_PRICES.has(p) || RUNNING_COSTS.has(p), `${rel}: unexpected price ${p}`);
     if (rel === 'index.html') {
       // 19 Nov 2026 (Sam): the homepage shows the roadmap, Done for you and guided setup only.
       assert.ok(prices.has('A$250') && prices.has('A$1,500') && prices.has('A$700'), `${rel}: the roadmap, Done for you and guided setup expected`);
