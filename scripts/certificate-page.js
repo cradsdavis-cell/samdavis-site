@@ -141,12 +141,12 @@ function certificatePage({ id, name, program, issued, withdrawn }) {
         <div><dt>Issued by</dt><dd>${esc(C.ISSUER)}, signed by ${esc(C.SIGNED_BY)}</dd></div>
         <div><dt>Expiry</dt><dd>None</dd></div>
       </dl>
-      <h2>What they showed</h2>
+      <h2>What the program covered</h2>
       <ul>
-${p.criteria.map((c) => `        <li>${esc(c)}</li>`).join('\n')}
+${p.covers.map((c) => `        <li>${esc(c)}</li>`).join('\n')}
       </ul>
-      <h2>How it was assessed</h2>
-      <p>${esc(C.PASS_MARK)}</p>
+      <h2>How it's awarded</h2>
+      <p>${esc(C.AWARDED)}</p>
       <h2>Format</h2>
       <p>${esc(p.format)}</p>
       <h2>What this certificate is</h2>
@@ -186,7 +186,7 @@ const CHECK_SCRIPT = `
 function indexPage() {
   const url = `${C.HOST}/certificates`;
   const title = 'Completion certificates · Crads AI';
-  const description = 'What a Crads AI completion certificate means, how it is assessed, and how to check one.';
+  const description = "What a Crads AI completion certificate means, how it's awarded, and how to check one.";
   // One section per distinct title (the two Walkthrough formats share one).
   const seen = new Set();
   const sections = Object.values(C.PROGRAMS).filter((p) => !seen.has(p.title) && seen.add(p.title)).map((p) => {
@@ -194,8 +194,9 @@ function indexPage() {
     return `
     <h3>${esc(p.title)}</h3>
     <p class="meta">Awarded on the ${esc(offers)}</p>
+    <p>The program covers:</p>
     <ul>
-${p.criteria.map((c) => `      <li>${esc(c)}</li>`).join('\n')}
+${p.covers.map((c) => `      <li>${esc(c)}</li>`).join('\n')}
     </ul>`;
   }).join('\n');
   return head({ title, description, url, navPath: '/certificates' }) + `
@@ -203,7 +204,7 @@ ${p.criteria.map((c) => `      <li>${esc(c)}</li>`).join('\n')}
     <div class="cert-explain">
       <p class="eyebrow">Completion certificates</p>
       <h1>Check a certificate</h1>
-      <p class="lede">Every Crads AI completion certificate has an ID like <span class="cert-id">CA-7K3M9Q</span> and its own page here. Type the ID to see who holds it and what they showed.</p>
+      <p class="lede">Every Crads AI completion certificate has an ID like <span class="cert-id">CA-7K3M9Q</span> and its own page here. Type the ID to see who holds it and what their program covered.</p>
       <form class="cert-check" id="cert-check" novalidate>
         <label class="cert-sr" for="cert-id">Certificate ID</label>
         <input id="cert-id" name="id" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="CA-7K3M9Q" maxlength="12">
@@ -212,11 +213,11 @@ ${p.criteria.map((c) => `      <li>${esc(c)}</li>`).join('\n')}
       <p class="cert-check-msg" id="cert-check-msg" role="status"></p>
 
       <h2>What the certificate means</h2>
-      <p>It is given to people who set up their own AI assistant with Sam Davis, PhD, and then showed, live, that they can run it and change it themselves. Nobody gets one for turning up.</p>
+      <p>It's given to people who complete a setup or coaching program with Sam Davis, PhD, building their own AI assistant in live sessions.</p>
 ${sections}
 
-      <h3>How it is assessed</h3>
-      <p>${esc(C.PASS_MARK)} All of them, or no certificate.</p>
+      <h3>How it's awarded</h3>
+      <p>${esc(C.AWARDED)}</p>
       <h3>What it isn't</h3>
       <p>It's a completion certificate, not an accredited or nationally recognised qualification. It isn't awarded for Done for you or Bespoke work, where we build it for you.</p>
       <h3>Expiry</h3>
