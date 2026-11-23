@@ -115,6 +115,7 @@
 - [Crazy Idea or Crazy Person?](https://crads-ai.com/writing/crazy-idea-or-crazy-person): On subjective truth, delusion, creativity, and whether an AI would need a little of its own reality.
 - [Is Ten Percent a Lot?](https://crads-ai.com/writing/is-ten-percent-a-lot): AI researchers put the chance of AI ending humanity at around one in ten. Is that a lot?
 - [Nice or Kind?](https://crads-ai.com/writing/nice-or-kind): On trust, masks, and what it would take to trust a mind smarter than us.
+- [Snowball or Napoleon?](https://crads-ai.com/writing/snowball-or-napoleon): Animal Farm’s windmill, and what more intelligence is for.
 - [The Other Half of the Room](https://crads-ai.com/writing/the-other-half-of-the-room): Men and women are being sold stories about each other. The first AI most of us lived with was built to sell them. What should the next one be built for?
 - [What Comes After Agents?](https://crads-ai.com/writing/what-comes-after-agents): I've been close to AI for nearly a decade. A diagram of its layers got me thinking about what comes next.
 - [When Should You Turn Back?](https://crads-ai.com/writing/when-should-you-turn-back): On wisdom, and whether a machine can know when to stop.
