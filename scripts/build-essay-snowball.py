@@ -5,7 +5,7 @@ Usage: python3 scripts/build-essay-snowball.py <essay.md>
 The markdown is mirrored in second-brain drafts/essay-snowball-or-napoleon.md.
 Everything from "# Snowball or Napoleon?" up to "## References" is rendered
 verbatim. [FIGURE: hours] becomes the hand-built hours chart (data below, from
-Our World in Data). After building, run `npm run nav`, `npm run sitemap`,
+Our World in Data); [PHOTO: file] becomes a credited photo from PHOTOS. After building, run `npm run nav`, `npm run sitemap`,
 `npm run llms` and `npm run feed`, then scripts/snap-figures.mjs for fig-1.png.
 
 Inline links (LINKS) are attached to exact phrases already in the text; the build
@@ -109,6 +109,35 @@ def hours_figure():
 
 FIGURES = {"[FIGURE: hours]": hours_figure}
 
+# ---------- photos: credited archive and Geograph photos (never AI images, never stock) ----------
+# Fetched from Wikimedia Commons, 24 Nov 2026. Licence checked on each file page.
+BY_SA = '<a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener">CC BY-SA 2.0</a>'
+PHOTOS = {
+    "windmill-holmeswood.jpg": dict(w=960, h=638, cls="wide",
+        alt="A brick tower windmill without its sails beside a line of trees, across a wet ploughed field with rows of young crops",
+        caption="The windmill at Windmill Farm, Holmeswood, November 2015.",
+        credit=f'Photo: Mike Pennington, via <a href="https://commons.wikimedia.org/wiki/File:The_eponymous_windmill_at_Windmill_Farm,_Holmeswood_-_geograph.org.uk_-_4743487.jpg" target="_blank" rel="noopener">Geograph</a>, {BY_SA}'),
+    "orwell-bbc-1940.jpg": dict(w=768, h=1069, cls="portrait",
+        alt="George Orwell in a tweed jacket, half smiling, seated at a BBC microphone",
+        caption="George Orwell at the BBC, 1940.",
+        credit='Photo: BBC, public domain, via <a href="https://commons.wikimedia.org/wiki/File:George-orwell-BBC.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>'),
+    "typing-pool-1918.jpg": dict(w=960, h=859, cls="wide",
+        alt="Rows of desks in a large open office, women and men at typewriters among stacks of paper",
+        caption="The typing pool at the Navy Department, Washington DC, around 1918.",
+        credit='Photo: US Naval History and Heritage Command (NH 52909), public domain, via <a href="https://commons.wikimedia.org/wiki/File:NH_52909_-_typing_pool,_Navy_Department,_Washington_DC.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>'),
+    "pigs-ulley.jpg": dict(w=1280, h=854, cls="wide",
+        alt="A group of pigs in a muddy field looking towards the camera from behind a wire fence",
+        caption="Pigs in a field north of Spring Wood, Ulley, November 2012.",
+        credit=f'Photo: Neil Theasby, via <a href="https://commons.wikimedia.org/wiki/File:Pigs_in_field_north_of_Spring_Wood,_Ulley_-_geograph.org.uk_-_3228472.jpg" target="_blank" rel="noopener">Geograph</a>, {BY_SA}'),
+}
+
+def photo(block):
+    fn = block[len("[PHOTO: "):-1].strip()
+    ph = PHOTOS[fn]
+    return (f'<figure class="essay-figure {ph["cls"]} photo"><img src="/writing/{SLUG}/{fn}" alt="{ph["alt"]}" '
+            f'width="{ph["w"]}" height="{ph["h"]}" loading="lazy"><figcaption>{inline(ph["caption"])} '
+            f'<span class="credit">{ph["credit"]}</span></figcaption></figure>')
+
 # ---------- body ----------
 blocks = [b.strip() for b in re.split(r"\n\s*\n", body_md) if b.strip()]
 title_md = blocks.pop(0)
@@ -123,6 +152,8 @@ for b in blocks:
         out.append(f'<h2 id="{hid}">{inline(h)}</h2>')
     elif b in FIGURES:
         out.append(FIGURES[b]())
+    elif b.startswith("[PHOTO: "):
+        out.append(photo(b))
     elif b.startswith("["):
         sys.exit(f"unknown block {b!r}")
     else:
