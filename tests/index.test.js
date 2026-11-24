@@ -116,14 +116,15 @@ test('proof: real, named, consented quotes only, plus a marked slot', () => {
   // lib/testimonialsRender.js). Sam, 12 Nov 2026: every testimonial is listed, so
   // the two anonymous quotes from the published set join them. Sam, 23 Nov 2026:
   // the two anonymous quotes are held back (readers discounted the named ones).
-  assert.deepStrictEqual(names, ['Abbey Pantano', 'Nim Zappert', 'Alex Mills', 'Samantha Philpot']);
+  // Sam, 24 Nov 2026: Aarti Soni joins (her name and text approved by email).
+  assert.deepStrictEqual(names, ['Abbey Pantano', 'Nim Zappert', 'Alex Mills', 'Samantha Philpot', 'Aarti Soni']);
   // Both quotes must match the consented source in lib/testimonialsRender.js or
   // the 23 Sep homepage (PR #38): no paraphrase.
   assert.match(proof, /lift the mental load of juggling all the moving parts of my business when I'm the only person working on it full time\./);
   const render = fs.readFileSync(path.join(__dirname, '..', 'lib', 'testimonialsRender.js'), 'utf8');
   const nim = proof.match(/<blockquote>(The fact that[^<]*)<\/blockquote>/)[1].replace(/\.$/, '');
   assert.ok(render.includes(nim), 'Nim\'s words are a verbatim excerpt of her published quote');
-  for (const q of proof.matchAll(/<blockquote>((?:I came in|After my first|It means I can|The concept of)[^<]*)<\/blockquote>/g)) {
+  for (const q of proof.matchAll(/<blockquote>((?:I came in|After my first|It means I can|The concept of|Our AI assistant)[^<]*)<\/blockquote>/g)) {
     assert.ok(render.includes(q[1]), 'verbatim from the published set: ' + q[1].slice(0, 30));
   }
   assert.match(proof, /SLOT \(client testimonial, door 1\)/, 'the slot for a clients-door testimonial is marked');
