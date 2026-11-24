@@ -109,14 +109,15 @@ def hours_figure():
 
 FIGURES = {"[FIGURE: hours]": hours_figure}
 
-# ---------- photos: credited archive and Geograph photos (never AI images, never stock) ----------
+# ---------- photos: credited archive and Geograph photos (never stock) ----------
 # Fetched from Wikimedia Commons, 24 Nov 2026. Licence checked on each file page.
+# One exception: the hero is an AI illustration (Canva), Sam's call on 24 Nov, labelled as such in its credit.
 BY_SA = '<a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener">CC BY-SA 2.0</a>'
 PHOTOS = {
-    "pig-stirling.jpg": dict(w=1280, h=855, cls="wide",
-        alt="A ginger Tamworth pig standing in a muddy field by a wire fence, staring at the camera with grass in its mouth",
-        caption="A Tamworth pig near Stirling, Loch Lomond and The Trossachs National Park, April 2019.",
-        credit='Photo: Benoit Brummer (Trougnouf), via <a href="https://commons.wikimedia.org/wiki/File:Farm_pig_in_Stirling_(DSCF0095).jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>'),
+    "snowball-napoleon-barn.jpg": dict(w=1280, h=720, cls="wide",
+        alt="Cartoon of a barn at night: a white pig waving windmill plans shouts at a large black boar with a sash and a cane, three snarling dogs behind him, while a horse, a donkey, hens and sheep look on under a banner reading All animals are equal but some animals are more equal than others",
+        caption="Snowball, Napoleon and the dogs.",
+        credit="Illustration made with AI in Canva."),
     "orwell-bbc-1940.jpg": dict(w=768, h=1069, cls="portrait",
         alt="George Orwell in a tweed jacket, half smiling, seated at a BBC microphone",
         caption="George Orwell at the BBC, 1940.",
