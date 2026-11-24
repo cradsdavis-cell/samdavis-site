@@ -50,6 +50,17 @@ test('the done for you form is not called short', () => {
   }
 });
 
+// 24 Nov 2026 (Sam): the form went from 64 questions to 20, about 25 minutes,
+// and the call is recorded with the client's OK. Both pages say so.
+test('the done for you form is the 25-minute one, and the call is recorded only with an OK', () => {
+  const card = read('offer/index.html').match(/<article class="rung[^"]*" data-sku="done-for-you"[\s\S]*?<\/article>/)[0];
+  for (const [where, text] of [['the /offer card', card], ['book/done-for-you.html', read('book/done-for-you.html')]]) {
+    assert.match(text, /about 25 minutes/i, `${where} gives the form's time`);
+    assert.ok(!/about an hour/.test(text), `${where} still describes the hour-long form`);
+    assert.match(text, /recorded with your OK|With your OK I record it/, `${where} says the call is recorded only with an OK`);
+  }
+});
+
 test('the one-pager PDF the table links to is shipped', () => {
   assert.match(offer, /href="\/lib\/offers-one-pager\.pdf"/);
   assert.ok(fs.statSync(path.join(ROOT, 'lib/offers-one-pager.pdf')).size > 10000);

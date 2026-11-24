@@ -65,6 +65,7 @@ test('done for you: the welcome email links the intake form and the handover sig
   assert.strictEqual(sent.length, 1);
   assert.match(sent[0].subject, /Done for you/);
   assert.ok(sent[0].html.includes(FORM), 'the form link is in the email');
+  assert.match(sent[0].html, /about 25 minutes/);
   assert.match(sent[0].html, /handover, at least a week after our call/);
   assert.doesNotMatch(sent[0].subject + sent[0].html, /—|session 2/);
 });
