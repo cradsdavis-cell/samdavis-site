@@ -388,6 +388,11 @@
     <div class="price-strip reveal-on-scroll" id="prices">
       <p class="then">The report says which of the three above to start with, with the steps to do it yourself. Then stop there, or have me build it:</p>
       <p><a href="/book/done-for-you"><strong>Done for you, A$1,500.</strong></a> Built and working. Your part: one form, two calls.</p>
+      <!-- SEASONAL, 24 Nov 2026 (Sam's ruling 5 after the Aarti Soni call: "nothing
+           happens until Australia Day"). Live from about 1 Dec 2026. REMOVE after
+           Mon 26 Jan 2027 (Australia Day): Todoist reminder 27 Jan, and
+           tests/index.test.js fails once that date has passed while it is still here. -->
+      <p class="then dfy-season">Start the new year with it; at the latest it's running before Australia gets back to work after Australia Day.</p>
       <p class="then">Rather set it up together? <a href="/book/guided-setup">Guided setup, A$700</a>.</p>
       <p class="more"><a href="/offer">What each one includes →</a></p>
     </div>
@@ -404,6 +409,13 @@
         <h3>I already use ChatGPT or Claude.</h3>
         <p>So did almost everyone I've done a roadmap with. Set up once, it knows your clients, your work and how you write, and works in your email and calendar on limits you choose.</p>
       </li>
+      <!-- 24 Nov 2026 (Aarti Soni call: Sydney is full of generic AI trainers and
+           the habits fade in weeks). No retention or results claim: nothing on the
+           site can evidence one. -->
+      <li>
+        <h3>We've already done AI training.</h3>
+        <p>Most training teaches you a tool and leaves you to fit it into your week. This starts from how you already work: your clients, your files, how you write.</p>
+      </li>
       <li>
         <h3>Will it sound like AI?</h3>
         <p>At first, a bit. It starts from real samples of your writing, taken when it's set up, and gets closer each time you edit a draft and show it what you changed. Nothing goes out until you've read it and said yes.</p>
@@ -416,9 +428,17 @@
         <h3>Is this another subscription?</h3>
         <p>If you already pay for Claude, nothing new: it runs on your Claude plan, plus a small server in your own account from about €6 a month (about A$11). If you use ChatGPT today, a Claude plan is the one new subscription: Pro is about A$34 a month, so about A$45 a month in all.</p>
       </li>
+      <!-- "You decide what it can reach" (24 Nov 2026, Aarti Soni call). Worded to
+           match how a limit works in Crads-AI (ai-os hardening-loop): connecting is a
+           real switch, per account and, for Google, per service on the consent screen
+           (docs/product/pages/how-to/connect-google.md, step 3); inside a connected
+           Drive there is no folder-level block (wizard/panel/google-connect-routes.mjs
+           asks for the full drive scope), so "leave alone" is something you tell it
+           (the interview's "what to never touch", the-interview.md), never a claim
+           that it is blocked. -->
       <li>
         <h3>Where does my data go?</h3>
-        <p>Into accounts in your name: a small server, a private GitHub folder that holds its memory, and your Claude plan. What you type goes to Claude, on Anthropic's servers, under <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">Anthropic's privacy policy</a>. I never hold it. If I build it for you, you let me onto the server for a set time; I can see what's on it while I'm in, and every session I open is recorded there.</p>
+        <p>Into accounts in your name: a small server, a private GitHub folder that holds its memory, and your Claude plan. What you type goes to Claude, on Anthropic's servers, under <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">Anthropic's privacy policy</a>. I never hold it. You decide what it can reach: you connect only the accounts you choose, and you tell it what to leave alone, like your finance and legal files. If I build it for you, you let me onto the server for a set time; I can see what's on it while I'm in, and every session I open is recorded there.</p>
       </li>
       <li>
         <h3>What if you stop doing this?</h3>

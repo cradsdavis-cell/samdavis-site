@@ -151,6 +151,11 @@ test('how the roadmap runs, then the price strip', () => {
   assert.match(how, /<a href="\/book\/done-for-you"><strong>Done for you, A\$1,500\.<\/strong><\/a> Built and working\. Your part: one form, two calls\./);
   assert.match(how, /Rather set it up together\? <a href="\/book\/guided-setup">Guided setup, A\$700<\/a>\./);
   assert.ok(how.indexOf('Done for you, A$1,500') < how.indexOf('Guided setup, A$700'), 'Done for you first');
+  // Sam, 24 Nov 2026 (ruling 5 after the Aarti Soni call): a seasonal line, down after Australia Day.
+  const season = /Start the new year with it; at the latest it's running before Australia gets back to work after Australia Day\./;
+  if (Date.now() > Date.parse('2027-01-27T00:00:00+11:00')) {
+    assert.ok(!season.test(how), 'Australia Day has passed: take the December Done for you line off the homepage (index.html, class dfy-season)');
+  }
   assert.ok(!/Walkthrough A\$350|Bespoke/.test(how), 'walkthrough and bespoke stay on /offer');
   assert.match(how, /href="\/offer"/, 'the strip links the full offer');
   // 16 Nov 2026 ruling: charities pay through grant-ready work, no discount.
@@ -160,7 +165,12 @@ test('how the roadmap runs, then the price strip', () => {
 
 test('the questions carry the mechanism and the traced claims', () => {
   const q = section('questions');
-  assert.strictEqual((q.match(/<h3>/g) || []).length, 6, 'six questions');
+  assert.strictEqual((q.match(/<h3>/g) || []).length, 7, 'seven questions');
+  // 24 Nov 2026 (Aarti Soni call): the AI-training objection, with no retention or results claim.
+  assert.match(q, /<h3>We've already done AI training\.<\/h3>\s*<p>Most training teaches you a tool and leaves you to fit it into your week\. This starts from how you already work: your clients, your files, how you write\.<\/p>/);
+  // You decide what it can reach: connecting is a real switch, "leave alone" is an instruction, never "blocked".
+  assert.match(q, /You decide what it can reach: you connect only the accounts you choose, and you tell it what to leave alone, like your finance and legal files\./);
+  assert.ok(!/\b(blocked|can't see|cannot see|locked out)\b/i.test(q.replace(/<!--[\s\S]*?-->/g, '')), 'no claim of a technical block inside a connected account');
   // Where the data goes, in the safe wording (public-copy-claims: never "your data stays with you").
   assert.match(q, /What you type goes to Claude, on Anthropic's servers, under <a href="https:\/\/www\.anthropic\.com\/legal\/privacy"[^>]*>Anthropic's privacy policy<\/a>\. I never hold it\./, 'Sam, 23 Nov 2026: link Anthropic\'s own terms, never paraphrase them');
   assert.ok(!/data stays with you/i.test(q));
