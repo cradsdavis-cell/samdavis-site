@@ -21,7 +21,11 @@ const EXCLUDE_FILES = new Set(['404.html', 'thanks.html', 'booking-failed.html']
 
 function redirectSources() {
   const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, 'vercel.json'), 'utf8'));
-  return new Set((cfg.redirects || []).map((r) => r.source));
+  // A host redirect (www to the bare domain) moves the host, not the page, so
+  // its source ("/" among them) never retires a URL from the sitemap.
+  return new Set((cfg.redirects || [])
+    .filter((r) => !(r.has || []).some((h) => h.type === 'host'))
+    .map((r) => r.source));
 }
 
 export function expectedUrls() {

@@ -17,7 +17,11 @@ const { NAV_ITEMS } = require('../lib/site.js');
 const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, 'vercel.json'), 'utf8'));
 const served = new Set(servedFiles());
 const rewriteSources = (cfg.rewrites || []).map((r) => r.source);
-const redirectSources = new Set((cfg.redirects || []).map((r) => r.source));
+// host redirects (www to the bare domain) move the host, not the page: their
+// sources ("/" among them) are not page redirects
+const redirectSources = new Set((cfg.redirects || [])
+  .filter((r) => !(r.has || []).some((h) => h.type === 'host'))
+  .map((r) => r.source));
 
 function patternMatches(pattern, url) {
   // vercel path patterns: literal, or :param segments
@@ -76,19 +80,20 @@ test('same-page fragment targets exist', () => {
   assert.deepStrictEqual(bad, [], `dangling fragments:\n${bad.join('\n')}`);
 });
 
-// A host redirect (www to the bare domain, 2026-11-25) moves every path to the
-// same path on the canonical host. It is not a page redirect, so it is checked
-// for its exact shape instead of for a landing page.
+// Host redirects (www to the bare domain, 2026-11-25) move every path to the
+// same path on the canonical host. They are not page redirects, so they are
+// checked for their exact shape instead of for a landing page. Two entries,
+// because Vercel's "/:path*" did not match the bare "/" in production
+// (www.crads-ai.com/ still answered 200 after #168 went live).
 const isHostRedirect = (r) => (r.has || []).some((h) => h.type === 'host');
 
-test('the only host redirect sends www.crads-ai.com to the same path on crads-ai.com', () => {
+test('the host redirects send www.crads-ai.com, home page included, to the same path on crads-ai.com', () => {
+  const www = [{ type: 'host', value: 'www.crads-ai.com' }];
   const hostRedirects = (cfg.redirects || []).filter(isHostRedirect);
-  assert.deepStrictEqual(hostRedirects, [{
-    source: '/:path*',
-    has: [{ type: 'host', value: 'www.crads-ai.com' }],
-    destination: 'https://crads-ai.com/:path*',
-    permanent: true,
-  }]);
+  assert.deepStrictEqual(hostRedirects, [
+    { source: '/', has: www, destination: 'https://crads-ai.com/', permanent: true },
+    { source: '/:path*', has: www, destination: 'https://crads-ai.com/:path*', permanent: true },
+  ]);
 });
 
 test('redirects land on real pages and never chain', () => {
