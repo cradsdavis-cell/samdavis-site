@@ -85,6 +85,19 @@
   /* Proof */
   #proof .testimonials-strip { margin: 0 auto; }
 
+  /* Partners (25 Nov 2026): logos under the quotes, each with one line in the
+     partner's own words. One logo box height so a wordmark and a round badge
+     sit on the same line. */
+  .partners { margin: var(--space-4) auto 0; text-align: center; }
+  /* inline-block so the eyebrow's accent stroke sits beside the centred word, not at the margin */
+  .partners .eyebrow { display: inline-block; margin: 0; }
+  .partner-row { list-style: none; margin: var(--space-3) 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-4) var(--space-5); }
+  .partner-row li { flex: 0 1 260px; display: flex; flex-direction: column; align-items: center; }
+  .partner-logo { display: flex; align-items: center; justify-content: center; height: 92px; }
+  .partner-logo img { display: block; width: auto; height: 92px; }
+  .partner-logo img.wordmark-logo { height: 30px; }
+  .partner-row p { margin: var(--space-2) 0 0; font-size: var(--fs-small); line-height: 1.55; color: var(--ink-soft); max-width: 30ch; }
+
   /* How the roadmap runs */
   /* UI loop 03: a timeline, not three cards. One line, three nodes drawn
      like the leaf mark's vein ends; the report (the thing you get) is the
@@ -294,6 +307,29 @@
              clients, in their own words, with written consent ("Yes, with my
              name" on the feedback form). Copy a figure into the track above. Never invent one,
              and never use roadmap-call words without that consent. -->
+    </div>
+    <!-- Partners (25 Nov 2026, Sam: "list Tap4Change and Pitch Club as partners
+         on my website. Include their logos"). Logos from their own sites:
+         tap4change.org (Tap4ChangeLatestBlack.svg) and pitchclub.au
+         (pitchclub-logo.png, scaled to 240px). Captions in their own words
+         ("Thank-You Perks", "founder pitch-practice events"). Never a booking
+         code here: partner codes are private. -->
+    <div class="partners reveal-on-scroll" id="partners">
+      <p class="eyebrow">Partners</p>
+      <ul class="partner-row">
+        <li>
+          <a class="partner-logo" href="https://tap4change.org/brands/crads-ai" target="_blank" rel="noopener">
+            <img class="wordmark-logo" src="/lib/img/partners/tap4change.svg" alt="Tap4Change" width="919" height="135" loading="lazy">
+          </a>
+          <p>Give to a charity and brands say thank you with a perk. Crads-AI is one of the brands.</p>
+        </li>
+        <li>
+          <a class="partner-logo" href="https://pitchclub.au/" target="_blank" rel="noopener">
+            <img src="/lib/img/partners/pitch-club.png" alt="The Pitch Club" width="240" height="240" loading="lazy">
+          </a>
+          <p>Founder pitch nights across Sydney, from Bondi to Parramatta.</p>
+        </li>
+      </ul>
     </div>
   </section>
 
