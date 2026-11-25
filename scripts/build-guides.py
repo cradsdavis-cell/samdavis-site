@@ -11,6 +11,13 @@ Guides are buyer-facing answers to the problems that come up in AI roadmap
 calls. One call to action each (the roadmap), no client names, no quotes from
 calls, no prices. After building, run `npm run nav`, `npm run sitemap` and
 `npm run llms`.
+
+NOT IN STEP (25 Nov 2026): the live guide pages are ahead of the drafts and of
+this script. Each guide has a CRIT-method link added straight into its HTML,
+the pages use `var(--fs-body)` where this script writes 18px, and the social
+guide says 4 min read where a rebuild says 3. Reconcile the drafts (they also
+carry uncommitted October edits in second-brain) before rebuilding, or a
+rebuild will quietly drop those changes.
 """
 import html, json, pathlib, re, sys
 
