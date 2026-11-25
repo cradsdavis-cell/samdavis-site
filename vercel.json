@@ -3,6 +3,12 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.crads-ai.com" }],
+      "destination": "https://crads-ai.com/:path*",
+      "permanent": true
+    },
+    {
       "source": "/book",
       "destination": "/offer",
       "permanent": false
