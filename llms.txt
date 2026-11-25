@@ -36,13 +36,17 @@
 - [Back up your mineral, and get it back](https://crads-ai.com/docs/back-up-and-restore): What is already backed up, the one thing you have to do yourself, and why the passphrase matters more than the backup.
 - [Brain](https://crads-ai.com/docs/brain-page): Everything your assistant knows, drawn from the files actually on your mineral.
 - [Use Claude Code on your mineral](https://crads-ai.com/docs/claude-code-on-your-mineral): Where you talk to your assistant. The app is the window onto your mineral; Claude Code is the room you work in.
+- [Connect Asana, with your own app](https://crads-ai.com/docs/connect-asana): Make a small Asana app in your own account, paste its two details, sign in once, and your assistant stays connected to your tasks and projects, in chats and in scheduled jobs.
+- [Connect any other email, over IMAP](https://crads-ai.com/docs/connect-email): Type your mail server's settings and an app password, and your assistant can search and read your email and write drafts for you to send. It never sends, deletes or moves anything.
 - [Connect Google, with your own key](https://crads-ai.com/docs/connect-google): Five console visits, one file, one sign-in, per account. Your Google key never touches our infrastructure, and here is why we made you do it the hard way.
 - [Connect Mailchimp, with your own key](https://crads-ai.com/docs/connect-mailchimp): Make an API key in Mailchimp, paste it, and your assistant can read your audiences and reports, add and tag contacts, and draft campaigns. It never sends one.
-- [Shopify and Xero, through your Claude account](https://crads-ai.com/docs/connect-shopify-and-xero): Why these two connect through your Claude account instead of your mineral, how to set them up there, and what that means for your scheduled jobs.
+- [Connect Microsoft 365](https://crads-ai.com/docs/connect-microsoft): Type a short code at Microsoft and your assistant can read your Outlook email, write drafts for you to send, and manage your calendar and contacts. Nothing to set up first.
+- [Connect Odoo, with your own key](https://crads-ai.com/docs/connect-odoo): Make an API key in your Odoo, paste it with the address of your Odoo, and your assistant can look things up, keep contacts and leads current, and draft invoices. It never deletes, posts or sends.
+- [Shopify, Xero and Figma, through your Claude account](https://crads-ai.com/docs/connect-shopify-and-xero): Why these three connect through your Claude account instead of your mineral, how to set them up there, and what that means for your scheduled jobs.
 - [Connect Slack, with your own app](https://crads-ai.com/docs/connect-slack): Make a small private Slack app from our template, paste one token, and your assistant can search, read and post in your workspace, in chats and in scheduled jobs.
 - [Connect Telegram](https://crads-ai.com/docs/connect-telegram): Your assistant in your pocket, step by step: your own private bot, made in about two minutes, that drafts and never sends.
 - [Connect WordPress and WooCommerce](https://crads-ai.com/docs/connect-wordpress): Switch on MCP on your site, make a user for your assistant, give it an application password, and connect. About ten minutes, with a check at the end.
-- [What you can connect](https://crads-ai.com/docs/connections): The 66 services your mineral can connect to, the 2 that only connect through your Claude account, and how each one signs in.
+- [What you can connect](https://crads-ai.com/docs/connections): The 72 services your mineral can connect to, the 3 that only connect through your Claude account, and how each one signs in.
 - [Connections](https://crads-ai.com/docs/connections-page): What your assistant can reach, and whether each one is still working.
 - [What happens if Crads AI goes away](https://crads-ai.com/docs/continuity): The honest answer to "what if you pick up another job", and why the self-hosted shape makes it survivable.
 - [Crads for teams](https://crads-ai.com/docs/crads-for-teams): One company brain your whole team contributes to, an assistant on its own server for each person, and a company agent that holds the brain together. What goes where, who can change what, and what the owner owns.
@@ -53,11 +57,12 @@
 - [Get a DigitalOcean API token](https://crads-ai.com/docs/get-a-digitalocean-api-token): The five-minute walk from no account to the token the setup wizard asks for when you pick DigitalOcean, and what that token actually is.
 - [Get a Hetzner API token](https://crads-ai.com/docs/get-a-hetzner-api-token): The five-minute walk from no account to the token the setup wizard asks for, and what that token actually is.
 - [The words](https://crads-ai.com/docs/glossary): A plain glossary of the terms these docs use, with the page where each one first matters.
-- [Let someone look at your mineral](https://crads-ai.com/docs/grant-support-access): Helper access: approving a request, what it opens, when it closes, what is recorded, and how to end it early.
+- [Let someone work on your mineral](https://crads-ai.com/docs/grant-support-access): Helper access: approving a request, what it opens, when it closes, what is recorded, and how to end it early.
 - [Grow the brain](https://crads-ai.com/docs/grow-the-brain): The everyday habits that turn a seeded brain into one that knows your business: correct it, tell it things, capture, and bring documents in.
 - [How updates reach you](https://crads-ai.com/docs/how-updates-reach-you): Your mineral updates when you say so, what an update does and does not touch, and how to tell what you are running.
 - [How your assistant thinks](https://crads-ai.com/docs/how-your-assistant-thinks): The one picture behind every page of these docs: a mind that is rented, a memory that is yours, and senses you add one at a time.
-- [The jobs your mineral runs by itself](https://crads-ai.com/docs/machinery-jobs): The 18 machinery jobs Crads AI maintains on every mineral, and what each one is for.
+- [The jobs your mineral runs by itself](https://crads-ai.com/docs/machinery-jobs): The 22 machinery jobs Crads AI maintains on every mineral, and what each one is for.
+- [Move in](https://crads-ai.com/docs/move-in-page): The tab a server you already had shows while it moves in, a plan of steps you approve one at a time, most of which can be undone.
 - [Overview](https://crads-ai.com/docs/overview-page): The page your mineral opens on: what your assistant knows, and how it is doing.
 - [Privacy policy](https://crads-ai.com/docs/privacy-policy): What is stored, where it runs, what leaves your mineral, and why almost none of this page is about us any more.
 - [Six prompting habits](https://crads-ai.com/docs/prompting-habits): The small changes in how you ask that make the biggest difference to what comes back, with an instead-of table you can keep open.
