@@ -46,10 +46,32 @@ test('every writing page advertises the feed', () => {
   }
 });
 
-test('every essay carries the drafting note under the byline', () => {
-  const NOTE = '<p class="essay-process">Built from my own ideas and stories, with Claude as a drafting partner.</p>';
+test('every essay declares its lane and carries that lane\'s note under the byline', async () => {
+  const { essayLane, LANE_NOTES } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'syndicate.mjs')).href);
   for (const rel of writingPages().filter((r) => r !== 'writing/index.html')) {
     const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');
-    assert.ok(src.includes(NOTE), `${rel} is missing the drafting note`);
+    const lane = essayLane(src, rel);
+    const notes = [...src.matchAll(/<p class="essay-process">([^<]*)<\/p>/g)].map((m) => m[1]);
+    assert.deepStrictEqual(notes, [LANE_NOTES[lane]], `${rel} (${lane}) must carry exactly its lane's note`);
+    // No other lane's note may appear anywhere on the page.
+    for (const [other, note] of Object.entries(LANE_NOTES)) {
+      if (other !== lane) assert.ok(!src.includes(note), `${rel} (${lane}) carries the ${other} note`);
+    }
   }
+});
+
+test('the essay lane is required and must be known', async () => {
+  const { essayLane } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'syndicate.mjs')).href);
+  assert.throws(() => essayLane('<html></html>', 'x'), /no essay-lane/);
+  assert.throws(() => essayLane('<meta name="essay-lane" content="ghost">', 'x'), /unknown essay-lane/);
+  assert.strictEqual(essayLane('<meta name="essay-lane" content="my-pen:strict">', 'x'), 'my-pen:strict');
+});
+
+test('every feed item carries its essay\'s lane', async () => {
+  const { render, feedItems } = await gen();
+  const xml = render();
+  assert.ok(xml.includes('xmlns:crads="https://crads-ai.com/ns/writing"'));
+  const items = feedItems();
+  assert.strictEqual((xml.match(/<crads:lane>/g) || []).length, items.length);
+  for (const it of items) assert.ok(['with-claude', 'my-pen:editor', 'my-pen:strict'].includes(it.lane), `${it.slug}: ${it.lane}`);
 });

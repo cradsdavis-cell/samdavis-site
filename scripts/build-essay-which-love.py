@@ -303,6 +303,7 @@ PAGE = f"""<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Which love? · Sam Davis</title>
 <meta name="description" content="{html.escape(dek)}">
+<meta name="essay-lane" content="with-claude">
 <link rel="stylesheet" href="/lib/site.css">
 <script defer src="/lib/site.js"></script>
 <link rel="canonical" href="https://crads-ai.com/writing/which-love">

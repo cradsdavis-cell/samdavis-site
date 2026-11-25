@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:crads="https://crads-ai.com/ns/writing">
 <channel>
   <title>Sam Davis · Writing</title>
   <link>https://crads-ai.com/writing</link>
@@ -13,6 +13,7 @@
     <guid isPermaLink="true">https://crads-ai.com/writing/snowball-or-napoleon</guid>
     <pubDate>Tue, 24 Nov 2026 00:00:00 +1000</pubDate>
     <dc:creator>Sam Davis</dc:creator>
+    <crads:lane>with-claude</crads:lane>
     <description>Animal Farm’s windmill, and what more intelligence is for.</description>
     <content:encoded><![CDATA[<p><em>Built from my own ideas and stories, with Claude as a drafting partner.</em></p>
 <figure><img src="https://crads-ai.com/writing/snowball-or-napoleon/snowball-napoleon-barn.jpg" alt="Cartoon of a barn at night: a white pig waving windmill plans shouts at a large black boar with a sash and a cane, three snarling dogs behind him, while a horse, a donkey, hens and sheep look on under a banner reading All animals are equal but some animals are more equal than others"><figcaption>Snowball, Napoleon and the dogs. Illustration made with AI in Canva.</figcaption></figure>
@@ -66,6 +67,7 @@
     <guid isPermaLink="true">https://crads-ai.com/writing/crazy-idea-or-crazy-person</guid>
     <pubDate>Mon, 05 Oct 2026 00:00:00 +1000</pubDate>
     <dc:creator>Sam Davis</dc:creator>
+    <crads:lane>with-claude</crads:lane>
     <description>On subjective truth, delusion, creativity, and whether an AI would need a little of its own reality.</description>
     <content:encoded><![CDATA[<p><em>Built from my own ideas and stories, with Claude as a drafting partner.</em></p>
 <figure><img src="https://crads-ai.com/writing/crazy-idea-or-crazy-person/sunnataram-chedi.jpg" alt="An ornate golden Thai stupa with standing Buddha statues in its alcoves, under a blue sky with white clouds, pink flowers in the foreground"><figcaption>Sunnataram Forest Monastery, New South Wales, Easter 2024.</figcaption></figure>
@@ -124,6 +126,7 @@
     <guid isPermaLink="true">https://crads-ai.com/writing/nice-or-kind</guid>
     <pubDate>Sat, 03 Oct 2026 00:00:00 +1000</pubDate>
     <dc:creator>Sam Davis</dc:creator>
+    <crads:lane>with-claude</crads:lane>
     <description>On trust, masks, and what it would take to trust a mind smarter than us.</description>
     <content:encoded><![CDATA[<p><em>Built from my own ideas and stories, with Claude as a drafting partner.</em></p>
 <figure><img src="https://crads-ai.com/writing/nice-or-kind/abseil.jpg" alt="A small figure hanging on a single long rope in front of a towering sandstone cliff above a forested valley"><figcaption>On the rope.</figcaption></figure>
@@ -190,6 +193,7 @@
     <guid isPermaLink="true">https://crads-ai.com/writing/when-should-you-turn-back</guid>
     <pubDate>Fri, 02 Oct 2026 00:00:00 +1000</pubDate>
     <dc:creator>Sam Davis</dc:creator>
+    <crads:lane>with-claude</crads:lane>
     <description>On wisdom, and whether a machine can know when to stop.</description>
     <content:encoded><![CDATA[<p><em>Built from my own ideas and stories, with Claude as a drafting partner.</em></p>
 <figure><img src="https://crads-ai.com/writing/when-should-you-turn-back/earnslaw-river.jpg" alt="A turquoise braided river running through a green valley towards snow-capped peaks under a clear blue sky"><figcaption>Below Mount Earnslaw, New Zealand, December 2023.</figcaption></figure>
@@ -252,6 +256,7 @@
     <guid isPermaLink="true">https://crads-ai.com/writing/what-comes-after-agents</guid>
     <pubDate>Sat, 26 Sep 2026 00:00:00 +1000</pubDate>
     <dc:creator>Sam Davis</dc:creator>
+    <crads:lane>with-claude</crads:lane>
     <description>I&amp;#x27;ve been close to AI for nearly a decade. A diagram of its layers got me thinking about what comes next.</description>
     <content:encoded><![CDATA[<p><em>Built from my own ideas and stories, with Claude as a drafting partner.</em></p>
 <p>In December 2022 I was at the Alan Turing Institute, facilitating a week-long data science sprint. In a gap between sessions, one of our group told us about a new website called ChatGPT. He’d worked in AI for decades and wasn’t that impressed. A gimmick, more or less.</p>
@@ -294,6 +299,7 @@
     <guid isPermaLink="true">https://crads-ai.com/writing/the-other-half-of-the-room</guid>
     <pubDate>Fri, 25 Sep 2026 00:00:00 +1000</pubDate>
     <dc:creator>Sam Davis</dc:creator>
+    <crads:lane>with-claude</crads:lane>
     <description>Men and women are being sold stories about each other. The first AI most of us lived with was built to sell them. What should the next one be built for?</description>
     <content:encoded><![CDATA[<p><em>Built from my own ideas and stories, with Claude as a drafting partner.</em></p>
 <p>A lot of my friends are women, and when the conversation turns to dating I hear the same words again and again. Narcissist. Red flag. Toxic. The ick. Dating sucks. Men are shit.</p>
@@ -347,6 +353,7 @@
     <guid isPermaLink="true">https://crads-ai.com/writing/is-ten-percent-a-lot</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 +1000</pubDate>
     <dc:creator>Sam Davis</dc:creator>
+    <crads:lane>with-claude</crads:lane>
     <description>AI researchers put the chance of AI ending humanity at around one in ten. Is that a lot?</description>
     <content:encoded><![CDATA[<p><em>Built from my own ideas and stories, with Claude as a drafting partner.</em></p>
 <p>In 2023 I was in Tasmania with a friend, trying to climb the Candlestick, a thin pillar of rock standing in the sea off Cape Hauy. He swam across the channel to set us up on the route, and somewhere in the crossing he dropped the rope. With it went any realistic way back. The water under him was choppy and cold, and he was getting hypothermic.</p>
@@ -404,6 +411,7 @@
     <guid isPermaLink="true">https://crads-ai.com/writing/which-love</guid>
     <pubDate>Thu, 24 Sep 2026 00:00:00 +1000</pubDate>
     <dc:creator>Sam Davis</dc:creator>
+    <crads:lane>with-claude</crads:lane>
     <description>On superintelligence, what we should want it to feel, and what 2,500 years of contemplative practice might have to say about it.</description>
     <content:encoded><![CDATA[<p><em>Built from my own ideas and stories, with Claude as a drafting partner.</em></p>
 <h2>Two men in a valley</h2>
