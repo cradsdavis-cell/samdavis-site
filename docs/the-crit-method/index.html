@@ -189,7 +189,8 @@
     box-shadow: 0 1px 3px rgba(0,0,0,.05); }
   .docs-article figure.shot img { width: 100%; height: auto; display: block; }
   .docs-article figure.film { margin: var(--space-3) 0; }
-  .docs-article figure.film video { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--rule); background: #000; }
+  /* Portrait films (the 4:5 CRIT film, 25 Nov) are capped by height so they fit a laptop screen, and keep their own shape (site.css sets 16:9 on .film video); widescreen films are unchanged. */
+  .docs-article figure.film video { width: auto; max-width: 100%; max-height: min(78vh, 720px); height: auto; aspect-ratio: auto; display: block; margin: 0 auto; border-radius: 12px; border: 1px solid var(--rule); background: #000; }
   .docs-article figure.film figcaption,
   .docs-article figure.shot figcaption { font-family: var(--sans); font-size: 12.5px;
     color: var(--ink-faint); margin-top: 8px; }
@@ -670,6 +671,7 @@ about whatever you need. Stop when you have enough.
 Task: then [what you want back: the form, the length, what to
 include and what to leave out].</code></pre>
 <p>A filled-in version is in <a href="#a-worked-example">the worked example</a> below.</p>
+<figure class="film" id="film-crit-in-90-seconds"><video controls playsinline preload="metadata" poster="/lib/video/posters/crit-in-90-seconds.jpg" aria-label="CRIT in 90 seconds: a one-line ask gets a generic beer poster, then the same job gets context, a role, an interview and a task."><source src="/lib/video/crit-in-90-seconds.mp4" type="video/mp4"></video><figcaption>CRIT in 90 seconds: a one-line ask gets a generic beer poster, then the same job gets context, a role, an interview and a task.</figcaption></figure>
 <figure class="diagram">
 <style>figure.diagram svg.dgm-n{display:none!important}@media (max-width:1080px){figure.diagram svg.dgm-w{display:none!important}figure.diagram svg.dgm-n{display:block!important;max-width:520px;margin:0 auto}}</style>
 <svg viewBox="0 0 824 160" role="img" aria-labelledby="d-crit-t d-crit-d" class="dgm dgm-w">
