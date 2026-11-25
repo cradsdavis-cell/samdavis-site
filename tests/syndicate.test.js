@@ -20,11 +20,11 @@ function essays() {
 }
 
 test('every essay syndicates to clean, self-contained HTML', async () => {
-  const { syndicationHtml, DRAFTING_NOTE, HOST } = await lib();
+  const { syndicationHtml, laneNote, HOST } = await lib();
   for (const { slug, src } of essays()) {
     const url = `${HOST}/writing/${slug}`;
     const html = syndicationHtml(src, { slug, url });
-    assert.ok(html.startsWith(`<p><em>${DRAFTING_NOTE}</em></p>`), `${slug}: drafting note must lead`);
+    assert.ok(html.startsWith(`<p><em>${laneNote(src, slug)}</em></p>`), `${slug}: the lane's note must lead`);
     assert.ok(html.includes(`<a href="${url}">crads-ai.com</a>`), `${slug}: first-published line`);
     for (const bad of ['<svg', '<div', '<details', '<section', 'class=', 'style=', 'loading=']) {
       assert.ok(!html.includes(bad), `${slug}: ${bad} left in`);
@@ -55,4 +55,15 @@ test('the feed carries the full text of every essay', () => {
   const feed = fs.readFileSync(path.join(ROOT, 'writing', 'feed.xml'), 'utf8');
   assert.ok(feed.includes('xmlns:content="http://purl.org/rss/1.0/modules/content/"'));
   assert.strictEqual((feed.match(/<content:encoded>/g) || []).length, (feed.match(/<item>/g) || []).length);
+});
+
+test('a my-pen essay never carries the Claude note in its copy', async () => {
+  const { syndicationHtml, LANE_NOTES, DRAFTING_NOTE } = await lib();
+  const page = (lane) => `<meta name="essay-lane" content="${lane}"><article class="essay-body"><p>Words.</p></article>`;
+  for (const lane of ['my-pen:strict', 'my-pen:editor']) {
+    const html = syndicationHtml(page(lane), { slug: 'x', url: 'https://crads-ai.com/writing/x' });
+    assert.ok(html.startsWith(`<p><em>${LANE_NOTES[lane]}</em></p>`), `${lane}: its own note leads`);
+    assert.ok(!html.includes(DRAFTING_NOTE), `${lane}: Claude note leaked`);
+  }
+  assert.throws(() => syndicationHtml('<article class="essay-body"><p>x</p></article>', { slug: 'x', url: 'u' }), /no essay-lane/);
 });
