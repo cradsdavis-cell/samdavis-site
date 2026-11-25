@@ -76,8 +76,23 @@ test('same-page fragment targets exist', () => {
   assert.deepStrictEqual(bad, [], `dangling fragments:\n${bad.join('\n')}`);
 });
 
+// A host redirect (www to the bare domain, 2026-11-25) moves every path to the
+// same path on the canonical host. It is not a page redirect, so it is checked
+// for its exact shape instead of for a landing page.
+const isHostRedirect = (r) => (r.has || []).some((h) => h.type === 'host');
+
+test('the only host redirect sends www.crads-ai.com to the same path on crads-ai.com', () => {
+  const hostRedirects = (cfg.redirects || []).filter(isHostRedirect);
+  assert.deepStrictEqual(hostRedirects, [{
+    source: '/:path*',
+    has: [{ type: 'host', value: 'www.crads-ai.com' }],
+    destination: 'https://crads-ai.com/:path*',
+    permanent: true,
+  }]);
+});
+
 test('redirects land on real pages and never chain', () => {
-  for (const r of cfg.redirects || []) {
+  for (const r of (cfg.redirects || []).filter((x) => !isHostRedirect(x))) {
     assert.ok(!redirectSources.has(r.destination), `${r.source} -> ${r.destination} chains into another redirect`);
     assert.ok(resolves(r.destination), `${r.source} -> ${r.destination} does not resolve`);
   }

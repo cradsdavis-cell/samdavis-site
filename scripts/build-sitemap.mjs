@@ -5,7 +5,8 @@
 // Rules: every served HTML page on its clean URL, plus /download (a rewrite to
 // a function), minus the account portal, the utility pages (404, thanks,
 // booking-failed), anything carrying a noindex meta, and any path that
-// vercel.json redirects away. lastmod is the file's last commit date.
+// vercel.json redirects away. lastmod is the date of the last commit that
+// changed what the page says (see contentOf), not merely the file.
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
@@ -38,13 +39,52 @@ export function expectedUrls() {
   return [...urls].sort((a, b) => (a === '/' ? -1 : b === '/' ? 1 : a.localeCompare(b)));
 }
 
+// What a page says, without the parts every page shares. Site-wide changes
+// (the nav bar, the docs sidebar, search index, breadcrumbs and footer, <head>
+// edits such as titles) rewrite every file in one commit, so the file's last
+// commit date put 54 of 86 sitemap entries on 19 Nov 2026, and Google ignores
+// lastmod values it cannot trust. Dating each page by this reduced text keeps
+// lastmod to edits a reader would notice.
+export function contentOf(html) {
+  return String(html)
+    .replace(/<head[\s\S]*?<\/head>/gi, '')
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<nav\b[\s\S]*?<\/nav>/gi, '')
+    .replace(/<aside\b[\s\S]*?<\/aside>/gi, '')
+    .replace(/<footer\b[\s\S]*?<\/footer>/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+const git = (args) => execSync(`git ${args}`, { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+
+// The newest commit whose version of the file reads differently from the
+// version before it. A file whose every commit was chrome-only keeps the date
+// it first appeared.
+export function contentDate(rel) {
+  const commits = git(`log --format="%H %cs" -- "${rel}"`).trim().split('\n').filter(Boolean)
+    .map((l) => { const [hash, date] = l.split(' '); return { hash, date }; });
+  if (!commits.length) return null;
+  const version = (c) => {
+    try { return contentOf(git(`show "${c.hash}:${rel}"`)); } catch { return null; }
+  };
+  let newer = version(commits[0]);
+  for (let i = 0; i < commits.length - 1; i++) {
+    const older = version(commits[i + 1]);
+    if (older !== newer) return commits[i].date;
+    newer = older;
+  }
+  return commits[commits.length - 1].date;
+}
+
 function lastmod(url) {
   const candidates = url === '/' ? ['index.html']
     : [url.slice(1) + '/index.html', url.slice(1) + '.html'];
   for (const rel of candidates) {
     if (fs.existsSync(path.join(ROOT, rel))) {
       try {
-        const d = execSync(`git log -1 --format=%cs -- "${rel}"`, { cwd: ROOT, encoding: 'utf8' }).trim();
+        const d = contentDate(rel);
         if (d) return d;
       } catch { /* untracked or no git: fall through */ }
       return new Date(fs.statSync(path.join(ROOT, rel)).mtime).toISOString().slice(0, 10);
