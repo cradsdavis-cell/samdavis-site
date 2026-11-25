@@ -27,7 +27,10 @@ test('sitemap.xml lists exactly the generated URL set', async () => {
 
 test('every sitemap URL is absolute, indexable, and not a redirect source or the account portal', () => {
   const cfg = JSON.parse(fs.readFileSync(path.join(ROOT, 'vercel.json'), 'utf8'));
-  const gone = new Set((cfg.redirects || []).map((r) => r.source));
+  // host redirects (www to the bare domain) move the host, not the page
+  const gone = new Set((cfg.redirects || [])
+    .filter((r) => !(r.has || []).some((h) => h.type === 'host'))
+    .map((r) => r.source));
   for (const loc of locs()) {
     assert.ok(loc.startsWith('https://crads-ai.com/'), `absolute: ${loc}`);
     const u = loc.slice('https://crads-ai.com'.length);
