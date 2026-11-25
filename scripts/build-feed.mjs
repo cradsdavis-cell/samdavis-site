@@ -12,7 +12,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { syndicationHtml } from './syndicate.mjs';
+import { syndicationHtml, essayLane } from './syndicate.mjs';
+
+// Each item also says how the essay was written (<crads:lane>, the page's essay-lane
+// meta), so the letter and the LinkedIn and Substack copies built from this feed can
+// follow it. Feed readers ignore the unknown namespace.
+export const LANE_NS = 'https://crads-ai.com/ns/writing';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const WRITING = path.join(ROOT, 'writing');
@@ -42,6 +47,7 @@ export function feedItems() {
       description: pick(src, /<meta name="description" content="([^"]*)"/, 'meta description', rel),
       link: pick(src, /<link rel="canonical" href="([^"]+)"/, 'canonical', rel),
       date: pick(src, /"datePublished":"(\d{4}-\d{2}-\d{2})"/, 'datePublished', rel),
+      lane: essayLane(src, rel),
     });
     const it = items[items.length - 1];
     it.content = syndicationHtml(src, { slug, url: it.link, rel });
@@ -61,7 +67,7 @@ export function render() {
   const items = feedItems();
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">',
+    `<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:crads="${LANE_NS}">`,
     '<channel>',
     '  <title>Sam Davis · Writing</title>',
     `  <link>${HOST}/writing</link>`,
@@ -78,6 +84,7 @@ export function render() {
       `    <guid isPermaLink="true">${esc(it.link)}</guid>`,
       `    <pubDate>${rfc822(it.date)}</pubDate>`,
       '    <dc:creator>Sam Davis</dc:creator>',
+      `    <crads:lane>${esc(it.lane)}</crads:lane>`,
       `    <description>${esc(it.description)}</description>`,
       `    <content:encoded><![CDATA[${it.content.replace(/]]>/g, ']]]]><![CDATA[>')}]]></content:encoded>`,
       '  </item>',
