@@ -142,6 +142,27 @@ test('proof carousel: moves slowly, can be paused, stays still for reduced motio
   assert.match(js, /copy\.setAttribute\('aria-hidden', 'true'\)/, 'clones are hidden from screen readers');
 });
 
+// Sam, 25 Nov 2026: "list Tap4Change and Pitch Club as partners on my website.
+// Include their logos". Under the quotes, inside the proof section (still eight
+// sections). Partner booking codes are private, so none appears on the page.
+test('partners: Tap4Change and Pitch Club, local logos, linked to their own sites, no codes', () => {
+  const proof = section('proof');
+  const p = proof.slice(proof.indexOf('id="partners"'));
+  assert.ok(proof.indexOf('id="partners"') > proof.indexOf('t-carousel-toggle'), 'partners sit under the quotes');
+  const alts = [...p.matchAll(/<img [^>]*alt="([^"]*)"/g)].map((m) => m[1]);
+  assert.deepStrictEqual(alts, ['Tap4Change', 'The Pitch Club']);
+  assert.match(p, /href="https:\/\/tap4change\.org\/brands\/crads-ai"/);
+  assert.match(p, /href="https:\/\/pitchclub\.au\/"/);
+  for (const m of p.matchAll(/src="(\/lib\/img\/partners\/[a-z0-9-]+\.(?:svg|png))"/g)) {
+    assert.ok(fs.existsSync(path.join(__dirname, '..', m[1])), m[1]);
+    if (m[1].endsWith('.svg')) {
+      assert.ok(!/<script|on[a-z]+=/i.test(fs.readFileSync(path.join(__dirname, '..', m[1]), 'utf8')), 'no script in ' + m[1]);
+    }
+  }
+  assert.ok(!/PITCHCLUB|TAP4ROADMAP|TAP4NEWS/.test(html), 'no partner booking code on the public page');
+  assert.ok(!p.includes('—'), 'no em dashes');
+});
+
 test('how the roadmap runs, then the price strip', () => {
   const how = section('how');
   assert.match(how, /Two calls and a report/);
